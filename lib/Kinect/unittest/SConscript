@@ -1,0 +1,9 @@
+Import('env')
+
+name = "Kinect_test"
+dependencies = ["Kinect"]
+
+src_files = env.Glob("*.cpp")
+prog = env.UnitTest(name, src_files, dependencies)
+
+

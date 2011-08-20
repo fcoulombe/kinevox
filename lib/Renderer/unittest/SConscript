@@ -1,0 +1,7 @@
+Import('env')
+
+name = "Renderer_test"
+dependencies = ["Renderer"]
+
+src_files = env.Glob("*.cpp")
+prog = env.UnitTest(name, src_files, dependencies)

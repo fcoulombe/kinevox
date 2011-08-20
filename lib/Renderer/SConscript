@@ -1,0 +1,11 @@
+Import('env')
+
+name = "Renderer"
+incPath = [env.Dir("#/lib/"+name)]
+dependencies = ['Kinect', 'GCL', 'SDL', 'OpenCV', 'OpenGL']
+
+env.Append(CPPPATH=incPath)
+src_files = env.Glob(name+"/*.cpp")
+lib = env.KStaticLibrary(name, src_files, dependencies)
+env.AddComponent(name, incPath, lib, dependencies)
+

@@ -1,0 +1,19 @@
+Import('env')
+
+name = "SDL"
+dependencies = []
+
+def SetCFlags(ienv):
+	if ienv['PLATFORM']=='darwin':
+		ienv.ParseConfig('sdl-config --cflags')
+	else:
+		ienv.ParseConfig('pkg-config --cflags sdl')
+
+def SetLFlags(ienv):
+	if ienv['PLATFORM']=='darwin':
+		ienv.ParseConfig('sdl-config --libs')
+	else:
+		ienv.ParseConfig('pkg-config --libs sdl')
+	
+	
+env.AddComponent(name, None, None,dependencies, SetCFlags, SetLFlags)

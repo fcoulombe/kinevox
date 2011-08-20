@@ -1,0 +1,12 @@
+Import('env')
+
+name = "OpenCV"
+dependencies = []
+
+def SetCFlags(ienv):
+	ienv.ParseConfig('pkg-config --cflags opencv')
+
+def SetLFlags(ienv):
+	ienv.ParseConfig('pkg-config --libs opencv')
+	
+env.AddComponent(name, None, None,dependencies, SetCFlags, SetLFlags)

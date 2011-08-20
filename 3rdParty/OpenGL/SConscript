@@ -1,0 +1,19 @@
+Import('env')
+
+name = "OpenGL"
+dependencies = []
+
+def SetCFlags(ienv):
+	if ienv['PLATFORM']=='darwin':
+		ienv['FRAMEWORKS'] = ['OpenGL']
+		ienv.Append(CPPFLAGS=['-FOpenGL']) #adding the opengl framework
+	else:
+		ienv.ParseConfig('pkg-config --cflags gl')
+		
+def SetLFlags(ienv):
+	if ienv['PLATFORM']=='darwin':
+		ienv['FRAMEWORKS'] = ['OpenGL']
+	else:
+		ienv.ParseConfig('pkg-config --libs gl')
+	
+env.AddComponent(name, None, None,dependencies, SetCFlags, SetLFlags)

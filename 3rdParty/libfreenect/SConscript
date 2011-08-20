@@ -1,0 +1,12 @@
+Import('env')
+
+name = "libfreenect"
+dependencies = []
+
+def SetCFlags(ienv):
+	ienv.ParseConfig('pkg-config --cflags libfreenect')
+
+def SetLFlags(ienv):
+	ienv.ParseConfig('pkg-config --libs libfreenect')
+	
+env.AddComponent(name, None, None,dependencies, SetCFlags, SetLFlags)

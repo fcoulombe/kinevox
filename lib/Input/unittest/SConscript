@@ -1,0 +1,9 @@
+Import('env')
+
+name = "Input_test"
+dependencies = ["Input"]
+
+src_files = env.Glob("*.cpp")
+prog = env.UnitTest(name,  src_files, dependencies)
+
+

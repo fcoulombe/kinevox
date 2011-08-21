@@ -155,15 +155,15 @@ void OpenGLRenderer::Render()
 	glLoadIdentity(); glErrorCheck();
 	mCamera.Update();
 
-	/*for (size_t i=0; i<mRenderObjectList.size(); ++i) {
+	for (size_t i=0; i<mRenderObjectList.size(); ++i) {
 		const void *data = mRenderObjectList[i]->GetVertexData();
-	}*/
+	}
 
-	for (size_t i=0; i<10; ++i) {
+	/*for (size_t i=0; i<10; ++i) {
 		for (size_t j=0; j<10; ++j) {
 				DrawCube(WorldPoint3(i*1.0,  0, j*1.0), 1.0);
 		}
-	}
+	}*/
 
 	/*glBegin(GL_QUADS);
 	glVertex3f(0.0, 0.0, 0.0);

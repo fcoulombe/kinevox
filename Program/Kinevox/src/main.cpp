@@ -26,7 +26,7 @@ int main(int argc, char **argv)
 	rgbImg = cvCreateImage(cvSize(640,480), IPL_DEPTH_8U, 3);
 	depthImg = cvCreateImage(cvSize(640,480), IPL_DEPTH_8U, 3);
 
-	Grid<10,0,10> grid;
+	Grid<10,10,10> grid;
 
 	renderer->RegisterRenderObject(&grid);
 	while (true)

@@ -10,8 +10,8 @@ public:
 	Camera();
 	void MoveForward();
 	void MoveBackward();
-	void TurnLeft();
-	void TurnRight();
+	void TurnLeft(double degree = -1.0);
+	void TurnRight(double degree = 1.0);
 	void TiltUp();
 	void TiltDown();
 

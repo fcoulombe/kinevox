@@ -16,7 +16,7 @@ Camera::Camera()
 void Camera::Update()
 {
 	Matrix44 tempMatrix = Inverse(mMatrix);
-	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&tempMatrix));
+	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&tempMatrix));glErrorCheck();
 }
 
 

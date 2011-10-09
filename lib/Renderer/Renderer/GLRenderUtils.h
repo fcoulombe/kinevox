@@ -9,7 +9,7 @@ namespace GCL
 
 inline void DrawCube(const WorldPoint3 &position, double size)
 {
-	double halfSize = size/2;
+	const double halfSize = size/2;
 
 	glBegin(GL_QUADS);
 	//front face
@@ -48,6 +48,51 @@ inline void DrawCube(const WorldPoint3 &position, double size)
 	glVertex3d(position.x+halfSize, position.y-halfSize, position.z-halfSize);
 	glVertex3d(position.x+halfSize, position.y-halfSize, position.z+halfSize);
 	glEnd();
+	glErrorCheck();
 
 }
+
+inline void WriteCube(WorldPoint3* cubeData, const WorldPoint3 &position, double size)
+{
+	const double halfSize = size/2;
+
+	//front face
+	*cubeData = WorldPoint3(position.x-halfSize, position.y-halfSize, position.z+halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x+halfSize, position.y-halfSize, position.z+halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x+halfSize, position.y+halfSize, position.z+halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x-halfSize, position.y+halfSize, position.z+halfSize); ++cubeData;
+
+	//backface
+	*cubeData = WorldPoint3(position.x-halfSize, position.y-halfSize, position.z-halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x+halfSize, position.y-halfSize, position.z-halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x+halfSize, position.y+halfSize, position.z-halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x-halfSize, position.y+halfSize, position.z-halfSize); ++cubeData;
+
+	//bot face
+	*cubeData = WorldPoint3(position.x-halfSize, position.y-halfSize, position.z+halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x+halfSize, position.y-halfSize, position.z+halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x+halfSize, position.y-halfSize, position.z-halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x-halfSize, position.y-halfSize, position.z-halfSize); ++cubeData;
+
+	//top face
+	*cubeData = WorldPoint3(position.x-halfSize, position.y+halfSize, position.z+halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x+halfSize, position.y+halfSize, position.z+halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x+halfSize, position.y+halfSize, position.z-halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x-halfSize, position.y+halfSize, position.z-halfSize); ++cubeData;
+
+	//left face
+	*cubeData = WorldPoint3(position.x-halfSize, position.y+halfSize, position.z+halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x-halfSize, position.y+halfSize, position.z-halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x-halfSize, position.y-halfSize, position.z-halfSize); ++cubeData;
+	*cubeData = WorldPoint3(position.x-halfSize, position.y-halfSize, position.z+halfSize); ++cubeData;
+
+	//right face
+	*cubeData = WorldPoint3(position.x+halfSize, position.y+halfSize, position.z+halfSize);
+	*cubeData = WorldPoint3(position.x+halfSize, position.y+halfSize, position.z-halfSize);
+	*cubeData = WorldPoint3(position.x+halfSize, position.y-halfSize, position.z-halfSize);
+	*cubeData = WorldPoint3(position.x+halfSize, position.y-halfSize, position.z+halfSize);
+
+
+}
+
 }

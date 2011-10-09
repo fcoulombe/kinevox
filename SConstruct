@@ -39,6 +39,7 @@ def gitClone(repo, dest="."):
     pipe = subprocess.Popen(cmd, shell=True)
     pipe.wait()
     return
+targetList = COMMAND_LINE_TARGETS
 
 default_env = Environment()
 #detect if we have the build script installed (hopefully its gonna be the right one)
@@ -70,5 +71,7 @@ default_env.Append(CPPFLAGS=cflags )
 
 
 default_env.SConsWalk(".", './SConscript')
-
+if "@aliases" in targetList:
+    default_env.displayAliases()
+    sys.exit()
 

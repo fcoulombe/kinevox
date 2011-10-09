@@ -1,6 +1,13 @@
 #include <iostream>
+#include <SDL.h>
 
-int main()
+#include "Voxel/Cube.h"
+#include "Voxel/Grid.h"
+#include "Voxel/Voxel.h"
+
+#include "GridTest.h"
+int main(int argc, char **argv)
 {
-	return 0;
+  GridTest::Test();
+  return 0;
 }

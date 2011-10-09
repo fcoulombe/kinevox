@@ -1,7 +1,8 @@
 Import('env')
 
 
-dependencies = ['Voxel']
+#dependencies = ['Voxel']
+dependencies = ['Renderer']
 
 src_files = env.Glob("src/*.cpp")
 prog = env.KProgram("Kinevox", src_files, dependencies)

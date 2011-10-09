@@ -1,50 +1,53 @@
 #pragma once
 
+#include <vector>
+
 #include <GCL/Point3.h>
 #include <Renderer/RenderObject.h>
-#include <Renderer/GLRenderUtils.h>
-
-#include "Voxel/Voxel.h"
 
 namespace GCL
 {
 
+  class Voxel;
 
 
-template<int X_DIMENSION, int Y_DIMENSION, int Z_DIMENSION>
-class Grid : public RenderObject
-{
-public:
-	Grid()
-	{
-		for (size_t i=0; i<X_DIMENSION; ++i) {
-			for (size_t j=0; j<Y_DIMENSION; ++j) {
-				for (size_t k=0; k<Z_DIMENSION; ++k) {
-					mGridVoxelPosition[i][j][k] = WorldPoint3(i*gVoxelSize,j*gVoxelSize,k*gVoxelSize);
-				}
-			}
-		}
-	}
+  class Grid : public RenderObject
+  {
+  public:
+    struct Row
+    {
+      Row(size_t x, size_t y, size_t z);
+      ~Row();
 
-	const void *GetVertexData() const
-	{
-		for (size_t i=0; i<X_DIMENSION; ++i) {
-			for (size_t j=0; j<Y_DIMENSION; ++j) {
-				for (size_t k=0; k<Z_DIMENSION; ++k) {
-					DrawCube(mGridVoxelPosition[i][j][k], gVoxelSize);
-				}
-			}
-		}
-		return NULL;
-	}
+      static const WorldUnit gVoxelSize = 1.0;
+      typedef std::vector<Voxel> VoxelList;
+      VoxelList mRow;
+      typedef std::vector<WorldPoint3> PositionList;
+      PositionList mPositions;
+    };
 
+    struct Slice
+    {
+      Slice(size_t x, size_t y, size_t z);
+      ~Slice();
+      typedef std::vector<Row> RowList;
+      RowList mRows;
+    };
+  public:
+    Grid(size_t x, size_t y, size_t z);
+    ~Grid();
 
+    void CreateVertexData();
+    const VertexData *GetVertexData() const; // this function can't be const because it might need to create vertex data on demand
 
-private:
+  private:
 
-	static const double gVoxelSize = 1.0;
-	Voxel mGrid[X_DIMENSION][Y_DIMENSION][Z_DIMENSION];
-	WorldPoint3 mGridVoxelPosition[X_DIMENSION][Y_DIMENSION][Z_DIMENSION];
+    const size_t X_DIMENSION;
+    const size_t Y_DIMENSION;
+    const size_t Z_DIMENSION;
 
-};
+    VertexData mVertexData;
+    typedef std::vector<Slice> SliceList;
+    SliceList mSlices;
+  };
 }

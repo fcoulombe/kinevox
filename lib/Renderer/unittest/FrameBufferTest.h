@@ -25,6 +25,7 @@
 #include <Renderer/RenderObject.h>
 #include <Renderer/FrameBuffer.h>
 #include <Renderer/Shader.h>
+#include <Renderer/Texture.h>
 #include <Renderer/Vertex.h>
 
 using namespace GCL;
@@ -59,16 +60,22 @@ namespace FrameBufferTest
   void Test()
   {
     OpenGLRenderer renderer;
-    renderer.Render();
+    /*renderer.Render();
     Shader shader;
     shader.Bind();
-    MyRenderObject obj;
+    MyRenderObject obj;*/
 
-    FrameBuffer frameBuffer;
+    size_t width = renderer.GetViewPort().GetWidth();
+    size_t height = renderer.GetViewPort().GetHeight();
+
+
+    RenderBuffer depthRenderBuffer(width, height, 2);;
+    depthRenderBuffer.Bind();
+
+    Texture texture(width, height, 4);
+
+    FrameBuffer frameBuffer(texture, depthRenderBuffer);
     frameBuffer.Bind();
-
-    RenderBuffer renderBuffer;
-    renderBuffer.Bind();
 
     renderer.Render();
 

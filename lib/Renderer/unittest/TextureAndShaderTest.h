@@ -22,13 +22,12 @@
 #pragma once
 
 #include <GCL/UnitTest.h>
-#include <Renderer/RenderObject.h>
-#include <Renderer/RenderBuffer.h>
+#include <Renderer/Texture.h>
 #include <Renderer/Shader.h>
 #include <Renderer/Vertex.h>
 
 using namespace GCL;
-namespace RenderBufferTest
+namespace TextureAndShaderTest
 {
   TEST_START
 
@@ -58,23 +57,23 @@ namespace RenderBufferTest
   }
   void Test()
   {
+    TextureResourceManager::Initialize();
     OpenGLRenderer renderer;
-
-    /*Shader shader;
+    Shader shader;
     shader.Bind();
-    MyRenderObject obj;*/
 
-    size_t width = renderer.GetViewPort().GetWidth();
-    size_t height = renderer.GetViewPort().GetHeight();
-    RenderBuffer target(width, height, 4);;
-    target.Bind();
+    Texture texture("data/mushroom.png");
+    texture.Bind();
+
+    MyRenderObject obj;
 
     renderer.Render();
 
-/*    RenderTarget::ResetDefault();
-    target.Save("RenderTargetTest.tga");
+
+    /*        target.Save("RenderTargetTest.tga");
     Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 */
+    TextureResourceManager::Terminate();
 
   }
 }

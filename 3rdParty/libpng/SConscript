@@ -1,0 +1,13 @@
+Import('env')
+
+name = "libpng"
+dependencies = []
+
+def SetCFlags(ienv):
+	ienv.ParseConfig('pkg-config --cflags libpng')
+
+def SetLFlags(ienv):
+	ienv.ParseConfig('pkg-config --libs libpng')
+	
+	
+env.AddComponent(name, None, None,dependencies, SetCFlags, SetLFlags)

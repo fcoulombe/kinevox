@@ -1,0 +1,13 @@
+Import('env')
+
+name = "IL"
+dependencies = []
+
+def SetCFlags(ienv):
+	ienv.ParseConfig('pkg-config --cflags IL')
+
+def SetLFlags(ienv):
+	ienv.ParseConfig('pkg-config --libs IL')
+	
+	
+env.AddComponent(name, None, None,dependencies, SetCFlags, SetLFlags)

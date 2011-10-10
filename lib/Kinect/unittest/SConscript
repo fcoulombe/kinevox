@@ -2,8 +2,9 @@ Import('env')
 
 name = "Kinect_test"
 dependencies = ["Kinect"]
+data = []
 
 src_files = env.Glob("*.cpp")
-prog = env.UnitTest(name, src_files, dependencies)
+prog = env.UnitTest(name, src_files, dependencies, data)
 
 

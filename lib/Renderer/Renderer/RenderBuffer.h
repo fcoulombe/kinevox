@@ -7,10 +7,14 @@ namespace GCL
   class RenderBuffer
   {
   public:
-    RenderBuffer()
+    RenderBuffer(size_t width, size_t height, size_t bytePerPixel)
     : mRenderBufferId(-1)
     {
       glGenRenderbuffers(1, &mRenderBufferId); glErrorCheck();
+      glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, mRenderBufferId);
+      glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT,
+                               width, height);
+      glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0);
     }
     ~RenderBuffer()
     {
@@ -25,6 +29,8 @@ namespace GCL
     static void ResetDefault() { GCLAssert(false); }
 
   private:
+    friend class FrameBuffer;
+    GLuint GetRenderBufferId() const  { return  mRenderBufferId; }
     GLuint mRenderBufferId;
   };
 

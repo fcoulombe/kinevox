@@ -2,6 +2,7 @@ Import('env')
 
 name = "Voxel_test"
 dependencies = ["Voxel"]
+data = []
 
 src_files = env.Glob("*.cpp")
-prog = env.UnitTest(name, src_files, dependencies)
+prog = env.UnitTest(name, src_files, dependencies, data)

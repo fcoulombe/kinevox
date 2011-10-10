@@ -5,6 +5,7 @@
 
 #include "Renderer/Camera.h"
 #include "Renderer/Renderer.h"
+#include "Renderer/ViewPort.h"
 
 
 namespace GCL
@@ -23,6 +24,8 @@ public:
 
 	Camera &GetCamera() { return mCamera; }
 
+	const ViewPort &GetViewPort() const { return mViewPort; }
+
 	uint32_t gl_depth_tex;
 	uint32_t gl_rgb_tex;
 
@@ -31,6 +34,7 @@ private:
 	void Init2DState();
 
 	Camera mCamera;
+	ViewPort mViewPort;
 
 };
 }

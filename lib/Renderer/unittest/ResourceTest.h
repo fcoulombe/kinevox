@@ -22,30 +22,29 @@
 #pragma once
 
 #include <GCL/UnitTest.h>
-#include <Renderer/Texture.h>
+#include <Renderer/TextureResourceManager.h>
 
 using namespace GCL;
-namespace TextureTest
+
+namespace ResourceTest
 {
   TEST_START
-
-
-  bool CompareImages(const char *filename1, const char *filename2)
-  {
-    Assert_Test(false);
-    return false;
-  }
   void Test()
   {
     TextureResourceManager::Initialize();
-    OpenGLRenderer renderer;
 
-    Texture texture("data/mushroom.png");
-    texture.Bind();
+    {
+      const Resource *tgaResource = TextureResourceManager::Instance().LoadResource("data/mushroom.tga");
+      Assert_Test(tgaResource);
 
-    /*        target.Save("RenderTargetTest.tga");
-    Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
-*/
+      //test resource sharing
+      const Resource *tgaResource2 = TextureResourceManager::Instance().LoadResource("data/mushroom.tga");
+      Assert_Test(tgaResource == tgaResource2);
+
+      const Resource *pngResource = TextureResourceManager::Instance().LoadResource("data/mushroom.png");
+      Assert_Test(pngResource);
+    }
+
     TextureResourceManager::Terminate();
   }
 }

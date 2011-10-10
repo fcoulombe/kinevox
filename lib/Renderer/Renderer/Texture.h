@@ -4,33 +4,18 @@
 
 namespace GCL
 {
+  class TextureResource;
   class Texture
   {
   public:
-    Texture(const char *filename)
-    : mTextureId(-1)
-    {
-      bool ret = LoadTexture(filename);
-      GCLAssert(ret);
-      glGenTextures(1, &mTextureId); glErrorCheck();
-      glBindTexture(GL_TEXTURE_2D, mTextureId);
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-      glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-      glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // automatic mipmap
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, TEXTURE_WIDTH, TEXTURE_HEIGHT, 0,
-                   GL_RGBA, GL_UNSIGNED_BYTE, 0);
-      glBindTexture(GL_TEXTURE_2D, 0);
-    }
+    Texture(const char *filename);
+    Texture(size_t width, size_t height, size_t bypesPerPixel = 4);
     ~Texture()
     {
       glDeleteTextures(1, &mTextureId); glErrorCheck();
     }
-    bool LoadTexture(const char *filename)
-    {
+    bool LoadTexture(const char *filename);
 
-    }
     void Bind() { GCLAssert(IsValid()); glBindTexture(GL_TEXTURE_2D, mTextureId);  glErrorCheck();}
 
     bool IsValid() const { return (int)mTextureId!=-1; }
@@ -40,8 +25,12 @@ namespace GCL
     static void ResetDefault() { GCLAssert(false); }
 
   private:
+    void Initialize(size_t width, size_t height, size_t bypesPerPixel, const uint8_t *imageData = NULL );
+    friend class FrameBuffer;
+    GLuint GetTextureId() const { return mTextureId; }
     GLuint mTextureId;
-    size_t mWidth, mHeight;
+
+    const TextureResource *mTextureResource;
   };
 
 }

@@ -19,8 +19,8 @@ void OpenGLRenderer::Init3DState()
   GCLAssert(sdlInitSuccessful>= 0);
 
   const SDL_VideoInfo* info = NULL;
-  int width = 640;
-  int height = 480;
+  int width = mViewPort.GetWidth();
+  int height = mViewPort.GetHeight();
   int flags = SDL_OPENGL;
   info = SDL_GetVideoInfo( );
 
@@ -204,7 +204,7 @@ void OpenGLRenderer::Render()
 	glEnd(); glErrorCheck();
    */
   SDL_GL_SwapBuffers();glErrorCheck();
-  printf("4");
+
 }
 
 

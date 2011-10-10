@@ -2,7 +2,7 @@ Import('env')
 
 name = "Renderer"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['Kinect', 'GCL', 'SDL', 'OpenCV', 'OpenGL']
+dependencies = ['Kinect', 'GCL', 'SDL', 'OpenCV', 'OpenGL', 'IL', 'libpng']
 
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")

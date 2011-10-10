@@ -21,31 +21,29 @@
  */
 #pragma once
 
+#include <fstream>
+
 #include <GCL/UnitTest.h>
-#include <Renderer/Texture.h>
+#include <Renderer/TextureResource.h>
 
 using namespace GCL;
-namespace TextureTest
+
+namespace TgaLoadingTest
 {
   TEST_START
-
-
-  bool CompareImages(const char *filename1, const char *filename2)
-  {
-    Assert_Test(false);
-    return false;
-  }
   void Test()
   {
-    TextureResourceManager::Initialize();
-    OpenGLRenderer renderer;
+    std::fstream fp("data/mushroom.tga", std::fstream::binary|std::fstream::in);
+    AssertMsg_Test(fp.is_open() && fp.good(), "data/mushroom.tga");
 
-    Texture texture("data/mushroom.png");
-    texture.Bind();
+    TextureResource::TextureData data;
+    TextureResource::LoadTga(fp, data);
+    fp.close();
+    Assert_Test(data.imageData);
+    Assert_Test(data.mBitdepth==8);
+    Assert_Test(data.mBytePerPixel==4);
+    Assert_Test(data.mWidth==768);
+    Assert_Test(data.mHeight==1024);
 
-    /*        target.Save("RenderTargetTest.tga");
-    Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
-*/
-    TextureResourceManager::Terminate();
   }
 }

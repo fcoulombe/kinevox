@@ -27,6 +27,7 @@ import subprocess
 print platform.machine()
 print platform.architecture()
 
+
 def gitAdd(fileName, repoDir):
     cmd = 'git add ' + fileName
     pipe = subprocess.Popen(cmd, shell=True, cwd=repoDir)
@@ -42,6 +43,7 @@ def gitClone(repo, dest="."):
 targetList = COMMAND_LINE_TARGETS
 
 default_env = Environment()
+default_env.SConsignFile(default_env.File("#build/.sconsign.dblite").abspath) 
 #detect if we have the build script installed (hopefully its gonna be the right one)
 if not os.path.exists(default_env.Dir("#GCLBuildScript").abspath):
     #git clone the build script

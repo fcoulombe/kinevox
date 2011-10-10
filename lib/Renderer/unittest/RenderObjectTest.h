@@ -53,9 +53,6 @@ namespace RenderObjectTest
   void Test()
   {
     OpenGLRenderer renderer;
-    renderer.Render();
-    Shader shader;
-    shader.Bind();
     MyRenderObject obj;
     renderer.Render();
   }

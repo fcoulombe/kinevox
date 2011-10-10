@@ -1,5 +1,6 @@
 #pragma once
 #include "Renderer/OpenGL.h"
+#include "Renderer/Texture.h"
 
 
 namespace GCL
@@ -7,10 +8,18 @@ namespace GCL
   class FrameBuffer
   {
   public:
-    FrameBuffer()
+    FrameBuffer(const Texture &texture, const RenderBuffer &depthBuffer)
     : mFrameBufferId(-1)
     {
       glGenFramebuffers(1, &mFrameBufferId); glErrorCheck();
+      glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, mFrameBufferId);
+      glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                                GL_TEXTURE_2D, texture.GetTextureId(), 0);
+      glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
+                                   GL_RENDERBUFFER_EXT, depthBuffer.GetRenderBufferId());
+
+      glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+
     }
     ~FrameBuffer()
     {
@@ -22,7 +31,7 @@ namespace GCL
 
     void Save(const char *filename) { GCLAssert(false); }
 
-    static void ResetDefault() { GCLAssert(false); }
+    static void ResetDefault() {  glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);  glErrorCheck(); }
 
   private:
     GLuint mFrameBufferId;

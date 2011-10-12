@@ -31,7 +31,7 @@ int main(int argc, char **argv)
   //	renderer->RegisterRenderObject(&grid);
   while (true)
     {
-#if 0
+
       ProcessInput();
       if (!SynchronizeDrawingData())
         continue;
@@ -70,7 +70,7 @@ int main(int argc, char **argv)
               cvScalar(255, 0, 0));
       }
 #endif
-#endif
+
       //renderer->Render((uint8_t*)rgbImg->imageData, (uint8_t*)depthImg->imageData);
       renderer->Render();
 

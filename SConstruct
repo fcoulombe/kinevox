@@ -21,11 +21,23 @@
 
 import os
 import os.path
+import atexit
 import sys
 import platform
 import subprocess
 print platform.machine()
 print platform.architecture()
+
+
+AddOption('--use-valgrind', action="store_true", 
+          dest="useValgrind",
+          default=False,
+          help='run the unit tests with valgrind')
+
+AddOption('--gen-valgrind-suppressions', action="store_true", 
+          dest="genValgrindSuppressions",
+          default=False,
+          help='generate valgrind suppression files')
 
 
 def gitAdd(fileName, repoDir):
@@ -58,7 +70,7 @@ if not os.path.exists(default_env.Dir("#lib/GCL").abspath):
     
     gitClone("https://fcoulombe@github.com/fcoulombe/GCL.git", "./lib/GCL")
 
-
+default_env.Tool('Profiler', toolpath=['site_scons/site_tools'])
 default_env.Tool('Catalog', toolpath=['site_scons/site_tools'])
 default_env.Tool('SConsWalk', toolpath=['site_scons/site_tools'])
 default_env.Tool('Wrappers', toolpath=['site_scons/site_tools'])
@@ -68,12 +80,43 @@ default_env['ENV']['PKG_CONFIG_PATH'] = '/usr/local/lib/pkgconfig'
 print default_env['ENV']['PATH']
 
 
-cflags = ["-O0", "-fPIC", "-g", "-Wall"]                                    
+cflags = ["-O0", "-fPIC", "-g", "-Wall", "-Werror", "-Wextra"]                                    
 default_env.Append(CPPFLAGS=cflags )
 
+sconsFilesList = [
+"./3rdParty/IL/SConscript",
+"./3rdParty/libfreenect/SConscript",
+"./3rdParty/libpng/SConscript",
+"./3rdParty/OpenCV/SConscript",
+"./3rdParty/OpenGL/SConscript",
+"./3rdParty/SDL/SConscript",
 
-default_env.SConsWalk(".", './SConscript')
+"./lib/GCL/GCL/SConscript",
+"./lib/GCL/GCL/unittest/SConscript",
+"./lib/Input/SConscript",
+"./lib/Input/unittest/SConscript",
+"./lib/Kinect/SConscript",
+"./lib/Kinect/unittest/SConscript",
+"./lib/Renderer/SConscript",
+"./lib/Renderer/unittest/SConscript",
+"./lib/Voxel/SConscript",
+"./lib/Voxel/unittest/SConscript",
+"./lib/AppLayer/SConscript",
+"./lib/AppLayer/unittest/SConscript",
+"./Program/Example/BasicTextureMapping/SConscript",
+"./Program/Kinevox/SConscript",
+]
+if GetOption('genValgrindSuppressions'):
+    sconsFileList.append("./tools/valgrindgen/SConscript") #this tool generates some rules for valgrind so that it ignores certain pattern of memory errors that we don't care about
+
+default_env.StampTime("start SConscript Parse...")
+default_env.SConsWalkList(sconsFilesList, './SConscript')
+default_env.StampTime("end sconscript parse...")
 if "@aliases" in targetList:
     default_env.displayAliases()
     sys.exit()
 
+def OnExit():
+    default_env.StampTime("exit")
+
+atexit.register(OnExit)

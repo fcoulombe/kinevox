@@ -22,31 +22,34 @@
 #pragma once
 
 #include <GCL/UnitTest.h>
-#include <Renderer/Texture.h>
+
+#include <Renderer/Camera.h>
+#include <Renderer/GLRenderer.h>
+#include <Renderer/ViewPort.h>
 
 using namespace GCL;
-namespace TextureTest
+namespace CameraTest
 {
   TEST_START
-
-
-  bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
-  {
-    Assert_Test(false && "TBD");
-    return false;
-  }
   void Test()
   {
-    TextureResourceManager::Initialize();
     OpenGLRenderer renderer;
+    Camera &camera = renderer.GetCamera();
+    ViewPort viewport;
 
-    Texture texture("data/mushroom.tga");
-    texture.Bind();
-
-
-    texture.Save("RenderTargetTest.tga");
-    //Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
-
-    TextureResourceManager::Terminate();
+    //std::cout << *(Matrix44*)&camera << std::endl;
+    camera.Update();
+    camera.MoveForward();
+    camera.Update();
+    camera.MoveBackward();
+    camera.Update();
+    camera.TurnLeft();
+    camera.Update();
+    camera.TurnRight();
+    camera.Update();
+    camera.TiltUp();
+    camera.Update();
+    camera.TiltDown();
+    camera.Update();
   }
 }

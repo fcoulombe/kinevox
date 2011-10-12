@@ -12,9 +12,9 @@ namespace GCL
     virtual bool Update() =0;
     virtual void Render(uint8_t *rgb_front, uint8_t *depth_front) =0;
 
-    void RegisterRenderObject(const RenderObject *renderObject)
+    void RegisterRenderObject(const RenderObject &renderObject)
     {
-      mRenderObjectList.push_back(renderObject);
+      mRenderObjectList.push_back(&renderObject);
     }
 
   protected:

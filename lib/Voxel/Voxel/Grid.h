@@ -38,7 +38,7 @@ namespace GCL
     ~Grid();
 
     void CreateVertexData();
-    const VertexData *GetVertexData() const; // this function can't be const because it might need to create vertex data on demand
+    const VertexData &GetVertexData() const; // this function can't be const because it might need to create vertex data on demand
 
   private:
 

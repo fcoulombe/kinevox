@@ -1,11 +1,12 @@
 #pragma once
 #include <cstdlib>
 #include <stdint.h>
+#include <GCL/Rect.h>
 
-struct CvRect;
+
 namespace GCL
 {
-	const CvRect &ProcessSelection();
+	const Rect<int> &ProcessSelection();
 	void ProcessInput();
 	bool IsKeyUp(uint16_t key);
 	bool IsLMouseDown();

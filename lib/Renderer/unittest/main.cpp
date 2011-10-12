@@ -15,6 +15,8 @@
 #include <Renderer/ShaderAttributeDefaultLocations.h>
 #include <Renderer/Vertex.h>
 #include <Renderer/VertexBuffer.h>*/
+
+#include "CameraTest.h"
 #include "GLRendererTest.h"
 #include "PngLoadingTest.h"
 #include "RenderObjectTest.h"
@@ -46,13 +48,14 @@ static const std::string Dirname(const std::string  &dir)
   return loc.substr(0, i);
 }
 
-int main(int argc, char **argv)
+int main(int /*argc*/, char **argv)
 {
   std::cout << "App: " << Dirname(std::string(argv[0])) << std::endl;
 
   try
   {
       GLRendererTest::Test();
+      CameraTest::Test();
       ShaderTest::Test();
       VertexTest::Test();
       VertexBufferTest::Test();

@@ -34,7 +34,7 @@ void ResourceManager::ReleaseResource( const Resource *resource )
       if (it->second == resource)
         {
           --it->second->mRefCount;
-          GCLAssert(resource->mRefCount>=0); //if we get a ref count of -1, something went really wrong;
+          GCLAssert((ssize_t)(resource->mRefCount)>=0); //if we get a ref count of -1, something went really wrong;
           return;
         }
     }

@@ -6,7 +6,7 @@
 #include "Voxel/Voxel.h"
 
 #include "GridTest.h"
-int main(int argc, char **argv)
+int main(int /*argc*/, char ** /*argv*/)
 {
   GridTest::Test();
   return 0;

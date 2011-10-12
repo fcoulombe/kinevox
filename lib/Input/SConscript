@@ -2,7 +2,7 @@ Import('env')
 
 name = "Input"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['GCL', 'SDL', 'OpenCV']
+dependencies = ['GCL', 'SDL']
 
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")

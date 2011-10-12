@@ -34,7 +34,11 @@ namespace RenderObjectTest
   class MyRenderObject : public RenderObject
   {
   public:
-    const VertexData *GetVertexData() const
+    MyRenderObject()
+    : RenderObject(Matrix44::IDENTITY)
+    {}
+
+    const VertexData &GetVertexData() const
     {
       static const   VertexPNT square[4] = {
           {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
@@ -42,8 +46,17 @@ namespace RenderObjectTest
           {WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
           {WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
       static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
-      return &data;
-
+      return data;
+    }
+    void SetOrientation(WorldUnit x,WorldUnit y,WorldUnit z)
+    {
+       mTransform.SetRotationX(x);
+       mTransform.SetRotationY(y);
+       mTransform.SetRotationZ(z);
+    }
+    void SetPosition(const WorldPoint3 &position)
+    {
+      mTransform.SetPosition(position);
     }
   private:
 
@@ -54,6 +67,16 @@ namespace RenderObjectTest
   {
     OpenGLRenderer renderer;
     MyRenderObject obj;
+    renderer.RegisterRenderObject(obj);
+    Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
+
+    const WorldPoint3 position(0.0,0.0, -10.0);
+    obj.SetPosition(position);
+    Matrix44 positionTestMat(Matrix44::IDENTITY);
+    positionTestMat.SetPosition(position);
+    std::stringstream s;
+    s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;
+    AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
     renderer.Render();
   }
 }

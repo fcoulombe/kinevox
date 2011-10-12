@@ -46,7 +46,7 @@ void depth_cb(freenect_device *dev, void *v_depth, uint32_t timestamp);
 void rgb_cb(freenect_device *dev, void *rgb, uint32_t timestamp);
 void *freenect_threadfunc(void *arg);
 
-void depth_cb(freenect_device *dev, void *v_depth, uint32_t timestamp)
+void depth_cb(freenect_device * /*dev*/, void *v_depth, uint32_t /*timestamp*/)
 {
 	int i;
 	uint16_t *depth = (uint16_t*)v_depth;
@@ -98,7 +98,7 @@ void depth_cb(freenect_device *dev, void *v_depth, uint32_t timestamp)
 	pthread_mutex_unlock(&gl_backbuf_mutex);
 }
 
-void rgb_cb(freenect_device *dev, void *rgb, uint32_t timestamp)
+void rgb_cb(freenect_device *dev, void *rgb, uint32_t /*timestamp*/)
 {
 
 	pthread_mutex_lock(&gl_backbuf_mutex);
@@ -114,7 +114,7 @@ void rgb_cb(freenect_device *dev, void *rgb, uint32_t timestamp)
 	pthread_mutex_unlock(&gl_backbuf_mutex);
 }
 
-void *freenect_threadfunc(void *arg)
+void *freenect_threadfunc(void * /*arg*/)
 {
 	int accelCount = 0;
 

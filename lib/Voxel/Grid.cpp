@@ -39,7 +39,8 @@ Grid::Slice::~Slice()
 
 
 Grid::Grid(size_t x, size_t y, size_t z)
-: X_DIMENSION(x),
+: RenderObject(Matrix44::IDENTITY),
+    X_DIMENSION(x),
   Y_DIMENSION(y),
   Z_DIMENSION(z)
 {
@@ -79,9 +80,9 @@ void Grid::CreateVertexData()
   mVertexData.vertexType = VertexP::GetComponentType();
 }
 
-const VertexData *Grid::GetVertexData() const
+const VertexData &Grid::GetVertexData() const
 {
   GCLAssert(mVertexData.mVertexData);
-  return &mVertexData;
+  return mVertexData;
 }
 

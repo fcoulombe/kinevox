@@ -1,6 +1,9 @@
 #include "Input/Input.h"
+#if 0
+#include <algorithm>
 #include <SDL.h>
-#include <cv.h>
+#include <GCL/Point2.h>
+#include <GCL/Rect.h>
 
 
 namespace GCL
@@ -27,17 +30,17 @@ bool IsLMouseDown()
 }
 bool IsKeyUp(uint16_t key)
 {
-
 	return keys[key];
-
 }
 void ProcessInput()
 {
 	memset(keys, 0, 255);
 	SDL_Event event;
 
-	while ( SDL_PollEvent(&event) ) {
-		switch (event.type) {
+	while ( SDL_PollEvent(&event) )
+	{
+		switch (event.type)
+		{
 		case SDL_KEYDOWN:
 			keys[event.key.keysym.sym] = true;
 			break;
@@ -75,24 +78,27 @@ void ProcessInput()
 			exit(0);
 		}
 	}
-	if (mouseX>640) {
+	if (mouseX>640)
+	{
 		mouseX -= 640;
 	}
 
 }
 
 
-CvPoint origin;
-CvPoint currentPos;
-CvRect selection;
+Point2<int> origin;
+Point2<int> currentPos;
+Rect<int> selection;
 bool isSelectionStarted = false;
 bool hasSelection = false;
-const CvRect &ProcessSelection()
+const Rect<int> &ProcessSelection()
 {
 	currentPos.x = GetMouseX();
 	currentPos.y = GetMouseY();
-	if (IsLMouseDown()) {
-		if (!isSelectionStarted) {
+	if (IsLMouseDown())
+	{
+		if (!isSelectionStarted)
+		{
 			//start picking
 			origin = currentPos;
 			selection.x = origin.x;
@@ -103,20 +109,23 @@ const CvRect &ProcessSelection()
 			printf("staret picking\n");
 		}
 		isSelectionStarted = true;
-		selection.x = MIN(currentPos.x,origin.x);
-		selection.y = MIN(currentPos.y,origin.y);
-		selection.width = selection.x + CV_IABS(currentPos.x - origin.x);
-		selection.height = selection.y + CV_IABS(currentPos.y - origin.y);
+		selection.x = std::min(currentPos.x,origin.x);
+		selection.y = std::min(currentPos.y,origin.y);
+		selection.width = selection.x + std::abs(currentPos.x - origin.x);
+		selection.height = selection.y + std::abs(currentPos.y - origin.y);
 
-		selection.x = MAX( selection.x, 0 );
-		selection.y = MAX( selection.y, 0 );
-		selection.width = MIN( selection.width, 640);
-		selection.height = MIN( selection.height, 480 );
+		selection.x = std::max( selection.x, 0 );
+		selection.y = std::max( selection.y, 0 );
+		selection.width = std::min( selection.width, 640);
+		selection.height = std::min( selection.height, 480 );
 		selection.width -= selection.x;
 		selection.height -= selection.y;
 
-	} else {
-		if (isSelectionStarted) {
+	}
+	else
+	{
+		if (isSelectionStarted)
+		{
 			printf("end picking\n");
 			//end picking
 			isSelectionStarted = false;
@@ -129,3 +138,4 @@ const CvRect &ProcessSelection()
 	return selection;
 }
 }
+#endif

@@ -36,7 +36,7 @@ namespace FrameBufferTest
   class MyRenderObject : public RenderObject
   {
   public:
-    const VertexData *GetVertexData() const
+    const VertexData &GetVertexData() const
     {
       static const   VertexPNT square[4] = {
           {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
@@ -44,7 +44,7 @@ namespace FrameBufferTest
           {WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
           {WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
       static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
-      return &data;
+      return data;
 
     }
   private:
@@ -52,9 +52,9 @@ namespace FrameBufferTest
 
   };
 
-  bool CompareImages(const char *filename1, const char *filename2)
+  bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
   {
-    Assert_Test(false);
+    Assert_Test(false && "TBD");
     return false;
   }
   void Test()
@@ -69,7 +69,7 @@ namespace FrameBufferTest
     size_t height = renderer.GetViewPort().GetHeight();
 
 
-    RenderBuffer depthRenderBuffer(width, height, 2);;
+    RenderBuffer depthRenderBuffer(width, height/*, 2*/);
     depthRenderBuffer.Bind();
 
     Texture texture(width, height, 4);
@@ -80,9 +80,9 @@ namespace FrameBufferTest
     renderer.Render();
 
     FrameBuffer::ResetDefault();
-    /*        target.Save("RenderTargetTest.tga");
-    Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
-*/
+    texture.Save("RenderTargetTest.tga");
+    //Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
+
 
   }
 }

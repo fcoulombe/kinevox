@@ -16,16 +16,24 @@ namespace GCL
     }
     bool LoadTexture(const char *filename);
 
-    void Bind() { GCLAssert(IsValid()); glBindTexture(GL_TEXTURE_2D, mTextureId);  glErrorCheck();}
+    void Bind() const { GCLAssert(IsValid()); glBindTexture(GL_TEXTURE_2D, mTextureId);  glErrorCheck();}
 
     bool IsValid() const { return (int)mTextureId!=-1; }
 
-    void Save(const char *filename) { GCLAssert(false); }
+    void Save(const char *filename);
 
     static void ResetDefault() { GCLAssert(false); }
 
   private:
     void Initialize(size_t width, size_t height, size_t bypesPerPixel, const uint8_t *imageData = NULL );
+    const uint8_t *GetTextureFromVRAM() const;
+
+    struct TextureData
+    {
+      size_t width, height;
+      size_t GetImageSizeInBytes() const { return width*height*3; }
+    }mTextureData;
+
     friend class FrameBuffer;
     GLuint GetTextureId() const { return mTextureId; }
     GLuint mTextureId;

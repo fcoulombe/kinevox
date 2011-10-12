@@ -1,5 +1,7 @@
 #pragma once
 
+#include <GCL/Matrix44.h>
+
 namespace GCL
 {
   struct VertexData
@@ -13,9 +15,14 @@ namespace GCL
   class RenderObject
   {
   public:
-    RenderObject()
+    RenderObject(const Matrix44 &transform)
+    : mTransform(transform)
     {
     }
-    virtual const VertexData *GetVertexData() const=0;
+    virtual const VertexData &GetVertexData() const=0;
+    const Matrix44 &GetTransform() const {return mTransform; }
+
+  protected:
+    Matrix44 mTransform;
   };
 }

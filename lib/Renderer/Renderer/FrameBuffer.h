@@ -29,7 +29,7 @@ namespace GCL
 
     bool IsValid() const { return (int)mFrameBufferId!=-1; }
 
-    void Save(const char *filename) { GCLAssert(false); }
+    void Save(const char * /*filename*/) { GCLAssert(false && "TBD"); }
 
     static void ResetDefault() {  glBindFramebuffer(GL_FRAMEBUFFER_EXT, 0);  glErrorCheck(); }
 

@@ -7,7 +7,7 @@ namespace GCL
   class RenderBuffer
   {
   public:
-    RenderBuffer(size_t width, size_t height, size_t bytePerPixel)
+    RenderBuffer(size_t width, size_t height)
     : mRenderBufferId(-1)
     {
       glGenRenderbuffers(1, &mRenderBufferId); glErrorCheck();
@@ -24,9 +24,9 @@ namespace GCL
 
     bool IsValid() const { return (int)mRenderBufferId!=-1; }
 
-    void Save(const char *filename) { GCLAssert(false); }
+    void Save(const char * /*filename*/) { GCLAssert(false && "TBD"); }
 
-    static void ResetDefault() { GCLAssert(false); }
+    static void ResetDefault() { GCLAssert(false && "TBD"); }
 
   private:
     friend class FrameBuffer;

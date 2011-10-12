@@ -1,0 +1,8 @@
+Import('env')
+
+name = "AppLayer_test"
+dependencies = ["AppLayer"]
+data = []
+
+src_files = env.Glob("*.cpp")
+prog = env.UnitTest(name, src_files, dependencies, data)

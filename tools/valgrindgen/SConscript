@@ -1,0 +1,29 @@
+Import('env')
+
+src_files = env.Glob("*.cpp")
+print "parse"
+suppressFileList = []
+for s in src_files:
+	print "stuff %s" % s
+	cflagsFile = env.File(s.abspath+".cflags")
+	cflags = eval(open(cflagsFile.srcnode().abspath).readlines()[0])
+	
+	
+	lflagsFile = env.File(s.abspath+".lflags") 
+	lflags = eval(open(lflagsFile.srcnode().abspath).readlines()[0])
+	obj = env.Object(s, CCFLAGS= cflags)
+	env.Depends(obj, cflagsFile)
+	env.Depends(obj, lflagsFile)
+	prog = env.Program(obj, LINKFLAGS=lflags)
+	#cmd = "/usr/local/bin/valgrind --leak-check=full --dsymutil=yes --gen-suppressions=all --quiet "+suppressionString + " --show-reachable=yes "
+	
+	suppressionString = ''
+	for rule in suppressFileList:
+		suppressionString += ' --suppressions=%s ' % rule[0].abspath
+	
+	progName = str(prog[0])
+	grind = env.Command(env.File(progName+'_suppression.log'), prog, "/usr/local/bin/valgrind --leak-check=full --dsymutil=yes --gen-suppressions=all --show-reachable=yes --quiet "+suppressionString + "   $SOURCE &> $TARGET")
+  	rules = env.Command(env.File(progName+'_suppression.rule'), grind, "cat $SOURCE | grep -v ^== | grep -v ^-- > $TARGET")
+  	suppressFileList.append(rules)
+  	env.AlwaysBuild(rules)
+	env.Alias("@gen_valgrind_suppressions", rules)

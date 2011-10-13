@@ -39,6 +39,14 @@ AddOption('--gen-valgrind-suppressions', action="store_true",
           default=False,
           help='generate valgrind suppression files')
 
+AddOption('--compiler', action="store",
+          type='string', 
+          dest="compiler",
+          default='g++',
+          help='specify the compiler')
+
+
+
 
 def gitAdd(fileName, repoDir):
     cmd = 'git add ' + fileName
@@ -69,6 +77,29 @@ if not os.path.exists(default_env.Dir("#lib/GCL").abspath):
     print "The cgl lib doesn't seem to be installed. I will fetch it for you from github"
     
     gitClone("https://fcoulombe@github.com/fcoulombe/GCL.git", "./lib/GCL")
+
+
+
+##############################################
+#
+#    SELECT COMPILER
+#
+##############################################
+compiler = GetOption('compiler')
+if compiler == 'g++':
+    default_env['CXX'] = 'g++'
+    default_env['CC'] = 'gcc'
+elif compiler == 'clang':
+    default_env['CXX'] = 'clang'
+    default_env['CC'] = 'clang'
+
+print default_env['CC']
+print default_env['CXX']  
+    
+    
+##############################################
+##############################################
+
 
 default_env.Tool('Profiler', toolpath=['site_scons/site_tools'])
 default_env.Tool('Catalog', toolpath=['site_scons/site_tools'])

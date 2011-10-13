@@ -20,18 +20,22 @@
  * THE SOFTWARE.
  */
 #pragma once
+#include <sstream>
 
 #include <GCL/UnitTest.h>
-#include <Renderer/GLRenderer.h>
+#include <AppLayer/GCLApplication.h>
 
 using namespace GCL;
-namespace GLRendererTest
+namespace GCLApplicationTest
 {
   TEST_START
 
+
   void Test()
   {
-    GLRenderer *renderer =  new GLRenderer();
-    delete renderer;
+    GCLApplication::Initialize();
+    Application::Update();
+    Application::Render();
+    GCLApplication::Terminate();
   }
 }

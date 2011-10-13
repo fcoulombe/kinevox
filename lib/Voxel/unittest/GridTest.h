@@ -35,7 +35,7 @@ TEST_START
 
 void Test()
 {
-  OpenGLRenderer *renderer = new OpenGLRenderer();
+  GLRenderer *renderer = new GLRenderer();
   std::cout << "created" << std::endl;
 
   /*Shader shader;

@@ -11,11 +11,11 @@
 namespace GCL
 {
 
-class OpenGLRenderer : public Renderer
+class GLRenderer : public Renderer
 {
 public:
-	OpenGLRenderer();
-	~OpenGLRenderer();
+	GLRenderer();
+	~GLRenderer();
 	bool Update();
 	void Render();
 	void Render(uint8_t *rgb_front, uint8_t *depth_front);

@@ -59,7 +59,7 @@ namespace FrameBufferTest
   }
   void Test()
   {
-    OpenGLRenderer renderer;
+    GLRenderer renderer;
     /*renderer.Render();
     Shader shader;
     shader.Bind();

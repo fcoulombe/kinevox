@@ -33,7 +33,7 @@ namespace CameraTest
   TEST_START
   void Test()
   {
-    OpenGLRenderer renderer;
+    GLRenderer renderer;
     Camera &camera = renderer.GetCamera();
     ViewPort viewport;
 

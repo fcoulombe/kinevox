@@ -8,10 +8,9 @@ namespace GCL
 class GCLRenderObject : public RenderObject
 {
 public:
-	GCLRenderObject()
-	: RenderObject(Matrix44::IDENTITY)
-	{}
+	GCLRenderObject();
 
+	~GCLRenderObject();
 	const VertexData &GetVertexData() const
 	{
 		return data;
@@ -30,6 +29,7 @@ public:
 	}
 private:
 
+	//friend class GCLApplication;
 	static const VertexPNT square[4];
 	static const VertexData data;
 

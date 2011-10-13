@@ -38,7 +38,7 @@ namespace TextureTest
   void Test()
   {
     TextureResourceManager::Initialize();
-    OpenGLRenderer renderer;
+    GLRenderer renderer;
 
     Texture texture("data/mushroom.tga");
     texture.Bind();

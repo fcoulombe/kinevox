@@ -22,32 +22,35 @@
 #pragma once
 #include <sstream>
 
+#include <AppLayer/GCLApplication.h>
 #include <AppLayer/GCLRenderObject.h>
+
 #include <GCL/UnitTest.h>
-#include <Renderer/GLRenderer.h>
-#include <Renderer/RenderObject.h>
-#include <Renderer/Shader.h>
-#include <Renderer/Vertex.h>
 
 using namespace GCL;
 namespace GCLRenderObjectTest
 {
-  TEST_START
+TEST_START
 
 
-  void Test()
-  {
-    OpenGLRenderer renderer;
-    GCLRenderObject obj;
-    Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
+void Test()
+{
+	GCLApplication::Initialize();
 
-    const WorldPoint3 position(0.0,0.0, -10.0);
-    obj.SetPosition(position);
-    Matrix44 positionTestMat(Matrix44::IDENTITY);
-    positionTestMat.SetPosition(position);
-    std::stringstream s;
-    s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;
-    AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
-    renderer.Render();
-  }
+	GCLRenderObject obj;
+	Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
+
+	const WorldPoint3 position(0.0,0.0, -10.0);
+	obj.SetPosition(position);
+	Matrix44 positionTestMat(Matrix44::IDENTITY);
+	positionTestMat.SetPosition(position);
+	std::stringstream s;
+	s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;
+	AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
+
+	GCLApplication::Update();
+	GCLApplication::Render();
+
+	GCLApplication::Terminate();
+}
 }

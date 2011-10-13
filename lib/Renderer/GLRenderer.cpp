@@ -12,7 +12,7 @@
 
 using namespace GCL;
 
-void OpenGLRenderer::Init3DState()
+void GLRenderer::Init3DState()
 {
 	int sdlInitSuccessful = SDL_Init(SDL_INIT_VIDEO);
 	GCLAssert(sdlInitSuccessful>= 0);
@@ -66,7 +66,7 @@ void OpenGLRenderer::Init3DState()
 
 }
 
-void OpenGLRenderer::Init2DState()
+void GLRenderer::Init2DState()
 {
 	int sdlInitSuccessful = SDL_Init(SDL_INIT_VIDEO);
 	GCLAssert(sdlInitSuccessful>= 0);
@@ -133,32 +133,32 @@ void OpenGLRenderer::Init2DState()
 
 }
 
-OpenGLRenderer::OpenGLRenderer()
+GLRenderer::GLRenderer()
 {
 	Init3DState();
 
 }
-OpenGLRenderer::~OpenGLRenderer()
+GLRenderer::~GLRenderer()
 {
 	/* Delete our opengl context, destroy our window, and shutdown SDL */
 	SDL_Quit();
 }
 
-bool OpenGLRenderer::Update()
+bool GLRenderer::Update()
 {
 
 	return true;
 }
 
-void OpenGLRenderer::Render()
+void GLRenderer::Render()
 {
 	glClearColor(0.0, 0.0, 1.0, 0.0); glErrorCheck();
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); glErrorCheck();
 	glLoadIdentity(); glErrorCheck();
-	mCamera.Update();
+	//mCamera.Update();
 
 
-	for (size_t i=0; i<mRenderObjectList.size(); ++i)
+	for (size_t i=0; false && i<mRenderObjectList.size(); ++i)
 	{
 		const VertexData &data = mRenderObjectList[i]->GetVertexData();
 		const Matrix44 &transform = mRenderObjectList[i]->GetTransform();
@@ -216,7 +216,7 @@ void OpenGLRenderer::Render()
 
 
 static bool isRenderingExtra = false;
-void OpenGLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth)
+void GLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth)
 {
 	glBindTexture(GL_TEXTURE_2D, gl_depth_tex);glErrorCheck();
 	if (depth == 1) {
@@ -235,7 +235,7 @@ void OpenGLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height
 	isRenderingExtra = true;
 
 }
-void OpenGLRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
+void GLRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
 {
 
 	if (!isRenderingExtra) {

@@ -19,7 +19,7 @@ int main(int argc, char **argv)
   /*if (!InitKinect())
 		return -1;*/
 
-  OpenGLRenderer *renderer = new OpenGLRenderer();
+  GLRenderer *renderer = new GLRenderer();
 
   IplImage* rgbImg;
   IplImage* depthImg;

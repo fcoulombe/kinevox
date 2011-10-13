@@ -4,55 +4,62 @@
 #include <SDL.h>
 
 #include <AppLayer/GCLRenderObject.h>
+#include <AppLayer/GCLApplication.h>
 #include <Input/Input.h>
-#include <Renderer/GLRenderer.h>
-#include <Renderer/RenderObject.h>
-#include <Renderer/Vertex.h>
+
 
 using namespace GCL;
 
 
 int main(int /*argc*/, char ** /*argv*/)
 {
-  OpenGLRenderer renderer;
-  //Camera &tempCamera = renderer.GetCamera();
+	std::cout << "start program" << std::endl;
 
-  GCLRenderObject renderObject;
-  renderObject.SetPosition(0,0,-10.0);
+	try
+	{
+		std::cout << "render" << std::endl;
+		GCLApplication::Initialize();
+		//Camera &tempCamera = renderer.GetCamera();
 
-  renderer.RegisterRenderObject(renderObject);
+		std::cout << "obj" << std::endl;
+		GCLRenderObject renderObject;
+		//renderObject.SetPosition(0,0,-10.0);
 
-  while (true)
-    {
+
+		while (true)
+		{
+			std::cout << "kllooop" << std::endl;
+			GCLApplication::Update();
 #if 0
-      ProcessInput();
+			if (IsKeyUp(SDLK_UP))
+				tempCamera.MoveForward();
+			if (IsKeyUp(SDLK_DOWN))
+				tempCamera.MoveBackward();
 
-      if (IsKeyUp(SDLK_UP))
-        tempCamera.MoveForward();
-      if (IsKeyUp(SDLK_DOWN))
-        tempCamera.MoveBackward();
+			if (IsKeyUp(SDLK_LEFT))
+				tempCamera.TurnLeft();
+			if (IsKeyUp(SDLK_RIGHT))
+				tempCamera.TurnRight();
 
-      if (IsKeyUp(SDLK_LEFT))
-        tempCamera.TurnLeft();
-      if (IsKeyUp(SDLK_RIGHT))
-        tempCamera.TurnRight();
-
-      if (IsKeyUp(SDLK_PAGEUP))
-        tempCamera.TiltUp();
-      if (IsKeyUp(SDLK_PAGEDOWN))
-        tempCamera.TiltDown();
-
-      renderer.Render();
-
-      if (!renderer.Update())
-        return 1;
+			if (IsKeyUp(SDLK_PAGEUP))
+				tempCamera.TiltUp();
+			if (IsKeyUp(SDLK_PAGEDOWN))
+				tempCamera.TiltDown();
 #else
-      renderer.Render();
-      sleep(0);
-    }
+
+			GCLApplication::Render();
+			sleep(1);
+		}
+		#endif
+	}
+	catch(GCLException &e)
+	{
+		std::cerr << e.what() << std::endl;
+	}
 
 
-#endif
-  return 0;
+	GCLApplication::Terminate();
+
+	return 0;
 }
 

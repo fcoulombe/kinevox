@@ -65,7 +65,7 @@ namespace RenderObjectTest
 
   void Test()
   {
-    OpenGLRenderer renderer;
+    GLRenderer renderer;
     MyRenderObject obj;
     renderer.RegisterRenderObject(obj);
     Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
@@ -77,6 +77,8 @@ namespace RenderObjectTest
     std::stringstream s;
     s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;
     AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
+
+    renderer.RegisterRenderObject(obj);
     renderer.Render();
   }
 }

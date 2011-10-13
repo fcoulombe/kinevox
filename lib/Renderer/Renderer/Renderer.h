@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include <vector>
-
+#include <iostream>
 namespace GCL
 {
   class RenderObject;
@@ -14,7 +14,9 @@ namespace GCL
 
     void RegisterRenderObject(const RenderObject &renderObject)
     {
+    	std::cout << "start rgeistering" << std::endl;
       mRenderObjectList.push_back(&renderObject);
+      std::cout << "end registering" << std::endl;
     }
 
   protected:

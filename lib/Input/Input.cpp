@@ -1,5 +1,5 @@
 #include "Input/Input.h"
-#if 0
+#if 1
 #include <algorithm>
 #include <SDL.h>
 #include <GCL/Point2.h>

@@ -19,6 +19,7 @@ namespace GCL
     : mTransform(transform)
     {
     }
+    virtual ~RenderObject() {}
     virtual const VertexData &GetVertexData() const=0;
     const Matrix44 &GetTransform() const {return mTransform; }
 

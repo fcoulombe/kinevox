@@ -31,7 +31,7 @@ namespace ShaderTest
 
   void Test()
   {
-    OpenGLRenderer renderer;
+    GLRenderer renderer;
     Shader shader;
     shader.Bind();
     Assert_Test(shader.IsValid());

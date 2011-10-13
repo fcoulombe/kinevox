@@ -31,7 +31,7 @@ TEST_START
 
 void Test()
 {
-  OpenGLRenderer renderer;
+  GLRenderer renderer;
 
   Shader shader;
   shader.Bind();

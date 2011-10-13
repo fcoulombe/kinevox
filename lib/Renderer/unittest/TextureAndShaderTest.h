@@ -60,7 +60,7 @@ namespace TextureAndShaderTest
   void Test()
   {
     TextureResourceManager::Initialize();
-    OpenGLRenderer renderer;
+    GLRenderer renderer;
     Shader shader;
     shader.Bind();
 

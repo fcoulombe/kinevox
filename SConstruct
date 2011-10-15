@@ -86,13 +86,18 @@ if not os.path.exists(default_env.Dir("#lib/GCL").abspath):
 #
 ##############################################
 compiler = GetOption('compiler')
-if compiler == 'g++':
+"""if compiler == 'g++':
     default_env['CXX'] = 'g++'
     default_env['CC'] = 'gcc'
-elif compiler == 'clang':
-    default_env['CXX'] = 'clang'
-    default_env['CC'] = 'clang'
-
+elif compiler == 'clang':"""
+print compiler
+default_env['CXX'] = 'clang++'
+default_env['CC'] = 'clang'
+default_env['CXX'] = 'scan-build -k'
+default_env['CC'] = 'scan-build -k'
+cflags = ["-pedantic", "-std=c++0x", '-fexceptions', '-ftrapv', '-fvisibility=hidden']
+default_env.AppendUnique(CFLAGS=cflags)
+default_env.AppendUnique(CXXFLAGS=cflags)
 print default_env['CC']
 print default_env['CXX']  
     

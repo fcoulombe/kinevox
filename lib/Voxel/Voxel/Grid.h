@@ -19,7 +19,9 @@ namespace GCL
       Row(size_t x, size_t y, size_t z);
       ~Row();
 
+#include <GCL/PushWarnings.h>
       static const WorldUnit gVoxelSize = 1.0;
+#include <GCL/PopWarnings.h>
       typedef std::vector<Voxel> VoxelList;
       VoxelList mRow;
       typedef std::vector<WorldPoint3> PositionList;

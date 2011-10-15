@@ -1,6 +1,6 @@
 
 #include <unistd.h>
-#include <cv.h>
+#include <Renderer/OpenCV.h>
 
 #include "Input/Input.h"
 #include "Kinect/KinectDriver.h"

@@ -10,7 +10,7 @@ namespace GCL
   //when something asks it to load a texture, it will hash the name and then
   //look in the map if we already have this texture loaded. if its the case, it will return
   //a reference and increase the ref count. this is so that we don't waste memory loading similar textures
-  struct TextureResource;
+  class TextureResource;
   class TextureResourceManager : public ResourceManager
   {
   public:

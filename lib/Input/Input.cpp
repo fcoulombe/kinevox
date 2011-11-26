@@ -1,40 +1,43 @@
 #include "Input/Input.h"
 #if 1
+
 #include <algorithm>
-#include <SDL.h>
+#include <iostream>
+#include <sstream>
+
+
+#include <GCL/Assert.h>
 #include <GCL/Point2.h>
 #include <GCL/Rect.h>
 
 
 namespace GCL
 {
+const size_t KEYS_STATE_ARRAY_SIZE = 350;
+std::map<uint32_t, bool> Input::keys;
+bool Input::isLMousedown = false;
+size_t Input::mouseX=0;
+size_t Input::mouseY=0;
 
-
-
-bool keys[350];
-bool isLMousedown = false;
-size_t mouseX=0;
-size_t mouseY=0;
-
-size_t GetMouseX()
+size_t Input::GetMouseX()
 {
 	return mouseX;
 }
-size_t GetMouseY()
+size_t Input::GetMouseY()
 {
 	return mouseY;
 }
-bool IsLMouseDown()
+bool Input::IsLMouseDown()
 {
 	return isLMousedown;
 }
-bool IsKeyUp(uint16_t key)
+bool Input::IsKeyUp(uint32_t key)
 {
 	return keys[key];
 }
-void ProcessInput()
+void Input::ProcessInput()
 {
-	memset(keys, 0, 255);
+	//memset(keys, 0, KEYS_STATE_ARRAY_SIZE);
 	SDL_Event event;
 
 	while ( SDL_PollEvent(&event) )
@@ -46,7 +49,6 @@ void ProcessInput()
 			break;
 		case SDL_KEYUP:
 			//printf("%d %s\n",event.key.keysym.sym, SDL_GetKeyName(event.key.keysym.sym));
-
 			keys[event.key.keysym.sym] = false;
 
 			break;
@@ -91,7 +93,7 @@ Point2<int> currentPos;
 Rect<int> selection;
 bool isSelectionStarted = false;
 bool hasSelection = false;
-const Rect<int> &ProcessSelection()
+const Rect<int> &Input::ProcessSelection()
 {
 	currentPos.x = GetMouseX();
 	currentPos.y = GetMouseY();

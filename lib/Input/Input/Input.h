@@ -1,15 +1,29 @@
 #pragma once
 #include <cstdlib>
 #include <stdint.h>
+#include <map>
+#include <SDL.h>
+
 #include <GCL/Rect.h>
 
 
 namespace GCL
 {
-	const Rect<int> &ProcessSelection();
-	void ProcessInput();
-	bool IsKeyUp(uint16_t key);
-	bool IsLMouseDown();
-	size_t GetMouseX();
-	size_t GetMouseY();
+class Input
+{
+public:
+	static const Rect<int> &ProcessSelection();
+	static void ProcessInput();
+	static bool IsKeyUp(uint32_t key);
+	static bool IsLMouseDown();
+	static size_t GetMouseX();
+	static size_t GetMouseY();
+
+
+private:
+	static std::map<uint32_t, bool> keys;
+	static bool isLMousedown ;
+	static size_t mouseX;
+	static size_t mouseY;
+};
 }

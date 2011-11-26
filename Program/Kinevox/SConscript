@@ -6,6 +6,6 @@ dependencies = ['Renderer']
 
 src_files = env.Glob("src/*.cpp")
 prog = env.KProgram("Kinevox", src_files, dependencies)
-finalProduct = env.Install(env.Dir("#/bin"), prog)
+finalProduct = env.Install(env.Dir("$INSTALL_DIR"), prog)
 
 Default(finalProduct)

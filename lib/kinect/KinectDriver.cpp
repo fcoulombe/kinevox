@@ -1,5 +1,5 @@
 
-#include "Kinect/KinectDriver.h"
+#include "kinect/KinectDriver.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,7 +9,7 @@
 
 #include <pthread.h>
 
-#include "Input/Input.h"
+#include "input/Input.h"
 
 using namespace GCL;
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <sstream>
 
-#include <GCL/Exception.h>
+#include <gcl/Exception.h>
 
 #include "InputTest.h"
 

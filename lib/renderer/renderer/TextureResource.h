@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Renderer/OpenGL.h"
-#include "Renderer/Resource.h"
+#include "renderer/OpenGL.h"
+#include "renderer/Resource.h"
 namespace GCL
 {
   //this is a resource class that can be shared between difference texture instance

@@ -1,5 +1,5 @@
 
-#include "Renderer/CVRenderer.h"
+#include "renderer/CVRenderer.h"
 
 #include <highgui.h>
 

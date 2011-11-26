@@ -1,5 +1,5 @@
-#include "Renderer/Shader.h"
-#include <GCL/Exception.h>
+#include "renderer/Shader.h"
+#include <gcl/Exception.h>
 using namespace GCL;
 
 

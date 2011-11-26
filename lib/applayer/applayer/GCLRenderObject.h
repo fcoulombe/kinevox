@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Renderer/RenderObject.h>
-#include <Renderer/Vertex.h>
+#include <renderer/RenderObject.h>
+#include <renderer/Vertex.h>
 
 namespace GCL
 {

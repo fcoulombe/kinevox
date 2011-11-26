@@ -22,10 +22,10 @@
 #pragma once
 #include <sstream>
 
-#include <AppLayer/GCLApplication.h>
-#include <AppLayer/GCLRenderObject.h>
+#include <applayer/GCLApplication.h>
+#include <applayer/GCLRenderObject.h>
 
-#include <GCL/UnitTest.h>
+#include <gcl/UnitTest.h>
 
 using namespace GCL;
 namespace GCLApplicationCameraTest

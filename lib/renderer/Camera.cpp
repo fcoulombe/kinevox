@@ -1,9 +1,9 @@
 #include <iostream>
-#include "Renderer/Camera.h"
+#include "renderer/Camera.h"
 
-#include <GCL/Assert.h>
-#include <GCL/Math.h>
-#include "Renderer/OpenGL.h"
+#include <gcl/Assert.h>
+#include <gcl/Math.h>
+#include "renderer/OpenGL.h"
 
 using namespace GCL;
 

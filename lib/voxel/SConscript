@@ -1,8 +1,8 @@
 Import('env')
 
-name = "Voxel"
+name = "voxel"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['Renderer']
+dependencies = ['renderer']
 
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")

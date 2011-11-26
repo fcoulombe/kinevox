@@ -1,7 +1,7 @@
 #pragma once
-#include "Renderer/OpenGL.h"
-#include "Renderer/ShaderAttributeDefaultLocations.h"
-#include "Renderer/Vertex.h"
+#include "renderer/OpenGL.h"
+#include "renderer/ShaderAttributeDefaultLocations.h"
+#include "renderer/Vertex.h"
 
 namespace GCL
 {
@@ -14,6 +14,7 @@ namespace GCL
     : mBufferType(GL_STATIC_DRAW),
       mVertexCount(count)
     {
+    	std::cout << "Create " << std::endl;
       glGenBuffers(1, &mVertexBufferId);glErrorCheck();
       glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);glErrorCheck();
       glBufferData(GL_ARRAY_BUFFER, sizeof(VertexType)*count, (void*)vertexArray, mBufferType);glErrorCheck();
@@ -22,6 +23,7 @@ namespace GCL
 
     ~VertexBuffer()
     {
+    	std::cout << "delete " << std::endl;
       glDeleteBuffers(1, &mVertexBufferId);glErrorCheck();
     }
     void PreRender()

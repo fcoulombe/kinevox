@@ -1,8 +1,8 @@
 Import('env')
 
-name = "Kinect"
+name = "kinect"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['Input','libfreenect']
+dependencies = ['input','libfreenect']
 
                                 
 env.Append(CPPPATH=incPath)

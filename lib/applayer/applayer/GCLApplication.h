@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vector>
-#include <GCL/GCLExport.h>
-#include <Renderer/Renderer.h>
+#include <gcl/GCLExport.h>
+#include <renderer/Renderer.h>
 
 namespace GCL
 {

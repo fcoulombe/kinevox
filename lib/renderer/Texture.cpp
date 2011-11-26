@@ -1,10 +1,10 @@
-#include "Renderer/Texture.h"
+#include "renderer/Texture.h"
 
 #include <stdint.h>
 
-#include <GCL/SafeCast.h>
-#include "Renderer/TextureResource.h"
-#include "Renderer/TextureResourceManager.h"
+#include <gcl/SafeCast.h>
+#include "renderer/TextureResource.h"
+#include "renderer/TextureResourceManager.h"
 
 
 

@@ -1,8 +1,8 @@
 Import('env')
 
-name = "Input"
+name = "input"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['GCL', 'SDL']
+dependencies = ['gcl', 'sdl']
 
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")

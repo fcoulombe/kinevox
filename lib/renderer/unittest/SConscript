@@ -1,7 +1,7 @@
 Import('env')
 
-name = "Renderer_test"
-dependencies = ["Renderer"]
+name = "renderer_test"
+dependencies = ["renderer"]
 data = [ env.Dir("data")]
 
 src_files = env.Glob("*.cpp")

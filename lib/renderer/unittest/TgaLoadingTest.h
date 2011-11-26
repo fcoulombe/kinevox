@@ -23,8 +23,8 @@
 
 #include <fstream>
 
-#include <GCL/UnitTest.h>
-#include <Renderer/TextureResource.h>
+#include <gcl/UnitTest.h>
+#include <renderer/TextureResource.h>
 
 using namespace GCL;
 

@@ -2,10 +2,10 @@ Import('env')
 
 
 
-dependencies = ['AppLayer']
+dependencies = ['applayer']
 
 src_files = env.Glob("src/*.cpp")
-prog = env.KProgram("BasicTextureMapping", src_files, dependencies)
+prog = env.KProgram("basicTextureMapping", src_files, dependencies)
 finalProduct = env.Install(env.Dir("$INSTALL_DIR"), prog)
 env.Alias("@BasicTextureMapping",finalProduct) 
 Default(finalProduct)

@@ -1,7 +1,7 @@
 Import('env')
 
-name = "Voxel_test"
-dependencies = ["Voxel"]
+name = "voxel_test"
+dependencies = ["voxel"]
 data = []
 
 src_files = env.Glob("*.cpp")

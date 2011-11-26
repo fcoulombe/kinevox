@@ -21,8 +21,8 @@
  */
 #pragma once
 
-#include <GCL/UnitTest.h>
-//#include <Renderer/VertexBuffer.h>
+#include <gcl/UnitTest.h>
+//#include <renderer/VertexBuffer.h>
 
 using namespace GCL;
 namespace ShaderTest

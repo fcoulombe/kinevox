@@ -1,4 +1,4 @@
-#include "Input/Input.h"
+#include "input/Input.h"
 #if 1
 
 #include <algorithm>
@@ -6,9 +6,9 @@
 #include <sstream>
 
 
-#include <GCL/Assert.h>
-#include <GCL/Point2.h>
-#include <GCL/Rect.h>
+#include <gcl/Assert.h>
+#include <gcl/Point2.h>
+#include <gcl/Rect.h>
 
 
 namespace GCL

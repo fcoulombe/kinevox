@@ -2,19 +2,19 @@
 #include <sstream>
 
 #include <SDL.h>
-#include <GCL/Assert.h>
+#include <gcl/Assert.h>
 
-/*#include <Renderer/Camera.h>
-#include <Renderer/CVRenderer.h>
-#include <Renderer/GLRenderer.h>
-#include <Renderer/GLRenderUtils.h>
-#include <Renderer/OpenGL.h>
-#include <Renderer/Renderer.h>
-#include <Renderer/RenderObject.h>
-#include <Renderer/Shader.h>
-#include <Renderer/ShaderAttributeDefaultLocations.h>
-#include <Renderer/Vertex.h>
-#include <Renderer/VertexBuffer.h>*/
+/*#include <renderer/Camera.h>
+#include <renderer/CVRenderer.h>
+#include <renderer/GLRenderer.h>
+#include <renderer/GLRenderUtils.h>
+#include <renderer/OpenGL.h>
+#include <renderer/Renderer.h>
+#include <renderer/RenderObject.h>
+#include <renderer/Shader.h>
+#include <renderer/ShaderAttributeDefaultLocations.h>
+#include <renderer/Vertex.h>
+#include <renderer/VertexBuffer.h>*/
 
 #include "CameraTest.h"
 #include "GLRendererTest.h"

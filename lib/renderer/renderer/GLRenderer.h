@@ -3,9 +3,9 @@
 #include <cstdlib>
 #include <stdint.h>
 
-#include "Renderer/Camera.h"
-#include "Renderer/Renderer.h"
-#include "Renderer/ViewPort.h"
+#include "renderer/Camera.h"
+#include "renderer/Renderer.h"
+#include "renderer/ViewPort.h"
 
 
 namespace GCL

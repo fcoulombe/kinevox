@@ -22,11 +22,11 @@
 #pragma once
 #include <sstream>
 
-#include <GCL/UnitTest.h>
-#include <GCL/Exception.h>
-#include <AppLayer/GCLApplication.h>
+#include <gcl/UnitTest.h>
+#include <gcl/Exception.h>
+#include <applayer/GCLApplication.h>
 
-#include <Renderer/GLRenderer.h>
+#include <renderer/GLRenderer.h>
 using namespace GCL;
 namespace GCLApplicationTest
 {

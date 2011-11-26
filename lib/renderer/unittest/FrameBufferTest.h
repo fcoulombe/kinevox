@@ -21,12 +21,12 @@
  */
 #pragma once
 
-#include <GCL/UnitTest.h>
-#include <Renderer/RenderObject.h>
-#include <Renderer/FrameBuffer.h>
-#include <Renderer/Shader.h>
-#include <Renderer/Texture.h>
-#include <Renderer/Vertex.h>
+#include <gcl/UnitTest.h>
+#include <renderer/RenderObject.h>
+#include <renderer/FrameBuffer.h>
+#include <renderer/Shader.h>
+#include <renderer/Texture.h>
+#include <renderer/Vertex.h>
 
 using namespace GCL;
 namespace FrameBufferTest

@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include <GCL/Point3.h>
-#include <Renderer/RenderObject.h>
+#include <gcl/Point3.h>
+#include <renderer/RenderObject.h>
 
 namespace GCL
 {

@@ -1,11 +1,11 @@
-#include "Renderer/TextureResource.h"
+#include "renderer/TextureResource.h"
 
 
 #include <fstream>
 #include <iostream>
 
-#include "GCL/Assert.h"
-#include "Renderer/TGALoaderData.h"
+#include "gcl/Assert.h"
+#include "renderer/TGALoaderData.h"
 #include <png.h>
 
 

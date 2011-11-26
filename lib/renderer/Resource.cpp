@@ -7,7 +7,7 @@
  *
  */
 
-#include "Renderer/Resource.h"
+#include "renderer/Resource.h"
 using namespace GCL;
 
 

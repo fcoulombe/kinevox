@@ -21,11 +21,11 @@
  */
 #pragma once
 
-#include <GCL/UnitTest.h>
+#include <gcl/UnitTest.h>
 
-#include <Renderer/Camera.h>
-#include <Renderer/GLRenderer.h>
-#include <Renderer/ViewPort.h>
+#include <renderer/Camera.h>
+#include <renderer/GLRenderer.h>
+#include <renderer/ViewPort.h>
 
 using namespace GCL;
 namespace CameraTest

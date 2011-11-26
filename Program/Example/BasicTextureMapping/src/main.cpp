@@ -6,6 +6,7 @@
 #include <AppLayer/GCLRenderObject.h>
 #include <AppLayer/GCLApplication.h>
 #include <Input/Input.h>
+#include <Renderer/Camera.h>
 
 
 using namespace GCL;
@@ -19,7 +20,8 @@ int main(int /*argc*/, char ** /*argv*/)
 	{
 		std::cout << "render" << std::endl;
 		GCLApplication::Initialize();
-		//Camera &tempCamera = renderer.GetCamera();
+		Camera myCamera;
+		GCLApplication::SetViewportCamera(myCamera);
 
 		std::cout << "obj" << std::endl;
 		GCLRenderObject renderObject;
@@ -30,27 +32,25 @@ int main(int /*argc*/, char ** /*argv*/)
 		{
 			std::cout << "kllooop" << std::endl;
 			GCLApplication::Update();
-#if 0
-			if (IsKeyUp(SDLK_UP))
-				tempCamera.MoveForward();
-			if (IsKeyUp(SDLK_DOWN))
-				tempCamera.MoveBackward();
+			if (Input::IsKeyUp(SDLK_UP))
+				myCamera.MoveForward();
+			if (Input::IsKeyUp(SDLK_DOWN))
+				myCamera.MoveBackward();
 
-			if (IsKeyUp(SDLK_LEFT))
-				tempCamera.TurnLeft();
-			if (IsKeyUp(SDLK_RIGHT))
-				tempCamera.TurnRight();
+			if (Input::IsKeyUp(SDLK_LEFT))
+				myCamera.TurnLeft();
+			if (Input::IsKeyUp(SDLK_RIGHT))
+				myCamera.TurnRight();
 
-			if (IsKeyUp(SDLK_PAGEUP))
-				tempCamera.TiltUp();
-			if (IsKeyUp(SDLK_PAGEDOWN))
-				tempCamera.TiltDown();
-#else
+			if (Input::IsKeyUp(SDLK_PAGEUP))
+				myCamera.TiltUp();
+			if (Input::IsKeyUp(SDLK_PAGEDOWN))
+				myCamera.TiltDown();
+
 
 			GCLApplication::Render();
-			sleep(1);
+			sleep(0);
 		}
-		#endif
 	}
 	catch(GCLException &e)
 	{

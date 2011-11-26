@@ -31,58 +31,57 @@
 using namespace GCL;
 namespace FrameBufferTest
 {
-  TEST_START
 
-  class MyRenderObject : public RenderObject
-  {
-  public:
-    const VertexData &GetVertexData() const
-    {
-      static const   VertexPNT square[4] = {
-          {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-          {WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-          {WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-          {WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
-      static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
-      return data;
+class MyRenderObject : public RenderObject
+{
+public:
+	const VertexData &GetVertexData() const
+	{
+		static const   VertexPNT square[4] = {
+				{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
+				{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+				{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+				{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
+		static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
+		return data;
 
-    }
-  private:
+	}
+private:
 
 
-  };
+};
 
-  bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
-  {
-    Assert_Test(false && "TBD");
-    return false;
-  }
-  void Test()
-  {
-    GLRenderer renderer;
-    /*renderer.Render();
+bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
+{
+	return false;
+}
+void Test()
+{
+	TEST_START
+	GLRenderer renderer;
+	/*renderer.Render();
     Shader shader;
     shader.Bind();
     MyRenderObject obj;*/
 
-    size_t width = renderer.GetViewPort().GetWidth();
-    size_t height = renderer.GetViewPort().GetHeight();
+	size_t width = renderer.GetViewPort().GetWidth();
+	size_t height = renderer.GetViewPort().GetHeight();
 
 
-    RenderBuffer depthRenderBuffer(width, height/*, 2*/);
-    depthRenderBuffer.Bind();
+	RenderBuffer depthRenderBuffer(width, height/*, 2*/);
+	depthRenderBuffer.Bind();
 
-    Texture texture(width, height, 4);
+	Texture texture(width, height, 4);
 
-    FrameBuffer frameBuffer(texture, depthRenderBuffer);
-    frameBuffer.Bind();
+	FrameBuffer frameBuffer(texture, depthRenderBuffer);
+	frameBuffer.Bind();
 
-    renderer.Render();
+	renderer.Render(RenderObjectList());
 
-    FrameBuffer::ResetDefault();
-    texture.Save("RenderTargetTest.tga");
-    //Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
+	FrameBuffer::ResetDefault();
+	texture.Save("RenderTargetTest.tga");
+	//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 
 
-  }
+}
 }

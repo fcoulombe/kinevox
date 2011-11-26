@@ -27,23 +27,24 @@
 using namespace GCL;
 namespace ShaderTest
 {
-  TEST_START
 
-  void Test()
-  {
-    GLRenderer renderer;
-    Shader shader;
-    shader.Bind();
-    Assert_Test(shader.IsValid());
-    renderer.Render();
+void Test()
+{
+	TEST_START
 
-    /*VertexPNT square[4] = { {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } ,
+	GLRenderer renderer;
+	Shader shader;
+	shader.Bind();
+	Assert_Test(shader.IsValid());
+	renderer.Render(RenderObjectList());
+
+	/*VertexPNT square[4] = { {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } ,
                           {WorldPoint3(0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } ,
                           {WorldPoint3(0.5, 0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } ,
                           {WorldPoint3(-0.5, 0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } };
   VertexBuffer<VertexPNT> vb(square, 4);
 
   renderer->Render(vb);
-     */
-  }
+	 */
+}
 }

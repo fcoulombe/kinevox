@@ -30,20 +30,21 @@ using namespace GCL;
 
 namespace TgaLoadingTest
 {
-  TEST_START
-  void Test()
-  {
-    std::fstream fp("data/mushroom.tga", std::fstream::binary|std::fstream::in);
-    AssertMsg_Test(fp.is_open() && fp.good(), "data/mushroom.tga");
+void Test()
+{
+	TEST_START
 
-    TextureResource::TextureData data;
-    TextureResource::LoadTga(fp, data);
-    fp.close();
-    Assert_Test(data.imageData);
-    Assert_Test(data.mBitdepth==8);
-    Assert_Test(data.mBytePerPixel==4);
-    Assert_Test(data.mWidth==768);
-    Assert_Test(data.mHeight==1024);
+	std::fstream fp("data/mushroom.tga", std::fstream::binary|std::fstream::in);
+	AssertMsg_Test(fp.is_open() && fp.good(), "data/mushroom.tga");
 
-  }
+	TextureResource::TextureData data;
+	TextureResource::LoadTga(fp, data);
+	fp.close();
+	Assert_Test(data.imageData);
+	Assert_Test(data.mBitdepth==8);
+	Assert_Test(data.mBytePerPixel==4);
+	Assert_Test(data.mWidth==768);
+	Assert_Test(data.mHeight==1024);
+
+}
 }

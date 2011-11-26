@@ -30,14 +30,16 @@
 using namespace GCL;
 namespace GCLRenderObjectTest
 {
-TEST_START
 
 
 void Test()
 {
+	TEST_START
+
 	GCLApplication::Initialize();
 
 	GCLRenderObject obj;
+	Assert_Test(GCLApplication::IsRegistered(obj));
 	Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
 
 	const WorldPoint3 position(0.0,0.0, -10.0);

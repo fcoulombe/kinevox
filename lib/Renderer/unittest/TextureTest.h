@@ -27,26 +27,25 @@
 using namespace GCL;
 namespace TextureTest
 {
-  TEST_START
+
+bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
+{
+	return false;
+}
+void Test()
+{
+	TEST_START
+
+	TextureResourceManager::Initialize();
+	GLRenderer renderer;
+
+	Texture texture("data/mushroom.tga");
+	texture.Bind();
 
 
-  bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
-  {
-    Assert_Test(false && "TBD");
-    return false;
-  }
-  void Test()
-  {
-    TextureResourceManager::Initialize();
-    GLRenderer renderer;
+	texture.Save("RenderTargetTest.tga");
+	//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 
-    Texture texture("data/mushroom.tga");
-    texture.Bind();
-
-
-    texture.Save("RenderTargetTest.tga");
-    //Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
-
-    TextureResourceManager::Terminate();
-  }
+	TextureResourceManager::Terminate();
+}
 }

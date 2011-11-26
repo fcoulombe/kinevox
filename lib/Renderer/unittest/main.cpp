@@ -30,10 +30,11 @@
 #include "VertexBufferTest.h"
 #include "VertexTest.h"
 
+#include <unistd.h>
+
 using namespace GCL;
 
 
-#include <unistd.h>
 
 static const std::string Dirname(const std::string  &dir)
 {
@@ -70,18 +71,16 @@ int main(int /*argc*/, char **argv)
   }
   catch (GCLException & e)
   {
-      //std::cerr << "EXCEPT START" << std::endl;
       std::stringstream str;
-      str << "[FAILED] \n";
+      str << "[FAILED] " << argv[0] << std::endl;
       str << e.what();
-
       str << std::endl;
       std::cerr << str.str();
-      //GLRendererTest::Assert_Test(false && str.str().c_str());
       return -1;
   }
   catch (...)
   {
+      std::cerr << "[FAILED] " << argv[0] << std::endl;
       std::cerr << "something went wrong" << std::endl;
   }
   return 0;

@@ -27,18 +27,19 @@
 using namespace GCL;
 namespace VertexTest
 {
-  TEST_START
 
-  void Test()
-  {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wunused-variable"
-    VertexP p;
+void Test()
+{
+	TEST_START
 
-    VertexPT pt;
-    VertexPNT pnt;
+	//#pragma clang diagnostic push
+	//#pragma clang diagnostic ignored "-Wunused-variable"
+	VertexP p;
 
-    VertexPN pn;
-#pragma clang diagnostic pop
-  }
+	VertexPT pt;
+	VertexPNT pnt;
+
+	VertexPN pn;
+	//#pragma clang diagnostic pop
+}
 }

@@ -30,26 +30,30 @@
 using namespace GCL;
 namespace CameraTest
 {
-  TEST_START
-  void Test()
-  {
-    GLRenderer renderer;
-    Camera &camera = renderer.GetCamera();
-    ViewPort viewport;
 
-    //std::cout << *(Matrix44*)&camera << std::endl;
-    camera.Update();
-    camera.MoveForward();
-    camera.Update();
-    camera.MoveBackward();
-    camera.Update();
-    camera.TurnLeft();
-    camera.Update();
-    camera.TurnRight();
-    camera.Update();
-    camera.TiltUp();
-    camera.Update();
-    camera.TiltDown();
-    camera.Update();
-  }
+void Test()
+{
+	TEST_START
+	GLRenderer renderer;
+	Camera camera;
+	GCLAssert(Matrix44::IDENTITY == camera.GetTransform());
+	renderer.SetCamera(camera);
+	ViewPort viewport;
+
+	//std::cout << *(Matrix44*)&camera << std::endl;
+	camera.Update();
+	camera.MoveForward();
+	camera.Update();
+	camera.MoveBackward();
+	camera.Update();
+	camera.TurnLeft();
+	camera.Update();
+	camera.TurnRight();
+	camera.Update();
+	camera.TiltUp();
+	camera.Update();
+	camera.TiltDown();
+	camera.Update();
+	//Camera::DefaultCamera.Update();
+}
 }

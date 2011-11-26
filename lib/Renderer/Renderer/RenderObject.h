@@ -8,7 +8,7 @@ namespace GCL
   {
     const void *mVertexData;
     size_t vertexCount;
-    int vertexType;
+    uint32_t vertexType;
 
   };
 

@@ -15,7 +15,7 @@ namespace GCL
   struct VertexP
   {
     WorldPoint3 position;
-    static size_t GetComponentType()  { return ePOSITION; }
+    static uint32_t GetComponentType()  { return ePOSITION; }
     static size_t OffsetToPosition() { return 0; }
     static size_t OffsetToTextureCoordinate() { GCLAssert(false); return 0; }
     static size_t OffsetToNormal() { GCLAssert(false);return 0; }
@@ -25,7 +25,7 @@ namespace GCL
   {
     WorldPoint3 position;
     WorldPoint2 textureCoordinate;
-    static size_t GetComponentType() { return ePOSITION|eTEXTURE_COORD; }
+    static uint32_t GetComponentType() { return ePOSITION|eTEXTURE_COORD; }
     static size_t OffsetToPosition() { return 0; }
     static size_t OffsetToTextureCoordinate() { return sizeof(WorldPoint3); }
     static size_t OffsetToNormal() { GCLAssert(false);return 0; }
@@ -37,7 +37,7 @@ namespace GCL
     WorldPoint3 position;
     WorldPoint3 normal;
     WorldPoint2 textureCoordinate;
-    static size_t GetComponentType()  { return ePOSITION|eNORMAL|eTEXTURE_COORD; }
+    static uint32_t GetComponentType()  { return ePOSITION|eNORMAL|eTEXTURE_COORD; }
     static size_t OffsetToPosition() { return 0; }
     static size_t OffsetToNormal() { return sizeof(WorldPoint3); }
     static size_t OffsetToTextureCoordinate() { return sizeof(WorldPoint3)+sizeof(WorldPoint2); }
@@ -47,7 +47,7 @@ namespace GCL
   {
     WorldPoint3 position;
     WorldPoint3 normal;
-    static size_t GetComponentType()  { return ePOSITION|eNORMAL; }
+    static uint32_t GetComponentType()  { return ePOSITION|eNORMAL; }
     static size_t OffsetToPosition() { return 0; }
     static size_t OffsetToNormal() { return sizeof(WorldPoint3); }
     static size_t OffsetToTextureCoordinate() { GCLAssert(false); return 0; }

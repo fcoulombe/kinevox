@@ -30,15 +30,14 @@
 using namespace GCL;
 namespace GridTest
 {
-TEST_START
-
-
 void Test()
 {
-  GLRenderer *renderer = new GLRenderer();
-  std::cout << "created" << std::endl;
+	TEST_START
 
-  /*Shader shader;
+	GLRenderer *renderer = new GLRenderer();
+	std::cout << "created" << std::endl;
+
+	/*Shader shader;
   shader.Bind();
 
   Grid::Row row(10,10,10);
@@ -49,7 +48,7 @@ void Test()
 
   renderer.Render();*/
 
-  delete renderer;
+	delete renderer;
 
 }
 }

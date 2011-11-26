@@ -30,21 +30,22 @@ using namespace GCL;
 
 namespace PngLoadingTest
 {
-  TEST_START
-  void Test()
-  {
-    FILE *fp = fopen("data/mushroom.png", "rb");
-    AssertMsg_Test(fp, "data/mushroom.png");
 
-    TextureResource::TextureData data;
-    TextureResource::LoadPng(fp, data);
-    Assert_Test(data.imageData);
+void Test()
+{
+	TEST_START
+	FILE *fp = fopen("data/mushroom.png", "rb");
+	AssertMsg_Test(fp, "data/mushroom.png");
 
-    Assert_Test(data.mBitdepth==8);
-    Assert_Test(data.mBytePerPixel==4);
-    Assert_Test(data.mWidth==768);
-    Assert_Test(data.mHeight==1024);
+	TextureResource::TextureData data;
+	TextureResource::LoadPng(fp, data);
+	Assert_Test(data.imageData);
 
-    fclose(fp);
-  }
+	Assert_Test(data.mBitdepth==8);
+	Assert_Test(data.mBytePerPixel==4);
+	Assert_Test(data.mWidth==768);
+	Assert_Test(data.mHeight==1024);
+
+	fclose(fp);
+}
 }

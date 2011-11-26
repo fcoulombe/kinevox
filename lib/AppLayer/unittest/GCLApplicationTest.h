@@ -23,19 +23,21 @@
 #include <sstream>
 
 #include <GCL/UnitTest.h>
+#include <GCL/Exception.h>
 #include <AppLayer/GCLApplication.h>
 
+#include <Renderer/GLRenderer.h>
 using namespace GCL;
 namespace GCLApplicationTest
 {
-  TEST_START
 
+void Test()
+{
+	TEST_START
 
-  void Test()
-  {
-    GCLApplication::Initialize();
-    Application::Update();
-    Application::Render();
-    GCLApplication::Terminate();
-  }
+	GCLApplication::Initialize();
+	GCLApplication::Update();
+	GCLApplication::Render();
+	GCLApplication::Terminate();
+}
 }

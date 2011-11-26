@@ -20,32 +20,29 @@
  * THE SOFTWARE.
  */
 #pragma once
+#include <sstream>
+
+#include <AppLayer/GCLApplication.h>
+#include <AppLayer/GCLRenderObject.h>
 
 #include <GCL/UnitTest.h>
-#include <Renderer/TextureResourceManager.h>
 
 using namespace GCL;
-
-namespace ResourceTest
+namespace GCLApplicationCameraTest
 {
+
 void Test()
 {
 	TEST_START
 
-	TextureResourceManager::Initialize();
+	GCLApplication::Initialize();
 
-	{
-		const Resource *tgaResource = TextureResourceManager::Instance().LoadResource("data/mushroom.tga");
-		Assert_Test(tgaResource);
+	Camera camera;
+	GCLApplication::SetViewportCamera(camera);
 
-		//test resource sharing
-		const Resource *tgaResource2 = TextureResourceManager::Instance().LoadResource("data/mushroom.tga");
-		Assert_Test(tgaResource == tgaResource2);
+	GCLApplication::Update();
+	GCLApplication::Render();
 
-		const Resource *pngResource = TextureResourceManager::Instance().LoadResource("data/mushroom.png");
-		Assert_Test(pngResource);
-	}
-
-	TextureResourceManager::Terminate();
+	GCLApplication::Terminate();
 }
 }

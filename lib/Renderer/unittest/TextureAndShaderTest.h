@@ -29,53 +29,53 @@
 using namespace GCL;
 namespace TextureAndShaderTest
 {
-  TEST_START
 
-  class MyRenderObject : public RenderObject
-  {
-  public:
-    MyRenderObject()
-    : RenderObject(Matrix44::IDENTITY) {}
-    const VertexData &GetVertexData() const
-    {
-      static const   VertexPNT square[4] = {
-          {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-          {WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-          {WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-          {WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
-      static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
-      return data;
+class MyRenderObject : public RenderObject
+{
+public:
+	MyRenderObject()
+	: RenderObject(Matrix44::IDENTITY) {}
+	const VertexData &GetVertexData() const
+	{
+		static const   VertexPNT square[4] = {
+				{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
+				{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+				{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+				{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
+		static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
+		return data;
 
-    }
-  private:
-
-
-  };
-
-  bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
-  {
-    Assert_Test(false && "TBD");
-    return false;
-  }
-  void Test()
-  {
-    TextureResourceManager::Initialize();
-    GLRenderer renderer;
-    Shader shader;
-    shader.Bind();
-
-    Texture texture("data/mushroom.png");
-    texture.Bind();
-
-    MyRenderObject obj;
-
-    renderer.Render();
+	}
+private:
 
 
-    /*        target.Save("RenderTargetTest.tga");
+};
+
+bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
+{
+	return false;
+}
+void Test()
+{
+	TEST_START
+
+	TextureResourceManager::Initialize();
+	GLRenderer renderer;
+	Shader shader;
+	shader.Bind();
+
+	Texture texture("data/mushroom.png");
+	texture.Bind();
+
+	MyRenderObject obj;
+
+	renderer.Render(RenderObjectList());
+
+
+	/*        target.Save("RenderTargetTest.tga");
     Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
-*/
-    TextureResourceManager::Terminate();
+	 */
+	TextureResourceManager::Terminate();
 
-  }
+}
 }

@@ -22,30 +22,26 @@
 #pragma once
 
 #include <GCL/UnitTest.h>
-#include <Renderer/TextureResourceManager.h>
+
+#include <Input/Input.h>
+#include <Renderer/GLRenderer.h>
 
 using namespace GCL;
-
-namespace ResourceTest
+namespace InputTest
 {
+
 void Test()
 {
 	TEST_START
-
-	TextureResourceManager::Initialize();
-
-	{
-		const Resource *tgaResource = TextureResourceManager::Instance().LoadResource("data/mushroom.tga");
-		Assert_Test(tgaResource);
-
-		//test resource sharing
-		const Resource *tgaResource2 = TextureResourceManager::Instance().LoadResource("data/mushroom.tga");
-		Assert_Test(tgaResource == tgaResource2);
-
-		const Resource *pngResource = TextureResourceManager::Instance().LoadResource("data/mushroom.png");
-		Assert_Test(pngResource);
-	}
-
-	TextureResourceManager::Terminate();
+	GLRenderer renderer;
+	//const Rect<int> &ProcessSelection();
+	Input::ProcessInput();
+	Input::IsKeyUp(SDLK_UP);
+	Input::IsKeyUp(SDLK_DOWN);
+	Input::IsKeyUp(SDLK_LEFT);
+	Input::IsKeyUp(SDLK_RIGHT);
+	Input::IsLMouseDown();
+	Input::GetMouseX();
+	Input::GetMouseY();
 }
 }

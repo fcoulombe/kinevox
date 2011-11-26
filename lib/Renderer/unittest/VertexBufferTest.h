@@ -27,28 +27,29 @@
 using namespace GCL;
 namespace VertexBufferTest
 {
-TEST_START
 
 void Test()
 {
-  GLRenderer renderer;
+	TEST_START
 
-  Shader shader;
-  shader.Bind();
+	GLRenderer renderer;
 
-  VertexPNT square[4] = { {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-                          {WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-                          {WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-                          {WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
-  VertexBuffer<VertexPNT> vb(square, 4);
-  Assert_Test(vb.IsValid());
+	Shader shader;
+	shader.Bind();
+
+	VertexPNT square[4] = { {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+			{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+			{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+			{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
+	VertexBuffer<VertexPNT> vb(square, 4);
+	Assert_Test(vb.IsValid());
 
 
-  VertexPT square2[4] = { {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0)} ,
-                          {WorldPoint3(0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0) } ,
-                          {WorldPoint3(0.5, 0.5, 0.0), WorldPoint2(0.0, 0.0)} ,
-                          {WorldPoint3(-0.5, 0.5, 0.0), WorldPoint2(0.0, 0.0)} };
-  VertexBuffer<VertexPT> vb2(square2, 4);
-  Assert_Test(vb2.IsValid());
+	VertexPT square2[4] = { {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0)} ,
+			{WorldPoint3(0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0) } ,
+			{WorldPoint3(0.5, 0.5, 0.0), WorldPoint2(0.0, 0.0)} ,
+			{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint2(0.0, 0.0)} };
+	VertexBuffer<VertexPT> vb2(square2, 4);
+	Assert_Test(vb2.IsValid());
 }
 }

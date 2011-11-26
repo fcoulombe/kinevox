@@ -27,11 +27,12 @@
 using namespace GCL;
 namespace GLRendererTest
 {
-  TEST_START
 
-  void Test()
-  {
-    GLRenderer *renderer =  new GLRenderer();
-    delete renderer;
-  }
+void Test()
+{
+	TEST_START
+
+	GLRenderer *renderer =  new GLRenderer();
+	delete renderer;
+}
 }

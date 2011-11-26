@@ -20,7 +20,7 @@
 					<folderInfo id="cdt.managedbuild.toolchain.llvm.clang.macosx.base.1708450591.1582221404" name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.llvm.clang.macosx.base.389015101" name="cdt.managedbuild.toolchain.llvm.clang.macosx.base" superClass="cdt.managedbuild.toolchain.llvm.clang.macosx.base">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.MachO64" id="cdt.managedbuild.target.llvm.macosx.platform.base.1793671150" isAbstract="true" name="Debug Platform" osList="macosx" superClass="cdt.managedbuild.target.llvm.macosx.platform.base"/>
-							<builder buildPath="/Users/francoiscoulombe/Documents/src/Kinevox3" command="scons" id="cdt.managedbuild.toolchain.llvm.clang.macosx.base.1708450591.2088894298" incrementalBuildTarget="@run_all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<builder buildPath="/Users/francoiscoulombe/Documents/src/Kinevox3" command="scons" id="cdt.managedbuild.toolchain.llvm.clang.macosx.base.1708450591.2088894298" incrementalBuildTarget="@BasicTextureMapping @run_all" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 							<tool id="cdt.managedbuild.tool.llvm.assembler.base.1342306635" name="LLVM assembler" superClass="cdt.managedbuild.tool.llvm.assembler.base"/>
 							<tool id="cdt.managedbuild.tool.llvm.archiver.base.1627885529" name="LLVM archiver" superClass="cdt.managedbuild.tool.llvm.archiver.base"/>
 							<tool id="cdt.managedbuild.tool.llvm.c.linker.base.1304505508" name="LLVM C linker" superClass="cdt.managedbuild.tool.llvm.c.linker.base"/>
@@ -288,6 +288,43 @@
 						</scannerInfoProvider>
 					</profile>
 				</scannerConfigBuildInfo>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+				<buildTargets>
+					<target name="GCL_test_run --compiler=clang" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>GCL_test_run --compiler=clang</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>true</useDefaultCommand>
+						<runAllBuilders>false</runAllBuilders>
+					</target>
+					<target name="Renderer_test_run --compiler=clang --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>Renderer_test_run --compiler=clang --verbose</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>true</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="Input_test_run --compiler=clang" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>Input_test_run --compiler=clang</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>true</useDefaultCommand>
+						<runAllBuilders>false</runAllBuilders>
+					</target>
+					<target name="AppLayer_test_run --compiler=clang" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>AppLayer_test_run --compiler=clang</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>true</useDefaultCommand>
+						<runAllBuilders>false</runAllBuilders>
+					</target>
+				</buildTargets>
 			</storageModule>
 		</cconfiguration>
 	</storageModule>

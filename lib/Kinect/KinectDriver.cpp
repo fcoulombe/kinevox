@@ -185,10 +185,10 @@ uint8_t *GetKinectDepthData()
 
 bool SynchronizeDrawingData()
 {
-	if (IsKeyUp(119)) {
+	if (Input::IsKeyUp(119)) {
 	// w
 		TiltUp();
-	} else if (IsKeyUp(120)) {
+	} else if (Input::IsKeyUp(120)) {
 		// x
 		TiltDown();
 	}

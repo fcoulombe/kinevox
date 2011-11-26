@@ -1,8 +1,8 @@
-#include "Renderer/ResourceManager.h"
+#include "renderer/ResourceManager.h"
 
-#include <GCL/Hash.h>
-#include <GCL/Assert.h>
-#include "Renderer/Resource.h"
+#include <gcl/Hash.h>
+#include <gcl/Assert.h>
+#include "renderer/Resource.h"
 
 using namespace GCL;
 

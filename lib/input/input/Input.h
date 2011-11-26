@@ -4,7 +4,7 @@
 #include <map>
 #include <SDL.h>
 
-#include <GCL/Rect.h>
+#include <gcl/Rect.h>
 
 
 namespace GCL

@@ -1,6 +1,6 @@
 Import('env')
 
-name = "OpenGL"
+name = "opengl"
 dependencies = []
 
 def SetCFlags(ienv):

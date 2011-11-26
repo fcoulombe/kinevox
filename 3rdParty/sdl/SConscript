@@ -1,6 +1,6 @@
 Import('env')
 
-name = "SDL"
+name = "sdl"
 dependencies = []
 
 def SetCFlags(ienv):

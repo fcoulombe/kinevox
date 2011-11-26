@@ -1,5 +1,5 @@
-#include "AppLayer/GCLRenderObject.h"
-#include "AppLayer/GCLApplication.h"
+#include "applayer/GCLRenderObject.h"
+#include "applayer/GCLApplication.h"
 
 using namespace GCL;
 

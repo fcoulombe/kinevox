@@ -1,6 +1,6 @@
 #pragma once
-#include <GCL/Assert.h>
-#include <GCL/Point3.h>
+#include <gcl/Assert.h>
+#include <gcl/Point3.h>
 
 namespace GCL
 {

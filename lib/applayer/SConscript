@@ -1,8 +1,8 @@
 Import('env')
 
-name = "AppLayer"
+name = "applayer"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['Renderer', 'Input']
+dependencies = ['renderer', 'input']
 
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")

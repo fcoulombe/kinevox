@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GCL/Matrix44.h>
+#include <gcl/Matrix44.h>
 
 namespace GCL
 {

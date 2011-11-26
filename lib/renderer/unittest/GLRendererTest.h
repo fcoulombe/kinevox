@@ -21,8 +21,8 @@
  */
 #pragma once
 
-#include <GCL/UnitTest.h>
-#include <Renderer/GLRenderer.h>
+#include <gcl/UnitTest.h>
+#include <renderer/GLRenderer.h>
 
 using namespace GCL;
 namespace GLRendererTest

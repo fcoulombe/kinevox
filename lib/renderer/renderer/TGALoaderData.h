@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Renderer/OpenGL.h"
+#include "renderer/OpenGL.h"
 namespace GCL
 {
 

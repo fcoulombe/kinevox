@@ -11,7 +11,7 @@
 #endif
 
 
-#include <GCL/Assert.h>
+#include <gcl/Assert.h>
 #include <iostream>
 #define glErrorCheck() do { i_glErrorCheck(__FILE__, __LINE__); }while(0);
 inline void i_glErrorCheck(const char *file, int line)

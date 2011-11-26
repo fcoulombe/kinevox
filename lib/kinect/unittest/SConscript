@@ -1,7 +1,7 @@
 Import('env')
 
-name = "Kinect_test"
-dependencies = ["Kinect"]
+name = "kinect_test"
+dependencies = ["kinect"]
 data = []
 
 src_files = env.Glob("*.cpp")

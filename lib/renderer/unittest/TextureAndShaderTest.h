@@ -21,10 +21,10 @@
  */
 #pragma once
 
-#include <GCL/UnitTest.h>
-#include <Renderer/Texture.h>
-#include <Renderer/Shader.h>
-#include <Renderer/Vertex.h>
+#include <gcl/UnitTest.h>
+#include <renderer/Texture.h>
+#include <renderer/Shader.h>
+#include <renderer/Vertex.h>
 
 using namespace GCL;
 namespace TextureAndShaderTest

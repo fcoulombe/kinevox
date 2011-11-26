@@ -1,6 +1,6 @@
 #pragma once
 
-#include "GCL/Assert.h"
+#include "gcl/Assert.h"
 
 #include "ResourceManager.h"
 

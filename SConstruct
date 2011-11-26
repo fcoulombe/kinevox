@@ -37,6 +37,12 @@ AddOption('--use-valgrind', action="store_true",
           default=False,
           help='run the unit tests with valgrind')
 
+AddOption('--print-component-dependencies', action="store_true", 
+          dest="print-component-dependencies",
+          default=False,
+          help='prints the component dependnecies for the programs')
+
+
 AddOption('--gen-valgrind-suppressions', action="store_true", 
           dest="genValgrindSuppressions",
           default=False,
@@ -69,18 +75,18 @@ targetList = COMMAND_LINE_TARGETS
 default_env = Environment()
 default_env.SConsignFile(default_env.File("#build/.sconsign.dblite").abspath) 
 #detect if we have the build script installed (hopefully its gonna be the right one)
-if not os.path.exists(default_env.Dir("#GCLBuildScript").abspath):
+if not os.path.exists(default_env.Dir("#gclbuildscript").abspath):
     #git clone the build script
     print "The buildscript doesn't seem to be installed. I will fetch it for you from github"
     
-    gitClone("git@github.com:fcoulombe/GCLBuildScript.git", "./GCLBuildScript")
-    os.symlink("GCLBuildScript/site_scons", "site_scons")
+    gitClone("git@github.com:fcoulombe/gclbuildscript.git", "./gclbuildscript")
+    os.symlink("gclbuildscript/site_scons", "site_scons")
     
-if not os.path.exists(default_env.Dir("#lib/GCL").abspath):
+if not os.path.exists(default_env.Dir("#lib/gcl").abspath):
     #git clone the build script
     print "The cgl lib doesn't seem to be installed. I will fetch it for you from github"
     
-    gitClone("https://fcoulombe@github.com/fcoulombe/GCL.git", "./lib/GCL")
+    gitClone("https://fcoulombe@github.com/fcoulombe/gcl.git", "./lib/gcl")
 
 
 
@@ -143,27 +149,27 @@ print default_env['ENV']['PATH']
 
 
 sconsFilesList = [
-"./3rdParty/IL/SConscript",
+"./3rdParty/il/SConscript",
 "./3rdParty/libfreenect/SConscript",
 "./3rdParty/libpng/SConscript",
-"./3rdParty/OpenCV/SConscript",
-"./3rdParty/OpenGL/SConscript",
-"./3rdParty/SDL/SConscript",
+"./3rdParty/opencv/SConscript",
+"./3rdParty/opengl/SConscript",
+"./3rdParty/sdl/SConscript",
 
-"./lib/GCL/GCL/SConscript",
-"./lib/GCL/GCL/unittest/SConscript",
-"./lib/Input/SConscript",
-"./lib/Kinect/SConscript",
-"./lib/Kinect/unittest/SConscript",
-"./lib/Renderer/SConscript",
-"./lib/Renderer/unittest/SConscript",
-"./lib/Input/unittest/SConscript", #depends on renderer
-"./lib/Voxel/SConscript",
-"./lib/Voxel/unittest/SConscript",
-"./lib/AppLayer/SConscript",
-"./lib/AppLayer/unittest/SConscript",
-"./Program/Example/BasicTextureMapping/SConscript",
-"./Program/Kinevox/SConscript",
+"./lib/gcl/gcl/SConscript",
+"./lib/gcl/gcl/unittest/SConscript",
+"./lib/input/SConscript",
+"./lib/kinect/SConscript",
+"./lib/kinect/unittest/SConscript",
+"./lib/renderer/SConscript",
+"./lib/renderer/unittest/SConscript",
+"./lib/input/unittest/SConscript", #depends on renderer
+"./lib/voxel/SConscript",
+"./lib/voxel/unittest/SConscript",
+"./lib/applayer/SConscript",
+"./lib/applayer/unittest/SConscript",
+"./program/example/basicTextureMapping/SConscript",
+"./program/kinevox/SConscript",
 ]
 if GetOption('genValgrindSuppressions'):
     sconsFileList.append("./tools/valgrindgen/SConscript") #this tool generates some rules for valgrind so that it ignores certain pattern of memory errors that we don't care about

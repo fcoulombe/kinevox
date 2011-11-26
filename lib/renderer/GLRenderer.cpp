@@ -1,13 +1,14 @@
-#include "Renderer/GLRenderer.h"
+#include "renderer/VertexBuffer.h"
+#include "renderer/GLRenderer.h"
 
 #include <SDL.h>
 #include <SDL_video.h>
 
-#include <GCL/Assert.h>
+#include <gcl/Assert.h>
 
-#include "Renderer/GLRenderUtils.h"
-#include "Renderer/RenderObject.h"
-#include "Renderer/VertexBuffer.h"
+#include "renderer/GLRenderUtils.h"
+#include "renderer/RenderObject.h"
+
 
 
 using namespace GCL;
@@ -159,10 +160,10 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 	mCamera->Update();
 
 
+	std::cout << "render " << renderObjectList.size() << "objects" << std::endl;;
 
-	for (size_t i=0; false && i<renderObjectList.size(); ++i)
+	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
-		std::cout << "3";
 		const VertexData &data = renderObjectList[i]->GetVertexData();
 		const Matrix44 &transform = renderObjectList[i]->GetTransform();
 		glPushMatrix();

@@ -21,9 +21,9 @@
  */
 #pragma once
 
-#include <GCL/UnitTest.h>
-#include <Renderer/GLRenderer.h>
-#include <Renderer/Shader.h>
+#include <gcl/UnitTest.h>
+#include <renderer/GLRenderer.h>
+#include <renderer/Shader.h>
 
 #include "Voxel/Grid.h"
 

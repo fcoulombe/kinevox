@@ -1,5 +1,5 @@
-#include "Renderer/TextureResourceManager.h"
-#include "Renderer/TextureResource.h"
+#include "renderer/TextureResourceManager.h"
+#include "renderer/TextureResource.h"
 
 using namespace GCL;
 

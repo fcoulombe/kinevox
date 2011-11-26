@@ -1,10 +1,10 @@
-#include "AppLayer/GCLApplication.h"
+#include "applayer/GCLApplication.h"
 
 
-#include <AppLayer/GCLRenderObject.h>
-#include <GCL/Assert.h>
-#include <Input/Input.h>
-#include <Renderer/GLRenderer.h>
+#include "applayer/GCLRenderObject.h"
+#include <gcl/Assert.h>
+#include <input/Input.h>
+#include <renderer/GLRenderer.h>
 
 using namespace GCL;
 
@@ -44,6 +44,7 @@ void GCLApplication::SetViewportCamera(const Camera &camera)
 
 void GCLApplication::RegisterRenderObject(GCLRenderObject* newRenderObj)
 {
+	std::cout << "registre" << newRenderObj << std::endl;
 	GCLAssert(newRenderObj);
 	mRenderObjectList.push_back(newRenderObj);
 }

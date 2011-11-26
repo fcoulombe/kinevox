@@ -1,6 +1,6 @@
 Import('env')
 
-name = "IL"
+name = "il"
 dependencies = []
 
 def SetCFlags(ienv):

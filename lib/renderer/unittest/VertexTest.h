@@ -21,8 +21,8 @@
  */
 #pragma once
 
-#include <GCL/UnitTest.h>
-#include <Renderer/Vertex.h>
+#include <gcl/UnitTest.h>
+#include <renderer/Vertex.h>
 
 using namespace GCL;
 namespace VertexTest

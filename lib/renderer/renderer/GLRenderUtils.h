@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include <GCL/Point3.h>
-#include "Renderer/OpenGL.h"
+#include <gcl/Point3.h>
+#include "renderer/OpenGL.h"
 
 namespace GCL
 {

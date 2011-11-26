@@ -21,8 +21,8 @@
  */
 #pragma once
 
-#include <GCL/UnitTest.h>
-#include <Renderer/Texture.h>
+#include <gcl/UnitTest.h>
+#include <renderer/Texture.h>
 
 using namespace GCL;
 namespace TextureTest

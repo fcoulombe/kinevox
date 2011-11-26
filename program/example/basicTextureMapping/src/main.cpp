@@ -1,12 +1,12 @@
 
 #include <unistd.h>
-#include <Renderer/OpenCV.h>
+#include <renderer/OpenCV.h>
 #include <SDL.h>
 
-#include <AppLayer/GCLRenderObject.h>
-#include <AppLayer/GCLApplication.h>
-#include <Input/Input.h>
-#include <Renderer/Camera.h>
+#include <applayer/GCLRenderObject.h>
+#include <applayer/GCLApplication.h>
+#include <input/Input.h>
+#include <renderer/Camera.h>
 
 
 using namespace GCL;
@@ -25,12 +25,11 @@ int main(int /*argc*/, char ** /*argv*/)
 
 		std::cout << "obj" << std::endl;
 		GCLRenderObject renderObject;
-		//renderObject.SetPosition(0,0,-10.0);
+		renderObject.SetPosition(0,0,-10.0);
 
 
 		while (true)
 		{
-			std::cout << "kllooop" << std::endl;
 			GCLApplication::Update();
 			if (Input::IsKeyUp(SDLK_UP))
 				myCamera.MoveForward();
@@ -49,7 +48,8 @@ int main(int /*argc*/, char ** /*argv*/)
 
 
 			GCLApplication::Render();
-			sleep(0);
+			usleep(100);
+			std::cout.flush();
 		}
 	}
 	catch(GCLException &e)

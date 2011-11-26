@@ -1,10 +1,10 @@
 
 #include <unistd.h>
-#include <Renderer/OpenCV.h>
+#include <renderer/OpenCV.h>
 
-#include "Input/Input.h"
-#include "Kinect/KinectDriver.h"
-#include "Renderer/GLRenderer.h"
+#include "input/Input.h"
+#include "kinect/KinectDriver.h"
+#include "renderer/GLRenderer.h"
 //#include "Voxel/Grid.h"
 
 using namespace GCL;
@@ -13,7 +13,7 @@ int use_nested_cascade = 0;
 
 
 #include <SDL.h>
-#include <Renderer/OpenGL.h>
+#include <renderer/OpenGL.h>
 int main(int argc, char **argv)
 {
   /*if (!InitKinect())

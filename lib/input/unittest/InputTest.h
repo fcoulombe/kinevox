@@ -21,10 +21,10 @@
  */
 #pragma once
 
-#include <GCL/UnitTest.h>
+#include <gcl/UnitTest.h>
 
-#include <Input/Input.h>
-#include <Renderer/GLRenderer.h>
+#include <input/Input.h>
+#include <renderer/GLRenderer.h>
 
 using namespace GCL;
 namespace InputTest

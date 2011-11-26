@@ -25,9 +25,12 @@ import atexit
 import sys
 import platform
 import subprocess
-print platform.machine()
-print platform.architecture()
 
+
+AddOption('--verbose', action="store_true", 
+          dest="verbose",
+          default=False,
+          help='make the build verbose')
 
 AddOption('--use-valgrind', action="store_true", 
           dest="useValgrind",
@@ -44,6 +47,7 @@ AddOption('--compiler', action="store",
           dest="compiler",
           default='g++',
           help='specify the compiler')
+
 
 
 
@@ -86,21 +90,39 @@ if not os.path.exists(default_env.Dir("#lib/GCL").abspath):
 #
 ##############################################
 compiler = GetOption('compiler')
-"""if compiler == 'g++':
+
+cflags = ["-O0", "-g", "-Wall", "-Werror", "-Wextra", '-fexceptions', '-ftrapv', '-fvisibility=hidden']            
+
+if compiler == 'g++':
     default_env['CXX'] = 'g++'
     default_env['CC'] = 'gcc'
-elif compiler == 'clang':"""
-print compiler
-default_env['CXX'] = 'clang++'
-default_env['CC'] = 'clang'
-default_env['CXX'] = 'scan-build -k'
-default_env['CC'] = 'scan-build -k'
-cflags = ["-pedantic", "-std=c++0x", '-fexceptions', '-ftrapv', '-fvisibility=hidden']
+    #default_env['CXX'] = 'scan-build g++'
+    #default_env['CC'] = 'scan-build gcc'
+elif compiler == 'clang':
+    default_env['CXX'] = 'clang++'
+    default_env['CC'] = 'clang'
+    cflags.append("-std=c++0x");
+    cflags.append("-pedantic")
+
+#default_env['CXX'] = 'scan-build -k'
+#default_env['CC'] = 'scan-build -k'
+                        
+default_env.AppendUnique(CPPFLAGS=cflags )
 default_env.AppendUnique(CFLAGS=cflags)
 default_env.AppendUnique(CXXFLAGS=cflags)
-print default_env['CC']
-print default_env['CXX']  
-    
+variant ="%s-%s-%s" % (default_env['CC'], platform.machine(),  platform.architecture()[0]) 
+print variant
+
+if not GetOption('verbose'):
+    default_env['RANLIBCOMSTR'] = "[ranlib] $TARGET" 
+    default_env['ARCOMSTR'] = "[ar] $TARGET"
+    default_env['CCCOMSTR'] = "[cc] $SOURCE"
+    default_env['CXXCOMSTR'] = "[cxx] $SOURCE"
+    default_env['LINKCOMSTR'] = "[link] $TARGET"
+    default_env['INSTALLSTR'] = '[install] $TARGET'
+
+default_env['INSTALL_DIR'] = '#/bin/' + variant 
+
     
 ##############################################
 ##############################################
@@ -110,14 +132,15 @@ default_env.Tool('Profiler', toolpath=['site_scons/site_tools'])
 default_env.Tool('Catalog', toolpath=['site_scons/site_tools'])
 default_env.Tool('SConsWalk', toolpath=['site_scons/site_tools'])
 default_env.Tool('Wrappers', toolpath=['site_scons/site_tools'])
+default_env.Tool('RSync', toolpath=['site_scons/site_tools'])
+default_env.Tool('UnitTest', toolpath=['site_scons/site_tools'])
 
-default_env['ENV']['PATH'] = '/Developer/usr/bin:' + default_env['ENV']['PATH'] + ':/opt/local/bin:/opt/local/sbin' 
+
+default_env['ENV']['PATH'] = '/usr/local/bin:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/Developer/usr/bin' 
 default_env['ENV']['PKG_CONFIG_PATH'] = '/usr/local/lib/pkgconfig'
 print default_env['ENV']['PATH']
 
 
-cflags = ["-O0", "-fPIC", "-g", "-Wall", "-Werror", "-Wextra"]                                    
-default_env.Append(CPPFLAGS=cflags )
 
 sconsFilesList = [
 "./3rdParty/IL/SConscript",
@@ -130,11 +153,11 @@ sconsFilesList = [
 "./lib/GCL/GCL/SConscript",
 "./lib/GCL/GCL/unittest/SConscript",
 "./lib/Input/SConscript",
-"./lib/Input/unittest/SConscript",
 "./lib/Kinect/SConscript",
 "./lib/Kinect/unittest/SConscript",
 "./lib/Renderer/SConscript",
 "./lib/Renderer/unittest/SConscript",
+"./lib/Input/unittest/SConscript", #depends on renderer
 "./lib/Voxel/SConscript",
 "./lib/Voxel/unittest/SConscript",
 "./lib/AppLayer/SConscript",
@@ -145,9 +168,9 @@ sconsFilesList = [
 if GetOption('genValgrindSuppressions'):
     sconsFileList.append("./tools/valgrindgen/SConscript") #this tool generates some rules for valgrind so that it ignores certain pattern of memory errors that we don't care about
 
-default_env.StampTime("start SConscript Parse...")
-default_env.SConsWalkList(sconsFilesList, './SConscript')
-default_env.StampTime("end sconscript parse...")
+#default_env.StampTime("start SConscript Parse...")
+default_env.SConsWalkList(sconsFilesList, './SConscript', variant)
+default_env.StampTime("Parsing Time")
 if "@aliases" in targetList:
     default_env.displayAliases()
     sys.exit()

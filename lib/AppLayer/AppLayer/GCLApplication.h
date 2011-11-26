@@ -2,9 +2,11 @@
 
 #include <vector>
 #include <GCL/GCLExport.h>
+#include <Renderer/Renderer.h>
 
 namespace GCL
 {
+class Camera;
 class GLRenderer;
 class GCLRenderObject;
 class Input;
@@ -18,6 +20,10 @@ public:
 	GCLEXPORT static void Update();
 	GCLEXPORT static void Render();
 
+	GCLEXPORT static void SetViewportCamera(const Camera &camera);
+
+
+	GCLTEST_EXPORT static bool IsRegistered(const GCLRenderObject &obj);
 private:
 	GCLApplication();
 	~GCLApplication();
@@ -29,7 +35,6 @@ private:
 
 	static GLRenderer *mRenderer;
 
-	typedef std::vector<GCLRenderObject*> RenderObjectList;
 	static RenderObjectList mRenderObjectList;
 };
 

@@ -9,7 +9,7 @@
 using namespace GCL;
 
 GLRenderer *GCLApplication::mRenderer = NULL;
-GCLApplication::RenderObjectList GCLApplication::mRenderObjectList;
+RenderObjectList GCLApplication::mRenderObjectList;
 
 
 /*static */void GCLApplication::Initialize()
@@ -28,12 +28,18 @@ GCLApplication::RenderObjectList GCLApplication::mRenderObjectList;
 
 void GCLApplication::Update()
 {
-	ProcessInput();
+	Input::ProcessInput();
 }
 void GCLApplication::Render()
 {
 	GCLAssert(mRenderer);
-	mRenderer->Render();
+	//std::cout <<"Render " << mRenderObjectList.size() << " ";
+	mRenderer->Render(mRenderObjectList);
+}
+
+void GCLApplication::SetViewportCamera(const Camera &camera)
+{
+	mRenderer->SetCamera(camera);
 }
 
 void GCLApplication::RegisterRenderObject(GCLRenderObject* newRenderObj)
@@ -48,4 +54,17 @@ void GCLApplication::ReleaseRenderObject(GCLRenderObject* renderObjToDelete)
 	RenderObjectList::iterator it = std::find(mRenderObjectList.begin(), mRenderObjectList.end(), renderObjToDelete);
 	GCLAssert(it != mRenderObjectList.end());
 	mRenderObjectList.erase(it);
+}
+
+
+bool GCLApplication::IsRegistered(const GCLRenderObject &obj)
+{
+	for (RenderObjectList::const_iterator it = mRenderObjectList.begin(); it !=mRenderObjectList.end(); ++it)
+	{
+		const RenderObject* ro = *it;
+		if (ro == &obj)
+			return true;
+	}
+	return false;
+
 }

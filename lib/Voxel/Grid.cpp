@@ -8,6 +8,11 @@
 using namespace GCL;
 
 
+namespace
+{
+const WorldUnit gVoxelSize = 1.0;
+}
+
 Grid::Row::Row(size_t x, size_t y, size_t z)
 {
   mRow.resize(x);
@@ -69,7 +74,7 @@ void Grid::CreateVertexData()
           const Row &tempRow = tempSlice.mRows[j];
           for (size_t k=0; k<X_DIMENSION; ++k)
             {
-              WriteCube(currentCube, tempRow.mPositions[k], Row::gVoxelSize);
+              WriteCube(currentCube, tempRow.mPositions[k], gVoxelSize);
               currentCube += 4*6;
               //DrawCube(mGridVoxelPosition[i][j][k], gVoxelSize);
             }

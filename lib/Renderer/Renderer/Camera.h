@@ -15,9 +15,11 @@ public:
 	void TiltUp();
 	void TiltDown();
 
-	void Update();
+	void Update() const;
 
 
+	const Matrix44 &GetTransform() const { return mMatrix; }
+	static Camera &DefaultCamera();
 private:
 	Matrix44 mMatrix;
 };

@@ -14,6 +14,7 @@ using namespace GCL;
 
 void GLRenderer::Init3DState()
 {
+
 	int sdlInitSuccessful = SDL_Init(SDL_INIT_VIDEO);
 	GCLAssert(sdlInitSuccessful>= 0);
 
@@ -28,7 +29,6 @@ void GLRenderer::Init3DState()
 		fprintf( stderr, "Video query failed: %s\n",
 				SDL_GetError( ) );
 		return;
-
 	}
 	int bpp = info->vfmt->BitsPerPixel;
 
@@ -37,6 +37,7 @@ void GLRenderer::Init3DState()
 	SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
 	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
 	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
+	//std::cout << "GLRenderer::Init3DState> w " << width << " h " <<  height << " bpp " << bpp << " f " << flags ;
 	if( SDL_SetVideoMode( width, height, bpp, flags ) == 0 )
 	{
 		fprintf( stderr, "Video mode set failed: %s\n",
@@ -54,7 +55,8 @@ void GLRenderer::Init3DState()
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
 	glShadeModel(GL_FLAT); glErrorCheck();
 	glEnable(GL_TEXTURE_2D); glErrorCheck();
-	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); glErrorCheck();
+
 
 	glViewport(0,0,width,height); glErrorCheck();
 	glMatrixMode(GL_PROJECTION); glErrorCheck();
@@ -62,7 +64,6 @@ void GLRenderer::Init3DState()
 	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f); glErrorCheck();
 	glMatrixMode(GL_MODELVIEW); glErrorCheck();
 	glLoadIdentity(); glErrorCheck();
-
 
 }
 
@@ -135,8 +136,8 @@ void GLRenderer::Init2DState()
 
 GLRenderer::GLRenderer()
 {
+	mCamera=&Camera::DefaultCamera();
 	Init3DState();
-
 }
 GLRenderer::~GLRenderer()
 {
@@ -150,18 +151,20 @@ bool GLRenderer::Update()
 	return true;
 }
 
-void GLRenderer::Render()
+void GLRenderer::Render(const RenderObjectList &renderObjectList)
 {
 	glClearColor(0.0, 0.0, 1.0, 0.0); glErrorCheck();
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); glErrorCheck();
 	glLoadIdentity(); glErrorCheck();
-	//mCamera.Update();
+	mCamera->Update();
 
 
-	for (size_t i=0; false && i<mRenderObjectList.size(); ++i)
+
+	for (size_t i=0; false && i<renderObjectList.size(); ++i)
 	{
-		const VertexData &data = mRenderObjectList[i]->GetVertexData();
-		const Matrix44 &transform = mRenderObjectList[i]->GetTransform();
+		std::cout << "3";
+		const VertexData &data = renderObjectList[i]->GetVertexData();
+		const Matrix44 &transform = renderObjectList[i]->GetTransform();
 		glPushMatrix();
 		glMultMatrixd((const GLdouble*)&transform);
 		//FC: can sort by component type
@@ -171,28 +174,26 @@ void GLRenderer::Render()
 		{
 			VertexBuffer<VertexP> buffer((const VertexP *)data.mVertexData, data.vertexCount);
 			buffer.Render();
-			break;
 		}
+		break;
 		case ePOSITION|eNORMAL:
-	{
-		VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.vertexCount);
-		buffer.Render();
+		{
+			VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.vertexCount);
+			buffer.Render();
+		}
 		break;
-	}
 		case ePOSITION|eTEXTURE_COORD:
-	{
-		VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.vertexCount);
-		buffer.Render();
-
+		{
+			VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.vertexCount);
+			buffer.Render();
+		}
 		break;
-	}
 		case ePOSITION|eNORMAL|eTEXTURE_COORD:
-	{
-		VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.vertexCount);
-		buffer.Render();
-
+		{
+			VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.vertexCount);
+			buffer.Render();
+		}
 		break;
-	}
 		}
 	}
 

@@ -15,7 +15,7 @@ using namespace GCL;
 int use_nested_cascade = 0;
 
 
-int main(int argc, char **argv)
+int main(int /*argc*/, char ** /*argv*/)
 {
   /*if (!InitKinect())
 		return -1;*/

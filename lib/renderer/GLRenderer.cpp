@@ -314,3 +314,4 @@ void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 		glDisable(GL_TEXTURE_2D); glErrorCheck();
 	}
 }
+

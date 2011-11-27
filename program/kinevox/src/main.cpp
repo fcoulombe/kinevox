@@ -1,10 +1,13 @@
 
 #include <unistd.h>
+
+
+#include <applayer/GCLApplication.h>
+#include <input/Input.h>
+#include <kinect/KinectDriver.h>
+#include <renderer/Camera.h>
 #include <renderer/OpenCV.h>
 
-#include "input/Input.h"
-#include "kinect/KinectDriver.h"
-#include "renderer/GLRenderer.h"
 //#include "Voxel/Grid.h"
 
 using namespace GCL;
@@ -12,14 +15,16 @@ using namespace GCL;
 int use_nested_cascade = 0;
 
 
-#include <SDL.h>
-#include <renderer/OpenGL.h>
 int main(int argc, char **argv)
 {
   /*if (!InitKinect())
 		return -1;*/
 
-  GLRenderer *renderer = new GLRenderer();
+	GCLApplication::Initialize();
+	Camera myCamera;
+	GCLApplication::SetViewportCamera(myCamera);
+
+
 
   IplImage* rgbImg;
   IplImage* depthImg;
@@ -32,7 +37,7 @@ int main(int argc, char **argv)
   while (true)
     {
 
-      ProcessInput();
+	  GCLApplication::Update();
       if (!SynchronizeDrawingData())
         continue;
 
@@ -40,25 +45,24 @@ int main(int argc, char **argv)
       cvSetData(rgbImg, GetKinectRgbData(), 640*3);
       cvSetData(depthImg, GetKinectDepthData(), 640*3);
 
-      Camera &tempCamera = renderer->GetCamera();
-      if (IsKeyUp(SDLK_UP))
-        tempCamera.MoveForward();
-      if (IsKeyUp(SDLK_DOWN))
-        tempCamera.MoveBackward();
+      if (Input::IsKeyUp(SDLK_UP))
+        myCamera.MoveForward();
+      if (Input::IsKeyUp(SDLK_DOWN))
+        myCamera.MoveBackward();
 
-      if (IsKeyUp(SDLK_LEFT))
-        tempCamera.TurnLeft();
-      if (IsKeyUp(SDLK_RIGHT))
-        tempCamera.TurnRight();
+      if (Input::IsKeyUp(SDLK_LEFT))
+    	  myCamera.TurnLeft();
+      if (Input::IsKeyUp(SDLK_RIGHT))
+    	  myCamera.TurnRight();
 
-      if (IsKeyUp(SDLK_PAGEUP))
-        tempCamera.TiltUp();
-      if (IsKeyUp(SDLK_PAGEDOWN))
-        tempCamera.TiltDown();
-
+      if (Input::IsKeyUp(SDLK_PAGEUP))
+    	  myCamera.TiltUp();
+      if (Input::IsKeyUp(SDLK_PAGEDOWN))
+    	  myCamera.TiltDown();
 
 
-      if(IsKeyUp(306)) { //left ctrl
+
+      if(Input::IsKeyUp(306)) { //left ctrl
           printf("start tracking!\n");
       }
 
@@ -72,16 +76,11 @@ int main(int argc, char **argv)
 #endif
 
       //renderer->Render((uint8_t*)rgbImg->imageData, (uint8_t*)depthImg->imageData);
-      renderer->Render();
 
-      if (!renderer->Update())
-        return 1;
-
-      sleep(0);
+		GCLApplication::Render();
+		usleep(100);
+		std::cout.flush();
     }
-
-  delete renderer;
-
 
   return 0;
 }

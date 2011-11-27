@@ -1,5 +1,6 @@
 #pragma once
 
+#include <renderer/Material.h>
 #include <renderer/RenderObject.h>
 #include <renderer/Vertex.h>
 
@@ -27,8 +28,9 @@ public:
 	{
 		mTransform.SetPosition(position);
 	}
+	 const Material &GetMaterial() const { return mMaterial; }
 private:
-
+	Material mMaterial;
 	//friend class GCLApplication;
 	static const VertexPNT square[4];
 	static const VertexData data;

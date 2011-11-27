@@ -22,62 +22,27 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
-#include <renderer/Texture.h>
-#include <renderer/Shader.h>
-#include <renderer/Vertex.h>
+#include <renderer/Material.h>
 
 using namespace GCL;
-namespace TextureAndShaderTest
+namespace MaterialTest
 {
 
-class MyRenderObject : public RenderObject
-{
-public:
-	MyRenderObject()
-	: RenderObject(Matrix44::IDENTITY) {}
-	const VertexData &GetVertexData() const
-	{
-		static const   VertexPNT square[4] = {
-				{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-				{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-				{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-				{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
-		static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
-		return data;
 
-	}
-	const Material &GetMaterial() const { return mMaterial; }
-private:
-	Material mMaterial;
-
-
-};
-
-bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
-{
-	return false;
-}
 void Test()
 {
 	TEST_START
 
 	TextureResourceManager::Initialize();
-	GLRenderer renderer;
-	Shader shader;
-	shader.Bind();
 
-	Texture texture("data/mushroom.png");
-	texture.Bind();
-
-	MyRenderObject obj;
-
-	renderer.Render(RenderObjectList());
+	{
+	Material material("Default");
+	material.Bind();
+	material.LoadMaterial("Mushroom");
+	material.Bind();
+	}
 
 
-	/*        target.Save("RenderTargetTest.tga");
-    Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
-	 */
 	TextureResourceManager::Terminate();
-
 }
 }

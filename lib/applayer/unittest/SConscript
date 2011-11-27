@@ -2,7 +2,7 @@ Import('env')
 
 name = "applayer_test"
 dependencies = ["applayer"]
-data = []
+data = [ env.Dir("data")]
 
 src_files = env.Glob("*.cpp")
 prog = env.UnitTest(name, src_files, dependencies, data)

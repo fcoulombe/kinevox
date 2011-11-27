@@ -2,8 +2,10 @@
 
 #include <gcl/Matrix44.h>
 
+
 namespace GCL
 {
+class Material;
   struct VertexData
   {
     const void *mVertexData;
@@ -21,6 +23,7 @@ namespace GCL
     }
     virtual ~RenderObject() {}
     virtual const VertexData &GetVertexData() const=0;
+    virtual const Material &GetMaterial() const=0;
     const Matrix44 &GetTransform() const {return mTransform; }
 
   protected:

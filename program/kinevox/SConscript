@@ -2,7 +2,7 @@ Import('env')
 
 
 #dependencies = ['voxel']
-dependencies = ['renderer']
+dependencies = ['applayer', 'renderer', 'input', 'kinect']
 
 src_files = env.Glob("src/*.cpp")
 prog = env.KProgram("kinevox", src_files, dependencies)

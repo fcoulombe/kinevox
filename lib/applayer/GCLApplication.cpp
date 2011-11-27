@@ -1,5 +1,6 @@
 #include "applayer/GCLApplication.h"
 
+#include <algorithm>
 
 #include "applayer/GCLRenderObject.h"
 #include <gcl/Assert.h>

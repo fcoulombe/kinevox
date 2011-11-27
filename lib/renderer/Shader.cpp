@@ -82,14 +82,14 @@ GLuint Shader::CompileShader(const char *shaderSrc, GLenum type)
       glGetShaderiv(shader, GL_INFO_LOG_LENGTH,&infologLength);glErrorCheck();
       if (infologLength > 0)
         {
-          GLchar *infoLog = (GLchar *)malloc(infologLength);
+          GLchar *infoLog = new GLchar[infologLength];
           int charsWritten  = 0;
           glGetShaderInfoLog(shader, infologLength, &charsWritten, infoLog);
 
           std::string log = "Shader Compile Log: " ;
           log += infoLog;
 
-          free(infoLog);
+          delete [] infoLog;
 
           throw GCLException(log);
         }

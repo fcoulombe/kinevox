@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdint.h>
 #include <gcl/Matrix44.h>
 
 

@@ -1,5 +1,6 @@
 #include "renderer/Texture.h"
 
+#include <cstring>
 #include <stdint.h>
 
 #include <gcl/SafeCast.h>

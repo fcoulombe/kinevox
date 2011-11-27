@@ -1,4 +1,5 @@
 #include "renderer/ResourceManager.h"
+#include <cstring>
 
 #include <gcl/Hash.h>
 #include <gcl/Assert.h>

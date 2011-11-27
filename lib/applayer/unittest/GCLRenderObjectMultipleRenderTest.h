@@ -51,11 +51,11 @@ void Test()
 	AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
 
 
-	for (size_t i=0;i<1000; ++i)
+	for (size_t i=0;i<100; ++i)
 	{
 	GCLApplication::Update();
 	GCLApplication::Render();
-	usleep(10);
+	usleep(1);
 	}
 
 	GCLApplication::Terminate();

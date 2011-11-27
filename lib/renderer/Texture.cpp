@@ -30,14 +30,18 @@ void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, cons
 {
 	mTextureData.width = width;
 	mTextureData.height= height;
+	mTextureData.bytesPerPixel = bytesPerPixel;
 
 	glGenTextures(1, &mTextureId); glErrorCheck();
 	glBindTexture(GL_TEXTURE_2D, mTextureId);glErrorCheck();
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);glErrorCheck();
-	glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // automatic mipmapglErrorCheck();
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); glErrorCheck();
+	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);glErrorCheck();
+	//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // automatic mipmapglErrorCheck();
 
 	GLenum BytePerPixel[] =
 	{

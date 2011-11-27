@@ -6,7 +6,7 @@
 #include <OpenGL/glext.h>
 #else
 /* If using GLEW */
-//#include <GL/glew.h>
+#include <GL/glew.h>
 #include <GL/gl.h>
 #endif
 

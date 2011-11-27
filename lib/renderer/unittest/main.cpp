@@ -27,6 +27,8 @@
 #include "TextureTest.h"
 #include "TextureAndShaderTest.h"
 #include "TgaLoadingTest.h"
+#include "MaterialTest.h"
+#include "RenderObjectWithMaterialTest.h"
 #include "VertexBufferTest.h"
 #include "VertexTest.h"
 
@@ -36,22 +38,10 @@ using namespace GCL;
 
 
 
-static const std::string Dirname(const std::string  &dir)
-{
-  const char DIR_SEPARATOR = '/';
-  register int i;
-  const std::string &loc = dir;
-  size_t size = loc.length();
-
-  for (i = (size - 1); (i >= 0) && (loc[i] != DIR_SEPARATOR); --i)
-    ;
-
-  return loc.substr(0, i);
-}
 
 int main(int /*argc*/, char **argv)
 {
-  std::cout << "App: " << Dirname(std::string(argv[0])) << std::endl;
+  std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
 
   try
   {
@@ -65,7 +55,11 @@ int main(int /*argc*/, char **argv)
       ResourceTest::Test();
       TextureTest::Test();
       TextureAndShaderTest::Test();
+      MaterialTest::Test();
+
       RenderObjectTest::Test();
+      RenderObjectWithMaterialTest::Test();
+
       RenderBufferTest::Test();
       FrameBufferTest::Test();
   }

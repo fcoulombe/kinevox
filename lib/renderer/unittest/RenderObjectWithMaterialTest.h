@@ -23,14 +23,11 @@
 
 #include <gcl/UnitTest.h>
 #include <renderer/Material.h>
-#include <renderer/RenderObject.h>
-#include <renderer/Shader.h>
-#include <renderer/TextureResourceManager.h>
-#include <renderer/Vertex.h>
 
 using namespace GCL;
-namespace RenderObjectTest
+namespace RenderObjectWithMaterialTest
 {
+
 class MyRenderObject : public RenderObject
 {
 public:
@@ -62,33 +59,29 @@ public:
 private:
 	Material mMaterial;
 
-
 };
 
 void Test()
 {
 	TEST_START
+
 	TextureResourceManager::Initialize();
+
+
+	{
 	GLRenderer renderer;
+
 	MyRenderObject obj;
 	RenderObjectList objList;
+
 	objList.push_back(&obj);
 
-	Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
-
-	const WorldPoint3 position(0.0,0.0, -10.0);
-	obj.SetPosition(position);
-	Matrix44 positionTestMat(Matrix44::IDENTITY);
-	positionTestMat.SetPosition(position);
-	std::stringstream s;
-	s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;
-	AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
-
+	Material material("Default");
+	material.Bind();
 
 	renderer.Render(objList);
+	}
 
 	TextureResourceManager::Terminate();
-
-
 }
 }

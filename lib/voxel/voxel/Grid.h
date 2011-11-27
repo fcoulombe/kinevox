@@ -4,6 +4,7 @@
 
 #include <gcl/Point3.h>
 #include <renderer/RenderObject.h>
+#include <renderer/Material.h>
 
 namespace GCL
 {
@@ -39,8 +40,10 @@ namespace GCL
     void CreateVertexData();
     const VertexData &GetVertexData() const; // this function can't be const because it might need to create vertex data on demand
 
+    const Material &GetMaterial() const { return mMaterial; }
   private:
 
+    Material mMaterial;
     const size_t X_DIMENSION;
     const size_t Y_DIMENSION;
     const size_t Z_DIMENSION;

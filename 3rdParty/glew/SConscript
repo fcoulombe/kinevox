@@ -1,0 +1,13 @@
+Import('env')
+
+name = "glew"
+dependencies = []
+
+def SetCFlags(ienv):
+	ienv.ParseConfig('pkg-config --cflags glew')
+
+def SetLFlags(ienv):
+	ienv.ParseConfig('pkg-config --libs glew')
+	
+	
+env.AddComponent(name, None, None,dependencies, SetCFlags, SetLFlags)

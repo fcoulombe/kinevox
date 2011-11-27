@@ -154,6 +154,7 @@ sconsFilesList = [
 "./3rdParty/libpng/SConscript",
 "./3rdParty/opencv/SConscript",
 "./3rdParty/opengl/SConscript",
+"./3rdParty/glew/SConscript",
 "./3rdParty/sdl/SConscript",
 
 "./lib/gcl/gcl/SConscript",

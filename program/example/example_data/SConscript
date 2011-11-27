@@ -1,0 +1,13 @@
+Import('env')
+
+name = "example_data"
+data =  env.Dir("data")
+dependencies = [ ]
+incPath = []
+lib = []
+
+d = env.Install(env.Dir("$INSTALL_DIR/example"), data.srcnode())
+ali = env.Alias("@example_data", d)
+
+env.AddComponent(name, incPath, lib, dependencies)
+

@@ -168,6 +168,7 @@ sconsFilesList = [
 "./lib/voxel/unittest/SConscript",
 "./lib/applayer/SConscript",
 "./lib/applayer/unittest/SConscript",
+"./program/example/example_data/SConscript",
 "./program/example/basicTextureMapping/SConscript",
 "./program/kinevox/SConscript",
 ]

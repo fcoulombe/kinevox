@@ -33,6 +33,17 @@ void Test()
 	TEST_START
 
 	GLRenderer *renderer =  new GLRenderer();
+
+
+	std::cout << "OpenGL Stats"<<std::endl;
+	std::cout << "Version: " << renderer->GetVersion()<<std::endl;
+	std::cout << "Vendor: " << renderer->GetVendor()<<std::endl;
+	std::cout << "Renderer: " << renderer->GetRenderer()<<std::endl;
+	std::cout << "ShadingLanguageVersion: " << renderer->GetShadingLanguageVersion()<<std::endl;
+
+
+	//renderer->IsShaderSupportEnabled();
+
 	delete renderer;
 }
 }

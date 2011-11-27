@@ -16,7 +16,12 @@ namespace GCL
     }
     bool LoadTexture(const char *filename);
 
-    void Bind() const { GCLAssert(IsValid()); glBindTexture(GL_TEXTURE_2D, mTextureId);  glErrorCheck();}
+    void Bind() const
+    {
+    	//std::cout << "Binding Texture: " <<mTextureId << std::endl;
+    	GCLAssert(IsValid());
+    	glBindTexture(GL_TEXTURE_2D, mTextureId);  glErrorCheck();
+    }
 
     bool IsValid() const { return (int)mTextureId!=-1; }
 
@@ -30,8 +35,8 @@ namespace GCL
 
     struct TextureData
     {
-      size_t width, height;
-      size_t GetImageSizeInBytes() const { return width*height*3; }
+      size_t width, height, bytesPerPixel;
+      size_t GetImageSizeInBytes() const { return width*height*bytesPerPixel; }
     }mTextureData;
 
     friend class FrameBuffer;

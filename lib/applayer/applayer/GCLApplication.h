@@ -24,6 +24,8 @@ public:
 
 
 	GCLTEST_EXPORT static bool IsRegistered(const GCLRenderObject &obj);
+
+	GCLEXPORT static GLRenderer *GetRenderer() { return mRenderer; }
 private:
 	GCLApplication();
 	~GCLApplication();

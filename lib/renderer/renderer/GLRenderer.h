@@ -29,12 +29,20 @@ public:
 	uint32_t gl_depth_tex;
 	uint32_t gl_rgb_tex;
 
+	struct RenderState
+	{
+		void SetTextureEnabled(bool isEnabled);
+	};
+	RenderState mCurrentRenderState;
 private:
 	void Init3DState();
 	void Init2DState();
 
 	const Camera *mCamera;
 	ViewPort mViewPort;
+
+
+
 
 };
 }

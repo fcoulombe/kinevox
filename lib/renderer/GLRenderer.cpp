@@ -7,11 +7,13 @@
 #include <gcl/Assert.h>
 
 #include "renderer/GLRenderUtils.h"
+#include "renderer/Material.h"
 #include "renderer/RenderObject.h"
 
 
 
 using namespace GCL;
+
 
 void GLRenderer::Init3DState()
 {
@@ -57,6 +59,7 @@ void GLRenderer::Init3DState()
 	glShadeModel(GL_FLAT); glErrorCheck();
 	glEnable(GL_TEXTURE_2D); glErrorCheck();
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); glErrorCheck();
+	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
 
 
 	glViewport(0,0,width,height); glErrorCheck();
@@ -160,15 +163,31 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 	mCamera->Update();
 
 
-	std::cout << "render " << renderObjectList.size() << "objects" << std::endl;;
+
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
-		const VertexData &data = renderObjectList[i]->GetVertexData();
 		const Matrix44 &transform = renderObjectList[i]->GetTransform();
 		glPushMatrix();glErrorCheck();
 		glMultMatrixd((const GLdouble*)&transform);glErrorCheck();
+		const Material &tempMaterial = renderObjectList[i]->GetMaterial();
+		tempMaterial.Bind();
+		glBegin (GL_QUADS);
+		glTexCoord2f (0.0, 0.0);
+		glVertex3f (0.0, 0.0, 0.0);
+		glTexCoord2f (1.0, 0.0);
+		glVertex3f (10.0, 0.0, 0.0);
+		glTexCoord2f (1.0, 1.0);
+		glVertex3f (10.0, 10.0, 0.0);
+		glTexCoord2f (0.0, 1.0);
+		glVertex3f (0.0, 10.0, 0.0);
+		glEnd ();
+
+
+
 		//FC: can sort by component type
+		/*
+		const VertexData &data = renderObjectList[i]->GetVertexData();
 		switch (data.vertexType)
 		{
 		case ePOSITION:
@@ -195,7 +214,7 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 			buffer.Render();
 		}
 		break;
-		}
+		}*/
 		glPopMatrix(); glErrorCheck();
 	}
 
@@ -273,3 +292,15 @@ void GLRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
 
 }
 
+void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
+{
+	if (isEnabled)
+	{
+		glEnable(GL_TEXTURE_2D); glErrorCheck();
+	}
+	else
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
+		glDisable(GL_TEXTURE_2D); glErrorCheck();
+	}
+}

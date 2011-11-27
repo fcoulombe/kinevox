@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Renderer.h"
-#include "Renderer/OpenCV.h"
+#include "renderer/OpenCV.h"
 
 namespace GCL
 {

@@ -1,9 +1,9 @@
-#include "Voxel/Grid.h"
+#include "voxel/Grid.h"
 
 #include <gcl/Assert.h>
 #include <renderer/GLRenderUtils.h>
 #include <renderer/Vertex.h>
-#include "Voxel/Voxel.h"
+#include "voxel/Voxel.h"
 
 using namespace GCL;
 

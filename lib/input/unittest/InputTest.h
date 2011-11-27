@@ -24,7 +24,6 @@
 #include <gcl/UnitTest.h>
 
 #include <input/Input.h>
-#include <renderer/GLRenderer.h>
 
 using namespace GCL;
 namespace InputTest
@@ -33,7 +32,7 @@ namespace InputTest
 void Test()
 {
 	TEST_START
-	GLRenderer renderer;
+
 	//const Rect<int> &ProcessSelection();
 	Input::ProcessInput();
 	Input::IsKeyUp(SDLK_UP);

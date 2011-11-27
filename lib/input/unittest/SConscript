@@ -1,7 +1,7 @@
 Import('env')
 
 name = "input_test"
-dependencies = ["input", "renderer"]
+dependencies = ["input"]
 data = []
 
 src_files = env.Glob("*.cpp")

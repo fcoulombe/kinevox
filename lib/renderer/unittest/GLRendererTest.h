@@ -41,8 +41,21 @@ void Test()
 	std::cout << "Renderer: " << renderer->GetRenderer()<<std::endl;
 	std::cout << "ShadingLanguageVersion: " << renderer->GetShadingLanguageVersion()<<std::endl;
 
+	std::cout << "Extensions: " << std::endl;
+	const std::vector<std::string> ext = renderer->GetExtensions();
+	for (size_t i=0; i<ext.size();++i)
+	{
+		std::cout << ext[i] << std::endl;;
+	}
 
-	//renderer->IsShaderSupportEnabled();
+	Assert_Test(renderer->IsExtensionSupported("GL_ARB_shading_language_100"));
+	Assert_Test(renderer->IsExtensionSupported("GL_ARB_fragment_program"));
+	Assert_Test(renderer->IsExtensionSupported("GL_ARB_multitexture"));
+	Assert_Test(renderer->IsExtensionSupported("GL_ARB_pixel_buffer_object"));
+	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_buffer_object"));
+	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_program"));
+	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_shader"));
+	Assert_Test(renderer->IsExtensionSupported("GL_EXT_texture_compression_dxt1"));
 
 	delete renderer;
 }

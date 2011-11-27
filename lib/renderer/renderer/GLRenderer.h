@@ -2,6 +2,8 @@
 
 #include <cstdlib>
 #include <stdint.h>
+#include <algorithm>
+#include <string>
 
 #include "renderer/Camera.h"
 #include "renderer/Renderer.h"
@@ -11,6 +13,7 @@
 namespace GCL
 {
 
+typedef std::vector<std::string> GLExtensionList;
 class GLRenderer : public Renderer
 {
 public:
@@ -40,7 +43,17 @@ public:
 	const std::string &GetVersion() const { return mVersion; }
 	const std::string &GetRenderer() const { return mRenderer; }
 	const std::string &GetShadingLanguageVersion() const { return mShadingLanguageVersion; }
-	const std::vector<std::string> &GetExtensions() const { return mExtensions; }
+	const GLExtensionList &GetExtensions() const { return mExtensions; }
+
+	bool IsExtensionSupported(const std::string &ext) const
+	{
+		GLExtensionList::const_iterator b = mExtensions.begin();
+		GLExtensionList::const_iterator e = mExtensions.end();
+		GLExtensionList::const_iterator r =  std::find(b, e, ext);
+
+		bool res = r != mExtensions.end();
+		return res;
+	}
 
 private:
 	void Init3DState();
@@ -50,7 +63,8 @@ private:
 	ViewPort mViewPort;
 
 	std::string mVendor, mVersion,mRenderer, mShadingLanguageVersion;
-	std::vector<std::string> mExtensions;
+
+	GLExtensionList mExtensions;
 
 
 

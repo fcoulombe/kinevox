@@ -16,6 +16,7 @@ namespace GCL
     {
     	std::cout << "Create " << std::endl;
       glGenBuffers(1, &mVertexBufferId);glErrorCheck();
+      std::cout << "Create " << std::endl;
       glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);glErrorCheck();
       glBufferData(GL_ARRAY_BUFFER, sizeof(VertexType)*count, (void*)vertexArray, mBufferType);glErrorCheck();
     }

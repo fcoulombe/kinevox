@@ -3,6 +3,8 @@
 #include "GCLApplicationTest.h"
 #include "GCLApplicationCameraTest.h"
 #include "GCLRenderObjectTest.h"
+#include "GCLRenderObjectMultipleRenderTest.h"
+
 int main(int /*argc*/, char ** /*argv*/)
 {
 	try
@@ -10,6 +12,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		GCLApplicationTest::Test();
 		GCLApplicationCameraTest::Test();
 		GCLRenderObjectTest::Test();
+		GCLRenderObjectMultipleRenderTest::Test();
 	}
 	catch (GCLException &e)
 	{

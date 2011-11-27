@@ -24,6 +24,7 @@
 #include <gcl/UnitTest.h>
 #include <renderer/GLRenderer.h>
 #include <renderer/Shader.h>
+#include <renderer/TextureResourceManager.h>
 
 #include "Voxel/Grid.h"
 
@@ -33,22 +34,26 @@ namespace GridTest
 void Test()
 {
 	TEST_START
+	TextureResourceManager::Initialize();
 
 	GLRenderer *renderer = new GLRenderer();
-	std::cout << "created" << std::endl;
 
-	/*Shader shader;
-  shader.Bind();
 
-  Grid::Row row(10,10,10);
-  Grid::Slice slice(10,10,10);
+	Shader shader;
+	shader.Bind();
 
-  Grid grid(10,10,10);
-  grid.CreateVertexData();
+	Grid::Row row(10,10,10);
+	Grid::Slice slice(10,10,10);
 
-  renderer.Render();*/
+	Grid grid(10,10,10);
+	grid.CreateVertexData();
+	RenderObjectList renderList;
+	renderList.push_back(&grid);
+
+	renderer->Render(renderList);
 
 	delete renderer;
+	TextureResourceManager::Terminate();
 
 }
 }

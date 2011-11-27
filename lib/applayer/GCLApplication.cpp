@@ -5,6 +5,7 @@
 #include <gcl/Assert.h>
 #include <input/Input.h>
 #include <renderer/GLRenderer.h>
+#include <renderer/TextureResourceManager.h>
 
 using namespace GCL;
 
@@ -14,6 +15,7 @@ RenderObjectList GCLApplication::mRenderObjectList;
 
 /*static */void GCLApplication::Initialize()
 {
+	TextureResourceManager::Initialize();
 	GCLAssert(mRenderer == NULL);
 	mRenderer = new GLRenderer();
 }
@@ -22,6 +24,7 @@ RenderObjectList GCLApplication::mRenderObjectList;
 	GCLAssert(mRenderer);
 	delete mRenderer;
 	mRenderer = NULL;
+	TextureResourceManager::Terminate();
 }
 
 
@@ -33,7 +36,6 @@ void GCLApplication::Update()
 void GCLApplication::Render()
 {
 	GCLAssert(mRenderer);
-	//std::cout <<"Render " << mRenderObjectList.size() << " ";
 	mRenderer->Render(mRenderObjectList);
 }
 
@@ -44,7 +46,6 @@ void GCLApplication::SetViewportCamera(const Camera &camera)
 
 void GCLApplication::RegisterRenderObject(GCLRenderObject* newRenderObj)
 {
-	std::cout << "registre" << newRenderObj << std::endl;
 	GCLAssert(newRenderObj);
 	mRenderObjectList.push_back(newRenderObj);
 }

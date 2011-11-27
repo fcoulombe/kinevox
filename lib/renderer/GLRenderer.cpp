@@ -166,8 +166,8 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 	{
 		const VertexData &data = renderObjectList[i]->GetVertexData();
 		const Matrix44 &transform = renderObjectList[i]->GetTransform();
-		glPushMatrix();
-		glMultMatrixd((const GLdouble*)&transform);
+		glPushMatrix();glErrorCheck();
+		glMultMatrixd((const GLdouble*)&transform);glErrorCheck();
 		//FC: can sort by component type
 		switch (data.vertexType)
 		{
@@ -196,6 +196,7 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		}
 		break;
 		}
+		glPopMatrix(); glErrorCheck();
 	}
 
 

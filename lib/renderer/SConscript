@@ -2,7 +2,7 @@ Import('env')
 
 name = "renderer"
 incPath = [env.Dir("#/lib/%s" % name)]
-dependencies = [ 'gcl', 'sdl', 'opencv', 'opengl', 'libpng']
+dependencies = [ 'gcl', 'sdl', 'opencv', 'opengl', 'libpng', 'glew']
 
 env.Append(CPPPATH=incPath)
 env.Append(CXXPATH=incPath)

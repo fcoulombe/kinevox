@@ -26,7 +26,7 @@
 #include <renderer/Shader.h>
 #include <renderer/TextureResourceManager.h>
 
-#include "Voxel/Grid.h"
+#include "voxel/Grid.h"
 
 using namespace GCL;
 namespace GridTest

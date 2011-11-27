@@ -97,7 +97,11 @@ if not os.path.exists(default_env.Dir("#lib/gcl").abspath):
 ##############################################
 compiler = GetOption('compiler')
 
-cflags = ["-O0", "-g", "-Wall", "-Werror", "-Wextra", '-fexceptions', '-ftrapv', '-fvisibility=hidden']            
+cflags = ["-O0", "-g", "-Wall", "-Werror", "-Wextra", '-fexceptions', '-ftrapv', '-fvisibility=hidden']   
+if default_env['PLATFORM']=='darwin':
+    cflags.append("-DOS_MACOSX")
+else:
+    cflags.append("-DOS_LINUX")                  
 
 if compiler == 'g++':
     default_env['CXX'] = 'g++'

@@ -7,6 +7,8 @@
 #include <applayer/GCLApplication.h>
 #include <input/Input.h>
 #include <renderer/Camera.h>
+#include <renderer/Material.h>
+#include <renderer/GLRenderer.h>
 
 
 using namespace GCL;
@@ -18,14 +20,15 @@ int main(int /*argc*/, char ** /*argv*/)
 
 	try
 	{
-		std::cout << "render" << std::endl;
+
 		GCLApplication::Initialize();
 		Camera myCamera;
 		GCLApplication::SetViewportCamera(myCamera);
 
-		std::cout << "obj" << std::endl;
+
 		GCLRenderObject renderObject;
 		renderObject.SetPosition(0,0,-10.0);
+
 
 
 		while (true)
@@ -44,7 +47,23 @@ int main(int /*argc*/, char ** /*argv*/)
 			if (Input::IsKeyUp(SDLK_PAGEUP))
 				myCamera.TiltUp();
 			if (Input::IsKeyUp(SDLK_PAGEDOWN))
-				myCamera.TiltDown();
+				//myCamera.TiltDown();
+			{
+				static bool isTextureOn = false;
+				isTextureOn = !isTextureOn;
+				if (isTextureOn)
+				{
+					std::cout << "on" << std::endl;
+					GCLApplication::GetRenderer()->mCurrentRenderState.SetTextureEnabled(true);
+				}
+				else
+				{
+					std::cout << "off" << std::endl;
+					GCLApplication::GetRenderer()->mCurrentRenderState.SetTextureEnabled(false);
+				}
+			}
+
+
 
 
 			GCLApplication::Render();

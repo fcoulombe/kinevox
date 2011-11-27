@@ -34,12 +34,23 @@ public:
 		void SetTextureEnabled(bool isEnabled);
 	};
 	RenderState mCurrentRenderState;
+
+
+	const std::string &GetVendor() const { return mVendor; }
+	const std::string &GetVersion() const { return mVersion; }
+	const std::string &GetRenderer() const { return mRenderer; }
+	const std::string &GetShadingLanguageVersion() const { return mShadingLanguageVersion; }
+	const std::vector<std::string> &GetExtensions() const { return mExtensions; }
+
 private:
 	void Init3DState();
 	void Init2DState();
 
 	const Camera *mCamera;
 	ViewPort mViewPort;
+
+	std::string mVendor, mVersion,mRenderer, mShadingLanguageVersion;
+	std::vector<std::string> mExtensions;
 
 
 

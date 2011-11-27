@@ -1,14 +1,16 @@
-#include "renderer/VertexBuffer.h"
+
 #include "renderer/GLRenderer.h"
 
 #include <SDL.h>
 #include <SDL_video.h>
 
 #include <gcl/Assert.h>
+#include <gcl/StringUtil.h>
 
 #include "renderer/GLRenderUtils.h"
 #include "renderer/Material.h"
 #include "renderer/RenderObject.h"
+#include "renderer/VertexBuffer.h"
 
 
 
@@ -138,10 +140,18 @@ void GLRenderer::Init2DState()
 
 }
 
+
+
 GLRenderer::GLRenderer()
 {
 	mCamera=&Camera::DefaultCamera();
 	Init3DState();
+
+	mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
+	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
+	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
+	mShadingLanguageVersion = std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));glErrorCheck();
+	mExtensions = StringUtil::Explode(std::string((const char *) glGetString(GL_EXTENSIONS)), ' ');glErrorCheck();
 }
 GLRenderer::~GLRenderer()
 {

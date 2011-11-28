@@ -43,6 +43,7 @@ public:
 	const std::string &GetVersion() const { return mVersion; }
 	const std::string &GetRenderer() const { return mRenderer; }
 	const std::string &GetShadingLanguageVersion() const { return mShadingLanguageVersion; }
+	const std::string &GetGlewVersion() const { return mGlewVersion; }
 	const GLExtensionList &GetExtensions() const { return mExtensions; }
 
 	bool IsExtensionSupported(const std::string &ext) const
@@ -62,7 +63,7 @@ private:
 	const Camera *mCamera;
 	ViewPort mViewPort;
 
-	std::string mVendor, mVersion,mRenderer, mShadingLanguageVersion;
+	std::string mVendor, mVersion,mRenderer, mShadingLanguageVersion, mGlewVersion;
 
 	GLExtensionList mExtensions;
 

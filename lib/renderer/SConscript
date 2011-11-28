@@ -2,7 +2,23 @@ Import('env')
 
 name = "renderer"
 incPath = [env.Dir("#/lib/%s" % name)]
-dependencies = [ 'gcl', 'sdl', 'opencv', 'opengl', 'libpng', 'glew']
+dependencies = [ 'gcl', 'sdl', 'opencv', 'opengl', 'libpng']
+
+
+if  env['PLATFORM']=='linux':
+	dependencies.append('glew')
+	glewPreProc = ["-DENABLE_GLEW=1"]
+elif env['PLATFORM']=='darwin':
+	glewPreProc = ["-DENABLE_GLEW=0"]
+else:
+	glewPreProc = ["-DENABLE_GLEW=0"]
+cflags = []
+cflags.extend(glewPreProc)
+
+
+env.Append(CPPPATH=glewPreProc)
+env.Append(CXXPATH=glewPreProc)
+env.Append(CPATH=glewPreProc)
 
 env.Append(CPPPATH=incPath)
 env.Append(CXXPATH=incPath)
@@ -11,5 +27,5 @@ env.Append(CPATH=incPath)
 
 src_files = env.Glob("*.cpp")
 lib = env.KStaticLibrary(name, src_files, dependencies)
-env.AddComponent(name, incPath, lib, dependencies)
+env.AddComponent(name, cflags, incPath, lib, dependencies)
 

@@ -23,6 +23,7 @@
 
 #include <gcl/UnitTest.h>
 #include <renderer/GLRenderer.h>
+#include <renderer/OpenGL.h>
 
 using namespace GCL;
 namespace GLRendererTest
@@ -40,6 +41,7 @@ void Test()
 	std::cout << "Vendor: " << renderer->GetVendor()<<std::endl;
 	std::cout << "Renderer: " << renderer->GetRenderer()<<std::endl;
 	std::cout << "ShadingLanguageVersion: " << renderer->GetShadingLanguageVersion()<<std::endl;
+	std::cout << "GlewVersion: " << renderer->GetGlewVersion()<<std::endl;
 
 	std::cout << "Extensions: " << std::endl;
 	const std::vector<std::string> ext = renderer->GetExtensions();
@@ -57,6 +59,17 @@ void Test()
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_shader"));
 	Assert_Test(renderer->IsExtensionSupported("GL_EXT_texture_compression_dxt1"));
 
+#if ENABLE_GLEW
+	Assert_Test(GLEW_ARB_vertex_program);
+	Assert_Test(glewGetExtension("GL_ARB_shading_language_100"));
+	Assert_Test(glewGetExtension("GL_ARB_fragment_program"));
+	Assert_Test(glewGetExtension("GL_ARB_multitexture"));
+	Assert_Test(glewGetExtension("GL_ARB_pixel_buffer_object"));
+	Assert_Test(glewGetExtension("GL_ARB_vertex_buffer_object"));
+	Assert_Test(glewGetExtension("GL_ARB_vertex_program"));
+	Assert_Test(glewGetExtension("GL_ARB_vertex_shader"));
+	Assert_Test(glewGetExtension("GL_EXT_texture_compression_dxt1"));
+#endif
 	delete renderer;
 }
 }

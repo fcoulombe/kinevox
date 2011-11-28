@@ -9,6 +9,7 @@
 
 #include "renderer/GLRenderUtils.h"
 #include "renderer/Material.h"
+#include "renderer/OpenGL.h"
 #include "renderer/RenderObject.h"
 #include "renderer/VertexBuffer.h"
 
@@ -152,6 +153,12 @@ GLRenderer::GLRenderer()
 	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
 	mShadingLanguageVersion = std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));glErrorCheck();
 	mExtensions = StringUtil::Explode(std::string((const char *) glGetString(GL_EXTENSIONS)), ' ');glErrorCheck();
+
+#if ENABLE_GLEW
+	GLenum err = glewInit();
+	GCLAssertMsg(GLEW_OK == err, (const char *)glewGetErrorString(err));
+	mGlewVersion = std::string((const char*)glewGetString(GLEW_VERSION));
+#endif
 }
 GLRenderer::~GLRenderer()
 {

@@ -1,13 +1,20 @@
 #pragma once
 
-#ifdef __APPLE__
+
+#if ENABLE_GLEW
+#include <GL/glew.h>
+#endif
+
+#if OS_MACOSX
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <OpenGL/glext.h>
-#else
-/* If using GLEW */
-#include <GL/glew.h>
+#elif OS_LINUX
 #include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+#else
+#error "TBD"
 #endif
 
 

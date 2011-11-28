@@ -1,4 +1,5 @@
 Import('env')
+from Component import Component
 
 name = "example_data"
 data =  env.Dir("data")
@@ -9,5 +10,5 @@ lib = []
 d = env.Install(env.Dir("$INSTALL_DIR/example"), data.srcnode())
 ali = env.Alias("@example_data", d)
 
-env.AddComponent(name, incPath, lib, dependencies)
+env.AddComponent(name, None, incPath, lib, dependencies)
 

@@ -57,7 +57,7 @@ void Test()
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_buffer_object"));
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_program"));
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_shader"));
-	Assert_Test(renderer->IsExtensionSupported("GL_EXT_texture_compression_dxt1"));
+	//Assert_Test(renderer->IsExtensionSupported("GL_EXT_texture_compression_dxt1"));
 
 #if ENABLE_GLEW
 	Assert_Test(GLEW_ARB_vertex_program);
@@ -68,7 +68,7 @@ void Test()
 	Assert_Test(glewGetExtension("GL_ARB_vertex_buffer_object"));
 	Assert_Test(glewGetExtension("GL_ARB_vertex_program"));
 	Assert_Test(glewGetExtension("GL_ARB_vertex_shader"));
-	Assert_Test(glewGetExtension("GL_EXT_texture_compression_dxt1"));
+	//Assert_Test(glewGetExtension("GL_EXT_texture_compression_dxt1"));
 #endif
 	delete renderer;
 }

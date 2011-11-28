@@ -30,7 +30,7 @@ Shader::Shader()
   GLuint fragmentShader = CompileShader(DefaultFShaderStr, GL_FRAGMENT_SHADER);
 
   mProgramObject = glCreateProgram();glErrorCheck();
-  GCLAssert(mProgramObject != 0);
+  GCLAssertMsg(mProgramObject != 0, "Can't create program");
 
   glAttachShader(mProgramObject, vertexShader);glErrorCheck();
   glAttachShader(mProgramObject, fragmentShader);glErrorCheck();

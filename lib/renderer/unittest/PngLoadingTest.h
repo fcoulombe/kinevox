@@ -43,8 +43,8 @@ void Test()
 
 	Assert_Test(data.mBitdepth==8);
 	Assert_Test(data.mBytePerPixel==4);
-	Assert_Test(data.mWidth==768);
-	Assert_Test(data.mHeight==1024);
+	Assert_Test(data.mWidth==512);
+	Assert_Test(data.mHeight==512);
 
 	fclose(fp);
 }

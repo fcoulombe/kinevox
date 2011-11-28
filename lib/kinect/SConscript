@@ -8,5 +8,5 @@ dependencies = ['input','libfreenect']
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")
 lib = env.KStaticLibrary(name, src_files, dependencies)
-env.AddComponent(name, incPath, lib, dependencies)
+env.AddComponent(name, None, incPath, lib, dependencies)
 

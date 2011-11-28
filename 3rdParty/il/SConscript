@@ -10,4 +10,4 @@ def SetLFlags(ienv):
 	ienv.ParseConfig('pkg-config --libs IL')
 	
 	
-env.AddComponent(name, None, None,dependencies, SetCFlags, SetLFlags)
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

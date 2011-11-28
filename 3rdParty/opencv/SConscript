@@ -9,4 +9,4 @@ def SetCFlags(ienv):
 def SetLFlags(ienv):
 	ienv.ParseConfig('pkg-config --libs opencv')
 	
-env.AddComponent(name, None, None,dependencies, SetCFlags, SetLFlags)
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

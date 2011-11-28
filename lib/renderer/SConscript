@@ -5,20 +5,21 @@ incPath = [env.Dir("#/lib/%s" % name)]
 dependencies = [ 'gcl', 'sdl', 'opencv', 'opengl', 'libpng']
 
 
-if  env['PLATFORM']=='linux':
+if  env['PLATFORM']=='posix':
 	dependencies.append('glew')
 	glewPreProc = ["-DENABLE_GLEW=1"]
 elif env['PLATFORM']=='darwin':
 	glewPreProc = ["-DENABLE_GLEW=0"]
 else:
+	print "Platform: %s" % env['PLATFORM'] #leave this here so that we catch new platforms
 	glewPreProc = ["-DENABLE_GLEW=0"]
 cflags = []
 cflags.extend(glewPreProc)
 
 
-env.Append(CPPPATH=glewPreProc)
-env.Append(CXXPATH=glewPreProc)
-env.Append(CPATH=glewPreProc)
+env.Append(CPPFLAGS=glewPreProc)
+env.Append(CXXFLAGS=glewPreProc)
+env.Append(CFLAGS=glewPreProc)
 
 env.Append(CPPPATH=incPath)
 env.Append(CXXPATH=incPath)

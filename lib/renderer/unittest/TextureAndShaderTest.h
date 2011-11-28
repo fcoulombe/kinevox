@@ -66,7 +66,7 @@ void Test()
 	Shader shader;
 	shader.Bind();
 
-	Texture texture("data/mushroom.png");
+	Texture texture("data/mushroom.tga");
 	texture.Bind();
 
 	MyRenderObject obj;

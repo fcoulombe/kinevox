@@ -19,7 +19,7 @@ Texture::Texture(const char *filename)
 	GCLAssertMsg(ret, (std::string("Failed Loading Testure: ") + std::string(filename)).c_str());
 
 	const TextureResource::TextureData &tempTextureData = mTextureResource->mTextureData;
-	Initialize(tempTextureData.mWidth, tempTextureData.mHeight, 4, tempTextureData.imageData);
+	Initialize(tempTextureData.mWidth, tempTextureData.mHeight, tempTextureData.mBytePerPixel, tempTextureData.imageData);
 }
 
 Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
@@ -29,6 +29,7 @@ Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
 
 void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, const uint8_t *data )
 {
+    std::cout << "tex: " << width << " " << height << " " << bytesPerPixel << std::endl;
 	mTextureData.width = width;
 	mTextureData.height= height;
 	mTextureData.bytesPerPixel = bytesPerPixel;

@@ -71,7 +71,7 @@ void Test()
 	RenderBuffer depthRenderBuffer(width, height/*, 2*/);
 	depthRenderBuffer.Bind();
 
-	Texture texture(width, height, 4);
+	/*Texture texture(width, height, 4);
 
 	FrameBuffer frameBuffer(texture, depthRenderBuffer);
 	frameBuffer.Bind();
@@ -79,7 +79,7 @@ void Test()
 	renderer.Render(RenderObjectList());
 
 	FrameBuffer::ResetDefault();
-	texture.Save("RenderTargetTest.tga");
+	texture.Save("RenderTargetTest.tga");*/
 	//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 
 

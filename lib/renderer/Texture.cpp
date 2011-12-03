@@ -24,16 +24,27 @@ Texture::Texture(const char *filename)
 
 Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
 {
-	Initialize(width, height, bytesPerPixel);
-}
-
-void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, const uint8_t *data )
-{
-    std::cout << "tex: " << width << " " << height << " " << bytesPerPixel << std::endl;
 	mTextureData.width = width;
 	mTextureData.height= height;
 	mTextureData.bytesPerPixel = bytesPerPixel;
-
+	Initialize(width, height, bytesPerPixel);
+}
+static const GLenum BytePerPixel[] =
+{
+	GL_LUMINANCE,
+	GL_LUMINANCE16,
+	GL_RGB8,
+	GL_RGBA8
+};
+static const GLenum BytesPerPixel[] =
+{
+    GL_LUMINANCE,
+    GL_LUMINANCE,
+    GL_RGB,
+    GL_RGBA,
+};
+void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, const uint8_t *data )
+{
 	glGenTextures(1, &mTextureId); glErrorCheck();
 	glBindTexture(GL_TEXTURE_2D, mTextureId);glErrorCheck();
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -42,26 +53,12 @@ void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, cons
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);glErrorCheck();
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); glErrorCheck();
-	//glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);glErrorCheck();
-	//glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE); // automatic mipmapglErrorCheck();
-
-	GLenum BytePerPixel[] =
-	{
-		GL_LUMINANCE,
-		GL_LUMINANCE16,
-		GL_RGB8,
-		GL_RGBA8
-	};
-	GLenum BytesPerPixel[] =
-	{
-	    GL_LUMINANCE,
-	    GL_LUMINANCE,
-	    GL_RGB,
-	    GL_RGBA,
-	};
 	GCLAssert(bytesPerPixel <= GL_RGBA);
-	glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[bytesPerPixel-1], width, height, 0,
-			BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();
+	/*glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[bytesPerPixel-1], width, height, 0,
+			BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();*/
+	if (data)
+		gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width,height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
 	glBindTexture(GL_TEXTURE_2D, 0);glErrorCheck();
 }
 
@@ -69,6 +66,11 @@ bool Texture::LoadTexture(const char *filename)
 {
 	const Resource *tempResource = TextureResourceManager::Instance().LoadResource(filename);
 	mTextureResource = static_cast<const TextureResource*>(tempResource);
+
+
+	mTextureData.width = mTextureResource->mTextureData.mWidth;
+	mTextureData.height= mTextureResource->mTextureData.mHeight;
+	mTextureData.bytesPerPixel = mTextureResource->mTextureData.mBytePerPixel;
 
 	return mTextureResource != 0;
 }

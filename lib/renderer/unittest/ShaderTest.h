@@ -28,15 +28,63 @@ using namespace GCL;
 namespace ShaderTest
 {
 
+class MyRenderObject : public RenderObject
+{
+public:
+	MyRenderObject()
+	: RenderObject(Matrix44::IDENTITY)
+	{}
+	const VertexData &GetVertexData() const
+	{
+		static const   VertexPNT square[4] = {
+				{WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
+				{WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
+				{WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
+				{WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
+		};
+		static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
+		return data;
+
+	}
+	const Material &GetMaterial() const { return mMaterial; }
+	private:
+		Material mMaterial;
+};
+
 void Test()
 {
 	TEST_START
-
+	TextureResourceManager::Initialize();
+	{
 	GLRenderer renderer;
-	Shader shader;
+	/*Shader shader;
 	shader.Bind();
-	Assert_Test(shader.IsValid());
+	Assert_Test(shader.IsValid());*/
 	renderer.Render(RenderObjectList());
+	}
+
+	{
+
+		GLRenderer renderer;
+	//	Shader shader;
+	//	shader.Bind();
+	//	Assert_Test(shader.IsValid());
+
+		MyRenderObject obj;
+		const WorldPoint3 position(0.0,0.0, -10.0);
+		obj.SetPosition(position);
+
+		RenderObjectList renderList;
+		renderList.push_back(&obj);
+
+		for (size_t i=0; i<100; ++i)
+		{
+		renderer.Render(renderList);
+		usleep(10);
+		}
+
+
+	}
 
 	/*VertexPNT square[4] = { {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } ,
                           {WorldPoint3(0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } ,
@@ -46,5 +94,7 @@ void Test()
 
   renderer->Render(vb);
 	 */
+
+	TextureResourceManager::Terminate();
 }
 }

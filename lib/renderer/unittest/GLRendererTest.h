@@ -43,12 +43,12 @@ void Test()
 	std::cout << "ShadingLanguageVersion: " << renderer->GetShadingLanguageVersion()<<std::endl;
 	std::cout << "GlewVersion: " << renderer->GetGlewVersion()<<std::endl;
 
-	std::cout << "Extensions: " << std::endl;
+	/*std::cout << "Extensions: " << std::endl;
 	const std::vector<std::string> ext = renderer->GetExtensions();
 	for (size_t i=0; i<ext.size();++i)
 	{
 		std::cout << ext[i] << std::endl;;
-	}
+	}*/
 
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_shading_language_100"));
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_fragment_program"));
@@ -69,6 +69,27 @@ void Test()
 		std::stringstream s;
 		s<<renderer->GetViewPort().GetWidth()<<"==640";
 		AssertMsg_Test(renderer->GetViewPort().GetWidth()==640, s.str().c_str());
+	}
+
+	Matrix44 projection = GLRenderer::GetGLProjection();
+
+	{
+		Matrix44 modelView = Inverse(Matrix44::IDENTITY);
+		Matrix44 transform;
+		transform.SetPosition(WorldPoint3(0.0,0.0,-10.0));
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glMultMatrixd(reinterpret_cast<const GLdouble*>(&transform));
+
+		Matrix44 modelView1 = GLRenderer::GetGLModelView();
+		GLRenderer::SetTransform(projection, modelView, transform);
+		Matrix44 modelView2 = GLRenderer::GetGLModelView();
+
+		std::stringstream s;
+		s<<std::endl<<modelView1<<std::endl<<"=="<<std::endl<<modelView2;
+		AssertMsg_Test(modelView1 == modelView2, s.str().c_str());
+
 	}
 
 

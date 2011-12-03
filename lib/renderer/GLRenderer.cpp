@@ -69,11 +69,6 @@ void GLRenderer::Init3DState()
 
 
 	glViewport(0,0,width,height); glErrorCheck();
-	glMatrixMode(GL_PROJECTION); glErrorCheck();
-	glLoadIdentity(); glErrorCheck();
-	gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f); glErrorCheck();
-	glMatrixMode(GL_MODELVIEW); glErrorCheck();
-	glLoadIdentity(); glErrorCheck();
 
 }
 
@@ -161,11 +156,12 @@ GLRenderer::GLRenderer()
 	GLenum err = glewInit();
 	GCLAssertMsg(GLEW_OK == err, (const char *)glewGetErrorString(err));
 	mGlewVersion = std::string((const char*)glewGetString(GLEW_VERSION));
+#else
+	mGlewVersion  = std::string("Unused");
 #endif
 }
 GLRenderer::~GLRenderer()
 {
-	/* Delete our opengl context, destroy our window, and shutdown SDL */
 	SDL_Quit();
 }
 
@@ -180,14 +176,24 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 {
 	glClearColor(0.0, 0.0, 1.0, 0.0); glErrorCheck();
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); glErrorCheck();
-	glLoadIdentity(); glErrorCheck();
+
 	mCamera->Update();
+
+	const Matrix44 &projection = mCamera->GetProjection();
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&projection)); glErrorCheck();
+
+	const Matrix44 &modelView = mCamera->GetModelView();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&modelView));
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
 		const Matrix44 &transform = renderObjectList[i]->GetTransform();
-		glPushMatrix();glErrorCheck();
-		glMultMatrixd((const GLdouble*)&transform);glErrorCheck();
+		SetTransform(projection, modelView, transform);
+
+
+
 		const Material &tempMaterial = renderObjectList[i]->GetMaterial();
 		tempMaterial.Bind();
 
@@ -220,27 +226,26 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		}
 		break;
 		case ePOSITION|eNORMAL:
-		{
-			VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.vertexCount);
-			buffer.Render();
-		}
-		break;
+	{
+		VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.vertexCount);
+		buffer.Render();
+	}
+	break;
 		case ePOSITION|eTEXTURE_COORD:
-		{
-			VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.vertexCount);
-			buffer.Render();
-		}
-		break;
+	{
+		VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.vertexCount);
+		buffer.Render();
+	}
+	break;
 		case ePOSITION|eNORMAL|eTEXTURE_COORD:
-		{
+	{
 
-			VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.vertexCount);
-			buffer.Render();
-		}
-		break;
+		VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.vertexCount);
+		buffer.Render();
+	}
+	break;
 		}
 
-		glPopMatrix(); glErrorCheck();
 	}
 
 
@@ -323,3 +328,61 @@ void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 	}
 }
 
+
+Matrix44 GLRenderer::GetGLProjection()
+{
+	Matrix44f projectionMatrix;
+	glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
+	Matrix44 projectionMatrixd;
+	projectionMatrixd[0].x = projectionMatrix.m0.x;
+	projectionMatrixd[0].y = projectionMatrix.m0.y;
+	projectionMatrixd[0].z = projectionMatrix.m0.z;
+	projectionMatrixd[0].w = projectionMatrix.m0.w;
+	projectionMatrixd[1].x = projectionMatrix.m1.x;
+	projectionMatrixd[1].y = projectionMatrix.m1.y;
+	projectionMatrixd[1].z = projectionMatrix.m1.z;
+	projectionMatrixd[1].w = projectionMatrix.m1.w;
+	projectionMatrixd[2].x = projectionMatrix.m2.x;
+	projectionMatrixd[2].y = projectionMatrix.m2.y;
+	projectionMatrixd[2].z = projectionMatrix.m2.z;
+	projectionMatrixd[2].w = projectionMatrix.m2.w;
+	projectionMatrixd[3].x = projectionMatrix.m3.x;
+	projectionMatrixd[3].y = projectionMatrix.m3.y;
+	projectionMatrixd[3].z = projectionMatrix.m3.z;
+	projectionMatrixd[3].w = projectionMatrix.m3.w;
+	return projectionMatrixd;
+}
+Matrix44 GLRenderer::GetGLModelView()
+{
+	Matrix44f modelViewMatrix;
+	glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&modelViewMatrix);
+	Matrix44 modelViewMatrixd;
+	modelViewMatrixd[0].x = modelViewMatrix.m0.x;
+	modelViewMatrixd[0].y = modelViewMatrix.m0.y;
+	modelViewMatrixd[0].z = modelViewMatrix.m0.z;
+	modelViewMatrixd[0].w = modelViewMatrix.m0.w;
+	modelViewMatrixd[1].x = modelViewMatrix.m1.x;
+	modelViewMatrixd[1].y = modelViewMatrix.m1.y;
+	modelViewMatrixd[1].z = modelViewMatrix.m1.z;
+	modelViewMatrixd[1].w = modelViewMatrix.m1.w;
+	modelViewMatrixd[2].x = modelViewMatrix.m2.x;
+	modelViewMatrixd[2].y = modelViewMatrix.m2.y;
+	modelViewMatrixd[2].z = modelViewMatrix.m2.z;
+	modelViewMatrixd[2].w = modelViewMatrix.m2.w;
+	modelViewMatrixd[3].x = modelViewMatrix.m3.x;
+	modelViewMatrixd[3].y = modelViewMatrix.m3.y;
+	modelViewMatrixd[3].z = modelViewMatrix.m3.z;
+	modelViewMatrixd[3].w = modelViewMatrix.m3.w;
+	return modelViewMatrixd;
+}
+
+
+void GLRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &modelView, const Matrix44 &transform)
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&projection));
+
+	glMatrixMode(GL_MODELVIEW);
+	Matrix44 f = transform*modelView;
+	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&f));
+}

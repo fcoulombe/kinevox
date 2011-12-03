@@ -61,8 +61,6 @@ public:
 	const Material &GetMaterial() const { return mMaterial; }
 private:
 	Material mMaterial;
-
-
 };
 
 void Test()

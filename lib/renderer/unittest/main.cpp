@@ -17,18 +17,19 @@
 #include <renderer/VertexBuffer.h>*/
 
 #include "CameraTest.h"
-#include "GLRendererTest.h"
-#include "PngLoadingTest.h"
-#include "RenderObjectTest.h"
-#include "RenderBufferTest.h"
 #include "FrameBufferTest.h"
+#include "GeomUtilTest.h"
+#include "GLRendererTest.h"
+#include "MaterialTest.h"
+#include "PngLoadingTest.h"
+#include "RenderBufferTest.h"
+#include "RenderObjectTest.h"
+#include "RenderObjectWithMaterialTest.h"
 #include "ResourceTest.h"
 #include "ShaderTest.h"
 #include "TextureTest.h"
 #include "TextureAndShaderTest.h"
 #include "TgaLoadingTest.h"
-#include "MaterialTest.h"
-#include "RenderObjectWithMaterialTest.h"
 #include "VertexBufferTest.h"
 #include "VertexTest.h"
 
@@ -62,6 +63,8 @@ int main(int /*argc*/, char **argv)
 
       RenderBufferTest::Test();
       FrameBufferTest::Test();
+      GeomUtilTest::Test();
+
   }
   catch (GCLException & e)
   {

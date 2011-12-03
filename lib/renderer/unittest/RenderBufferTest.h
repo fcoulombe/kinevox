@@ -52,8 +52,6 @@ public:
 	const Material &GetMaterial() const { return mMaterial; }
 	private:
 		Material mMaterial;
-
-
 };
 
 bool CompareImages(const char */*filename1*/, const char */*filename2*/)

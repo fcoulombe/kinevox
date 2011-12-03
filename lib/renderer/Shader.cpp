@@ -3,7 +3,8 @@
 using namespace GCL;
 
 
-const char *DefaultVShaderStr =
+
+const char *PositionVShaderStr =
     "#version 110                \n"
     "uniform mat4 ProjectionModelviewMatrix;\n"
     "uniform mat4 ModelviewMatrix;\n"
@@ -13,7 +14,8 @@ const char *DefaultVShaderStr =
     "   gl_Position = ProjectionModelviewMatrix * InVertex; \n"
     "}                           \n";
 
-const char *DefaultFShaderStr =
+
+const char *BlankFShaderStr =
     "#version 110                               \n"
     "//precision mediump float;                   \n"
     "void main()                                \n"
@@ -21,7 +23,33 @@ const char *DefaultFShaderStr =
     "  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); \n"
     "}                                          \n";
 
+const char *TextureVShaderStr =
+    "#version 110                \n"
+    "uniform mat4 ProjectionModelviewMatrix;\n"
+    "uniform mat4 ModelviewMatrix;\n"
+    "attribute vec4 InVertex;   \n"
+	"attribute vec4 InTexCoord;   \n"
+	"attribute vec4 InNormal;   \n"
+	"varying vec2 texcoord;  \n"
+    "void main()                 \n"
+    "{                           \n"
+    "   gl_Position = ProjectionModelviewMatrix * InVertex; \n"
+	"	texcoord = InTexCoord.xy;\n"
+    "}                           \n";
 
+const char *TextureFShaderStr =
+		"#version 110	\n"
+		"//uniform float fade_factor;	\n"
+		"uniform sampler2D textures[1]; 	\n"
+		"varying vec2 texcoord;	\n"
+		"void main() \n"
+    	"{\n"
+        	"//gl_FragColor = texture2D(textures[0], texcoord);\n"
+			"gl_FragColor = vec4(1.0,0.0,0.0,1.0);\n"
+    	"}\n";
+
+const char *DefaultVShaderStr = TextureVShaderStr;
+const char *DefaultFShaderStr = TextureFShaderStr;
 
 Shader::Shader()
 :mIsValid (false)

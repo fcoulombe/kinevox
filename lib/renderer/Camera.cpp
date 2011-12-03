@@ -3,6 +3,8 @@
 
 #include <gcl/Assert.h>
 #include <gcl/Math.h>
+
+#include "renderer/GLRenderer.h"
 #include "renderer/OpenGL.h"
 
 using namespace GCL;
@@ -11,65 +13,70 @@ using namespace GCL;
 Camera &Camera::DefaultCamera()
 {
 	static Camera defaultCamera;
-	return defaultCamera; }
-
-Camera::Camera()
-: mMatrix(Matrix44::IDENTITY)
-{
-	//TurnLeft(180);
-	//mMatrix[3].z = -10;
+	return defaultCamera;
 }
 
-void Camera::Update() const
+Camera::Camera()
+: mCameraMatrix(Matrix44::IDENTITY),
+  mFov(45.0),
+  mAspect(640.0/480.0),
+  mNear(0.1),
+  mFar(100.0)
 {
-	Matrix44 tempMatrix = Inverse(mMatrix);
-	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&tempMatrix));glErrorCheck();
+	Update();
+}
+
+void Camera::Update()
+{
+	mProjectionMatrix.SetPerspective(mFov,mAspect,mNear,mFar);
+	mModelViewMatrix = Inverse(mCameraMatrix);
+	//glLoadMatrixd(reinterpret_cast<const GLdouble*>(&mModelViewMatrix));glErrorCheck();
 }
 
 
 void Camera::MoveForward()
 {
-	mMatrix[3] -= mMatrix[2]/10;
+	mCameraMatrix[3] -= mCameraMatrix[2]/10;
 }
 void Camera::MoveBackward()
 {
-	mMatrix[3] += mMatrix[2]/10;
+	mCameraMatrix[3] += mCameraMatrix[2]/10;
 }
 void Camera::TurnLeft(double degree )
 {
 	Matrix44 rotMat;
 	rotMat.SetRotationY(DegreeToRadian(degree));
-	WorldPoint4 positionBack = mMatrix[3];
-	mMatrix[3] = WorldPoint3::ZERO;
-	mMatrix = rotMat*mMatrix;
-	mMatrix[3] = positionBack;
+	WorldPoint4 positionBack = mCameraMatrix[3];
+	mCameraMatrix[3] = WorldPoint3::ZERO;
+	mCameraMatrix = rotMat*mCameraMatrix;
+	mCameraMatrix[3] = positionBack;
 }
 void Camera::TurnRight(double degree )
 {
 	Matrix44 rotMat;
 	rotMat.SetRotationY(DegreeToRadian(degree));
-	WorldPoint4 positionBack = mMatrix[3];
-	mMatrix[3] = WorldPoint3::ZERO;
-	mMatrix = rotMat*mMatrix;
-	mMatrix[3] = positionBack;
+	WorldPoint4 positionBack = mCameraMatrix[3];
+	mCameraMatrix[3] = WorldPoint3::ZERO;
+	mCameraMatrix = rotMat*mCameraMatrix;
+	mCameraMatrix[3] = positionBack;
 }
 void Camera::TiltUp()
 {
 	Matrix44 rotMat;
 	rotMat.SetRotationX(DegreeToRadian(1));
-	WorldPoint4 positionBack = mMatrix[3];
-	mMatrix[3] = WorldPoint3::ZERO;
-	mMatrix = mMatrix*rotMat;
-	mMatrix[3] = positionBack;
+	WorldPoint4 positionBack = mCameraMatrix[3];
+	mCameraMatrix[3] = WorldPoint3::ZERO;
+	mCameraMatrix = mCameraMatrix*rotMat;
+	mCameraMatrix[3] = positionBack;
 }
 void Camera::TiltDown()
 {
 
 	Matrix44 rotMat;
 	rotMat.SetRotationX(DegreeToRadian(-1));
-	WorldPoint4 positionBack = mMatrix[3];
-	mMatrix[3] = WorldPoint3::ZERO;
-	mMatrix = mMatrix*rotMat;
-	mMatrix[3] = positionBack;
+	WorldPoint4 positionBack = mCameraMatrix[3];
+	mCameraMatrix[3] = WorldPoint3::ZERO;
+	mCameraMatrix = mCameraMatrix*rotMat;
+	mCameraMatrix[3] = positionBack;
 }
 

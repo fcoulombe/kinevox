@@ -15,12 +15,17 @@ public:
 	void TiltUp();
 	void TiltDown();
 
-	void Update() const;
+	void Update();
 
 
-	const Matrix44 &GetTransform() const { return mMatrix; }
+	const Matrix44 &GetTransform() const { return mCameraMatrix; }
+	const Matrix44 &GetModelView() const { return mModelViewMatrix; }
+	const Matrix44 &GetProjection() const { return mProjectionMatrix; }
 	static Camera &DefaultCamera();
 private:
-	Matrix44 mMatrix;
+	Matrix44 mCameraMatrix;
+	Matrix44 mModelViewMatrix;
+	Matrix44 mProjectionMatrix;
+	WorldUnit mFov, mAspect, mNear, mFar;
 };
 }

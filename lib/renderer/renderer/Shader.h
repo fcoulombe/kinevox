@@ -3,6 +3,7 @@
 
 namespace GCL
 {
+class Matrix44;
   class Shader
   {
   public:
@@ -16,6 +17,8 @@ namespace GCL
     void Bind();
     bool IsValid() const { return mIsValid; }
 
+    void SetProjectionMatrix(const Matrix44 &m);
+    void SetModelViewMatrix(const Matrix44 &m);
   private:
     void PrintInfoLog(GLuint );
     GLuint CompileShader(const char *shaderSrc, GLenum type);

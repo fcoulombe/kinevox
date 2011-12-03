@@ -22,8 +22,11 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
-#include <renderer/RenderObject.h>
+
 #include <renderer/FrameBuffer.h>
+#include <renderer/Material.h>
+#include <renderer/RenderBuffer.h>
+#include <renderer/RenderObject.h>
 #include <renderer/Shader.h>
 #include <renderer/Texture.h>
 #include <renderer/TextureResourceManager.h>

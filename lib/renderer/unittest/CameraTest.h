@@ -20,11 +20,13 @@
  * THE SOFTWARE.
  */
 #pragma once
+#include <iomanip>
 
 #include <gcl/UnitTest.h>
 
 #include <renderer/Camera.h>
 #include <renderer/GLRenderer.h>
+#include <renderer/OpenGL.h>
 #include <renderer/ViewPort.h>
 
 using namespace GCL;
@@ -34,11 +36,45 @@ namespace CameraTest
 void Test()
 {
 	TEST_START
+
 	GLRenderer renderer;
+
 	Camera camera;
-	GCLAssert(Matrix44::IDENTITY == camera.GetTransform());
+	std::stringstream s;
+	//camera projection equal Matrix44::Projection
+	{
+		Assert_Test(Matrix44::IDENTITY == camera.GetTransform());
+		Assert_Test(Inverse(Matrix44::IDENTITY) == camera.GetModelView());
+
+		Matrix44 perspective;
+		perspective.SetPerspective( 45.0,640.0/480.0,0.1,100.0);
+		s.str("");
+		s <<std::setprecision(16)<< std::endl<<perspective << std::endl << "==" << std::endl << camera.GetProjection();
+		AssertMsg_Test(perspective==camera.GetProjection(), s.str().c_str());
+	}
+
+	//camera projection equal gluPerspective projection
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(45.0,640.0/480.0,0.1,100.0);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+
+		s.str("");
+		s<<std::setprecision(16)<< std::endl<<GLRenderer::GetGLProjection() << std::endl <<"==" << std::endl << camera.GetProjection();
+		AssertMsg_Test(GLRenderer::GetGLProjection() == camera.GetProjection(), s.str().c_str());
+	}
+
+
+
 	renderer.SetCamera(camera);
 	ViewPort viewport;
+
+	camera.Update();
+
+
+
 
 	//std::cout << *(Matrix44*)&camera << std::endl;
 	camera.Update();

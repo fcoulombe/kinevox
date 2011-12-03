@@ -20,7 +20,7 @@ public:
 	GCLEXPORT static void Update();
 	GCLEXPORT static void Render();
 
-	GCLEXPORT static void SetViewportCamera(const Camera &camera);
+	GCLEXPORT static void SetViewportCamera(Camera &camera);
 
 
 	GCLTEST_EXPORT static bool IsRegistered(const GCLRenderObject &obj);

@@ -1,5 +1,7 @@
 #include "renderer/Shader.h"
 #include <gcl/Exception.h>
+#include <gcl/Point4.h>
+#include <gcl/Matrix44.h>
 using namespace GCL;
 
 
@@ -8,14 +10,14 @@ const char *PositionVShaderStr =
     "#version 110                \n"
     "uniform mat4 ProjectionModelviewMatrix;\n"
     "uniform mat4 ModelviewMatrix;\n"
-    "attribute vec4 InVertex;   \n"
+    "attribute vec4 InPosition;   \n"
     "void main()                 \n"
     "{                           \n"
-    "   gl_Position = ProjectionModelviewMatrix * InVertex; \n"
+    "   gl_Position = ProjectionModelviewMatrix * InPosition; \n"
     "}                           \n";
 
 
-const char *BlankFShaderStr =
+const char *PositionFShaderStr =
     "#version 110                               \n"
     "//precision mediump float;                   \n"
     "void main()                                \n"
@@ -27,13 +29,13 @@ const char *TextureVShaderStr =
     "#version 110                \n"
     "uniform mat4 ProjectionModelviewMatrix;\n"
     "uniform mat4 ModelviewMatrix;\n"
-    "attribute vec4 InVertex;   \n"
+    "attribute vec4 InPosition;   \n"
 	"attribute vec4 InTexCoord;   \n"
 	"attribute vec4 InNormal;   \n"
 	"varying vec2 texcoord;  \n"
     "void main()                 \n"
     "{                           \n"
-    "   gl_Position = ProjectionModelviewMatrix * InVertex; \n"
+    "   gl_Position = ProjectionModelviewMatrix * InPosition; \n"
 	"	texcoord = InTexCoord.xy;\n"
     "}                           \n";
 
@@ -75,6 +77,8 @@ Shader::Shader()
       glDeleteProgram(mProgramObject);glErrorCheck();
       mIsValid = false;
     }
+
+
   mIsValid = true;
   return;
 }
@@ -139,4 +143,22 @@ void Shader::PrintInfoLog(GLuint p)
       delete [] infoLog;
     }
 
+}
+
+
+
+
+void Shader::SetProjectionMatrix(const Matrix44 &m)
+{
+	GCLAssert(mIsValid);
+	GLint projectionLoc = glGetUniformLocation(mProgramObject,"ProjectionModelviewMatrix");
+	Matrix44f mm(m);
+	glUniformMatrix4fv(projectionLoc,4,false,(const GLfloat*)&mm);
+}
+void Shader::SetModelViewMatrix(const Matrix44 &m)
+{
+	GCLAssert(mIsValid);
+	GLint modelviewMatrix = glGetUniformLocation(mProgramObject,"ModelviewMatrix");
+	Matrix44f mm(m);
+	glUniformMatrix4fv(modelviewMatrix,4,false,(const GLfloat*)&mm);
 }

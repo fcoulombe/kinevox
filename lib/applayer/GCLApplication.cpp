@@ -40,7 +40,7 @@ void GCLApplication::Render()
 	mRenderer->Render(mRenderObjectList);
 }
 
-void GCLApplication::SetViewportCamera(const Camera &camera)
+void GCLApplication::SetViewportCamera(Camera &camera)
 {
 	mRenderer->SetCamera(camera);
 }

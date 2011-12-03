@@ -25,7 +25,7 @@ public:
 	void RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth);
 
 
-	void SetCamera(const Camera &camera) { mCamera = &camera; }
+	void SetCamera(Camera &camera) { mCamera = &camera; }
 
 	const ViewPort &GetViewPort() const { return mViewPort; }
 
@@ -56,11 +56,16 @@ public:
 		return res;
 	}
 
+	static void SetTransform( const Matrix44 &projection, const Matrix44 &modelView, const Matrix44 &transform);
+
+	static Matrix44 GetGLProjection();
+	static Matrix44 GetGLModelView();
+
 private:
 	void Init3DState();
 	void Init2DState();
 
-	const Camera *mCamera;
+	Camera *mCamera;
 	ViewPort mViewPort;
 
 	std::string mVendor, mVersion,mRenderer, mShadingLanguageVersion, mGlewVersion;

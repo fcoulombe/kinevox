@@ -57,7 +57,20 @@ void Test()
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_buffer_object"));
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_program"));
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_shader"));
+	Assert_Test(renderer->IsExtensionSupported("GL_EXT_framebuffer_object"));
 	//Assert_Test(renderer->IsExtensionSupported("GL_EXT_texture_compression_dxt1"));
+
+	{
+		std::stringstream s;
+		s<<renderer->GetViewPort().GetHeight()<<"==480";
+		AssertMsg_Test(renderer->GetViewPort().GetHeight()==480, s.str().c_str());
+	}
+	{
+		std::stringstream s;
+		s<<renderer->GetViewPort().GetWidth()<<"==640";
+		AssertMsg_Test(renderer->GetViewPort().GetWidth()==640, s.str().c_str());
+	}
+
 
 #if ENABLE_GLEW
 	Assert_Test(GLEW_ARB_vertex_program);

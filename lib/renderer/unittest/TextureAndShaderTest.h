@@ -38,10 +38,12 @@ public:
 	const VertexData &GetVertexData() const
 	{
 		static const   VertexPNT square[4] = {
-				{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-				{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-				{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-				{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
+				{WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
+				{WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
+				{WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
+				{WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
+		};
+
 		static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
 		return data;
 
@@ -70,12 +72,13 @@ void Test()
 	texture.Bind();
 
 	MyRenderObject obj;
+	RenderObjectList renderObjectList;
+	renderObjectList.push_back(&obj);
+	renderer.Render(renderObjectList);
 
-	renderer.Render(RenderObjectList());
 
-
-	/*        target.Save("RenderTargetTest.tga");
-    Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
+	        /*target.Save("TextureAndShaderTest.tga");
+	        Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 	 */
 	TextureResourceManager::Terminate();
 

@@ -5,6 +5,7 @@
 #include "GCLRenderObjectTest.h"
 #include "GCLRenderObjectWithMaterialTest.h"
 #include "GCLRenderObjectMultipleRenderTest.h"
+#include "GCLRenderTargetTest.h"
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -13,6 +14,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		GCLApplicationTest::Test();
 		GCLApplicationCameraTest::Test();
 		GCLRenderObjectTest::Test();
+		GCLRenderTargetTest::Test();
 		GCLRenderObjectWithMaterialTest::Test();
 		GCLRenderObjectMultipleRenderTest::Test();
 	}

@@ -40,7 +40,7 @@ namespace GCL
     static uint32_t GetComponentType()  { return ePOSITION|eNORMAL|eTEXTURE_COORD; }
     static size_t OffsetToPosition() { return 0; }
     static size_t OffsetToNormal() { return sizeof(WorldPoint3); }
-    static size_t OffsetToTextureCoordinate() { return sizeof(WorldPoint3)+sizeof(WorldPoint2); }
+    static size_t OffsetToTextureCoordinate() { return sizeof(WorldPoint3)+sizeof(WorldPoint3); }
   };
 
   struct VertexPN

@@ -1,6 +1,8 @@
 
 #include "renderer/GLRenderer.h"
 
+#include <sstream>
+
 #include <SDL.h>
 #include <SDL_video.h>
 
@@ -46,8 +48,9 @@ void GLRenderer::Init3DState()
 	//std::cout << "GLRenderer::Init3DState> w " << width << " h " <<  height << " bpp " << bpp << " f " << flags ;
 	if( SDL_SetVideoMode( width, height, bpp, flags ) == 0 )
 	{
-		fprintf( stderr, "Video mode set failed: %s\n",
-				SDL_GetError( ) );
+		std::stringstream s;
+		s<<"Video mode set failed: " <<	SDL_GetError( ) << std::endl;
+		GCLAssertMsg(false,  s.str().c_str());
 		return;
 	}
 
@@ -172,15 +175,13 @@ bool GLRenderer::Update()
 	return true;
 }
 
+
 void GLRenderer::Render(const RenderObjectList &renderObjectList)
 {
 	glClearColor(0.0, 0.0, 1.0, 0.0); glErrorCheck();
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); glErrorCheck();
 	glLoadIdentity(); glErrorCheck();
 	mCamera->Update();
-
-
-
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
@@ -189,22 +190,27 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		glMultMatrixd((const GLdouble*)&transform);glErrorCheck();
 		const Material &tempMaterial = renderObjectList[i]->GetMaterial();
 		tempMaterial.Bind();
-		glBegin (GL_QUADS);
+
+#if 0
+		glPushMatrix();glErrorCheck();
+		glTranslatef(2.0,0.0,0.0);
+		glBegin (GL_TRIANGLE_STRIP);
 		glTexCoord2f (0.0, 0.0);
-		glVertex3f (0.0, 0.0, 0.0);
+		glVertex3f (-0.5, -0.5, 0.0);
 		glTexCoord2f (1.0, 0.0);
-		glVertex3f (10.0, 0.0, 0.0);
-		glTexCoord2f (1.0, 1.0);
-		glVertex3f (10.0, 10.0, 0.0);
+		glVertex3f (0.5, -0.5, 0.0);
 		glTexCoord2f (0.0, 1.0);
-		glVertex3f (0.0, 10.0, 0.0);
+		glVertex3f (-0.5, 0.5, 0.0);
+		glTexCoord2f (1.0, 1.0);
+		glVertex3f (0.5, 0.5, 0.0);
 		glEnd ();
-
-
-
+		glPopMatrix();glErrorCheck();
+#endif
 		//FC: can sort by component type
-		/*
+
 		const VertexData &data = renderObjectList[i]->GetVertexData();
+
+
 		switch (data.vertexType)
 		{
 		case ePOSITION:
@@ -227,11 +233,13 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		break;
 		case ePOSITION|eNORMAL|eTEXTURE_COORD:
 		{
+
 			VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.vertexCount);
 			buffer.Render();
 		}
 		break;
-		}*/
+		}
+
 		glPopMatrix(); glErrorCheck();
 	}
 
@@ -242,13 +250,6 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		}
 	}*/
 
-	/*glBegin(GL_QUADS);
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(1.0, 0.0, 0.0);
-	glVertex3f(1.0, 1.0, 0.0);
-	glVertex3f(0.0, 1.0, 0.0);
-	glEnd(); glErrorCheck();
-	 */
 	SDL_GL_SwapBuffers();glErrorCheck();
 
 }

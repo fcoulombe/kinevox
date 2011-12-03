@@ -1,10 +1,18 @@
 #pragma once
+#include <gcl/Macro.h>
 #include "renderer/OpenGL.h"
 
 
 namespace GCL
 {
   class TextureResource;
+
+  struct TextureData
+  {
+    size_t width, height, bytesPerPixel;
+    size_t GetImageSizeInBytes() const { return width*height*bytesPerPixel; }
+  };
+
   class Texture
   {
   public:
@@ -33,17 +41,19 @@ namespace GCL
     void Initialize(size_t width, size_t height, size_t bypesPerPixel, const uint8_t *imageData = NULL );
     const uint8_t *GetTextureFromVRAM() const;
 
-    struct TextureData
-    {
-      size_t width, height, bytesPerPixel;
-      size_t GetImageSizeInBytes() const { return width*height*bytesPerPixel; }
-    }mTextureData;
 
     friend class FrameBuffer;
     GLuint GetTextureId() const { return mTextureId; }
     GLuint mTextureId;
+    TextureData mTextureData;
 
     const TextureResource *mTextureResource;
   };
+
+	GCLINLINE std::ostream& operator<<( std::ostream& output, const TextureData &P)
+	{
+		output << "(width: " << P.width << ", height: " << P.height << ", bpp: " << P.bytesPerPixel << ")" << std::endl;
+		return output;
+	}
 
 }

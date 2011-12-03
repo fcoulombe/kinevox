@@ -27,8 +27,7 @@ namespace GCL
       }
       ~TextureData()
       {
-        if (imageData)
-          delete [] imageData;
+
       }
 
       GLubyte *imageData;
@@ -48,6 +47,8 @@ namespace GCL
 
     static void LoadPng(FILE *is, TextureData &data);
     static void LoadTga(std::istream &is, TextureData &data);
+    static void LoadRaw(std::istream &is, TextureData &data);
+    static void Unload(TextureData &data);
   private:
     TextureResource() {}
   };

@@ -82,29 +82,51 @@ const uint8_t *Texture::GetTextureFromVRAM() const
 	Bind();
 	long imageSize = mTextureData.GetImageSizeInBytes();
 	uint8_t *data = new uint8_t[imageSize];
-	glReadPixels(0,0,mTextureData.width,mTextureData.height, GL_BGR,GL_UNSIGNED_BYTE,data);glErrorCheck();
+
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
 	return data;
-	//glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGB,0,0, mTextureData.width,mTextureData.height,0);
 }
 
 #include <fstream>
+//TODO: push this in the texture resource
 void Texture::Save(const char *filename)
 {
 	const uint8_t *data = GetTextureFromVRAM();
 	const char *ext = &(filename[strlen(filename)-3]);
 	if (strncmp(ext, "tga", 3)==0)
 	{
-		int x = mTextureData.width;
-		int y = mTextureData.height;
+		uint16_t x = mTextureData.width;
+		uint16_t y = mTextureData.height;
 		// split x and y sizes into bytes
-		int xa= x % 256;
-		int xb= (x-xa)/256;
-
-		int ya= y % 256;
-		int yb= (y-ya)/256;
 
 		//assemble the header
-		const uint8_t header[18]={0,0,2,0,0,0,0,0,0,0,0,0,(uint8_t)xa,(uint8_t)xb,(uint8_t)ya,(uint8_t)yb,24,0};
+		uint8_t header[18]={
+				0, //1			1
+				0, //2 garbage	2
+				2, //1 type		3
+				0, //1			4
+				0, //2			5
+				0, //3			6
+				0, //4			7
+				0, //5 garbage	8
+				0, //1			9
+				0, //2 xstart	10
+				0, //1			11
+				0, //2 ystart	12
+				0, //1 			13
+				0, //2 width	14
+				0, //1			15
+				0, //2 height	16
+				0, //1 bpp		17
+				0, //1 desc		18
+				};
+
+		*(uint16_t*)&(header[8]) = 0;
+		*(uint16_t*)&(header[10]) = 0;
+		*(uint16_t*)&(header[12]) = x;
+		*(uint16_t*)&(header[14]) = y;
+		*(uint8_t*)&(header[16]) = mTextureData.bytesPerPixel*8;
 
 		// write header and data to file
 		std::fstream File(filename, std::ios::out | std::ios::binary);

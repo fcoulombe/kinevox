@@ -20,6 +20,8 @@ namespace GCL
     Texture(size_t width, size_t height, size_t bypesPerPixel = 4);
     ~Texture()
     {
+
+    	glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
       glDeleteTextures(1, &mTextureId); glErrorCheck();
     }
     bool LoadTexture(const char *filename);

@@ -34,18 +34,24 @@ namespace RenderBufferTest
 class MyRenderObject : public RenderObject
 {
 public:
+	MyRenderObject()
+	: RenderObject(Matrix44::IDENTITY)
+	{}
 	const VertexData &GetVertexData() const
 	{
 		static const   VertexPNT square[4] = {
-				{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-				{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-				{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-				{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
+				{WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
+				{WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
+				{WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
+				{WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
+		};
 		static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
 		return data;
 
 	}
-private:
+	const Material &GetMaterial() const { return mMaterial; }
+	private:
+		Material mMaterial;
 
 
 };
@@ -57,24 +63,38 @@ bool CompareImages(const char */*filename1*/, const char */*filename2*/)
 void Test()
 {
 	TEST_START
-	GLRenderer renderer;
+	TextureResourceManager::Initialize();
+	{
+		GLRenderer renderer;
+		size_t width = renderer.GetViewPort().GetWidth();
+		size_t height = renderer.GetViewPort().GetHeight();
+		RenderBuffer target(width, height);;
+		target.Bind();
+		renderer.Render(RenderObjectList());
+	}
+
+	{
+		GLRenderer renderer;
+		size_t width = renderer.GetViewPort().GetWidth();
+		size_t height = renderer.GetViewPort().GetHeight();
+		RenderBuffer target(width, height);;
+		target.Bind();
+
+	    MyRenderObject obj;
+	    RenderObjectList renderObjectList;
+	    renderObjectList.push_back(&obj);
+		renderer.Render(renderObjectList);
+	}
 
 	/*Shader shader;
-    shader.Bind();
-    MyRenderObject obj;*/
+    shader.Bind();*/
 
-	size_t width = renderer.GetViewPort().GetWidth();
-	size_t height = renderer.GetViewPort().GetHeight();
-	RenderBuffer target(width, height);;
-	target.Bind();
-
-
-	renderer.Render(RenderObjectList());
 
 	/*    RenderTarget::ResetDefault();
     target.Save("RenderTargetTest.tga");
     Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 	 */
 
+	TextureResourceManager::Terminate();
 }
 }

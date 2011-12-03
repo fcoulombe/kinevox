@@ -26,6 +26,7 @@
 #include <renderer/FrameBuffer.h>
 #include <renderer/Shader.h>
 #include <renderer/Texture.h>
+#include <renderer/TextureResourceManager.h>
 #include <renderer/Vertex.h>
 
 using namespace GCL;
@@ -35,18 +36,24 @@ namespace FrameBufferTest
 class MyRenderObject : public RenderObject
 {
 public:
+	MyRenderObject()
+	: RenderObject(Matrix44::IDENTITY)
+	{}
 	const VertexData &GetVertexData() const
 	{
 		static const   VertexPNT square[4] = {
-				{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-				{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-				{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-				{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
+				{WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
+				{WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
+				{WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
+				{WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
+		};
 		static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
 		return data;
 
 	}
+	const Material &GetMaterial() const { return mMaterial; }
 private:
+	Material mMaterial;
 
 
 };
@@ -58,30 +65,66 @@ bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 void Test()
 {
 	TEST_START
-	GLRenderer renderer;
-	/*renderer.Render();
-    Shader shader;
-    shader.Bind();
-    MyRenderObject obj;*/
+	TextureResourceManager::Initialize();
 
-	size_t width = renderer.GetViewPort().GetWidth();
-	size_t height = renderer.GetViewPort().GetHeight();
+	{
+		GLRenderer renderer;
+		size_t width = renderer.GetViewPort().GetWidth();
+		size_t height = renderer.GetViewPort().GetHeight();
 
+		RenderBuffer depthRenderBuffer(width, height);
+		depthRenderBuffer.Bind();
 
-	RenderBuffer depthRenderBuffer(width, height/*, 2*/);
-	depthRenderBuffer.Bind();
+		Texture texture(width, height, 4);
+		texture.Bind();
+		try
+		{
+			FrameBuffer frameBuffer(texture, depthRenderBuffer);
+			frameBuffer.Bind();
+			renderer.Render(RenderObjectList());
+			FrameBuffer::ResetDefault();
+		}
+		catch (GCLException &e)
+		{
+			AssertMsg_Test(false, e.what());
+		}
 
-	/*Texture texture(width, height, 4);
+	}
 
-	FrameBuffer frameBuffer(texture, depthRenderBuffer);
-	frameBuffer.Bind();
+	{
+		GLRenderer renderer;
 
-	renderer.Render(RenderObjectList());
+		Camera myCamera;
 
-	FrameBuffer::ResetDefault();
-	texture.Save("RenderTargetTest.tga");*/
-	//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
+		MyRenderObject obj;
+		obj.SetPosition(0,0,-10.0);
+		RenderObjectList renderObjectList;
+		renderObjectList.push_back(&obj);
 
+		renderer.SetCamera(myCamera);
+		size_t width = renderer.GetViewPort().GetWidth();
+		size_t height = renderer.GetViewPort().GetHeight();
 
+		RenderBuffer depthRenderBuffer(width, height);
+		depthRenderBuffer.Bind();
+
+		Texture texture(width, height, 4);
+
+		try
+		{
+			FrameBuffer frameBuffer(texture, depthRenderBuffer);
+			frameBuffer.Bind();
+			renderer.Render(renderObjectList);
+			FrameBuffer::ResetDefault();
+		}
+		catch (GCLException &e)
+		{
+			AssertMsg_Test(false, e.what());
+		}
+		texture.Save("FrameBufferTest.tga");
+		//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
+	}
+
+	TextureResourceManager::Terminate();
 }
 }

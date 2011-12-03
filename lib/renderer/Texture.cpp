@@ -47,7 +47,7 @@ void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, cons
 {
 	glGenTextures(1, &mTextureId); glErrorCheck();
 	glBindTexture(GL_TEXTURE_2D, mTextureId);glErrorCheck();
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);glErrorCheck();
@@ -58,7 +58,9 @@ void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, cons
 			BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();*/
 	if (data)
 		gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width,height, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
+	else
+		glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[bytesPerPixel-1], width, height, 0,
+					BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();
 	glBindTexture(GL_TEXTURE_2D, 0);glErrorCheck();
 }
 

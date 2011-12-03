@@ -88,13 +88,6 @@ void Test()
 
 	/*Shader shader;
     shader.Bind();*/
-
-
-	/*    RenderTarget::ResetDefault();
-    target.Save("RenderTargetTest.tga");
-    Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
-	 */
-
 	TextureResourceManager::Terminate();
 }
 }

@@ -52,6 +52,19 @@ public:
 	virtual const Material &GetMaterial() const=0;
 	const Matrix44 &GetTransform() const {return mTransform; }
 
+	void SetOrientation(WorldUnit x,WorldUnit y,WorldUnit z)
+	{
+		mTransform.SetRotationX(x);
+		mTransform.SetRotationY(y);
+		mTransform.SetRotationZ(z);
+	}
+	void SetPosition(WorldUnit x, WorldUnit y,WorldUnit z)
+	{ SetPosition(WorldPoint3(x,y,z));	}
+	void SetPosition(const WorldPoint3 &position)
+	{
+		mTransform.SetPosition(position);
+	}
+
 protected:
 	Matrix44 mTransform;
 };

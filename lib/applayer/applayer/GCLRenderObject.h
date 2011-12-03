@@ -16,18 +16,7 @@ public:
 	{
 		return data;
 	}
-	void SetOrientation(WorldUnit x,WorldUnit y,WorldUnit z)
-	{
-		mTransform.SetRotationX(x);
-		mTransform.SetRotationY(y);
-		mTransform.SetRotationZ(z);
-	}
-	void SetPosition(WorldUnit x, WorldUnit y,WorldUnit z)
-	{ SetPosition(WorldPoint3(x,y,z));	}
-	void SetPosition(const WorldPoint3 &position)
-	{
-		mTransform.SetPosition(position);
-	}
+
 	 const Material &GetMaterial() const { return mMaterial; }
 private:
 	Material mMaterial;

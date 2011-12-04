@@ -16,14 +16,16 @@ else:
 cflags = []
 cflags.extend(glewPreProc)
 
+cflags.extend(['-DENABLE_FIX_PIPELINE=1'])
 
-env.Append(CPPFLAGS=glewPreProc)
-env.Append(CXXFLAGS=glewPreProc)
-env.Append(CFLAGS=glewPreProc)
 
-env.Append(CPPPATH=incPath)
-env.Append(CXXPATH=incPath)
-env.Append(CPATH=incPath)
+env.AppendUnique(CPPFLAGS=cflags)
+env.AppendUnique(CXXFLAGS=cflags)
+env.AppendUnique(CFLAGS=cflags)
+
+env.AppendUnique(CPPPATH=incPath)
+env.AppendUnique(CXXPATH=incPath)
+env.AppendUnique(CPATH=incPath)
 
 
 src_files = env.Glob("*.cpp")

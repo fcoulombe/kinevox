@@ -22,7 +22,9 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
-//#include <renderer/VertexBuffer.h>
+#include <renderer/Shader.h>
+#include <renderer/ShaderAttributeDefaultLocations.h>
+
 
 using namespace GCL;
 namespace ShaderTest
@@ -47,8 +49,8 @@ public:
 
 	}
 	const Material &GetMaterial() const { return mMaterial; }
-	private:
-		Material mMaterial;
+private:
+	Material mMaterial;
 };
 
 void Test()
@@ -56,20 +58,97 @@ void Test()
 	TEST_START
 	TextureResourceManager::Initialize();
 	{
-	GLRenderer renderer;
-	/*Shader shader;
-	shader.Bind();
-	Assert_Test(shader.IsValid());*/
-	renderer.Render(RenderObjectList());
+		GLRenderer renderer;
+		Shader shader;
+		shader.Bind();
+		Assert_Test(shader.IsValid());
+
+		//set matrix uniform test
+		Matrix44 proj;
+		proj.SetPerspective(45.0, 640.0/480.0,0.1,100.0);
+		Matrix44 modelView;
+		modelView.SetRotationX(90.0);
+		shader.SetModelViewMatrix(modelView);
+		shader.SetProjectionMatrix(proj);
+
+		//query uniform fail test
+		try
+		{
+			Matrix44 m2;
+			shader.GetUniform("NonExistingUniform", m2);
+			Assert_Test(true);
+		}
+		catch (GCLException &e)
+		{
+		}
+
+		std::stringstream s;
+#if !ENABLE_FIX_PIPELINE
+
+		//query pro0jection matrix test
+		Matrix44 proj2;
+		shader.GetUniform("ProjectionMatrix", proj2);
+		s.str("");
+		s<<std::endl<<proj2<<std::endl<<"=="<<std::endl<<proj;
+		AssertMsg_Test(proj2==proj, s.str().c_str());
+
+		//query modelview matrix test
+		Matrix44 modelView2;
+		shader.GetUniform("ModelViewMatrix", modelView2);
+		s.str("");
+		s<<std::endl<<modelView2<<std::endl<<"=="<<std::endl<<modelView;
+		AssertMsg_Test(modelView2==modelView, s.str().c_str());
+#endif
+
+
+		Texture tex("data/mushroom.tga");
+		tex.Bind();
+		shader.SetTextureSampler(tex);
+
+		int sampler;
+		shader.GetUniform("texture", sampler);
+		s.str("");
+		s<<sampler<<" == 1";
+		AssertMsg_Test(sampler==1, s.str().c_str());
+
+
+		//attribute
+		//attribute location fail test
+		try
+		{
+			shader.GetAttributeLocation("NonExistingAttribute");
+			Assert_Test(true);
+		}
+		catch (GCLException & /*e*/)
+		{}
+
+#if !ENABLE_FIX_PIPELINE
+		//attribute position query test
+		int loc = shader.GetAttributeLocation("InPosition");
+		s.str("");
+		s<<loc<<" == ATTRIB_POSITION";
+		AssertMsg_Test(loc == ATTRIB_POSITION, s.str().c_str());
+
+		//attribute texcoord query test
+		loc = shader.GetAttributeLocation("InTexCoord");
+		s.str("");
+		s<<loc<<" == ATTRIB_TEXTURE_COORD";
+		AssertMsg_Test(loc == ATTRIB_TEXTURE_COORD, s.str().c_str());
+
+		//attribute normal query test
+		loc = shader.GetAttributeLocation("InNormal");
+		s.str("");
+		s<<loc<<" == ATTRIB_NORMAL";
+		AssertMsg_Test(loc == ATTRIB_NORMAL, s.str().c_str());
+#endif
+
+		renderer.Render(RenderObjectList());
+		Shader::ResetDefault();
 	}
 
 	{
 
 		GLRenderer renderer;
-	//	Shader shader;
-	//	shader.Bind();
-	//	Assert_Test(shader.IsValid());
-
 		MyRenderObject obj;
 		const WorldPoint3 position(0.0,0.0, -10.0);
 		obj.SetPosition(position);
@@ -79,11 +158,11 @@ void Test()
 
 		for (size_t i=0; i<100; ++i)
 		{
-		renderer.Render(renderList);
-		usleep(10);
+			renderer.Render(renderList);
+			usleep(10);
 		}
 
-
+		Shader::ResetDefault();
 	}
 
 	/*VertexPNT square[4] = { {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } ,

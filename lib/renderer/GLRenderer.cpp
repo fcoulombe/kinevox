@@ -13,6 +13,7 @@
 #include "renderer/Material.h"
 #include "renderer/OpenGL.h"
 #include "renderer/RenderObject.h"
+#include "renderer/Shader.h"
 #include "renderer/VertexBuffer.h"
 
 
@@ -180,26 +181,23 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 	mCamera->Update();
 
 	const Matrix44 &projection = mCamera->GetProjection();
+#if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&projection)); glErrorCheck();
+#endif
 
 	const Matrix44 &modelView = mCamera->GetModelView();
+#if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&modelView));
+#endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
-		const Matrix44 &transform = renderObjectList[i]->GetTransform();
-		SetTransform(projection, modelView, transform);
-
-
-
-		const Material &tempMaterial = renderObjectList[i]->GetMaterial();
-		tempMaterial.Bind();
-
 #if 0
 		glPushMatrix();glErrorCheck();
-		glTranslatef(2.0,0.0,0.0);
+		glTranslatef(0.0,0.0,-10.0);
+
 		glBegin (GL_TRIANGLE_STRIP);
 		glTexCoord2f (0.0, 0.0);
 		glVertex3f (-0.5, -0.5, 0.0);
@@ -211,12 +209,16 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		glVertex3f (0.5, 0.5, 0.0);
 		glEnd ();
 		glPopMatrix();glErrorCheck();
-#endif
+#else
+
+		const Material &tempMaterial = renderObjectList[i]->GetMaterial();
+		tempMaterial.Bind();
+
+		const Matrix44 &transform = renderObjectList[i]->GetTransform();
+		SetTransform(projection, modelView, transform);
+
 		//FC: can sort by component type
-
 		const VertexData &data = renderObjectList[i]->GetVertexData();
-
-
 		switch (data.vertexType)
 		{
 		case ePOSITION:
@@ -226,28 +228,27 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		}
 		break;
 		case ePOSITION|eNORMAL:
-	{
-		VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.vertexCount);
-		buffer.Render();
-	}
-	break;
-		case ePOSITION|eTEXTURE_COORD:
-	{
-		VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.vertexCount);
-		buffer.Render();
-	}
-	break;
-		case ePOSITION|eNORMAL|eTEXTURE_COORD:
-	{
-
-		VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.vertexCount);
-		buffer.Render();
-	}
-	break;
+		{
+			VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.vertexCount);
+			buffer.Render();
 		}
+		break;
+		case ePOSITION|eTEXTURE_COORD:
+		{
+			VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.vertexCount);
+			buffer.Render();
+		}
+		break;
+		case ePOSITION|eNORMAL|eTEXTURE_COORD:
+		{
 
+			VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.vertexCount);
+			buffer.Render();
+		}
+		break;
 	}
-
+#endif
+	}
 
 	/*for (size_t i=0; i<10; ++i) {
 		for (size_t j=0; j<10; ++j) {
@@ -256,7 +257,6 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 	}*/
 
 	SDL_GL_SwapBuffers();glErrorCheck();
-
 }
 
 
@@ -377,12 +377,23 @@ Matrix44 GLRenderer::GetGLModelView()
 }
 
 
-void GLRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &modelView, const Matrix44 &transform)
+void GLRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &modelView, const Matrix44 &transform, Shader *shader)
 {
+	Matrix44 f = modelView*transform;
+
+#if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&projection));
 
+
 	glMatrixMode(GL_MODELVIEW);
-	Matrix44 f = transform*modelView;
 	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&f));
+	(void)shader;
+#else
+	if (shader)
+	{
+		shader->SetProjectionMatrix(projection);
+		shader->SetModelViewMatrix(f);
+	}
+#endif
 }

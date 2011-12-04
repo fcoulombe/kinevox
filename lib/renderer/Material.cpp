@@ -80,6 +80,8 @@ void Material::LoadMaterial(const char *filename)
 
 void Material::Bind() const
 {
-	//mShader->Bind();
+#if 1//!ENABLE_FIX_PIPELINE
+	mShader->Bind();
+#endif
 	mTexture->Bind();
 }

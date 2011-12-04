@@ -44,6 +44,7 @@ namespace GCL
     const uint8_t *GetTextureFromVRAM() const;
 
 
+    friend class Shader;
     friend class FrameBuffer;
     GLuint GetTextureId() const { return mTextureId; }
     GLuint mTextureId;

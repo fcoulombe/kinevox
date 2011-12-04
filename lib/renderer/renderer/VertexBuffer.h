@@ -3,7 +3,7 @@
 #include "renderer/ShaderAttributeDefaultLocations.h"
 #include "renderer/Vertex.h"
 
-#define ENABLE_FIX_PIPELINE 1
+
 namespace GCL
 {
 

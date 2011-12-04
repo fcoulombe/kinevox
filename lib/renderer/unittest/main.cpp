@@ -48,6 +48,7 @@ int main(int /*argc*/, char **argv)
   {
       GLRendererTest::Test();
       CameraTest::Test();
+
       ShaderTest::Test();
       VertexTest::Test();
       VertexBufferTest::Test();

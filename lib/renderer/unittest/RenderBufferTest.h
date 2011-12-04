@@ -84,8 +84,8 @@ void Test()
 		renderer.Render(renderObjectList);
 	}
 
-	/*Shader shader;
-    shader.Bind();*/
+	Shader shader;
+    shader.Bind();
 	TextureResourceManager::Terminate();
 }
 }

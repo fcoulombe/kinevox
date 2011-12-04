@@ -7,7 +7,7 @@ enum AttributePositions
 {
   ATTRIB_POSITION,
   ATTRIB_NORMAL,
-  ATTRIB_TEXTURE_COORD
+  ATTRIB_TEXTURE_COORD,
 };
 
 }

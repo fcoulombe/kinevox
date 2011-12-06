@@ -52,13 +52,13 @@ public:
 	virtual const Material &GetMaterial() const=0;
 	const Matrix44 &GetTransform() const {return mTransform; }
 
-	void SetOrientation(WorldUnit x,WorldUnit y,WorldUnit z)
+	void SetOrientation(Real x,Real y,Real z)
 	{
 		mTransform.SetRotationX(x);
 		mTransform.SetRotationY(y);
 		mTransform.SetRotationZ(z);
 	}
-	void SetPosition(WorldUnit x, WorldUnit y,WorldUnit z)
+	void SetPosition(Real x, Real y,Real z)
 	{ SetPosition(WorldPoint3(x,y,z));	}
 	void SetPosition(const WorldPoint3 &position)
 	{

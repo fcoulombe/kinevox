@@ -4,21 +4,21 @@
 
 using namespace GCL;
 
-void GeomUtil::MakeMeshSphere(std::vector<WorldPoint3>& dst, WorldUnit radius)
+void GeomUtil::MakeMeshSphere(std::vector<WorldPoint3>& dst, Real radius)
 {
 
 	const size_t resolution = 16;
-	const WorldUnit halfPI = PI * 0.5;
-	WorldUnit interp = 1.0 / (WorldUnit)resolution;
+	const Real halfPI = PI * 0.5;
+	Real interp = 1.0 / (Real)resolution;
 	WorldPoint3 v0,v1,v2,v3;
 	radius *= 0.5;
 
 	for(size_t i=0; i<=resolution; ++i)
 	{
-		WorldUnit theta0 = interp*(WorldUnit)(i+0)*PI - halfPI;
-		WorldUnit theta1 = interp*(WorldUnit)(i+1)*PI - halfPI;
-		WorldUnit z1 = std::sin(theta0);
-		WorldUnit z2 = std::sin(theta1);
+		Real theta0 = interp*(Real)(i+0)*PI - halfPI;
+		Real theta1 = interp*(Real)(i+1)*PI - halfPI;
+		Real z1 = std::sin(theta0);
+		Real z2 = std::sin(theta1);
 
 		v0.z = z1 * radius;
 		v1.z = z1 * radius;
@@ -27,16 +27,16 @@ void GeomUtil::MakeMeshSphere(std::vector<WorldPoint3>& dst, WorldUnit radius)
 
 		for(size_t j=0; j<=resolution; ++j)
 		{
-			WorldUnit phi0 = interp*(WorldUnit)(j+0)*2.0*PI;
-			WorldUnit phi1 = interp*(WorldUnit)(j+1)*2.0*PI;
-			WorldUnit x1 = std::cos(theta0)*std::cos(phi0);
-			WorldUnit x2 = std::cos(theta0)*std::cos(phi1);
-			WorldUnit y1 = std::cos(theta0)*std::sin(phi0);
-			WorldUnit y2 = std::cos(theta0)*std::sin(phi1);
-			WorldUnit x3 = std::cos(theta1)*std::cos(phi0);
-			WorldUnit x4 = std::cos(theta1)*std::cos(phi1);
-			WorldUnit y3 = std::cos(theta1)*std::sin(phi0);
-			WorldUnit y4 = std::cos(theta1)*std::sin(phi1);
+			Real phi0 = interp*(Real)(j+0)*2.0*PI;
+			Real phi1 = interp*(Real)(j+1)*2.0*PI;
+			Real x1 = std::cos(theta0)*std::cos(phi0);
+			Real x2 = std::cos(theta0)*std::cos(phi1);
+			Real y1 = std::cos(theta0)*std::sin(phi0);
+			Real y2 = std::cos(theta0)*std::sin(phi1);
+			Real x3 = std::cos(theta1)*std::cos(phi0);
+			Real x4 = std::cos(theta1)*std::cos(phi1);
+			Real y3 = std::cos(theta1)*std::sin(phi0);
+			Real y4 = std::cos(theta1)*std::sin(phi1);
 			v0.x = x1 * radius;
 			v0.y = y1 * radius;
 			v1.x = x2 * radius;
@@ -52,18 +52,18 @@ void GeomUtil::MakeMeshSphere(std::vector<WorldPoint3>& dst, WorldUnit radius)
 	}
 }
 
-void GeomUtil::MakeMeshCircle(std::vector<WorldPoint3>& dst, WorldUnit /*radius*/)
+void GeomUtil::MakeMeshCircle(std::vector<WorldPoint3>& dst, Real /*radius*/)
 {
 	const size_t resolution = 64;
-	WorldUnit interp = 1.0 / (WorldUnit)resolution;
+	Real interp = 1.0 / (Real)resolution;
 	WorldPoint3 middle(0.0, 0.0, 0.0);
 	WorldPoint3 v0(0.0, 0.0, 0.0);
 	WorldPoint3 v1(0.0, 0.0, 0.0);
 
 	for(size_t i = 0; i<=resolution; ++i)
 	{
-		WorldUnit alpha0 = (WorldUnit)(i+0) * interp * PI * 2.0;
-		WorldUnit alpha1 = (WorldUnit)(i+1) * interp * PI * 2.0;
+		Real alpha0 = (Real)(i+0) * interp * PI * 2.0;
+		Real alpha1 = (Real)(i+1) * interp * PI * 2.0;
 
 		v0.x = sin(alpha0);
 		v0.y = cos(alpha0);
@@ -78,7 +78,7 @@ void GeomUtil::MakeMeshCircle(std::vector<WorldPoint3>& dst, WorldUnit /*radius*
 
 void GeomUtil::MakeMeshPlane(std::vector<WorldPoint3>& vertexData,
 		std::vector<WorldPoint3>& tcoordData,
-		WorldUnit size)
+		Real size)
 {
 	const WorldPoint3 v0( 1.0 * size,  1.0 * size,  0.0);
 	const WorldPoint3 v1(-1.0 * size,  1.0 * size,  0.0);
@@ -108,7 +108,7 @@ void GeomUtil::MakeMeshPlane(std::vector<WorldPoint3>& vertexData,
 
 void GeomUtil::MakeMeshCube(std::vector<WorldPoint3>& vertexData,
 		std::vector<WorldPoint3>& tcoordData,
-		WorldUnit size)
+		Real size)
 {
 	size *= 0.5;
 

@@ -7,14 +7,14 @@ namespace GCL
   class GeomUtil
   {
   public:
-	  static void MakeMeshSphere(std::vector<WorldPoint3>& dst, WorldUnit radius);
-	  static void MakeMeshCircle(std::vector<WorldPoint3>& dst, WorldUnit radius);
+	  static void MakeMeshSphere(std::vector<WorldPoint3>& dst, Real radius);
+	  static void MakeMeshCircle(std::vector<WorldPoint3>& dst, Real radius);
 	  static void MakeMeshPlane(std::vector<WorldPoint3>& vertexData,
 	  		  std::vector<WorldPoint3>& tcoordData,
-	  		  WorldUnit size);
+	  		  Real size);
 	  static void MakeMeshCube(std::vector<WorldPoint3>& vertexData,
 	  		  std::vector<WorldPoint3>& tcoordData,
-	  		  WorldUnit size);
+	  		  Real size);
 
   };
 }

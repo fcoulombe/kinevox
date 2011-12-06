@@ -26,6 +26,6 @@ private:
 	Matrix44 mCameraMatrix;
 	Matrix44 mModelViewMatrix;
 	Matrix44 mProjectionMatrix;
-	WorldUnit mFov, mAspect, mNear, mFar;
+	Real mFov, mAspect, mNear, mFar;
 };
 }

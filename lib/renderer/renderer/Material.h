@@ -27,7 +27,7 @@ class Shader;
     WorldPoint4 mDiffuset;
     WorldPoint4 mspecular;
     WorldPoint4 mEmissive;
-    WorldUnit mShininess;
+    Real mShininess;
 
   };
 

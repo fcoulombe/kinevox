@@ -67,12 +67,12 @@ void Test()
 
 
 		std::vector<WorldPoint3> dst;
-		WorldUnit radius = 1.0;
+		Real radius = 1.0;
 		GeomUtil::MakeMeshSphere(dst, radius);
 		GeomUtil::MakeMeshCircle(dst, radius);
 
 		std::vector<WorldPoint3> vertexData,tcoordData;
-		WorldUnit size = 1.0;
+		Real size = 1.0;
 		GeomUtil::MakeMeshPlane(vertexData,tcoordData,size);
 		GeomUtil::MakeMeshCube(vertexData,tcoordData,size);
 

@@ -64,7 +64,7 @@ void Material::LoadMaterial(const char *filename)
 	fp.getline(buffer, BUFFER_SIZE);
 	sscanf(buffer, "emissive: %lf %lf %lf %lf", &emissive.x, &emissive.y, &emissive.z, &emissive.w);
 
-	WorldUnit shininess;
+	Real shininess;
 	fp.getline(buffer, BUFFER_SIZE);
 	sscanf(buffer, "shininess: %lf", &shininess);
 

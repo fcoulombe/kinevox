@@ -48,7 +48,7 @@ public:
 		static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
 		return data;
 	}
-	void SetOrientation(WorldUnit x,WorldUnit y,WorldUnit z)
+	void SetOrientation(Real x,Real y,Real z)
 	{
 		mTransform.SetRotationX(x);
 		mTransform.SetRotationY(y);

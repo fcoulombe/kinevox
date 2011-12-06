@@ -10,7 +10,7 @@ using namespace GCL;
 
 namespace
 {
-const WorldUnit gVoxelSize = 1.0;
+const Real gVoxelSize = 1.0;
 }
 
 Grid::Row::Row(size_t x, size_t y, size_t z)

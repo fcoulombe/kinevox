@@ -1,0 +1,476 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		812A37E2148C1F4F00D9E98D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E1148C1F4F00D9E98D /* UIKit.framework */; };
+		812A37E4148C1F4F00D9E98D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E3148C1F4F00D9E98D /* Foundation.framework */; };
+		812A37E6148C1F4F00D9E98D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E5148C1F4F00D9E98D /* CoreGraphics.framework */; };
+		812A37E8148C1F4F00D9E98D /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E7148C1F4F00D9E98D /* GLKit.framework */; };
+		812A37EA148C1F4F00D9E98D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E9148C1F4F00D9E98D /* OpenGLES.framework */; };
+		812A37F0148C1F4F00D9E98D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 812A37EE148C1F4F00D9E98D /* InfoPlist.strings */; };
+		812A37F2148C1F4F00D9E98D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 812A37F1148C1F4F00D9E98D /* main.m */; };
+		812A37F6148C1F4F00D9E98D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 812A37F5148C1F4F00D9E98D /* AppDelegate.m */; };
+		812A37F9148C1F4F00D9E98D /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 812A37F7148C1F4F00D9E98D /* MainStoryboard_iPhone.storyboard */; };
+		812A37FC148C1F4F00D9E98D /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 812A37FA148C1F4F00D9E98D /* MainStoryboard_iPad.storyboard */; };
+		812A37FE148C1F5000D9E98D /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 812A37FD148C1F5000D9E98D /* Shader.fsh */; };
+		812A3800148C1F5000D9E98D /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 812A37FF148C1F5000D9E98D /* Shader.vsh */; };
+		812A3803148C1F5000D9E98D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 812A3802148C1F5000D9E98D /* ViewController.m */; };
+		812A380B148C1F5000D9E98D /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A380A148C1F5000D9E98D /* SenTestingKit.framework */; };
+		812A380C148C1F5000D9E98D /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E1148C1F4F00D9E98D /* UIKit.framework */; };
+		812A380D148C1F5000D9E98D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E3148C1F4F00D9E98D /* Foundation.framework */; };
+		812A3815148C1F5000D9E98D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 812A3813148C1F5000D9E98D /* InfoPlist.strings */; };
+		812A3818148C1F5000D9E98D /* kinevoxTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 812A3817148C1F5000D9E98D /* kinevoxTests.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		812A380E148C1F5000D9E98D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 812A37D4148C1F4F00D9E98D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 812A37DC148C1F4F00D9E98D;
+			remoteInfo = kinevox;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		812A37DD148C1F4F00D9E98D /* kinevox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kinevox.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		812A37E1148C1F4F00D9E98D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		812A37E3148C1F4F00D9E98D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		812A37E5148C1F4F00D9E98D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		812A37E7148C1F4F00D9E98D /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
+		812A37E9148C1F4F00D9E98D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		812A37ED148C1F4F00D9E98D /* kinevox-Info.plist */ = {isa = PBXFileReference; path = "kinevox-Info.plist"; sourceTree = "<group>"; };
+		812A37EF148C1F4F00D9E98D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		812A37F1148C1F4F00D9E98D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		812A37F3148C1F4F00D9E98D /* kinevox-Prefix.pch */ = {isa = PBXFileReference; path = "kinevox-Prefix.pch"; sourceTree = "<group>"; };
+		812A37F4148C1F4F00D9E98D /* AppDelegate.h */ = {isa = PBXFileReference; path = AppDelegate.h; sourceTree = "<group>"; };
+		812A37F5148C1F4F00D9E98D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		812A37F8148C1F4F00D9E98D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		812A37FB148C1F4F00D9E98D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
+		812A37FD148C1F5000D9E98D /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
+		812A37FF148C1F5000D9E98D /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
+		812A3801148C1F5000D9E98D /* ViewController.h */ = {isa = PBXFileReference; path = ViewController.h; sourceTree = "<group>"; };
+		812A3802148C1F5000D9E98D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		812A3809148C1F5000D9E98D /* kinevoxTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = kinevoxTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		812A380A148C1F5000D9E98D /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		812A3812148C1F5000D9E98D /* kinevoxTests-Info.plist */ = {isa = PBXFileReference; path = "kinevoxTests-Info.plist"; sourceTree = "<group>"; };
+		812A3814148C1F5000D9E98D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		812A3816148C1F5000D9E98D /* kinevoxTests.h */ = {isa = PBXFileReference; path = kinevoxTests.h; sourceTree = "<group>"; };
+		812A3817148C1F5000D9E98D /* kinevoxTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = kinevoxTests.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		812A37DA148C1F4F00D9E98D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				812A37E2148C1F4F00D9E98D /* UIKit.framework in Frameworks */,
+				812A37E4148C1F4F00D9E98D /* Foundation.framework in Frameworks */,
+				812A37E6148C1F4F00D9E98D /* CoreGraphics.framework in Frameworks */,
+				812A37E8148C1F4F00D9E98D /* GLKit.framework in Frameworks */,
+				812A37EA148C1F4F00D9E98D /* OpenGLES.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		812A3805148C1F5000D9E98D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				812A380B148C1F5000D9E98D /* SenTestingKit.framework in Frameworks */,
+				812A380C148C1F5000D9E98D /* UIKit.framework in Frameworks */,
+				812A380D148C1F5000D9E98D /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		812A37D2148C1F4F00D9E98D = {
+			isa = PBXGroup;
+			children = (
+				812A37EB148C1F4F00D9E98D /* kinevox */,
+				812A3810148C1F5000D9E98D /* kinevoxTests */,
+				812A37E0148C1F4F00D9E98D /* Frameworks */,
+				812A37DE148C1F4F00D9E98D /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		812A37DE148C1F4F00D9E98D /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				812A37DD148C1F4F00D9E98D /* kinevox.app */,
+				812A3809148C1F5000D9E98D /* kinevoxTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		812A37E0148C1F4F00D9E98D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				812A37E1148C1F4F00D9E98D /* UIKit.framework */,
+				812A37E3148C1F4F00D9E98D /* Foundation.framework */,
+				812A37E5148C1F4F00D9E98D /* CoreGraphics.framework */,
+				812A37E7148C1F4F00D9E98D /* GLKit.framework */,
+				812A37E9148C1F4F00D9E98D /* OpenGLES.framework */,
+				812A380A148C1F5000D9E98D /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		812A37EB148C1F4F00D9E98D /* kinevox */ = {
+			isa = PBXGroup;
+			children = (
+				812A37F4148C1F4F00D9E98D /* AppDelegate.h */,
+				812A37F5148C1F4F00D9E98D /* AppDelegate.m */,
+				812A37F7148C1F4F00D9E98D /* MainStoryboard_iPhone.storyboard */,
+				812A37FA148C1F4F00D9E98D /* MainStoryboard_iPad.storyboard */,
+				812A37FD148C1F5000D9E98D /* Shader.fsh */,
+				812A37FF148C1F5000D9E98D /* Shader.vsh */,
+				812A3801148C1F5000D9E98D /* ViewController.h */,
+				812A3802148C1F5000D9E98D /* ViewController.m */,
+				812A37EC148C1F4F00D9E98D /* Supporting Files */,
+			);
+			path = kinevox;
+			sourceTree = "<group>";
+		};
+		812A37EC148C1F4F00D9E98D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				812A37ED148C1F4F00D9E98D /* kinevox-Info.plist */,
+				812A37EE148C1F4F00D9E98D /* InfoPlist.strings */,
+				812A37F1148C1F4F00D9E98D /* main.m */,
+				812A37F3148C1F4F00D9E98D /* kinevox-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		812A3810148C1F5000D9E98D /* kinevoxTests */ = {
+			isa = PBXGroup;
+			children = (
+				812A3816148C1F5000D9E98D /* kinevoxTests.h */,
+				812A3817148C1F5000D9E98D /* kinevoxTests.m */,
+				812A3811148C1F5000D9E98D /* Supporting Files */,
+			);
+			path = kinevoxTests;
+			sourceTree = "<group>";
+		};
+		812A3811148C1F5000D9E98D /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				812A3812148C1F5000D9E98D /* kinevoxTests-Info.plist */,
+				812A3813148C1F5000D9E98D /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		812A37DC148C1F4F00D9E98D /* kinevox */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 812A381B148C1F5000D9E98D /* Build configuration list for PBXNativeTarget "kinevox" */;
+			buildPhases = (
+				812A37D9148C1F4F00D9E98D /* Sources */,
+				812A37DA148C1F4F00D9E98D /* Frameworks */,
+				812A37DB148C1F4F00D9E98D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = kinevox;
+			productName = kinevox;
+			productReference = 812A37DD148C1F4F00D9E98D /* kinevox.app */;
+			productType = "com.apple.product-type.application";
+		};
+		812A3808148C1F5000D9E98D /* kinevoxTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 812A381E148C1F5000D9E98D /* Build configuration list for PBXNativeTarget "kinevoxTests" */;
+			buildPhases = (
+				812A3804148C1F5000D9E98D /* Sources */,
+				812A3805148C1F5000D9E98D /* Frameworks */,
+				812A3806148C1F5000D9E98D /* Resources */,
+				812A3807148C1F5000D9E98D /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				812A380F148C1F5000D9E98D /* PBXTargetDependency */,
+			);
+			name = kinevoxTests;
+			productName = kinevoxTests;
+			productReference = 812A3809148C1F5000D9E98D /* kinevoxTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		812A37D4148C1F4F00D9E98D /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 812A37D7148C1F4F00D9E98D /* Build configuration list for PBXProject "kinevox" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 812A37D2148C1F4F00D9E98D;
+			productRefGroup = 812A37DE148C1F4F00D9E98D /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				812A37DC148C1F4F00D9E98D /* kinevox */,
+				812A3808148C1F5000D9E98D /* kinevoxTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		812A37DB148C1F4F00D9E98D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				812A37F0148C1F4F00D9E98D /* InfoPlist.strings in Resources */,
+				812A37F9148C1F4F00D9E98D /* MainStoryboard_iPhone.storyboard in Resources */,
+				812A37FC148C1F4F00D9E98D /* MainStoryboard_iPad.storyboard in Resources */,
+				812A37FE148C1F5000D9E98D /* Shader.fsh in Resources */,
+				812A3800148C1F5000D9E98D /* Shader.vsh in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		812A3806148C1F5000D9E98D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				812A3815148C1F5000D9E98D /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		812A3807148C1F5000D9E98D /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		812A37D9148C1F4F00D9E98D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				812A37F2148C1F4F00D9E98D /* main.m in Sources */,
+				812A37F6148C1F4F00D9E98D /* AppDelegate.m in Sources */,
+				812A3803148C1F5000D9E98D /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		812A3804148C1F5000D9E98D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				812A3818148C1F5000D9E98D /* kinevoxTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		812A380F148C1F5000D9E98D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 812A37DC148C1F4F00D9E98D /* kinevox */;
+			targetProxy = 812A380E148C1F5000D9E98D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		812A37EE148C1F4F00D9E98D /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				812A37EF148C1F4F00D9E98D /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		812A37F7148C1F4F00D9E98D /* MainStoryboard_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				812A37F8148C1F4F00D9E98D /* en */,
+			);
+			name = MainStoryboard_iPhone.storyboard;
+			sourceTree = "<group>";
+		};
+		812A37FA148C1F4F00D9E98D /* MainStoryboard_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				812A37FB148C1F4F00D9E98D /* en */,
+			);
+			name = MainStoryboard_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		812A3813148C1F5000D9E98D /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				812A3814148C1F5000D9E98D /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		812A3819148C1F5000D9E98D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		812A381A148C1F5000D9E98D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		812A381C148C1F5000D9E98D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "kinevox/kinevox-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "kinevox/kinevox-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		812A381D148C1F5000D9E98D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "kinevox/kinevox-Prefix.pch";
+				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
+				INFOPLIST_FILE = "kinevox/kinevox-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		812A381F148C1F5000D9E98D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/kinevox.app/kinevox";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "kinevox/kinevox-Prefix.pch";
+				INFOPLIST_FILE = "kinevoxTests/kinevoxTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		812A3820148C1F5000D9E98D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/kinevox.app/kinevox";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "kinevox/kinevox-Prefix.pch";
+				INFOPLIST_FILE = "kinevoxTests/kinevoxTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		812A37D7148C1F4F00D9E98D /* Build configuration list for PBXProject "kinevox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				812A3819148C1F5000D9E98D /* Debug */,
+				812A381A148C1F5000D9E98D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		812A381B148C1F5000D9E98D /* Build configuration list for PBXNativeTarget "kinevox" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				812A381C148C1F5000D9E98D /* Debug */,
+				812A381D148C1F5000D9E98D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		812A381E148C1F5000D9E98D /* Build configuration list for PBXNativeTarget "kinevoxTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				812A381F148C1F5000D9E98D /* Debug */,
+				812A3820148C1F5000D9E98D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 812A37D4148C1F4F00D9E98D /* Project object */;
+}

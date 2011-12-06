@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'renderer' target in the 'renderer' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif

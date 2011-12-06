@@ -10,11 +10,7 @@ class Texture;
   public:
     Shader();
 
-    ~Shader()
-    {
-      if (mIsValid)
-        glDeleteProgram(mProgramObject);glErrorCheck();
-    }
+    ~Shader();
     void Bind();
     bool IsValid() const { return mIsValid; }
 

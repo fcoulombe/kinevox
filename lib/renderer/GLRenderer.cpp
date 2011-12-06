@@ -2,9 +2,10 @@
 #include "renderer/GLRenderer.h"
 
 #include <sstream>
-
+#if !defined(ES1) && !defined(ES2)
 #include <SDL.h>
 #include <SDL_video.h>
+#endif
 
 #include <gcl/Assert.h>
 #include <gcl/StringUtil.h>

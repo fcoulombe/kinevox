@@ -32,9 +32,9 @@ Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
 static const GLenum BytePerPixel[] =
 {
 	GL_LUMINANCE,
-	GL_LUMINANCE16,
-	GL_RGB8,
-	GL_RGBA8
+	GL_LUMINANCE,
+	GL_RGB,
+	GL_RGBA
 };
 static const GLenum BytesPerPixel[] =
 {
@@ -56,9 +56,11 @@ void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, cons
 	GCLAssert(bytesPerPixel <= GL_RGBA);
 	/*glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[bytesPerPixel-1], width, height, 0,
 			BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();*/
+#ifndef ES1
 	if (data)
 		gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width,height, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	else
+#endif
 		glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[bytesPerPixel-1], width, height, 0,
 					BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();
 	glBindTexture(GL_TEXTURE_2D, 0);glErrorCheck();
@@ -81,13 +83,19 @@ bool Texture::LoadTexture(const char *filename)
 
 const uint8_t *Texture::GetTextureFromVRAM() const
 {
+#if !defined(ES1) && !defined(ES2)
 	Bind();
 	long imageSize = mTextureData.GetImageSizeInBytes();
 	uint8_t *data = new uint8_t[imageSize];
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
 	glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
+    
 	return data;
+#else
+    GCLAssert(false && "unsupported");
+    return NULL;
+#endif
 }
 
 #include <fstream>

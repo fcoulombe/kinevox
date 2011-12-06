@@ -79,6 +79,7 @@ Shader::Shader()
 	vbuffer += DefaultVShaderStr;
 	std::string fbuffer(SHADER_HEADER);
 	fbuffer += DefaultFShaderStr;
+#ifndef ES1
 
 	GLuint vertexShader = CompileShader(vbuffer.c_str(), GL_VERTEX_SHADER);
 	GLuint fragmentShader = CompileShader(fbuffer.c_str(), GL_FRAGMENT_SHADER);
@@ -108,20 +109,32 @@ Shader::Shader()
 		glDeleteProgram(mProgramObject);glErrorCheck();
 		mIsValid = false;
 	}
-
+#endif
 	return;
+}
+
+Shader::~Shader()
+{
+#ifndef ES1
+    if (mIsValid)
+        glDeleteProgram(mProgramObject);glErrorCheck();
+#endif
 }
 
 void Shader::Bind()
 {
 	GCLAssert(mIsValid);
+#ifndef ES1
 	glUseProgram(mProgramObject);glErrorCheck();
+#endif
 }
 
 
 GLuint Shader::CompileShader(const char *shaderSrc, GLenum type)
 {
+    
 	GLuint shader;
+#ifndef  ES1
 	GLint compiled;
 
 	// Create the shader object
@@ -157,11 +170,13 @@ GLuint Shader::CompileShader(const char *shaderSrc, GLenum type)
 		glDeleteShader(shader);glErrorCheck();
 		return 0;
 	}
+#endif
 	return shader;
 }
 
 void Shader::PrintInfoLog(GLuint p)
 {
+#ifndef ES1
 	GLint infoLen = 0;
 	glGetProgramiv(p, GL_INFO_LOG_LENGTH, &infoLen);glErrorCheck();
 	if(infoLen > 1)
@@ -171,6 +186,7 @@ void Shader::PrintInfoLog(GLuint p)
 		std::cerr << "Error linking program:\n%s" << infoLog << std::endl;
 		delete [] infoLog;
 	}
+#endif
 
 }
 
@@ -179,50 +195,65 @@ void Shader::PrintInfoLog(GLuint p)
 
 void Shader::SetProjectionMatrix(const Matrix44 &m)
 {
+#ifndef ES1
 	GCLAssert(mIsValid);
 	GLint projectionMatrixLoc = glGetUniformLocation(mProgramObject,"ProjectionMatrix");glErrorCheck();
 	Matrix44f mf(m);
 	glUniformMatrix4fv(projectionMatrixLoc,1,false,(const GLfloat*)&mf);glErrorCheck();
+#endif
 }
 void Shader::SetModelViewMatrix(const Matrix44 &m)
 {
+#ifndef ES1
 	GCLAssert(mIsValid);
 	GLint modelviewMatrixLoc = glGetUniformLocation(mProgramObject,"ModelViewMatrix");glErrorCheck();
 	Matrix44f mm(m);
 	glUniformMatrix4fv(modelviewMatrixLoc,1,false,(const GLfloat*)&mm);glErrorCheck();
+#endif
 }
 
 
 
 void Shader::SetTextureSampler(const Texture &sampler)
 {
+    #ifndef ES1
 	GLint textureLoc = glGetUniformLocation(mProgramObject,"texture");glErrorCheck();
 	glUniform1i(textureLoc, sampler.GetTextureId());glErrorCheck();
+#endif
 }
 
 void Shader::GetUniform(const char *uniformName, Matrix44 &m44) const
 {
+    #ifndef ES1
 	GLfloat mf[16];
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
 	glGetUniformfv(	mProgramObject,uniformLoc,mf);glErrorCheck();
 	m44 = Matrix44((const float *)mf);
+#endif
 }
 void Shader::GetUniform(const char *uniformName, int &sampler) const
 {
+    #ifndef ES1
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
 	glGetUniformiv(mProgramObject,uniformLoc,&sampler);glErrorCheck();
+#endif
 }
 int Shader::GetAttributeLocation(const char *attributeName) const
 {
-	int ret =  (int)glGetAttribLocation(mProgramObject,attributeName);glErrorCheck();
+    int ret=-1;
+    #ifndef ES1
+	ret =  (int)glGetAttribLocation(mProgramObject,attributeName);glErrorCheck();
 	GCLAssertMsg(ret!=-1, attributeName);
+#endif
 	return ret;
 }
 void Shader::ResetDefault()
 {
+#ifndef ES1
 	glUseProgram(0);glErrorCheck();
+#endif
 }

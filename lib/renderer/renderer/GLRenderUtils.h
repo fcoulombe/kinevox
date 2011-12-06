@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <gcl/Assert.h>
 #include <gcl/Point3.h>
 #include "renderer/OpenGL.h"
 
@@ -10,7 +11,7 @@ namespace GCL
 inline void DrawCube(const WorldPoint3 &position, double size)
 {
 	const double halfSize = size/2;
-
+#if !defined(ES1) && !defined(ES2)
 	glBegin(GL_QUADS);
 	//front face
 	glVertex3d(position.x-halfSize, position.y-halfSize, position.z+halfSize);
@@ -48,6 +49,11 @@ inline void DrawCube(const WorldPoint3 &position, double size)
 	glVertex3d(position.x+halfSize, position.y-halfSize, position.z-halfSize);
 	glVertex3d(position.x+halfSize, position.y-halfSize, position.z+halfSize);
 	glEnd();
+#else
+    
+    GCLAssert(false, "TBD");
+    
+#endif
 	glErrorCheck();
 
 }

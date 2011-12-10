@@ -40,6 +40,7 @@ void Test()
 	GLRenderer renderer;
 
 	Camera camera;
+	camera.Update();
 	std::stringstream s;
 	//camera projection equal Matrix44::Projection
 	{

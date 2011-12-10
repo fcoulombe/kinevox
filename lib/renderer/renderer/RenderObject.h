@@ -44,8 +44,8 @@ class RenderObject
 {
 public:
 	RenderObject(const Matrix44 &transform)
-	: mTransform(transform)
 	{
+		mTransform = (transform);
 	}
 	virtual ~RenderObject() {}
 	virtual const VertexData &GetVertexData() const=0;

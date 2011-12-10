@@ -184,13 +184,13 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 	const Matrix44 &projection = mCamera->GetProjection();
 #if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&projection)); glErrorCheck();
+	glLoadMatrix(reinterpret_cast<const GLreal*>(&projection)); glErrorCheck();
 #endif
 
 	const Matrix44 &modelView = mCamera->GetModelView();
 #if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&modelView));
+	glLoadMatrix(reinterpret_cast<const GLreal*>(&modelView));
 #endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
@@ -384,11 +384,11 @@ void GLRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &model
 
 #if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&projection));
+	glLoadMatrix(reinterpret_cast<const GLreal*>(&projection));
 
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixd(reinterpret_cast<const GLdouble*>(&f));
+	glLoadMatrix(reinterpret_cast<const GLreal*>(&f));
 	(void)shader;
 #else
 	if (shader)

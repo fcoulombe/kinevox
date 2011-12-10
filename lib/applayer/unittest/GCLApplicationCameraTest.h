@@ -38,6 +38,7 @@ void Test()
 	GCLApplication::Initialize();
 
 	Camera camera;
+	camera.Update();
 	GCLApplication::SetViewportCamera(camera);
 
 	GCLApplication::Update();

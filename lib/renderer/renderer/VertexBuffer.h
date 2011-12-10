@@ -31,33 +31,33 @@ public:
 		if (VertexType::GetComponentType() & ePOSITION)
 		{
 			glEnableClientState(GL_VERTEX_ARRAY);
-			glVertexPointer(3, GL_DOUBLE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToPosition()); glErrorCheck();
+			glVertexPointer(3, GL_UNIT, sizeof(VertexType), (char*)NULL+VertexType::OffsetToPosition()); glErrorCheck();
 		}
 		if (VertexType::GetComponentType() & eNORMAL)
 		{
 			glEnableClientState(GL_NORMAL_ARRAY);
-			glNormalPointer(GL_DOUBLE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal()); glErrorCheck();
+			glNormalPointer(GL_UNIT, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal()); glErrorCheck();
 		}
 		if (VertexType::GetComponentType() & eTEXTURE_COORD)
 		{
 			glClientActiveTexture(GL_TEXTURE0);
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			glTexCoordPointer(2, GL_DOUBLE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
+			glTexCoordPointer(2, GL_UNIT, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
 		}
 #else
 		if (VertexType::GetComponentType() & ePOSITION)
 		{
-			glVertexAttribPointer(ATTRIB_POSITION, 3, GL_DOUBLE, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToPosition());glErrorCheck();
+			glVertexAttribPointer(ATTRIB_POSITION, 3, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToPosition());glErrorCheck();
 			glEnableVertexAttribArray(ATTRIB_POSITION);glErrorCheck();
 		}
 		if (VertexType::GetComponentType() & eNORMAL)
 		{
-			glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_DOUBLE, GL_TRUE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal());glErrorCheck();
+			glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_UNIT, GL_TRUE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal());glErrorCheck();
 			glEnableVertexAttribArray(ATTRIB_NORMAL);glErrorCheck();
 		}
 		if (VertexType::GetComponentType() & eTEXTURE_COORD)
 		{
-			glVertexAttribPointer(ATTRIB_TEXTURE_COORD, 2, GL_DOUBLE, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
+			glVertexAttribPointer(ATTRIB_TEXTURE_COORD, 2, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
 			glEnableVertexAttribArray(ATTRIB_TEXTURE_COORD);glErrorCheck();
 		}
 #endif

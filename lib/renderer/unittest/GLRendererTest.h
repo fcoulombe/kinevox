@@ -80,7 +80,7 @@ void Test()
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		glMultMatrixd(reinterpret_cast<const GLdouble*>(&transform));
+		glMultMatrix(reinterpret_cast<const GLreal*>(&transform));
 
 		Matrix44 modelView1 = GLRenderer::GetGLModelView();
 		GLRenderer::SetTransform(projection, modelView, transform);

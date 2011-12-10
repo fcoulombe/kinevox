@@ -8,9 +8,9 @@
 namespace GCL
 {
 
-inline void DrawCube(const WorldPoint3 &position, double size)
+inline void DrawCube(const WorldPoint3 &position, Real size)
 {
-	const double halfSize = size/2;
+	const Real halfSize = size/2;
 #if !defined(ES1) && !defined(ES2)
 	glBegin(GL_QUADS);
 	//front face
@@ -58,9 +58,9 @@ inline void DrawCube(const WorldPoint3 &position, double size)
 
 }
 
-inline void WriteCube(WorldPoint3* cubeData, const WorldPoint3 &position, double size)
+inline void WriteCube(WorldPoint3* cubeData, const WorldPoint3 &position, Real size)
 {
-	const double halfSize = size/2;
+	const Real halfSize = size/2;
 
 	//front face
 	*cubeData = WorldPoint3(position.x-halfSize, position.y-halfSize, position.z+halfSize); ++cubeData;

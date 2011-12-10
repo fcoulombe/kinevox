@@ -35,7 +35,7 @@ class MyRenderObject : public RenderObject
 {
 public:
 	MyRenderObject()
-	: RenderObject(Matrix44::IDENTITY)
+	: RenderObject(Matrix44(true)) //identity
 	{}
 
 	const VertexData &GetVertexData() const
@@ -72,13 +72,16 @@ void Test()
 	RenderObjectList objList;
 	objList.push_back(&obj);
 
-	Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
+	const Matrix44 &transform = obj.GetTransform();
+	std::stringstream s;
+	s<<std::endl<<transform<<std::endl<<"=="<<std::endl<<Matrix44::IDENTITY;
+	AssertMsg_Test(transform == Matrix44::IDENTITY, s.str().c_str());
 
 	const WorldPoint3 position(0.0,0.0, -10.0);
 	obj.SetPosition(position);
 	Matrix44 positionTestMat(Matrix44::IDENTITY);
 	positionTestMat.SetPosition(position);
-	std::stringstream s;
+	s.str("");
 	s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;
 	AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
 

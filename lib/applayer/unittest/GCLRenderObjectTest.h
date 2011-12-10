@@ -44,7 +44,7 @@ void Test()
 
 	const WorldPoint3 position(0.0,0.0, -10.0);
 	obj.SetPosition(position);
-	Matrix44 positionTestMat(Matrix44::IDENTITY);
+	Matrix44 positionTestMat(true); //identity
 	positionTestMat.SetPosition(position);
 	std::stringstream s;
 	s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;

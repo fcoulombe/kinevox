@@ -17,20 +17,19 @@ Camera &Camera::DefaultCamera()
 }
 
 Camera::Camera()
-: mCameraMatrix(Matrix44::IDENTITY),
+: mCameraMatrix(true), //identity
   mFov(45.0),
   mAspect(640.0/480.0),
   mNear(0.1),
   mFar(100.0)
 {
-	Update();
 }
 
 void Camera::Update()
 {
 	mProjectionMatrix.SetPerspective(mFov,mAspect,mNear,mFar);
 	mModelViewMatrix = Inverse(mCameraMatrix);
-	//glLoadMatrixd(reinterpret_cast<const GLdouble*>(&mModelViewMatrix));glErrorCheck();
+	//glLoadMatrixd(reinterpret_cast<const GLreal*>(&mModelViewMatrix));glErrorCheck();
 }
 
 
@@ -42,7 +41,7 @@ void Camera::MoveBackward()
 {
 	mCameraMatrix[3] += mCameraMatrix[2]/10;
 }
-void Camera::TurnLeft(double degree )
+void Camera::TurnLeft(Real degree )
 {
 	Matrix44 rotMat;
 	rotMat.SetRotationY(DegreeToRadian(degree));
@@ -51,7 +50,7 @@ void Camera::TurnLeft(double degree )
 	mCameraMatrix = rotMat*mCameraMatrix;
 	mCameraMatrix[3] = positionBack;
 }
-void Camera::TurnRight(double degree )
+void Camera::TurnRight(Real degree )
 {
 	Matrix44 rotMat;
 	rotMat.SetRotationY(DegreeToRadian(degree));

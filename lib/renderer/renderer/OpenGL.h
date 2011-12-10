@@ -26,6 +26,18 @@
 #error "TBD"
 #endif
 
+#if USE_64BIT_PLATFORM
+#define GL_UNIT GL_DOUBLE
+#define GLreal GLdouble
+#define glLoadMatrix glLoadMatrixd
+#define glMultMatrix glMultMatrixd
+#else
+#define GL_UNIT GL_FLOAT
+#define GLreal GLfloat
+#define glLoadMatrix glLoadMatrixf
+#define glMultMatrix glMultMatrixf
+#endif
+
 
 #include <gcl/Assert.h>
 #include <sstream>

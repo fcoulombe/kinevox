@@ -32,7 +32,7 @@ class MyRenderObject : public RenderObject
 {
 public:
 	MyRenderObject()
-	: RenderObject(Matrix44::IDENTITY)
+	: RenderObject(Matrix44(true)) //identity
 	{}
 
 	const VertexData &GetVertexData() const

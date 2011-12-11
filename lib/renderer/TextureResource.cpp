@@ -6,7 +6,10 @@
 
 #include "gcl/Assert.h"
 #include "renderer/TGALoaderData.h"
+
+#ifndef OS_IPHONE
 #include <png.h>
+#endif
 
 
 using namespace GCL;
@@ -86,6 +89,8 @@ void TextureResource::LoadTga(std::istream& fp, TextureData &data)
 		GCLAssert(false && "Unknown image header");
 	}
 }
+
+#ifndef OS_IPHONE
 
 #define PNGSIGSIZE 8
 
@@ -192,6 +197,7 @@ void TextureResource::LoadPng(FILE *source, TextureData &textureData)
 	//And don't forget to clean up the read and info structs !
 	png_destroy_read_struct(&pngPtr, &infoPtr,(png_infopp)0);
 }
+#endif
 
 //this loads TGA files and then upload it to opengl
 TextureResource::TextureResource( const char *textureName )
@@ -216,13 +222,20 @@ TextureResource::TextureResource( const char *textureName )
 
 		fp.close();
 	}
+
+
 	else if (strncmp(ext, "png", 3) == 0)
 	{
+#ifndef OS_IPHONE
 		FILE *fp = fopen(path.c_str(), "rb");
 		GCLAssertMsg(fp, path.c_str());
 
 		LoadPng(fp, data);
 		GCLAssert(data.imageData);
+#else
+        GCLAssertMsg(false, "cant load png on iphone yet" );
+#endif
+
 	}
 	else if (strncmp(ext, "raw", 3) == 0)
 	{

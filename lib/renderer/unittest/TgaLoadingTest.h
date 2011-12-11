@@ -30,7 +30,8 @@ using namespace GCL;
 
 namespace TgaLoadingTest
 {
-void Test()
+    void Test();
+    void Test()
 {
 	TEST_START
 

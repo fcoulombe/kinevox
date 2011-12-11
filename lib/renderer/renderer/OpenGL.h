@@ -5,25 +5,25 @@
 #include <GL/glew.h>
 #endif
 
-#if OS_MACOSX
-#if defined( ES2)
-#include <OpenGLES/ES2/gl.h>
-#include <OpenGLES/ES2/glext.h>
-#elif defined(ES1)
-#include <OpenGLES/ES1/gl.h>
-#include <OpenGLES/ES1/glext.h>
-#define ENABLE_FIX_PIPELINE 1
-#else
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#include <OpenGL/glext.h>
-#endif
+#if defined(OS_IPHONE)
+#   if defined( ES2)
+#       include <OpenGLES/ES2/gl.h>
+#       include <OpenGLES/ES2/glext.h>
+#   elif defined(ES1)
+#       include <OpenGLES/ES1/gl.h>
+#       include <OpenGLES/ES1/glext.h>
+#       define ENABLE_FIX_PIPELINE 1
+#   endif
+#elif defined(OS_MACOSX) 
+#   include <OpenGL/gl.h>
+#   include <OpenGL/glu.h>
+#   include <OpenGL/glext.h>
 #elif OS_LINUX
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glext.h>
+#   include <GL/gl.h>
+#   include <GL/glu.h>
+#   include <GL/glext.h>
 #else
-#error "TBD"
+#   error "TBD"
 #endif
 
 #if USE_64BIT_PLATFORM
@@ -36,6 +36,33 @@
 #define GLreal GLfloat
 #define glLoadMatrix glLoadMatrixf
 #define glMultMatrix glMultMatrixf
+#endif
+
+#ifdef ES1
+#define glClearDepth                            glClearDepthf
+#define glGenerateMipmap                        glGenerateMipmapOES
+#define glGenFramebuffers                       glGenFramebuffersOES
+#define glGenRenderbuffers                       glGenRenderbuffersOES
+#define glBindRenderbuffer                       glBindRenderbufferOES
+#define glBindFramebuffer                       glBindFramebufferOES
+#define glFramebufferTexture2D          glFramebufferTexture2DOES
+#define glDeleteFramebuffers            glDeleteFramebuffersOES
+#define glDeleteRenderbuffers            glDeleteRenderbuffersOES
+#define glCheckFramebufferStatus        glCheckFramebufferStatusOES
+#define glDeleteVertexArrays            glDeleteVertexArraysOES
+#define glGenVertexArrays                       glGenVertexArraysOES
+#define glBindVertexArray                       glBindVertexArrayOES
+#define glRenderbufferStorage glRenderbufferStorageOES
+#define glFramebufferRenderbuffer glFramebufferRenderbufferOES
+
+#define GL_RENDERBUFFER                       GL_RENDERBUFFER_OES
+#define GL_FRAMEBUFFER                       GL_FRAMEBUFFER_OES
+#define GL_FRAMEBUFFER_BINDING       GL_FRAMEBUFFER_BINDING_OES
+#define GL_COLOR_ATTACHMENT0         GL_COLOR_ATTACHMENT0_OES
+#define GL_FRAMEBUFFER_COMPLETE      GL_FRAMEBUFFER_COMPLETE_OES
+#define GL_DEPTH_COMPONENT GL_DEPTH_COMPONENT16_OES
+#define GL_DEPTH_ATTACHMENT GL_DEPTH_ATTACHMENT_OES
+
 #endif
 
 

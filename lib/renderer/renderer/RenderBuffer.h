@@ -10,10 +10,10 @@ public:
 	RenderBuffer(size_t width, size_t height)
 	: mRenderBufferId(-1)
 	{
-		glGenRenderbuffersEXT(1, &mRenderBufferId); glErrorCheck();
-		glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, mRenderBufferId);glErrorCheck();
-		glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width, height);glErrorCheck();
-		glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0); glErrorCheck();
+		glGenRenderbuffers(1, &mRenderBufferId); glErrorCheck();
+		glBindRenderbuffer(GL_RENDERBUFFER, mRenderBufferId);glErrorCheck();
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);glErrorCheck();
+		glBindRenderbuffer(GL_RENDERBUFFER, 0); glErrorCheck();
 	}
 	~RenderBuffer()
 	{

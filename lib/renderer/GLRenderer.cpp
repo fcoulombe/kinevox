@@ -2,10 +2,10 @@
 #include "renderer/GLRenderer.h"
 
 #include <sstream>
-#if !defined(ES1) && !defined(ES2)
+//#if !defined(ES1) && !defined(ES2)
 #include <SDL.h>
 #include <SDL_video.h>
-#endif
+//#endif
 
 #include <gcl/Assert.h>
 #include <gcl/StringUtil.h>
@@ -66,8 +66,10 @@ void GLRenderer::Init3DState()
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
 	glShadeModel(GL_FLAT); glErrorCheck();
 	glEnable(GL_TEXTURE_2D); glErrorCheck();
+#if !defined(ES1) && !defined(ES2)
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); glErrorCheck();
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
+#endif
 
 
 	glViewport(0,0,width,height); glErrorCheck();
@@ -76,6 +78,8 @@ void GLRenderer::Init3DState()
 
 void GLRenderer::Init2DState()
 {
+    
+#if !defined(ES1) && !defined(ES2)
 	int sdlInitSuccessful = SDL_Init(SDL_INIT_VIDEO);
 	GCLAssert(sdlInitSuccessful>= 0);
 
@@ -138,6 +142,10 @@ void GLRenderer::Init2DState()
 	glOrtho (0, width, height, 0, -1.0f, 1.0f); glErrorCheck();
 	glMatrixMode(GL_MODELVIEW); glErrorCheck();
 	glLoadIdentity(); glErrorCheck();
+#else
+    
+    GCLAssert(false && "TBD");
+#endif
 
 }
 
@@ -151,7 +159,9 @@ GLRenderer::GLRenderer()
 	mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
 	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
 	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
+#if !defined(ES1)
 	mShadingLanguageVersion = std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));glErrorCheck();
+#endif
 	mExtensions = StringUtil::Explode(std::string((const char *) glGetString(GL_EXTENSIONS)), ' ');glErrorCheck();
 
 #if ENABLE_GLEW
@@ -264,6 +274,7 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 static bool isRenderingExtra = false;
 void GLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth)
 {
+#if !defined(ES1) && !defined(ES2)
 	glBindTexture(GL_TEXTURE_2D, gl_depth_tex);glErrorCheck();
 	if (depth == 1) {
 		glTexImage2D(GL_TEXTURE_2D, 0, depth, width, height, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, rgb_front); glErrorCheck();
@@ -279,10 +290,14 @@ void GLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height, si
 	glTexCoord2f(0, 1); glVertex3f(0,480,0);
 	glEnd(); glErrorCheck();
 	isRenderingExtra = true;
+#else
+    GCLAssert(false &&" TBD");
+#endif
 
 }
 void GLRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
 {
+#if !defined(ES1) && !defined(ES2)
 
 	if (!isRenderingExtra) {
 		glBindTexture(GL_TEXTURE_2D, gl_depth_tex); glErrorCheck();
@@ -313,6 +328,9 @@ void GLRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
 
 
 	SDL_GL_SwapBuffers();glErrorCheck();
+#else 
+    GCLAssert(false && "TBD");
+#endif
 
 }
 

@@ -33,6 +33,7 @@ using namespace GCL;
 namespace CameraTest
 {
 
+    void Test();
 void Test()
 {
 	TEST_START
@@ -53,7 +54,7 @@ void Test()
 		s <<std::setprecision(16)<< std::endl<<perspective << std::endl << "==" << std::endl << camera.GetProjection();
 		AssertMsg_Test(perspective==camera.GetProjection(), s.str().c_str());
 	}
-
+#if !defined(ES1) && !defined(ES2)
 	//camera projection equal gluPerspective projection
 	{
 		glMatrixMode(GL_PROJECTION);
@@ -66,6 +67,7 @@ void Test()
 		s<<std::setprecision(16)<< std::endl<<GLRenderer::GetGLProjection() << std::endl <<"==" << std::endl << camera.GetProjection();
 		AssertMsg_Test(GLRenderer::GetGLProjection() == camera.GetProjection(), s.str().c_str());
 	}
+#endif
 
 
 

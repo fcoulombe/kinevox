@@ -109,8 +109,8 @@ if compiler == 'g++':
     #default_env['CXX'] = 'scan-build g++'
     #default_env['CC'] = 'scan-build gcc'
 elif compiler == 'clang':
-    default_env['CXX'] = 'clang++'
-    default_env['CC'] = 'clang'
+    default_env['CXX'] = '/Developer//usr/bin/clang++'
+    default_env['CC'] = '/Developer//usr/bin/clang'
     cflags.append("-std=c++0x");
     cflags.append("-pedantic")
 

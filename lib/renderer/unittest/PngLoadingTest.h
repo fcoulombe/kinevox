@@ -30,7 +30,8 @@ using namespace GCL;
 
 namespace PngLoadingTest
 {
-
+    
+    void Test();
 void Test()
 {
 	TEST_START

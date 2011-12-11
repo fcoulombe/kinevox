@@ -13,6 +13,9 @@ void checkFrameBufferStatus(GLenum stat)
 {
 	if (GL_FRAMEBUFFER_COMPLETE == stat)
 		return;
+#if defined(ES1) || defined(ES2)
+	GCLAssert(GL_FRAMEBUFFER_COMPLETE == stat);
+#else
 	std::stringstream s;
 	switch (stat)
 	{
@@ -44,8 +47,10 @@ void checkFrameBufferStatus(GLenum stat)
 	default:
 		s<<"don't know what happenned to the framebuffer";
 	}
-
+    
 	GCLAssertMsg(GL_FRAMEBUFFER_COMPLETE == stat, s.str().c_str());
+#endif
+
 }
 }
 
@@ -54,13 +59,13 @@ FrameBuffer::FrameBuffer(const Texture & texture, const RenderBuffer & depthBuff
 {
 	GCLAssert(texture.IsValid());
 
-	glGenFramebuffersEXT(1, &mFrameBufferId); glErrorCheck();
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, mFrameBufferId); glErrorCheck();
-	glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture.GetTextureId(), 0); glErrorCheck();
-	glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, depthBuffer.GetRenderBufferId());glErrorCheck();
+	glGenFramebuffers(1, &mFrameBufferId); glErrorCheck();
+	glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId); glErrorCheck();
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.GetTextureId(), 0); glErrorCheck();
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer.GetRenderBufferId());glErrorCheck();
 
-	GLenum status =  glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+	GLenum status =  glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	checkFrameBufferStatus(status);
 
-	glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);glErrorCheck();
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);glErrorCheck();
 }

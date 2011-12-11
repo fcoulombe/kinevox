@@ -62,7 +62,8 @@ public:
 private:
 	Material mMaterial;
 };
-
+    
+    void Test();
 void Test()
 {
 	TEST_START

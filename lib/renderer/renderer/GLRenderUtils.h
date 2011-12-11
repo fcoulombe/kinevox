@@ -51,7 +51,7 @@ inline void DrawCube(const WorldPoint3 &position, Real size)
 	glEnd();
 #else
     
-    GCLAssert(false, "TBD");
+    GCLAssertMsg(false, "TBD");
     
 #endif
 	glErrorCheck();

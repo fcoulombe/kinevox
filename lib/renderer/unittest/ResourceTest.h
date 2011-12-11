@@ -28,6 +28,7 @@ using namespace GCL;
 
 namespace ResourceTest
 {
+    void Test();
 void Test()
 {
 	TEST_START

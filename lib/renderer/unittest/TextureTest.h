@@ -27,11 +27,12 @@
 using namespace GCL;
 namespace TextureTest
 {
-
+    bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 {
 	return false;
 }
+    void Test();
 void Test()
 {
 	TEST_START

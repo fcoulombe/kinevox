@@ -45,12 +45,23 @@ void Test()
 	std::cout << "GlewVersion: " << renderer->GetGlewVersion()<<std::endl;
 
 	/*std::cout << "Extensions: " << std::endl;
-	const std::vector<std::string> ext = renderer->GetExtensions();
+	const std::vector<std::string> &ext = renderer->GetExtensions();
 	for (size_t i=0; i<ext.size();++i)
 	{
 		std::cout << ext[i] << std::endl;;
 	}*/
 
+#ifdef OS_IPHONE
+#   ifdef ES1
+    Assert_Test(renderer->IsExtensionSupported("GL_OES_framebuffer_object"));
+    Assert_Test(renderer->IsExtensionSupported("GL_OES_vertex_array_object"));
+    Assert_Test(renderer->IsExtensionSupported("GL_IMG_texture_compression_pvrtc"));
+#   elif defined(ES2)
+#       error "TBD: implement extension check for ES2"
+#   else
+#       error "INVALID"
+#   endif
+#else
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_shading_language_100"));
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_fragment_program"));
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_multitexture"));
@@ -60,16 +71,23 @@ void Test()
 	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_shader"));
 	Assert_Test(renderer->IsExtensionSupported("GL_EXT_framebuffer_object"));
 	//Assert_Test(renderer->IsExtensionSupported("GL_EXT_texture_compression_dxt1"));
-
+#endif
+#ifdef OS_IPHONE
+    const size_t DEFAULT_SCREEN_WIDTH = 320;
+    const size_t DEFAULT_SCREEN_HEIGHT = 480;
+#else
+    const size_t DEFAULT_SCREEN_WIDTH = 640;
+    const size_t DEFAULT_SCREEN_HEIGHT = 480;
+#endif
 	{
 		std::stringstream s;
-		s<<renderer->GetViewPort().GetHeight()<<"==480";
-		AssertMsg_Test(renderer->GetViewPort().GetHeight()==480, s.str().c_str());
+		s<<renderer->GetViewPort().GetHeight()<<"=="<<DEFAULT_SCREEN_HEIGHT;
+		AssertMsg_Test(renderer->GetViewPort().GetHeight()==DEFAULT_SCREEN_HEIGHT, s.str().c_str());
 	}
 	{
 		std::stringstream s;
-		s<<renderer->GetViewPort().GetWidth()<<"==640";
-		AssertMsg_Test(renderer->GetViewPort().GetWidth()==640, s.str().c_str());
+		s<<renderer->GetViewPort().GetWidth()<<"=="<<DEFAULT_SCREEN_WIDTH;
+		AssertMsg_Test(renderer->GetViewPort().GetWidth()==DEFAULT_SCREEN_WIDTH, s.str().c_str());
 	}
 
 	Matrix44 projection = GLRenderer::GetGLProjection();

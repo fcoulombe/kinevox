@@ -31,7 +31,27 @@ void GLRenderer::Init3DState()
 	const SDL_VideoInfo* info = NULL;
 	int width = mViewPort.GetWidth();
 	int height = mViewPort.GetHeight();
-	int flags = SDL_OPENGL;
+	int flags = SDL_OPENGL | SDL_WINDOW_SHOWN;
+    
+#if 0 //defined(OS_IPHONE)
+    SDL_Window *window;
+    SDL_Renderer *r;
+    /* create window and renderer */
+    window =
+    SDL_CreateWindow(NULL, 0, 0, width, height,
+                     SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+    if (!window) {
+        printf("Could not initialize Window\n");
+        return 1;
+    }
+    
+    r = SDL_CreateRenderer(window, -1, 0);
+    if (!r) {
+        printf("Could not create renderer\n");
+        return 1;
+    }
+
+#else
 	info = SDL_GetVideoInfo( );
 
 	if( !info )
@@ -55,6 +75,7 @@ void GLRenderer::Init3DState()
 		GCLAssertMsg(false,  s.str().c_str());
 		return;
 	}
+#endif
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); glErrorCheck();
 	glClearDepth(1.0); glErrorCheck();

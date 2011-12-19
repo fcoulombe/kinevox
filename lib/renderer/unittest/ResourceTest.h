@@ -42,9 +42,10 @@ void Test()
 		//test resource sharing
 		const Resource *tgaResource2 = TextureResourceManager::Instance().LoadResource("data/mushroom.tga");
 		Assert_Test(tgaResource == tgaResource2);
-
+#ifndef OS_IPHONE
 		const Resource *pngResource = TextureResourceManager::Instance().LoadResource("data/mushroom.png");
 		Assert_Test(pngResource);
+#endif
 	}
 
 	TextureResourceManager::Terminate();

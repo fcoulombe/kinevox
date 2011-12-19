@@ -58,6 +58,7 @@ private:
 void Test()
 {
 	TEST_START
+    #ifndef ES1
 	TextureResourceManager::Initialize();
 	{
 		GLRenderer renderer;
@@ -177,5 +178,6 @@ void Test()
 	 */
 
 	TextureResourceManager::Terminate();
+#endif
 }
 }

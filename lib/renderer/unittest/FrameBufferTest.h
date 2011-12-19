@@ -126,8 +126,10 @@ void Test()
 		{
 			AssertMsg_Test(false, e.what());
 		}
+#ifndef OS_IPHONE
 		texture.Save("FrameBufferTest.tga");
 		//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
+#endif
 	}
 
 	TextureResourceManager::Terminate();

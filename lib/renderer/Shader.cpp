@@ -123,8 +123,8 @@ Shader::~Shader()
 
 void Shader::Bind()
 {
-	GCLAssert(mIsValid);
 #ifndef ES1
+	GCLAssert(mIsValid);
 	glUseProgram(mProgramObject);glErrorCheck();
 #endif
 }
@@ -133,7 +133,7 @@ void Shader::Bind()
 GLuint Shader::CompileShader(const char *shaderSrc, GLenum type)
 {
     
-	GLuint shader;
+	GLuint shader=0;
 #ifndef  ES1
 	GLint compiled;
 

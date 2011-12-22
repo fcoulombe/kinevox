@@ -110,8 +110,8 @@ void Test()
 		int sampler;
 		shader.GetUniform("texture", sampler);
 		s.str("");
-		s<<sampler<<" == 1";
-		AssertMsg_Test(sampler==1, s.str().c_str());
+		s<<sampler<<" == 0";
+		AssertMsg_Test(sampler==0, s.str().c_str());
 
 
 		//attribute

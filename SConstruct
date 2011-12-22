@@ -97,7 +97,8 @@ if not os.path.exists(default_env.Dir("#lib/gcl").abspath):
 ##############################################
 compiler = GetOption('compiler')
 
-cflags = ["-O0", "-g", "-Wall", "-Werror", "-Wextra", '-fexceptions', '-ftrapv', '-fvisibility=hidden']   
+lflags = [] 
+cflags = ["-O0", "-g", "-Wall", "-Werror", "-Wextra", '-fexceptions', '-ftrapv'] #, '-fvisibility=hidden']   
 if default_env['PLATFORM']=='darwin':
     cflags.append("-DOS_MACOSX")
 else:
@@ -108,11 +109,21 @@ if compiler == 'g++':
     default_env['CC'] = 'gcc'
     #default_env['CXX'] = 'scan-build g++'
     #default_env['CC'] = 'scan-build gcc'
-elif compiler == 'clang':
-    default_env['CXX'] = '/Developer//usr/bin/clang++'
-    default_env['CC'] = '/Developer//usr/bin/clang'
     cflags.append("-std=c++0x");
     cflags.append("-pedantic")
+    lflags.append("-L/usr/lib/")
+
+
+elif compiler == 'clang':
+    if default_env['PLATFORM']=='darwin':
+        default_env['CXX'] = '/Developer//usr/bin/clang++'
+        default_env['CC'] = '/Developer//usr/bin/clang'
+    else:
+        default_env['CXX'] = 'clang++'
+        default_env['CC'] = 'clang'
+    cflags.append("-std=c++0x");
+    cflags.append("-pedantic")
+    lflags.append("-L/usr/lib/")
 
 #default_env['CXX'] = 'scan-build -k'
 #default_env['CC'] = 'scan-build -k'
@@ -120,6 +131,7 @@ elif compiler == 'clang':
 default_env.AppendUnique(CPPFLAGS=cflags )
 default_env.AppendUnique(CFLAGS=cflags)
 default_env.AppendUnique(CXXFLAGS=cflags)
+default_env.AppendUnique(LINKFLAGS=lflags)
 variant ="%s-%s-%s" % (default_env['CC'], platform.machine(),  platform.architecture()[0]) 
 print variant
 

@@ -81,5 +81,7 @@ int main(int /*argc*/, char **argv)
       std::cerr << "[FAILED] " << argv[0] << std::endl;
       std::cerr << "something went wrong" << std::endl;
   }
+  std::cout.flush();
+  std::cerr.flush();
   return 0;
 }

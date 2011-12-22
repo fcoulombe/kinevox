@@ -65,6 +65,11 @@
 
 #endif
 
+#if defined(ES1 ) || true
+#define ENABLE_SHADERS 0
+#else
+#define ENABLE_SHADERS 1
+#endif
 
 #include <gcl/Assert.h>
 #include <sstream>

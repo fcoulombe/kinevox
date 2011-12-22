@@ -162,7 +162,9 @@ GLRenderer::GLRenderer()
 #if !defined(ES1)
 	mShadingLanguageVersion = std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));glErrorCheck();
 #endif
-	mExtensions = StringUtil::Explode(std::string((const char *) glGetString(GL_EXTENSIONS)), ' ');glErrorCheck();
+	char delim = ' ';
+	std::string extString((const char *) glGetString(GL_EXTENSIONS));
+	mExtensions = StringUtil::Explode(extString, delim); glErrorCheck();
 
 #if ENABLE_GLEW
 	GLenum err = glewInit();

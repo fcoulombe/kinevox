@@ -31,7 +31,11 @@ void GLRenderer::Init3DState()
 	const SDL_VideoInfo* info = NULL;
 	int width = mViewPort.GetWidth();
 	int height = mViewPort.GetHeight();
+#ifdef ES1
 	int flags = SDL_OPENGL | SDL_WINDOW_SHOWN;
+#else
+	int flags = SDL_OPENGL;
+#endif
     
 #if 0 //defined(OS_IPHONE)
     SDL_Window *window;
@@ -253,30 +257,30 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 
 		//FC: can sort by component type
 		const VertexData &data = renderObjectList[i]->GetVertexData();
-		switch (data.vertexType)
+		switch (data.mVertexType)
 		{
 		case ePOSITION:
 		{
-			VertexBuffer<VertexP> buffer((const VertexP *)data.mVertexData, data.vertexCount);
+			VertexBuffer<VertexP> buffer((const VertexP *)data.mVertexData, data.mVertexCount);
 			buffer.Render();
 		}
 		break;
 		case ePOSITION|eNORMAL:
 		{
-			VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.vertexCount);
+			VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.mVertexCount);
 			buffer.Render();
 		}
 		break;
 		case ePOSITION|eTEXTURE_COORD:
 		{
-			VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.vertexCount);
+			VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.mVertexCount);
 			buffer.Render();
 		}
 		break;
 		case ePOSITION|eNORMAL|eTEXTURE_COORD:
 		{
 
-			VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.vertexCount);
+			VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.mVertexCount);
 			buffer.Render();
 		}
 		break;

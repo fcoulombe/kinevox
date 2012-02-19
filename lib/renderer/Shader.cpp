@@ -123,8 +123,8 @@ Shader::~Shader()
 
 void Shader::Bind()
 {
-	GCLAssert(mIsValid);
 #if ENABLE_SHADERS
+	GCLAssert(mIsValid);
 	glUseProgram(mProgramObject);glErrorCheck();
 #endif
 }

@@ -8,7 +8,11 @@ namespace GCL
   {
   public:
     ViewPort()
+#ifdef OS_IPHONE
+    : mWidth(320), mHeight(480) {}
+#else
     : mWidth(640), mHeight(480) {}
+#endif
 
     size_t GetWidth() const { return mWidth; }
     size_t GetHeight() const { return mHeight; }

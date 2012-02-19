@@ -54,6 +54,11 @@ AddOption('--compiler', action="store",
           default='g++',
           help='specify the compiler')
 
+AddOption('--configuration', action="store",
+          type='string', 
+          dest="configuration",
+          default='debug',
+          help='specify whether we are compiling in (debug, opt) mode')
 
 
 
@@ -98,7 +103,7 @@ if not os.path.exists(default_env.Dir("#lib/gcl").abspath):
 compiler = GetOption('compiler')
 
 lflags = [] 
-cflags = ["-O0", "-g", "-Wall", "-Werror", "-Wextra", '-fexceptions', '-ftrapv'] #, '-fvisibility=hidden']   
+cflags = [ "-g", "-Wall", "-Werror", "-Wextra", '-fexceptions', '-ftrapv'] #, '-fvisibility=hidden']   
 if default_env['PLATFORM']=='darwin':
     cflags.append("-DOS_MACOSX")
 else:
@@ -119,20 +124,26 @@ elif compiler == 'clang':
         default_env['CXX'] = '/Developer//usr/bin/clang++'
         default_env['CC'] = '/Developer//usr/bin/clang'
     else:
-        default_env['CXX'] = 'clang++'
-        default_env['CC'] = 'clang'
+        default_env['CXX'] = '/usr/local/bin/clang++'
+        default_env['CC'] = '/usr/local/bin/clang'
     cflags.append("-std=c++0x");
     cflags.append("-pedantic")
-    lflags.append("-L/usr/lib/")
+    lflags.append("-L/usr/local/lib/")
 
 #default_env['CXX'] = 'scan-build -k'
 #default_env['CC'] = 'scan-build -k'
+
+configuration = GetOption('configuration')
+if configuration == 'debug':
+    cflags.append("-O0")
+elif configuration == 'opt':
+    cflags.append("-O3")
                         
 default_env.AppendUnique(CPPFLAGS=cflags )
 default_env.AppendUnique(CFLAGS=cflags)
 default_env.AppendUnique(CXXFLAGS=cflags)
 default_env.AppendUnique(LINKFLAGS=lflags)
-variant ="%s-%s-%s" % (default_env['CC'], platform.machine(),  platform.architecture()[0]) 
+variant ="%s-%s-%s-%s" % (default_env['CC'], platform.machine(),  platform.architecture()[0], configuration) 
 print variant
 
 if not GetOption('verbose'):
@@ -155,6 +166,7 @@ default_env.Tool('Catalog', toolpath=['site_scons/site_tools'])
 default_env.Tool('SConsWalk', toolpath=['site_scons/site_tools'])
 default_env.Tool('Wrappers', toolpath=['site_scons/site_tools'])
 default_env.Tool('RSync', toolpath=['site_scons/site_tools'])
+default_env.Tool('Data', toolpath=['site_scons/site_tools'])
 default_env.Tool('UnitTest', toolpath=['site_scons/site_tools'])
 
 
@@ -187,6 +199,7 @@ sconsFilesList = [
 "./lib/applayer/unittest/SConscript",
 "./program/example/example_data/SConscript",
 "./program/example/basicTextureMapping/SConscript",
+"./program/example/spinningCube/SConscript",
 "./program/kinevox/SConscript",
 ]
 if GetOption('genValgrindSuppressions'):

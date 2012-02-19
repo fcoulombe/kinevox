@@ -11,7 +11,6 @@
 		812A37E4148C1F4F00D9E98D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E3148C1F4F00D9E98D /* Foundation.framework */; };
 		812A37E6148C1F4F00D9E98D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E5148C1F4F00D9E98D /* CoreGraphics.framework */; };
 		812A37E8148C1F4F00D9E98D /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E7148C1F4F00D9E98D /* GLKit.framework */; };
-		812A37EA148C1F4F00D9E98D /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E9148C1F4F00D9E98D /* OpenGLES.framework */; };
 		812A37F0148C1F4F00D9E98D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 812A37EE148C1F4F00D9E98D /* InfoPlist.strings */; };
 		812A37F2148C1F4F00D9E98D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 812A37F1148C1F4F00D9E98D /* main.m */; };
 		812A37F6148C1F4F00D9E98D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 812A37F5148C1F4F00D9E98D /* AppDelegate.m */; };
@@ -53,7 +52,6 @@
 		812A3882148C20CB00D9E98D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E3148C1F4F00D9E98D /* Foundation.framework */; };
 		812A3885148C20CB00D9E98D /* librenderer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A3872148C20CB00D9E98D /* librenderer.a */; };
 		812A388B148C20CB00D9E98D /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 812A3889148C20CB00D9E98D /* InfoPlist.strings */; };
-		812A388E148C20CC00D9E98D /* rendererTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 812A388D148C20CC00D9E98D /* rendererTests.mm */; };
 		812A3896148C20FF00D9E98D /* Camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 812A3895148C20FF00D9E98D /* Camera.cpp */; };
 		812A3898148C210300D9E98D /* CVRenderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 812A3897148C210300D9E98D /* CVRenderer.cpp */; };
 		812A389A148C210800D9E98D /* FrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 812A3899148C210800D9E98D /* FrameBuffer.cpp */; };
@@ -67,6 +65,13 @@
 		812A38AA148C21B400D9E98D /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 812A38A9148C21B400D9E98D /* Texture.cpp */; };
 		812A38AC148C21C800D9E98D /* TextureResource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 812A38AB148C21C800D9E98D /* TextureResource.cpp */; };
 		812A38AE148C222600D9E98D /* TextureResourceManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 812A38AD148C222600D9E98D /* TextureResourceManager.cpp */; };
+		815F585F149D911C00A89B1F /* libgcl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A3827148C1F8700D9E98D /* libgcl.a */; };
+		816D21A2149D5E4800038648 /* libSDL.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 816D21A1149D5E4800038648 /* libSDL.a */; };
+		816D21A3149D60FB00038648 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E5148C1F4F00D9E98D /* CoreGraphics.framework */; };
+		816D21A4149D60FF00038648 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812A37E7148C1F4F00D9E98D /* GLKit.framework */; };
+		816D21A8149D650F00038648 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 816D21A7149D650F00038648 /* AudioToolbox.framework */; };
+		816D21AD149D65C000038648 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 816D21AC149D65BF00038648 /* QuartzCore.framework */; };
+		816D21AE149D68C400038648 /* rendererTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 812A388D148C20CC00D9E98D /* rendererTests.mm */; };
 		81C0D8DE1494968A00C2B1CA /* gcl in Resources */ = {isa = PBXBuildFile; fileRef = 81C0D8DD1494968900C2B1CA /* gcl */; };
 		81C1D82A148C2D0D00C2FCA0 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C1D829148C2D0D00C2FCA0 /* OpenGLES.framework */; };
 		81C1D82B148C2D0D00C2FCA0 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81C1D829148C2D0D00C2FCA0 /* OpenGLES.framework */; };
@@ -97,6 +102,13 @@
 			remoteGlobalIDString = 812A3871148C20CB00D9E98D;
 			remoteInfo = renderer;
 		};
+		815F585C149D905000A89B1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 812A37D4148C1F4F00D9E98D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 812A3826148C1F8700D9E98D;
+			remoteInfo = gcl;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -105,7 +117,6 @@
 		812A37E3148C1F4F00D9E98D /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		812A37E5148C1F4F00D9E98D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		812A37E7148C1F4F00D9E98D /* GLKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLKit.framework; path = System/Library/Frameworks/GLKit.framework; sourceTree = SDKROOT; };
-		812A37E9148C1F4F00D9E98D /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		812A37ED148C1F4F00D9E98D /* kinevox-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "kinevox-Info.plist"; sourceTree = "<group>"; };
 		812A37EF148C1F4F00D9E98D /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		812A37F1148C1F4F00D9E98D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -168,6 +179,11 @@
 		812A38A9148C21B400D9E98D /* Texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Texture.cpp; path = ../../../lib/renderer/Texture.cpp; sourceTree = "<group>"; };
 		812A38AB148C21C800D9E98D /* TextureResource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TextureResource.cpp; path = ../../../lib/renderer/TextureResource.cpp; sourceTree = "<group>"; };
 		812A38AD148C222600D9E98D /* TextureResourceManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = TextureResourceManager.cpp; path = ../../../lib/renderer/TextureResourceManager.cpp; sourceTree = "<group>"; };
+		815F5860149DA71900A89B1F /* TgaLoadingTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TgaLoadingTest.h; path = ../../../lib/renderer/unittest/TgaLoadingTest.h; sourceTree = "<group>"; };
+		815F5861149DAB1400A89B1F /* TextureTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureTest.h; path = ../../../lib/renderer/unittest/TextureTest.h; sourceTree = "<group>"; };
+		815F5862149DAB2100A89B1F /* TextureAndShaderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TextureAndShaderTest.h; path = ../../../lib/renderer/unittest/TextureAndShaderTest.h; sourceTree = "<group>"; };
+		815F5863149DAB2100A89B1F /* VertexBufferTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexBufferTest.h; path = ../../../lib/renderer/unittest/VertexBufferTest.h; sourceTree = "<group>"; };
+		815F5864149DAB2100A89B1F /* VertexTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VertexTest.h; path = ../../../lib/renderer/unittest/VertexTest.h; sourceTree = "<group>"; };
 		816D005F14947F0D001391AB /* AssertTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssertTest.h; path = ../../../lib/gcl/gcl/unittest/AssertTest.h; sourceTree = "<group>"; };
 		816D006014947F0D001391AB /* CurveTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CurveTest.h; path = ../../../lib/gcl/gcl/unittest/CurveTest.h; sourceTree = "<group>"; };
 		816D006114947F0D001391AB /* ExceptionTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExceptionTest.h; path = ../../../lib/gcl/gcl/unittest/ExceptionTest.h; sourceTree = "<group>"; };
@@ -180,8 +196,13 @@
 		816D006814947F0D001391AB /* SafeCastTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SafeCastTest.h; path = ../../../lib/gcl/gcl/unittest/SafeCastTest.h; sourceTree = "<group>"; };
 		816D006914947F0D001391AB /* StringUtilTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StringUtilTest.h; path = ../../../lib/gcl/gcl/unittest/StringUtilTest.h; sourceTree = "<group>"; };
 		816D006A14947F0D001391AB /* WarningTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WarningTest.h; path = ../../../lib/gcl/gcl/unittest/WarningTest.h; sourceTree = "<group>"; };
+		816D21A1149D5E4800038648 /* libSDL.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSDL.a; path = "../../../../SDL/SDL1.3/Xcode-iPhoneOS/SDL/build/Debug-iphonesimulator/libSDL.a"; sourceTree = "<group>"; };
+		816D21A5149D63D200038648 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk/System/Library/Frameworks/AudioUnit.framework; sourceTree = DEVELOPER_DIR; };
+		816D21A7149D650F00038648 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk/System/Library/Frameworks/AudioToolbox.framework; sourceTree = DEVELOPER_DIR; };
+		816D21AC149D65BF00038648 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk/System/Library/Frameworks/QuartzCore.framework; sourceTree = DEVELOPER_DIR; };
 		81C0D8DD1494968900C2B1CA /* gcl */ = {isa = PBXFileReference; lastKnownFileType = folder; name = gcl; path = ../../../lib/gcl/gcl/gcl; sourceTree = "<group>"; };
 		81C1D829148C2D0D00C2FCA0 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator5.0.sdk/System/Library/Frameworks/OpenGLES.framework; sourceTree = DEVELOPER_DIR; };
+		81C322C2149D5B470043A138 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../lib/renderer/unittest/main.cpp; sourceTree = "<group>"; };
 		81C557E71494BF83002226A8 /* CameraTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CameraTest.h; path = ../../../lib/renderer/unittest/CameraTest.h; sourceTree = "<group>"; };
 		81C557E81494BF83002226A8 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../../../lib/renderer/unittest/data; sourceTree = "<group>"; };
 		81C557E91494BF83002226A8 /* FrameBufferTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FrameBufferTest.h; path = ../../../lib/renderer/unittest/FrameBufferTest.h; sourceTree = "<group>"; };
@@ -206,7 +227,6 @@
 				812A37E4148C1F4F00D9E98D /* Foundation.framework in Frameworks */,
 				812A37E6148C1F4F00D9E98D /* CoreGraphics.framework in Frameworks */,
 				812A37E8148C1F4F00D9E98D /* GLKit.framework in Frameworks */,
-				812A37EA148C1F4F00D9E98D /* OpenGLES.framework in Frameworks */,
 				81C1D82A148C2D0D00C2FCA0 /* OpenGLES.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -246,6 +266,7 @@
 			files = (
 				812A3873148C20CB00D9E98D /* Foundation.framework in Frameworks */,
 				81C1D82B148C2D0D00C2FCA0 /* OpenGLES.framework in Frameworks */,
+				815F585F149D911C00A89B1F /* libgcl.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +280,11 @@
 				812A3885148C20CB00D9E98D /* librenderer.a in Frameworks */,
 				81C1D82C148C2D0D00C2FCA0 /* OpenGLES.framework in Frameworks */,
 				81C557E61494BEED002226A8 /* libgcl.a in Frameworks */,
+				816D21A2149D5E4800038648 /* libSDL.a in Frameworks */,
+				816D21A3149D60FB00038648 /* CoreGraphics.framework in Frameworks */,
+				816D21A4149D60FF00038648 /* GLKit.framework in Frameworks */,
+				816D21A8149D650F00038648 /* AudioToolbox.framework in Frameworks */,
+				816D21AD149D65C000038648 /* QuartzCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,12 +321,14 @@
 		812A37E0148C1F4F00D9E98D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				816D21AC149D65BF00038648 /* QuartzCore.framework */,
+				816D21A7149D650F00038648 /* AudioToolbox.framework */,
+				816D21A5149D63D200038648 /* AudioUnit.framework */,
 				81C1D829148C2D0D00C2FCA0 /* OpenGLES.framework */,
 				812A37E1148C1F4F00D9E98D /* UIKit.framework */,
 				812A37E3148C1F4F00D9E98D /* Foundation.framework */,
 				812A37E5148C1F4F00D9E98D /* CoreGraphics.framework */,
 				812A37E7148C1F4F00D9E98D /* GLKit.framework */,
-				812A37E9148C1F4F00D9E98D /* OpenGLES.framework */,
 				812A380A148C1F5000D9E98D /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
@@ -450,6 +478,13 @@
 		812A3886148C20CB00D9E98D /* rendererTests */ = {
 			isa = PBXGroup;
 			children = (
+				815F5862149DAB2100A89B1F /* TextureAndShaderTest.h */,
+				815F5863149DAB2100A89B1F /* VertexBufferTest.h */,
+				815F5864149DAB2100A89B1F /* VertexTest.h */,
+				815F5861149DAB1400A89B1F /* TextureTest.h */,
+				815F5860149DA71900A89B1F /* TgaLoadingTest.h */,
+				816D21A1149D5E4800038648 /* libSDL.a */,
+				81C322C2149D5B470043A138 /* main.cpp */,
 				81C557E71494BF83002226A8 /* CameraTest.h */,
 				81C557E81494BF83002226A8 /* data */,
 				81C557E91494BF83002226A8 /* FrameBufferTest.h */,
@@ -599,6 +634,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				815F585D149D905000A89B1F /* PBXTargetDependency */,
 				812A3884148C20CB00D9E98D /* PBXTargetDependency */,
 			);
 			name = rendererTests;
@@ -716,7 +752,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+			shellScript = "# Run the unit tests in this test bundle.\ncd \"${BUILT_PRODUCTS_DIR}/rendererTests.octest\"\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -792,7 +828,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				812A388E148C20CC00D9E98D /* rendererTests.mm in Sources */,
+				816D21AE149D68C400038648 /* rendererTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -813,6 +849,11 @@
 			isa = PBXTargetDependency;
 			target = 812A3871148C20CB00D9E98D /* renderer */;
 			targetProxy = 812A3883148C20CB00D9E98D /* PBXContainerItemProxy */;
+		};
+		815F585D149D905000A89B1F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 812A3826148C1F8700D9E98D /* gcl */;
+			targetProxy = 815F585C149D905000A89B1F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1115,11 +1156,15 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "renderer/renderer-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
+					"/Users/francoiscoulombe/src/SDL/SDL1.3/Xcode-iPhoneOS/SDL/build/Debug-iphonesimulator/usr/local/include",
 					../../lib/renderer,
 					../../lib/gcl/gcl,
 				);
 				INFOPLIST_FILE = "rendererTests/rendererTests-Info.plist";
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../SDL/SDL1.3/Xcode-iPhoneOS/SDL/build/Debug-iphonesimulator\"",
+					/opt/local/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = ../../lib/renderer/unittest;
 				WRAPPER_EXTENSION = octest;
@@ -1137,11 +1182,15 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "renderer/renderer-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
+					"/Users/francoiscoulombe/src/SDL/SDL1.3/Xcode-iPhoneOS/SDL/build/Debug-iphonesimulator/usr/local/include",
 					../../lib/renderer,
 					../../lib/gcl/gcl,
 				);
 				INFOPLIST_FILE = "rendererTests/rendererTests-Info.plist";
-				LIBRARY_SEARCH_PATHS = /opt/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../SDL/SDL1.3/Xcode-iPhoneOS/SDL/build/Debug-iphonesimulator\"",
+					/opt/local/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = ../../lib/renderer/unittest;
 				WRAPPER_EXTENSION = octest;

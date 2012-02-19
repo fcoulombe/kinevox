@@ -21,7 +21,8 @@ public:
 private:
 	Material mMaterial;
 	//friend class GCLApplication;
-	static const VertexPNT square[4];
+	static const size_t NUM_VERTICES = 24;
+	static const VertexPNT cube[NUM_VERTICES];
 	static const VertexData data;
 
 

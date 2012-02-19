@@ -43,8 +43,9 @@ void Test()
 	Texture texture("data/mushroom.tga");
 	texture.Bind();
 
-
+#ifndef OS_IPHONE
 	texture.Save("RenderTargetTest.tga");
+#endif
 	//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 
 	TextureResourceManager::Terminate();

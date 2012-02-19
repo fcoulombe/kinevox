@@ -39,6 +39,8 @@ void Test()
 	AssertMsg_Test(fp, "data/mushroom.png");
 
 	TextureResource::TextureData data;
+    
+#ifndef OS_IPHONE
 	TextureResource::LoadPng(fp, data);
 	Assert_Test(data.imageData);
 
@@ -46,7 +48,7 @@ void Test()
 	Assert_Test(data.mBytePerPixel==4);
 	Assert_Test(data.mWidth==512);
 	Assert_Test(data.mHeight==512);
-
+#endif
 	fclose(fp);
 }
 }

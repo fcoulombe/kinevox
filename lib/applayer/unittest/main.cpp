@@ -6,6 +6,7 @@
 #include "GCLRenderObjectWithMaterialTest.h"
 #include "GCLRenderObjectMultipleRenderTest.h"
 #include "GCLRenderTargetTest.h"
+#include "SpriteTest.h"
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -17,15 +18,19 @@ int main(int /*argc*/, char ** /*argv*/)
 		GCLRenderTargetTest::Test();
 		GCLRenderObjectWithMaterialTest::Test();
 		GCLRenderObjectMultipleRenderTest::Test();
+		SpriteTest::Test();
 	}
 	catch (GCLException &e)
 	{
 		std::stringstream str;
 		str << "[FAILED] \n";
-		str << e.what();
+		std::string what = e.what();
+		str << what;
 
 		str << std::endl;
-		std::cerr << str.str();
+		std::string finalOutput;
+		finalOutput = str.str();
+		std::cerr << finalOutput;
 		return -1;
 	}
 	catch (std::exception &e)

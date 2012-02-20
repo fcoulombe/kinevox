@@ -81,8 +81,8 @@ void Grid::CreateVertexData()
         }
     }
   mVertexData.mVertexData = (const void *)vertexData;
-  mVertexData.vertexCount = 4*6*X_DIMENSION*Y_DIMENSION*Z_DIMENSION;
-  mVertexData.vertexType = VertexP::GetComponentType();
+  mVertexData.mVertexCount = 4*6*X_DIMENSION*Y_DIMENSION*Z_DIMENSION;
+  mVertexData.mVertexType = VertexP::GetComponentType();
 }
 
 const VertexData &Grid::GetVertexData() const

@@ -28,7 +28,7 @@ void Material::LoadMaterial(const char *filename)
 		delete mTexture;
 		mTexture=NULL;
 	}
-	const std::string fullFileName(std::string("data/") + std::string(filename) + std::string(".material"));
+	const std::string fullFileName(std::string(MATERIAL_PATH) + std::string(filename) + std::string(".mat"));
 	std::ifstream fp(fullFileName.c_str());
 	std::stringstream s;
 	s << "Failed loading the file: " << fullFileName;
@@ -45,7 +45,7 @@ void Material::LoadMaterial(const char *filename)
 	char texture[BUFFER_SIZE];
 	fp.getline(buffer, BUFFER_SIZE);
 	sscanf(buffer, "texture: %s", texture);
-	//texture: data/mushroom.tga
+	//texture: TEXTURE_PATH/mushroomtga.tga
 
 #if USE_64BIT_PLATFORM
 #define FLOAT_FLAG "%lf"

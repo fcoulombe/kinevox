@@ -40,7 +40,7 @@ void Test()
 	TextureResourceManager::Initialize();
 	GLRenderer renderer;
 
-	Texture texture("data/mushroom.tga");
+	Texture texture(TEXTURE_PATH"mushroomtga.tga");
 	texture.Bind();
 
 #ifndef OS_IPHONE

@@ -2,8 +2,12 @@
 #include <stdint.h>
 #include <map>
 
+#include "renderer/ResourceManagerConfig.h"
+
 namespace GCL
 {
+
+
 class Resource;
 class ResourceManager
 {

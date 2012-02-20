@@ -35,8 +35,8 @@ namespace PngLoadingTest
 void Test()
 {
 	TEST_START
-	FILE *fp = fopen("data/mushroom.png", "rb");
-	AssertMsg_Test(fp, "data/mushroom.png");
+	FILE *fp = fopen(TEXTURE_PATH"mushroompng.png", "rb");
+	AssertMsg_Test(fp, TEXTURE_PATH"mushroompng.png");
 
 	TextureResource::TextureData data;
     

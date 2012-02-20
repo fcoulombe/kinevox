@@ -36,14 +36,14 @@ void Test()
 	TextureResourceManager::Initialize();
 
 	{
-		const Resource *tgaResource = TextureResourceManager::Instance().LoadResource("data/mushroom.tga");
+		const Resource *tgaResource = TextureResourceManager::Instance().LoadResource(TEXTURE_PATH"mushroomtga.tga");
 		Assert_Test(tgaResource);
 
 		//test resource sharing
-		const Resource *tgaResource2 = TextureResourceManager::Instance().LoadResource("data/mushroom.tga");
+		const Resource *tgaResource2 = TextureResourceManager::Instance().LoadResource(TEXTURE_PATH"mushroomtga.tga");
 		Assert_Test(tgaResource == tgaResource2);
 #ifndef OS_IPHONE
-		const Resource *pngResource = TextureResourceManager::Instance().LoadResource("data/mushroom.png");
+		const Resource *pngResource = TextureResourceManager::Instance().LoadResource(TEXTURE_PATH"mushroompng.png");
 		Assert_Test(pngResource);
 #endif
 	}

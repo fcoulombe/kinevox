@@ -28,6 +28,7 @@
 #include "RenderObjectWithMaterialTest.h"
 #include "ResourceTest.h"
 #include "ShaderTest.h"
+#include "SpriteTest.h"
 #include "TextureTest.h"
 #include "TextureAndShaderTest.h"
 #include "TgaLoadingTest.h"
@@ -59,6 +60,8 @@ int main(int /*argc*/, char **argv)
       TextureTest::Test();
       TextureAndShaderTest::Test();
       MaterialTest::Test();
+
+      SpriteTest::Test();
 
       RenderObjectTest::Test();
       RenderObjectWithMaterialTest::Test();

@@ -6,7 +6,6 @@
 #include "GCLRenderObjectWithMaterialTest.h"
 #include "GCLRenderObjectMultipleRenderTest.h"
 #include "GCLRenderTargetTest.h"
-#include "SpriteTest.h"
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -18,7 +17,6 @@ int main(int /*argc*/, char ** /*argv*/)
 		GCLRenderTargetTest::Test();
 		GCLRenderObjectWithMaterialTest::Test();
 		GCLRenderObjectMultipleRenderTest::Test();
-		SpriteTest::Test();
 	}
 	catch (GCLException &e)
 	{

@@ -1,4 +1,4 @@
-#include "applayer/Sprite.h"
+#include "renderer/Sprite.h"
 #include <gcl/Assert.h>
 #include <renderer/ResourceManagerConfig.h>
 #include <renderer/Texture.h>
@@ -55,4 +55,10 @@ void Sprite::Pause()
 void Sprite::Rewind()
 {
 	mCurrentFrame = 0;
+}
+
+
+void Sprite::Update()
+{
+
 }

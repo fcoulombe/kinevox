@@ -1,7 +1,7 @@
 #pragma once
 
 #include <gcl/Point4.h>
-
+#include "renderer/ResourceManagerConfig.h"
 namespace GCL
 {
 

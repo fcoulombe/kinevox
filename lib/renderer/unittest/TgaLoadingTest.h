@@ -46,14 +46,33 @@ using namespace GCL;
 
 namespace TgaLoadingTest
 {
-    void Test();
-    void Test()
+void Test();
+void Test()
 {
 	TEST_START
 
+	//tga uncompressed
 	{
-		std::fstream fp(TEXTURE_PATH"mushroomtga.tga", std::fstream::binary|std::fstream::in);
-		AssertMsg_Test( fp.good(), TEXTURE_PATH"mushroomtga.tga");
+		const char *fullFileName = TEXTURE_PATH"mushroomtga.tga";
+		std::fstream fp(fullFileName, std::fstream::binary|std::fstream::in);
+		AssertMsg_Test( fp.good(), fullFileName);
+
+		TextureResource::TextureData data;
+		TextureResource::LoadTga(fp, data);
+		fp.close();
+		Assert_Test(data.imageData);
+		Assert_Test(data.mBitdepth==8);
+		Assert_Test(data.mBytePerPixel==4);
+		Assert_Test(data.mWidth==512);
+		Assert_Test(data.mHeight==512);
+		TextureResource::Unload(data);
+	}
+
+	//tga compressed
+	{
+		const char *fullFileName =TEXTURE_PATH"mushroomcompressedtga.tga";
+		std::fstream fp(fullFileName, std::fstream::binary|std::fstream::in);
+		AssertMsg_Test( fp.good(), fullFileName);
 
 		TextureResource::TextureData data;
 		TextureResource::LoadTga(fp, data);

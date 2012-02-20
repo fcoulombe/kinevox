@@ -20,7 +20,6 @@ int main(int /*argc*/, char ** /*argv*/)
 
 	try
 	{
-
 		GCLApplication::Initialize();
 		Camera myCamera;
 		GCLApplication::SetViewportCamera(myCamera);
@@ -30,22 +29,25 @@ int main(int /*argc*/, char ** /*argv*/)
 		renderObject.SetPosition(0,0,-10.0);
 
 
-		bool isRunning = true;
 
+		bool isRunning = true;
+		Real x = 0.0;
+		Real y = 0.0;
 		while (isRunning)
 		{
 			GCLApplication::Update();
 			if (Input::IsKeyUp(SDLK_ESCAPE))
 				isRunning=false;
+
 			if (Input::IsKeyUp(SDLK_UP))
-				myCamera.MoveForward();
+				x+=0.01;
 			if (Input::IsKeyUp(SDLK_DOWN))
-				myCamera.MoveBackward();
+				x-=0.01;
 
 			if (Input::IsKeyUp(SDLK_LEFT))
-				myCamera.TurnLeft();
+				y+=0.01;
 			if (Input::IsKeyUp(SDLK_RIGHT))
-				myCamera.TurnRight();
+				y-=0.01;
 
 			if (Input::IsKeyUp(SDLK_PAGEUP))
 				myCamera.TiltUp();
@@ -67,7 +69,11 @@ int main(int /*argc*/, char ** /*argv*/)
 			}
 
 
+			//x +=0.01;
+			//y+=0.01;
+			renderObject.SetOrientation(x,y,0.0);
 
+			std::cout << renderObject.GetTransform() << std::endl;
 
 			GCLApplication::Render();
 			usleep(100);

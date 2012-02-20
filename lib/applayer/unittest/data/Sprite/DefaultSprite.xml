@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
 <gclsprite>
     
-    <header width="64" height="64" frame_count="64"/>
+    <header width="64" height="64" frame_count="128"/>
     <textures>
         <texture filename="ExampleSprite1.tga"/>
         <texture filename="ExampleSprite2.tga"/>
-    <textures> 
+    </textures> 
     
 </gclsprite>

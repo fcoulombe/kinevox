@@ -99,6 +99,10 @@ const uint8_t *Texture::GetTextureFromVRAM() const
 }
 
 #include <fstream>
+//franky disable strict aliasing warning for this save funcgtion
+#if defined(__GNUC__)
+#  pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#endif
 //TODO: push this in the texture resource
 void Texture::Save(const char *filename)
 {

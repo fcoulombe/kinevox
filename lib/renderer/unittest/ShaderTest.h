@@ -144,7 +144,9 @@ void Test()
 		AssertMsg_Test(loc == ATTRIB_NORMAL, s.str().c_str());
 #endif
 
+		renderer.PreRender();
 		renderer.Render(RenderObjectList());
+		renderer.PostRender();
 		Shader::ResetDefault();
 	}
 
@@ -160,7 +162,9 @@ void Test()
 
 		for (size_t i=0; i<100; ++i)
 		{
+			renderer.PreRender();
 			renderer.Render(renderList);
+			renderer.PostRender();
 			usleep(10);
 		}
 

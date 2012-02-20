@@ -21,7 +21,10 @@ public:
 	GLRenderer();
 	~GLRenderer();
 	bool Update();
+	void PreRender();
+	void PostRender();
 	virtual void Render(const RenderObjectList &renderObjectList);
+	virtual void Render(const SpriteList &spriteList);
 	void Render(uint8_t *rgb_front, uint8_t *depth_front);
 	void RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth);
 

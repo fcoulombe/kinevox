@@ -86,7 +86,9 @@ void Test()
 		{
 			FrameBuffer frameBuffer(texture, depthRenderBuffer);
 			frameBuffer.Bind();
+			renderer.PreRender();
 			renderer.Render(RenderObjectList());
+			renderer.PostRender();
 			FrameBuffer::ResetDefault();
 		}
 		catch (GCLException &e)
@@ -119,7 +121,9 @@ void Test()
 		{
 			FrameBuffer frameBuffer(texture, depthRenderBuffer);
 			frameBuffer.Bind();
+			renderer.PreRender();
 			renderer.Render(renderObjectList);
+			renderer.PostRender();
 			FrameBuffer::ResetDefault();
 		}
 		catch (GCLException &e)

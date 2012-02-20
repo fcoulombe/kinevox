@@ -77,7 +77,9 @@ void Test()
 	MyRenderObject obj;
 	RenderObjectList renderObjectList;
 	renderObjectList.push_back(&obj);
+	renderer.PreRender();
 	renderer.Render(renderObjectList);
+	renderer.PostRender();
 
 
 	        /*target.Save("TextureAndShaderTest.tga");

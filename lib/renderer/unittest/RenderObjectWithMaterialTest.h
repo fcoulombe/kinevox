@@ -81,7 +81,9 @@ void Test()
 	Material material("Default");
 	material.Bind();
 
+	renderer.PreRender();
 	renderer.Render(objList);
+	renderer.PostRender();
 	}
 
 	TextureResourceManager::Terminate();

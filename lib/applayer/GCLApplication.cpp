@@ -37,7 +37,9 @@ void GCLApplication::Update()
 void GCLApplication::Render()
 {
 	GCLAssert(mRenderer);
+	mRenderer->PreRender();
 	mRenderer->Render(mRenderObjectList);
+	mRenderer->PostRender();
 }
 
 void GCLApplication::SetViewportCamera(Camera &camera)

@@ -70,7 +70,11 @@ private:
 	Camera *mCamera;
 	ViewPort mViewPort;
 
-	std::string mVendor, mVersion,mRenderer, mShadingLanguageVersion, mGlewVersion;
+	std::string mVendor,
+				mVersion,
+				mRenderer,
+				mShadingLanguageVersion,
+				mGlewVersion;
 
 	GLExtensionList mExtensions;
 

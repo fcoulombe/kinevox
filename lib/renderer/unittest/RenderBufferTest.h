@@ -74,7 +74,9 @@ void Test()
 		size_t height = renderer.GetViewPort().GetHeight();
 		RenderBuffer target(width, height);;
 		target.Bind();
+		renderer.PreRender();
 		renderer.Render(RenderObjectList());
+		renderer.PostRender();
 	}
 
 	{
@@ -87,7 +89,9 @@ void Test()
 	    MyRenderObject obj;
 	    RenderObjectList renderObjectList;
 	    renderObjectList.push_back(&obj);
+		renderer.PreRender();
 		renderer.Render(renderObjectList);
+		renderer.PostRender();
 	}
 
 	Shader shader;

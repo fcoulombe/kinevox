@@ -50,7 +50,9 @@ void Test()
 	RenderObjectList renderList;
 	renderList.push_back(&grid);
 
+	renderer->PreRender();
 	renderer->Render(renderList);
+	renderer->PostRender();
 
 	delete renderer;
 	TextureResourceManager::Terminate();

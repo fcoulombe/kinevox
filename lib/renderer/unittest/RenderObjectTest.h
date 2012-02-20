@@ -132,8 +132,10 @@ void Test()
 	obj.SetTransform(Matrix44::IDENTITY);
 
 	}
-	//test render
+
+	renderer.PreRender();
 	renderer.Render(objList);
+	renderer.PostRender();
 
 	TextureResourceManager::Terminate();
 

@@ -7,7 +7,11 @@ dependencies = [ ]
 incPath = []
 lib = []
 
-d = env.Install(env.Dir("$INSTALL_DIR/example"), data.srcnode())
+builtData = env.Data([data])
+
+d = env.RSync(env.Dir("$INSTALL_DIR/example/data/"), data)
+env.Depends(d, builtData)
+env.AlwaysBuild(d)
 ali = env.Alias("@example_data", d)
 
 env.AddComponent(name, None, incPath, lib, dependencies)

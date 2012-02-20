@@ -1,5 +1,5 @@
-shader: mushroom
-texture: data/mushroom.tga
+shader: default
+texture: data/Texture/mushroomtga.tga
 ambient: 0.3 0.3 0.3 1.0
 diffuse: 0.6 0.6 0.6 1.0
 specular: 0.3 0.3 0.3 1.0

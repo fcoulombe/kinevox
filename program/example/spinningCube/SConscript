@@ -1,0 +1,12 @@
+Import('env')
+
+
+
+dependencies = ['applayer', 'example_data']
+
+src_files = env.Glob("src/*.cpp")
+prog = env.KProgram("spinningCube", src_files, dependencies)
+finalProduct = env.Install(env.Dir("$INSTALL_DIR/example"), prog)
+env.Alias("@SpinningCube",finalProduct) 
+env.Depends(env.Alias("@SpinningCube"), env.Alias("@example_data"))
+Default(finalProduct)

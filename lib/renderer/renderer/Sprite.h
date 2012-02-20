@@ -20,6 +20,7 @@ class Sprite
 public:
 	Sprite(const char *filename="DefaultSprite");
 
+	void Update();
 	void Play();
 	void Pause();
 	void Rewind();

@@ -22,8 +22,7 @@
 #pragma once
 #include <sstream>
 
-#include <applayer/GCLApplication.h>
-#include <applayer/Sprite.h>
+#include <renderer/Sprite.h>
 
 #include <gcl/UnitTest.h>
 
@@ -36,9 +35,13 @@ void Test()
 {
 	TEST_START
 
-	GCLApplication::Initialize();
+
+	TextureResourceManager::Initialize();
+	GLRenderer renderer;
 
 	Sprite obj;
+	SpriteList spriteList;
+	spriteList.push_back(&obj);
 	Assert_Test(obj.GetWidth() == 64);
 
 	Assert_Test(obj.GetHeight() == 64);
@@ -48,15 +51,18 @@ void Test()
 
 	for (size_t i=0;i<100; ++i)
 	{
-	GCLApplication::Update();
-	GCLApplication::Render();
-	usleep(1);
+		obj.Update();
+		renderer.PreRender();
+		renderer.Render(spriteList);
+		renderer.PostRender();
+		usleep(1);
 	}
 
 	obj.Pause();
 	obj.Rewind();
 
+	spriteList.clear();
+	TextureResourceManager::Terminate();
 
-	GCLApplication::Terminate();
 }
 }

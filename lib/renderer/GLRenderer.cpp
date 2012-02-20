@@ -36,24 +36,24 @@ void GLRenderer::Init3DState()
 #else
 	int flags = SDL_OPENGL;
 #endif
-    
+
 #if 0 //defined(OS_IPHONE)
-    SDL_Window *window;
-    SDL_Renderer *r;
-    /* create window and renderer */
-    window =
-    SDL_CreateWindow(NULL, 0, 0, width, height,
-                     SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-    if (!window) {
-        printf("Could not initialize Window\n");
-        return 1;
-    }
-    
-    r = SDL_CreateRenderer(window, -1, 0);
-    if (!r) {
-        printf("Could not create renderer\n");
-        return 1;
-    }
+	SDL_Window *window;
+	SDL_Renderer *r;
+	/* create window and renderer */
+	window =
+			SDL_CreateWindow(NULL, 0, 0, width, height,
+					SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
+	if (!window) {
+		printf("Could not initialize Window\n");
+		return 1;
+	}
+
+	r = SDL_CreateRenderer(window, -1, 0);
+	if (!r) {
+		printf("Could not create renderer\n");
+		return 1;
+	}
 
 #else
 	info = SDL_GetVideoInfo( );
@@ -103,7 +103,7 @@ void GLRenderer::Init3DState()
 
 void GLRenderer::Init2DState()
 {
-    
+
 #if !defined(ES1) && !defined(ES2)
 	int sdlInitSuccessful = SDL_Init(SDL_INIT_VIDEO);
 	GCLAssert(sdlInitSuccessful>= 0);
@@ -168,8 +168,8 @@ void GLRenderer::Init2DState()
 	glMatrixMode(GL_MODELVIEW); glErrorCheck();
 	glLoadIdentity(); glErrorCheck();
 #else
-    
-    GCLAssert(false && "TBD");
+
+	GCLAssert(false && "TBD");
 #endif
 
 }
@@ -211,10 +211,20 @@ bool GLRenderer::Update()
 }
 
 
-void GLRenderer::Render(const RenderObjectList &renderObjectList)
+void GLRenderer::PreRender()
 {
 	glClearColor(0.0, 0.0, 1.0, 0.0); glErrorCheck();
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); glErrorCheck();
+
+}
+void GLRenderer::PostRender()
+{
+	SDL_GL_SwapBuffers();glErrorCheck();
+
+}
+
+void GLRenderer::Render(const RenderObjectList &renderObjectList)
+{
 
 	mCamera->Update();
 
@@ -266,25 +276,25 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		}
 		break;
 		case ePOSITION|eNORMAL:
-		{
-			VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.mVertexCount);
-			buffer.Render();
-		}
-		break;
-		case ePOSITION|eTEXTURE_COORD:
-		{
-			VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.mVertexCount);
-			buffer.Render();
-		}
-		break;
-		case ePOSITION|eNORMAL|eTEXTURE_COORD:
-		{
-
-			VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.mVertexCount);
-			buffer.Render();
-		}
-		break;
+	{
+		VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.mVertexCount);
+		buffer.Render();
 	}
+	break;
+		case ePOSITION|eTEXTURE_COORD:
+	{
+		VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.mVertexCount);
+		buffer.Render();
+	}
+	break;
+		case ePOSITION|eNORMAL|eTEXTURE_COORD:
+	{
+
+		VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.mVertexCount);
+		buffer.Render();
+	}
+	break;
+		}
 #endif
 	}
 
@@ -294,7 +304,27 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		}
 	}*/
 
-	SDL_GL_SwapBuffers();glErrorCheck();
+}
+
+void GLRenderer::Render(const SpriteList &spriteList)
+{
+	for (size_t i=0;  i<spriteList.size(); ++i)
+	{
+		glPushMatrix();glErrorCheck();
+		glTranslatef(0.0,0.0,-10.0);
+
+		glBegin (GL_TRIANGLE_STRIP);
+		glTexCoord2f (0.0, 0.0);
+		glVertex3f (-0.5, -0.5, 0.0);
+		glTexCoord2f (1.0, 0.0);
+		glVertex3f (0.5, -0.5, 0.0);
+		glTexCoord2f (0.0, 1.0);
+		glVertex3f (-0.5, 0.5, 0.0);
+		glTexCoord2f (1.0, 1.0);
+		glVertex3f (0.5, 0.5, 0.0);
+		glEnd ();
+		glPopMatrix();glErrorCheck();
+	}
 }
 
 
@@ -318,7 +348,7 @@ void GLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height, si
 	glEnd(); glErrorCheck();
 	isRenderingExtra = true;
 #else
-    GCLAssert(false &&" TBD");
+	GCLAssert(false &&" TBD");
 #endif
 
 }
@@ -356,7 +386,7 @@ void GLRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
 
 	SDL_GL_SwapBuffers();glErrorCheck();
 #else 
-    GCLAssert(false && "TBD");
+	GCLAssert(false && "TBD");
 #endif
 
 }

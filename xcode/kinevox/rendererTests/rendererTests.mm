@@ -43,7 +43,7 @@
     currentpath = [filemgr currentDirectoryPath];
     
     NSLog (@"Current directory is %@", currentpath);
-    NSString *filePath = [[NSBundle mainBundle] pathForResource:@"data/mushroom" ofType:@"tga"];  
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:@TEXTURE_PATH"mushroom" ofType:@"tga"];  
     NSLog (@"Current directory is %@", filePath);
 }
 

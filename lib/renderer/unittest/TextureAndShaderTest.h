@@ -38,23 +38,23 @@ public:
 	{}
 	const VertexData &GetVertexData() const
 	{
-		static const   VertexPNT square[4] = {
-				{WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
-				{WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
-				{WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
-				{WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
-		};
-
-		static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
 		return data;
-
 	}
 	const Material &GetMaterial() const { return mMaterial; }
 private:
 	Material mMaterial;
-
+	static const VertexData data;
 
 };
+
+static const   VertexPNT square[4] = {
+		{WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
+		{WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
+		{WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
+		{WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
+};
+
+const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
 
     bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
@@ -71,7 +71,7 @@ void Test()
 	Shader shader;
 	shader.Bind();
 
-	Texture texture("data/mushroom.tga");
+	Texture texture(TEXTURE_PATH"mushroomtga.tga");
 	texture.Bind();
 
 	MyRenderObject obj;

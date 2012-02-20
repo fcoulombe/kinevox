@@ -21,6 +21,7 @@
 #include "GeomUtilTest.h"
 #include "GLRendererTest.h"
 #include "MaterialTest.h"
+#include "MeshTest.h"
 #include "PngLoadingTest.h"
 #include "RenderBufferTest.h"
 #include "RenderObjectTest.h"
@@ -65,6 +66,7 @@ int main(int /*argc*/, char **argv)
       RenderBufferTest::Test();
       FrameBufferTest::Test();
       GeomUtilTest::Test();
+      MeshTest::Test();
 
   }
   catch (GCLException & e)

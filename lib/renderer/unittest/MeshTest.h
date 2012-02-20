@@ -22,67 +22,26 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
-#include <renderer/Material.h>
+#include <renderer/Mesh.h>
 
 using namespace GCL;
-namespace RenderObjectWithMaterialTest
+namespace MeshTest
 {
 
-class MyRenderObject : public RenderObject
-{
-public:
-	MyRenderObject()
-	: RenderObject(Matrix44(true)) //identity
-	{}
 
-	const VertexData &GetVertexData() const
-	{
-
-		return data;
-	}
-	void SetOrientation(Real x,Real y,Real z)
-	{
-		mTransform.SetRotationX(x);
-		mTransform.SetRotationY(y);
-		mTransform.SetRotationZ(z);
-	}
-	void SetPosition(const WorldPoint3 &position)
-	{
-		mTransform.SetPosition(position);
-	}
-	const Material &GetMaterial() const { return mMaterial; }
-private:
-	static const VertexData data;
-	Material mMaterial;
-};
-static const   VertexPNT square[4] = {
-			{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-			{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-			{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-			{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
-
-const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
     void Test();
 void Test()
 {
 	TEST_START
 
 	TextureResourceManager::Initialize();
-
+	GLRenderer render;
 
 	{
-	GLRenderer renderer;
-
-	MyRenderObject obj;
-	RenderObjectList objList;
-
-	objList.push_back(&obj);
-
-	Material material("Default");
-	material.Bind();
-
-	renderer.Render(objList);
+		Mesh myMesh("data/ExampleMesh.gcm");
+		myMesh.Render();
 	}
+
 
 	TextureResourceManager::Terminate();
 }

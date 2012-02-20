@@ -26,6 +26,22 @@
 #include <gcl/UnitTest.h>
 #include <renderer/TextureResource.h>
 
+
+#include <ctype.h>
+#include <math.h>
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <wchar.h>
+#include <wctype.h>
+#include <unistd.h>
+
+#include <algorithm>
+#include <ostream>  // NOLINT
+#include <sstream>
+#include <vector>
+
+
 using namespace GCL;
 
 namespace TgaLoadingTest
@@ -36,8 +52,8 @@ namespace TgaLoadingTest
 	TEST_START
 
 	{
-		std::fstream fp("data/mushroom.tga", std::fstream::binary|std::fstream::in);
-		AssertMsg_Test( fp.good(), "data/mushroom.tga");
+		std::fstream fp(TEXTURE_PATH"mushroomtga.tga", std::fstream::binary|std::fstream::in);
+		AssertMsg_Test( fp.good(), TEXTURE_PATH"mushroomtga.tga");
 
 		TextureResource::TextureData data;
 		TextureResource::LoadTga(fp, data);
@@ -51,8 +67,8 @@ namespace TgaLoadingTest
 	}
 
 	{
-		std::fstream fp("data/texture.raw", std::fstream::binary|std::fstream::in);
-		AssertMsg_Test( fp.good(), "data/texture.raw");
+		std::fstream fp(TEXTURE_PATH"texture.raw", std::fstream::binary|std::fstream::in);
+		AssertMsg_Test( fp.good(), TEXTURE_PATH"texture.raw");
 
 
 		TextureResource::TextureData data;

@@ -38,27 +38,26 @@ public:
 	{}
 	const VertexData &GetVertexData() const
 	{
-		static const   VertexPNT square[4] = {
+		return data;
+	}
+	const Material &GetMaterial() const { return mMaterial; }
+private:
+	static const VertexData data;
+	Material mMaterial;
+};
+static const   VertexPNT square[4] = {
 				{WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
 				{WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
 				{WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
 				{WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
 		};
-		static const VertexData data = {&square, 4, VertexPNT::GetComponentType()};
-		return data;
-
-	}
-	const Material &GetMaterial() const { return mMaterial; }
-private:
-	Material mMaterial;
-};
-
+const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
     
     void Test();
 void Test()
 {
 	TEST_START
-    #ifndef ES1
+    #ifndef ENABLE_SHADERS
 	TextureResourceManager::Initialize();
 	{
 		GLRenderer renderer;
@@ -104,7 +103,7 @@ void Test()
 #endif
 
 
-		Texture tex("data/mushroom.tga");
+		Texture tex(TEXTURE_PATH"mushroomtga.tga");
 		tex.Bind();
 		shader.SetTextureSampler(tex);
 

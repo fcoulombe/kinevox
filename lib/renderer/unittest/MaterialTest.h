@@ -35,6 +35,7 @@ void Test()
 	TEST_START
 
 	TextureResourceManager::Initialize();
+	GLRenderer render;
 
 	{
 	Material material("Default");

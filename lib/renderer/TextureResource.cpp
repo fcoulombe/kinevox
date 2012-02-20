@@ -81,8 +81,9 @@ void TextureResource::LoadTga(std::istream& fp, TextureData &data)
 	//check if header is compressed
 	else if(memcmp(TGACompressedHeader, &header, sizeof(TGAHeader)) == 0)
 	{
+
 		TGA tga;
-		fp.read((char*)&tga.header, sizeof(TGAHeader));
+		fp.read((char*)&tga.header, sizeof(tga.header));
 
 		data.mWidth  = tga.width = tga.header[1] * 256 + tga.header[0];
 		data.mHeight = tga.height = tga.header[3] * 256 + tga.header[2];

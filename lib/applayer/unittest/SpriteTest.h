@@ -39,9 +39,22 @@ void Test()
 	GCLApplication::Initialize();
 
 	Sprite obj;
+	Assert_Test(obj.GetWidth() == 64);
 
+	Assert_Test(obj.GetHeight() == 64);
+	Assert_Test(obj.GetFrameCount() == 128);
+
+	obj.Play();
+
+	for (size_t i=0;i<100; ++i)
+	{
 	GCLApplication::Update();
 	GCLApplication::Render();
+	usleep(1);
+	}
+
+	obj.Pause();
+	obj.Rewind();
 
 
 	GCLApplication::Terminate();

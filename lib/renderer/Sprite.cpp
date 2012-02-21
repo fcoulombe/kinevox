@@ -71,8 +71,12 @@ void Sprite::Render() const
 	//figure out what is the texture coordinate for our current frame
 
 	const Texture &firstTexture = *(mTextureList[0]);
-	size_t framePerWidth = firstTexture.GetWidth()/mHeader.width;
-	size_t rowPerTexture = firstTexture.GetHeight()/mHeader.height;
+
+	//we use the size of the first texture to detemrine everything else
+	size_t width = firstTexture.GetWidth();
+	size_t height = firstTexture.GetHeight();
+	size_t framePerWidth = width/mHeader.width;
+	size_t rowPerTexture = height/mHeader.height;
 
 	//size_t offset = mHeader.width*mCurrentFrame;
 	size_t whatRow = mCurrentFrame/framePerWidth;
@@ -82,8 +86,8 @@ void Sprite::Render() const
 	whatRow = whatRow- (whatTexture*rowPerTexture);
 
 	WorldPoint2 topTextureCoord, bottomTextureCoord;
-	Real widthRatio = mHeader.width/Real(firstTexture.GetWidth());
-	Real heightRatio = mHeader.height/Real(firstTexture.GetHeight());
+	Real widthRatio = mHeader.width/Real(width);
+	Real heightRatio = mHeader.height/Real(height);
 	topTextureCoord.x = whatCol*widthRatio;
 	topTextureCoord.y = whatRow*heightRatio;
 	bottomTextureCoord.x = topTextureCoord.x +widthRatio;
@@ -95,23 +99,25 @@ void Sprite::Render() const
 	mTextureList[whatTexture]->Bind();
 	glBegin (GL_TRIANGLE_STRIP);
 #if 1
+	Real halfWidth = width/2.0;
+	Real halfHeight = height/2.0;
 	glTexCoord2f (topTextureCoord.x, topTextureCoord.y);
-	glVertex3f (-0.5+mPosition.x, -0.5+mPosition.y, 0.0);
+	glVertex3f (-halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
 	glTexCoord2f (bottomTextureCoord.x, topTextureCoord.y);
-	glVertex3f (0.5+mPosition.x, -0.5+mPosition.y, 0.0);
+	glVertex3f (halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
 	glTexCoord2f (topTextureCoord.x, bottomTextureCoord.y);
-	glVertex3f (-0.5+mPosition.x, 0.5+mPosition.y, 0.0);
+	glVertex3f (-halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
 	glTexCoord2f (bottomTextureCoord.x, bottomTextureCoord.y);
-	glVertex3f (0.5+mPosition.x, 0.5+mPosition.y, 0.0);
+	glVertex3f (halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
 #else
 	glTexCoord2f (0.0, 0.0);
-			glVertex3f (-0.5, -0.5, 0.0);
+			glVertex3f (-5, -5, 0.0);
 			glTexCoord2f (1.0, 0.0);
-			glVertex3f (0.5, -0.5, 0.0);
+			glVertex3f (5, -5, 0.0);
 			glTexCoord2f (0.0, 1.0);
-			glVertex3f (-0.5, 0.5, 0.0);
+			glVertex3f (-5, 5, 0.0);
 			glTexCoord2f (1.0, 1.0);
-			glVertex3f (0.5, 0.5, 0.0);
+			glVertex3f (5, 5, 0.0);
 
 #endif
 	glEnd ();

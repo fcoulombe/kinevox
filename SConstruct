@@ -201,6 +201,7 @@ sconsFilesList = [
 "./program/example/basicTextureMapping/SConscript",
 "./program/example/spinningCube/SConscript",
 "./program/example/spriteExample/SConscript",
+"./program/arkanoid/SConscript",
 "./program/kinevox/SConscript",
 ]
 if GetOption('genValgrindSuppressions'):

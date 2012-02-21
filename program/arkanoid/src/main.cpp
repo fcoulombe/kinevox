@@ -39,14 +39,14 @@ int main(int /*argc*/, char ** /*argv*/)
 				isRunning=false;
 
 			if (Input::IsKeyUp(SDLK_UP))
-				y+=0.01;
+				y+=1.;
 			if (Input::IsKeyUp(SDLK_DOWN))
-				y-=0.01;
+				y-=1.;
 
 			if (Input::IsKeyUp(SDLK_LEFT))
-				x-=0.01;
+				x-=1.;
 			if (Input::IsKeyUp(SDLK_RIGHT))
-				x+=0.01;
+				x+=1.;
 
 			if (Input::IsKeyUp(SDLK_PAGEUP))
 				myCamera.TiltUp();

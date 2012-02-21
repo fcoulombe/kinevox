@@ -47,6 +47,7 @@ void Test()
 	Assert_Test(obj.GetHeight() == 64);
 	Assert_Test(obj.GetFrameCount() == 128);
 
+	obj.SetPosition(WorldPoint3(320.0, 240.0, 0.0));
 	obj.Play();
 
 	for (size_t i=0;i<100; ++i)

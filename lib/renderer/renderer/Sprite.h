@@ -34,7 +34,6 @@ public:
 	void SetPosition(const WorldPoint3 &position)  	{mPosition = position;	}
 private:
 	void LoadSprite(const char *filename);
-	Material mMaterial;
 	std::vector<Texture*> mTextureList;
 
 	SpriteDataHeader mHeader;

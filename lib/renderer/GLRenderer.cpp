@@ -226,7 +226,6 @@ void GLRenderer::PostRender()
 
 void GLRenderer::Render(const RenderObjectList &renderObjectList)
 {
-
 	mCamera->Update();
 
 	const Matrix44 &projection = mCamera->GetProjection();
@@ -309,34 +308,38 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 
 void GLRenderer::Render(const SpriteList &spriteList)
 {
-
-	mCamera->Update();
-
-	const Matrix44 &projection = mCamera->GetProjection();
 #if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
-	glLoadMatrix(reinterpret_cast<const GLreal*>(&projection)); glErrorCheck();
+	glLoadIdentity();
+	glOrtho (0, mViewPort.GetWidth(), mViewPort.GetHeight(), 0, -1.0f, 1.0f); glErrorCheck();
 #endif
 
-	const Matrix44 &modelView = mCamera->GetModelView();
 #if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrix(reinterpret_cast<const GLreal*>(&modelView));
+	glLoadIdentity();
 #endif
 
 	for (size_t i=0;  i<spriteList.size(); ++i)
 	{
 #if 0
 		glPushMatrix();glErrorCheck();
-		glTranslatef(0.0,0.0,-10.0);
+		glTranslatef(0.0,0.0,0.0);
 
+		glBegin (GL_TRIANGLE_STRIP);
+		glTexCoord2f (0.0, 0.0);
+		glVertex3f (-5, -5, 0.0);
+		glTexCoord2f (1.0, 0.0);
+		glVertex3f (5, -5, 0.0);
+		glTexCoord2f (0.0, 1.0);
+		glVertex3f (-5, 5, 0.0);
+		glTexCoord2f (1.0, 1.0);
+		glVertex3f (5, 5, 0.0);
+		glEnd ();
 		glPopMatrix();glErrorCheck();
-
 #else
-		glPushMatrix();glErrorCheck();
-		glTranslatef(0.0,0.0,-10.0);
-		spriteList[i]->Render();
-		glPopMatrix();glErrorCheck();
+	glPushMatrix();glErrorCheck();
+	spriteList[i]->Render();
+	glPopMatrix();glErrorCheck();
 
 #endif
 	}

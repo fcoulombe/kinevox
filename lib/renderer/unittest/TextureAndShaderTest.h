@@ -93,12 +93,9 @@ void Test()
 	renderObjectList.push_back(&obj1);
 
 	renderObjectList.push_back(&obj2);
-	for (size_t i=0; i<100; ++i)
-	{
 	renderer.PreRender();
 	renderer.Render(renderObjectList);
 	renderer.PostRender();
-	}
 
 	        /*target.Save("TextureAndShaderTest.tga");
 	        Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));

@@ -8,7 +8,7 @@ namespace GCL
   class RenderObject;
   class Sprite;
   typedef std::vector<const RenderObject*> RenderObjectList;
-  typedef std::vector<const Sprite*> SpriteList;
+  typedef std::vector<Sprite*> SpriteList;
   class Renderer
   {
   public:

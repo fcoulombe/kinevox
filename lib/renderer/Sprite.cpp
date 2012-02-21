@@ -61,7 +61,7 @@ void Sprite::Rewind()
 void Sprite::Update()
 {
 	++mCurrentFrame;
-	if (mCurrentFrame>mHeader.frameCount)
+	if (mCurrentFrame>=mHeader.frameCount)
 		mCurrentFrame = 0;
 }
 
@@ -96,13 +96,13 @@ void Sprite::Render() const
 	glBegin (GL_TRIANGLE_STRIP);
 #if 1
 	glTexCoord2f (topTextureCoord.x, topTextureCoord.y);
-	glVertex3f (-0.5, -0.5, 0.0);
+	glVertex3f (-0.5+mPosition.x, -0.5+mPosition.y, 0.0);
 	glTexCoord2f (bottomTextureCoord.x, topTextureCoord.y);
-	glVertex3f (0.5, -0.5, 0.0);
+	glVertex3f (0.5+mPosition.x, -0.5+mPosition.y, 0.0);
 	glTexCoord2f (topTextureCoord.x, bottomTextureCoord.y);
-	glVertex3f (-0.5, 0.5, 0.0);
+	glVertex3f (-0.5+mPosition.x, 0.5+mPosition.y, 0.0);
 	glTexCoord2f (bottomTextureCoord.x, bottomTextureCoord.y);
-	glVertex3f (0.5, 0.5, 0.0);
+	glVertex3f (0.5+mPosition.x, 0.5+mPosition.y, 0.0);
 #else
 	glTexCoord2f (0.0, 0.0);
 			glVertex3f (-0.5, -0.5, 0.0);

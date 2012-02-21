@@ -72,22 +72,16 @@ void Test()
 	Assert_Test(renderer->IsExtensionSupported("GL_EXT_framebuffer_object"));
 	//Assert_Test(renderer->IsExtensionSupported("GL_EXT_texture_compression_dxt1"));
 #endif
-#ifdef OS_IPHONE
-    const size_t DEFAULT_SCREEN_WIDTH = 320;
-    const size_t DEFAULT_SCREEN_HEIGHT = 480;
-#else
-    const size_t DEFAULT_SCREEN_WIDTH = 640;
-    const size_t DEFAULT_SCREEN_HEIGHT = 480;
-#endif
+
 	{
 		std::stringstream s;
-		s<<renderer->GetViewPort().GetHeight()<<"=="<<DEFAULT_SCREEN_HEIGHT;
-		AssertMsg_Test(renderer->GetViewPort().GetHeight()==DEFAULT_SCREEN_HEIGHT, s.str().c_str());
+		s<<renderer->GetViewPort().GetHeight()<<"=="<<ViewPort::DEFAULT_SCREEN_HEIGHT;
+		AssertMsg_Test(renderer->GetViewPort().GetHeight()==ViewPort::DEFAULT_SCREEN_HEIGHT, s.str().c_str());
 	}
 	{
 		std::stringstream s;
-		s<<renderer->GetViewPort().GetWidth()<<"=="<<DEFAULT_SCREEN_WIDTH;
-		AssertMsg_Test(renderer->GetViewPort().GetWidth()==DEFAULT_SCREEN_WIDTH, s.str().c_str());
+		s<<renderer->GetViewPort().GetWidth()<<"=="<<ViewPort::DEFAULT_SCREEN_WIDTH;
+		AssertMsg_Test(renderer->GetViewPort().GetWidth()==ViewPort::DEFAULT_SCREEN_WIDTH, s.str().c_str());
 	}
 
 	Matrix44 projection = GLRenderer::GetGLProjection();

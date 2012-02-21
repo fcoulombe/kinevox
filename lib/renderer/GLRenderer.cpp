@@ -15,6 +15,7 @@
 #include "renderer/OpenGL.h"
 #include "renderer/RenderObject.h"
 #include "renderer/Shader.h"
+#include "renderer/Sprite.h"
 #include "renderer/VertexBuffer.h"
 
 
@@ -308,22 +309,36 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 
 void GLRenderer::Render(const SpriteList &spriteList)
 {
+
+	mCamera->Update();
+
+	const Matrix44 &projection = mCamera->GetProjection();
+#if ENABLE_FIX_PIPELINE
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrix(reinterpret_cast<const GLreal*>(&projection)); glErrorCheck();
+#endif
+
+	const Matrix44 &modelView = mCamera->GetModelView();
+#if ENABLE_FIX_PIPELINE
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrix(reinterpret_cast<const GLreal*>(&modelView));
+#endif
+
 	for (size_t i=0;  i<spriteList.size(); ++i)
 	{
+#if 0
 		glPushMatrix();glErrorCheck();
 		glTranslatef(0.0,0.0,-10.0);
 
-		glBegin (GL_TRIANGLE_STRIP);
-		glTexCoord2f (0.0, 0.0);
-		glVertex3f (-0.5, -0.5, 0.0);
-		glTexCoord2f (1.0, 0.0);
-		glVertex3f (0.5, -0.5, 0.0);
-		glTexCoord2f (0.0, 1.0);
-		glVertex3f (-0.5, 0.5, 0.0);
-		glTexCoord2f (1.0, 1.0);
-		glVertex3f (0.5, 0.5, 0.0);
-		glEnd ();
 		glPopMatrix();glErrorCheck();
+
+#else
+		glPushMatrix();glErrorCheck();
+		glTranslatef(0.0,0.0,-10.0);
+		spriteList[i]->Render();
+		glPopMatrix();glErrorCheck();
+
+#endif
 	}
 }
 

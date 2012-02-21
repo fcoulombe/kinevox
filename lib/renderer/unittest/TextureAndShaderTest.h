@@ -41,6 +41,7 @@ public:
 		return data;
 	}
 	const Material &GetMaterial() const { return mMaterial; }
+	Material &GetMaterial() { return mMaterial; }
 private:
 	Material mMaterial;
 	static const VertexData data;
@@ -71,16 +72,33 @@ void Test()
 	Shader shader;
 	shader.Bind();
 
-	Texture texture(TEXTURE_PATH"mushroomtga.tga");
-	texture.Bind();
+	Texture texture1(TEXTURE_PATH"mushroomcompressedtga.tga");
+	texture1.Bind();
 
-	MyRenderObject obj;
+	Texture texture2(TEXTURE_PATH"HappyFish.tga");
+	texture2.Bind();
+
+	MyRenderObject obj1;
+	const WorldPoint3 position1(2.5,0.0, -10.0);
+	obj1.SetPosition(position1);
+	obj1.GetMaterial().SetTexture(texture1);
+
+
+	MyRenderObject obj2;
+	const WorldPoint3 position2(-2.5,0.0, -10.0);
+	obj2.SetPosition(position2);
+	obj2.GetMaterial().SetTexture(texture2);
+
 	RenderObjectList renderObjectList;
-	renderObjectList.push_back(&obj);
+	renderObjectList.push_back(&obj1);
+
+	renderObjectList.push_back(&obj2);
+	for (size_t i=0; i<100; ++i)
+	{
 	renderer.PreRender();
 	renderer.Render(renderObjectList);
 	renderer.PostRender();
-
+	}
 
 	        /*target.Save("TextureAndShaderTest.tga");
 	        Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));

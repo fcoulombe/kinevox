@@ -26,7 +26,11 @@ import sys
 import platform
 import subprocess
 
-
+#################################################################
+#
+#   adding custom commandline argument
+#
+#################################################################
 AddOption('--verbose', action="store_true", 
           dest="verbose",
           default=False,
@@ -61,7 +65,12 @@ AddOption('--configuration', action="store",
           help='specify whether we are compiling in (debug, opt) mode')
 
 
-
+########################################################################
+#
+#   fetching some other packages from github if they don't seem to be there
+#   usually on used on very first build
+#
+########################################################################
 
 def gitAdd(fileName, repoDir):
     cmd = 'git add ' + fileName

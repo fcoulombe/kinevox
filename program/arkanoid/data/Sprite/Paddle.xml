@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<gclsprite>
+    
+    <header width="256" height="64" frame_count="1"/>
+    <textures>
+        <texture filename="paddle.tga"/>
+    </textures> 
+    
+</gclsprite>

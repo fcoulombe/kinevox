@@ -90,3 +90,10 @@ void Material::Bind() const
 #endif
 	mTexture->Bind();
 }
+
+void Material::SetTexture(Texture &texture)
+{
+	if (mTexture)
+		delete mTexture;
+	mTexture = &texture;
+}

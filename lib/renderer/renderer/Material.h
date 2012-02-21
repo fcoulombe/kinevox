@@ -19,6 +19,7 @@ class Shader;
     void Bind() const;
     void LoadMaterial(const char *filename);
 
+    void SetTexture(Texture &texture);
   private:
     Texture *mTexture;
     Shader *mShader;

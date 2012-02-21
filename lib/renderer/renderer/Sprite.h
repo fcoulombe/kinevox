@@ -20,6 +20,8 @@ class Sprite
 public:
 	Sprite(const char *filename="DefaultSprite");
 
+	void Render() const;
+
 	void Update();
 	void Play();
 	void Pause();

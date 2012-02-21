@@ -60,5 +60,60 @@ void Sprite::Rewind()
 
 void Sprite::Update()
 {
+	++mCurrentFrame;
+	if (mCurrentFrame>mHeader.frameCount)
+		mCurrentFrame = 0;
+}
+
+void Sprite::Render() const
+{
+	GCLAssert(mTextureList.size());
+	//figure out what is the texture coordinate for our current frame
+
+	const Texture &firstTexture = *(mTextureList[0]);
+	size_t framePerWidth = firstTexture.GetWidth()/mHeader.width;
+	size_t rowPerTexture = firstTexture.GetHeight()/mHeader.height;
+
+	//size_t offset = mHeader.width*mCurrentFrame;
+	size_t whatRow = mCurrentFrame/framePerWidth;
+	size_t whatCol = mCurrentFrame%framePerWidth;
+	size_t whatTexture = whatRow/rowPerTexture;
+	//adjust the column to offset in the texture
+	whatRow = whatRow- (whatTexture*rowPerTexture);
+
+	WorldPoint2 topTextureCoord, bottomTextureCoord;
+	Real widthRatio = mHeader.width/Real(firstTexture.GetWidth());
+	Real heightRatio = mHeader.height/Real(firstTexture.GetHeight());
+	topTextureCoord.x = whatCol*widthRatio;
+	topTextureCoord.y = whatRow*heightRatio;
+	bottomTextureCoord.x = topTextureCoord.x +widthRatio;
+	bottomTextureCoord.y = topTextureCoord.y +heightRatio;
+
+	//std::cout << "top " << topTextureCoord << std::endl;
+	//std::cout << "bot " <<bottomTextureCoord << std::endl;
+
+	mTextureList[whatTexture]->Bind();
+	glBegin (GL_TRIANGLE_STRIP);
+#if 1
+	glTexCoord2f (topTextureCoord.x, topTextureCoord.y);
+	glVertex3f (-0.5, -0.5, 0.0);
+	glTexCoord2f (bottomTextureCoord.x, topTextureCoord.y);
+	glVertex3f (0.5, -0.5, 0.0);
+	glTexCoord2f (topTextureCoord.x, bottomTextureCoord.y);
+	glVertex3f (-0.5, 0.5, 0.0);
+	glTexCoord2f (bottomTextureCoord.x, bottomTextureCoord.y);
+	glVertex3f (0.5, 0.5, 0.0);
+#else
+	glTexCoord2f (0.0, 0.0);
+			glVertex3f (-0.5, -0.5, 0.0);
+			glTexCoord2f (1.0, 0.0);
+			glVertex3f (0.5, -0.5, 0.0);
+			glTexCoord2f (0.0, 1.0);
+			glVertex3f (-0.5, 0.5, 0.0);
+			glTexCoord2f (1.0, 1.0);
+			glVertex3f (0.5, 0.5, 0.0);
+
+#endif
+	glEnd ();
 
 }

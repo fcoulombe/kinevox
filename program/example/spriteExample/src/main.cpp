@@ -48,25 +48,6 @@ int main(int /*argc*/, char ** /*argv*/)
 			if (Input::IsKeyUp(SDLK_RIGHT))
 				x+=0.01;
 
-			if (Input::IsKeyUp(SDLK_PAGEUP))
-				myCamera.TiltUp();
-			if (Input::IsKeyUp(SDLK_PAGEDOWN))
-				//myCamera.TiltDown();
-			{
-				static bool isTextureOn = false;
-				isTextureOn = !isTextureOn;
-				if (isTextureOn)
-				{
-					std::cout << "on" << std::endl;
-					GCLApplication::GetRenderer()->mCurrentRenderState.SetTextureEnabled(true);
-				}
-				else
-				{
-					std::cout << "off" << std::endl;
-					GCLApplication::GetRenderer()->mCurrentRenderState.SetTextureEnabled(false);
-				}
-			}
-
 
 			obj.SetPosition(WorldPoint3(x,y,0.0));
 			GCLApplication::Render();

@@ -9,6 +9,7 @@ namespace GCL
 class Camera;
 class GLRenderer;
 class GCLRenderObject;
+class GCLSprite;
 class Input;
 
 class GCLApplication
@@ -30,14 +31,19 @@ private:
 	GCLApplication();
 	~GCLApplication();
 
-	friend class GCLRenderObject;
+	friend class 	GCLRenderObject;
+	friend class GCLSprite;
 	static void RegisterRenderObject(GCLRenderObject* newRenderObject);
 	static void ReleaseRenderObject(GCLRenderObject* renderObjectToDelete);
+
+	static void RegisterSprite(GCLSprite* newSpriteObject);
+	static void ReleaseSprite(GCLSprite* spriteToDelete);
 
 
 	static GLRenderer *mRenderer;
 
 	static RenderObjectList mRenderObjectList;
+	static SpriteList mSpriteList;
 };
 
 }

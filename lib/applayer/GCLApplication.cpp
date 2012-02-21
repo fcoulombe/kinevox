@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "applayer/GCLRenderObject.h"
+#include "applayer/GCLSprite.h"
 #include <gcl/Assert.h>
 #include <input/Input.h>
 #include <renderer/GLRenderer.h>
@@ -12,6 +13,7 @@ using namespace GCL;
 
 GLRenderer *GCLApplication::mRenderer = NULL;
 RenderObjectList GCLApplication::mRenderObjectList;
+SpriteList GCLApplication::mSpriteList;
 
 
 /*static */void GCLApplication::Initialize()
@@ -33,12 +35,17 @@ RenderObjectList GCLApplication::mRenderObjectList;
 void GCLApplication::Update()
 {
 	Input::ProcessInput();
+	for (size_t i=0; i<mSpriteList.size(); ++i)
+	{
+		mSpriteList[i]->Update();
+	}
 }
 void GCLApplication::Render()
 {
 	GCLAssert(mRenderer);
 	mRenderer->PreRender();
 	mRenderer->Render(mRenderObjectList);
+	mRenderer->Render(mSpriteList);
 	mRenderer->PostRender();
 }
 
@@ -61,6 +68,20 @@ void GCLApplication::ReleaseRenderObject(GCLRenderObject* renderObjToDelete)
 	mRenderObjectList.erase(it);
 }
 
+void GCLApplication::RegisterSprite(GCLSprite* newSprite)
+{
+	GCLAssert(newSprite);
+	mSpriteList.push_back(newSprite);
+}
+
+void GCLApplication::ReleaseSprite(GCLSprite* spriteToDelete)
+{
+	GCLAssert(spriteToDelete);
+	SpriteList::iterator it = std::find(mSpriteList.begin(), mSpriteList.end(), spriteToDelete);
+	GCLAssert(it != mSpriteList.end());
+	mSpriteList.erase(it);
+}
+
 
 bool GCLApplication::IsRegistered(const GCLRenderObject &obj)
 {
@@ -71,5 +92,4 @@ bool GCLApplication::IsRegistered(const GCLRenderObject &obj)
 			return true;
 	}
 	return false;
-
 }

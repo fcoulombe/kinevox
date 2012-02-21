@@ -30,6 +30,8 @@ public:
 	size_t GetWidth() const { return mHeader.width; }
 	size_t GetHeight() const { return mHeader.height; }
 	size_t GetFrameCount() const { return mHeader.frameCount; }
+
+	void SetPosition(const WorldPoint3 &position)  	{mPosition = position;	}
 private:
 	void LoadSprite(const char *filename);
 	Material mMaterial;

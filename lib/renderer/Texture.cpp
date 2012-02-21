@@ -27,21 +27,22 @@ Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
 	mTextureData.width = width;
 	mTextureData.height= height;
 	mTextureData.bytesPerPixel = bytesPerPixel;
+	mTextureResource = NULL;
 	Initialize(width, height, bytesPerPixel);
 }
 static const GLenum BytePerPixel[] =
 {
-	GL_LUMINANCE,
-	GL_LUMINANCE,
-	GL_RGB,
-	GL_RGBA
+		GL_LUMINANCE,
+		GL_LUMINANCE,
+		GL_RGB,
+		GL_RGBA
 };
 static const GLenum BytesPerPixel[] =
 {
-    GL_LUMINANCE,
-    GL_LUMINANCE,
-    GL_RGB,
-    GL_RGBA,
+		GL_LUMINANCE,
+		GL_LUMINANCE,
+		GL_RGB,
+		GL_RGBA,
 };
 void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, const uint8_t *data )
 {
@@ -58,11 +59,12 @@ void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, cons
 			BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();*/
 #ifndef ES1
 	if (data)
-		gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width,height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width,height, BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);
 	else
 #endif
 		glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[bytesPerPixel-1], width, height, 0,
-					BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();
+						BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();
+
 	glBindTexture(GL_TEXTURE_2D, 0);glErrorCheck();
 }
 
@@ -89,12 +91,16 @@ const uint8_t *Texture::GetTextureFromVRAM() const
 	uint8_t *data = new uint8_t[imageSize];
 
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);
-	glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
-    
+
+	if (mTextureResource)
+		glGetTexImage(GL_TEXTURE_2D, 0, mTextureResource->mTextureData.mTextureFormat, GL_UNSIGNED_BYTE, data);
+	else
+		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
 	return data;
 #else
-    GCLAssert(false && "unsupported");
-    return NULL;
+	GCLAssert(false && "unsupported");
+	return NULL;
 #endif
 }
 
@@ -103,15 +109,15 @@ const uint8_t *Texture::GetTextureFromVRAM() const
 #if defined(__GNUC__)
 #  pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
-//TODO: push this in the texture resource
-void Texture::Save(const char *filename)
+
+void iSave(const char *filename, size_t width, size_t height, size_t bytePerPixel,const uint8_t *data );
+void iSave(const char *filename, size_t width, size_t height, size_t bytePerPixel,const uint8_t *data )
 {
-	const uint8_t *data = GetTextureFromVRAM();
 	const char *ext = &(filename[strlen(filename)-3]);
 	if (strncmp(ext, "tga", 3)==0)
 	{
-		uint16_t x = mTextureData.width;
-		uint16_t y = mTextureData.height;
+		uint16_t x = width;
+		uint16_t y = height;
 		// split x and y sizes into bytes
 
 		//assemble the header
@@ -134,18 +140,28 @@ void Texture::Save(const char *filename)
 				0, //2 height	16
 				0, //1 bpp		17
 				0, //1 desc		18
-				};
+		};
 
 		*(uint16_t*)&(header[8]) = 0;
 		*(uint16_t*)&(header[10]) = 0;
 		*(uint16_t*)&(header[12]) = x;
 		*(uint16_t*)&(header[14]) = y;
-		*(uint8_t*)&(header[16]) = mTextureData.bytesPerPixel*8;
+		*(uint8_t*)&(header[16]) = bytePerPixel*8;
 
+		size_t imageSize = sizeof (uint8_t)*width*height*bytePerPixel;
+		//swap the R and the B
+		uint8_t *tempData = new uint8_t[imageSize];
+		memcpy(tempData, data, imageSize);
+		for(GLuint cswap = 0; cswap < imageSize; cswap += bytePerPixel)
+		{
+			uint8_t temp = tempData[cswap];
+			tempData[cswap] = tempData[cswap+2];
+			tempData[cswap+2] = temp;
+		}
 		// write header and data to file
 		std::fstream File(filename, std::ios::out | std::ios::binary);
 		File.write ((const char *)&header, sizeof (uint8_t)*18);
-		File.write ((const char *)data, sizeof (uint8_t)*mTextureData.GetImageSizeInBytes()     );
+		File.write ((const char *)tempData, imageSize);
 		File.close();
 
 		delete[] data;
@@ -163,4 +179,18 @@ void Texture::Save(const char *filename)
 		s += ext;
 		GCLAssertMsg(false, s)
 	}
+
+}
+
+//TODO: push this in the texture resource
+void Texture::Save(const char *filename)
+{
+	std::string name(filename);
+	std::string nameResource(filename);
+	nameResource += "res.tga";
+
+	iSave(name.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,GetTextureFromVRAM());
+	//test saving the resource version and not the vram version
+	//iSave(nameResource.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,mTextureResource->mTextureData.imageData);
+
 }

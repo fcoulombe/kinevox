@@ -42,6 +42,9 @@ void Test()
 	material.Bind();
 	material.LoadMaterial("Mushroom");
 	material.Bind();
+	Texture texture(TEXTURE_PATH"HappyFish.tga");
+	material.SetTexture(texture);
+	material.Bind();
 	}
 
 

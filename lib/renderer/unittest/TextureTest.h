@@ -27,12 +27,12 @@
 using namespace GCL;
 namespace TextureTest
 {
-    bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
+bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 {
 	return false;
 }
-    void Test();
+void Test();
 void Test()
 {
 	TEST_START
@@ -40,14 +40,28 @@ void Test()
 	TextureResourceManager::Initialize();
 	GLRenderer renderer;
 
+	//rgba
+	{
 	Texture texture(TEXTURE_PATH"mushroomtga.tga");
+	texture.Bind();
+	Assert_Test(texture.GetWidth() == 512);
+	Assert_Test(texture.GetHeight() == 512);
+
+
+#ifndef OS_IPHONE
+	texture.Save("MushroomTest.tga");
+#endif
+	//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
+	}
+	//rgb
+	{
+	Texture texture(TEXTURE_PATH"HappyFish.tga");
 	texture.Bind();
 
 #ifndef OS_IPHONE
-	texture.Save("RenderTargetTest.tga");
+	texture.Save("HappyFishTest.tga");
 #endif
-	//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
-
+	}
 	TextureResourceManager::Terminate();
 }
 }

@@ -219,6 +219,7 @@
 				<buildTargets>
 					<target name="@build_all @run_all --verbose --compiler=clang --configuration=opt" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
+						<buildArguments/>
 						<buildTarget>@build_all @run_all --verbose --compiler=clang --configuration=opt</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
@@ -226,6 +227,7 @@
 					</target>
 					<target name="@BasicTextureMapping" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
+						<buildArguments/>
 						<buildTarget>@BasicTextureMapping</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
@@ -233,7 +235,6 @@
 					</target>
 					<target name="@SpinningCube" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
-						<buildArguments/>
 						<buildTarget>@SpinningCube</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
@@ -241,8 +242,15 @@
 					</target>
 					<target name="@build_all @run_all --verbose --configuration=debug" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
-						<buildArguments/>
 						<buildTarget>@build_all @run_all --verbose --configuration=debug</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>true</useDefaultCommand>
+						<runAllBuilders>false</runAllBuilders>
+					</target>
+					<target name="@Arkanoid" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>scons</buildCommand>
+						<buildArguments/>
+						<buildTarget>@Arkanoid</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>false</runAllBuilders>

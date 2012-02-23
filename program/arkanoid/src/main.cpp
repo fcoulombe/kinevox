@@ -37,17 +37,18 @@
 
 using namespace GCL;
 
-static const size_t NUM_ROW = 10;
-static const size_t NUM_COL = 20;
-static const size_t BORDER_SIZE = 5;
-
+static const size_t NUM_ROW 	= 5;
+static const size_t NUM_COL 	= 8;
+static const size_t BORDER_SIZE = 0;
+static const WorldPoint3 START_POSITION(640.0, 700.0, 0.0);
+static const WorldPoint3 BALL_INITIAL_VELOCITY(-6.0, -3.0, 0.0);
 class AGameObject
 {
 public:
 	AGameObject(const char *objName, const char *objSpriteName)
 	: mRenderObject(objName, objSpriteName)
 	{
-		mRenderObject.SetScale(WorldPoint2(0.5, 0.5));
+		//mRenderObject.SetScale(WorldPoint2(0.5, 0.5));
 	}
 	void SetPosition(const WorldPoint3 &position) { mRenderObject.SetPosition(position); }
 	const WorldPoint3 &GetPosition() const { return mRenderObject.GetPosition(); }
@@ -68,19 +69,35 @@ public:
 		mRenderObject.SetName(s.str().c_str());
 		const ViewPort &viewPort = GCLApplication::GetRenderer()->GetViewPort();
 
-		size_t spaceX = viewPort.GetWidth()/NUM_COL;
-		size_t spaceY = viewPort.GetHeight()/NUM_ROW;
-		(void)spaceX;
-		(void)spaceY;
-		size_t y = blockIndex/NUM_ROW;
-		size_t x = blockIndex%NUM_ROW;
+		size_t blockWidth = mRenderObject.GetWidth();
+		size_t blockHeight = mRenderObject.GetHeight();
+		Real blockHalfWidth = blockWidth/2.0;
+		Real blockHalfHeight = blockHeight/2.0;
 
-		WorldPoint3 position(x, y, 0.0);
+		size_t spaceX = (viewPort.GetWidth())/NUM_COL;
+		//size_t spaceY = (viewPort.GetHeight()-BORDER_SIZE)/NUM_COL;
+		size_t spaceY = blockHeight;
+
+		Real x = (int(blockIndex%NUM_COL)*spaceX) + BORDER_SIZE + blockHalfWidth;
+		Real y = (int(blockIndex/NUM_COL)*spaceY) + BORDER_SIZE + blockHalfHeight;
+
+		//
+		WorldPoint3 position(x,y, 0.0);
 		SetPosition(position);
 		std::cout << position << std::endl;
 	}
+
+	void Hit()
+	{
+		mRenderObject.SetVisible(false);
+	}
+
+	bool IsVisible() const { return mRenderObject.IsVisible(); }
+	size_t GetHeight() const { return mRenderObject.GetScaledHeight(); }
+	size_t GetWidth() const { return mRenderObject.GetScaledWidth(); }
 private:
 };
+typedef std::vector<Block *> BlockList;
 
 class Paddle : public AGameObject
 {
@@ -88,7 +105,7 @@ public:
 	Paddle()
 	: AGameObject("Paddle", "Paddle")
 	{
-		SetPosition(WorldPoint3(640.0, 500.0, 0.0));
+		SetPosition(START_POSITION);
 	}
 
 	void Update()
@@ -119,12 +136,12 @@ public:
 class Ball : public AGameObject
 {
 public:
-	static const WorldPoint3 BALL_START_POSITION;
+
 	Ball()
 	: AGameObject("Ball", "Ball"),
-	  mVelocity(-3.0, -1.5, 0.0)
+	  mVelocity(BALL_INITIAL_VELOCITY)
 	{
-		SetPosition(BALL_START_POSITION);
+		SetPosition(START_POSITION);
 	}
 	void Update()
 	{
@@ -152,14 +169,65 @@ public:
 		else if (newPosition.y > viewPort.GetHeight())
 		{
 			mVelocity *= -1.0;
-			newPosition = BALL_START_POSITION;
+			newPosition = START_POSITION;
 		}
 		SetPosition(newPosition);
 	}
 	WorldPoint3 mVelocity;
 };
-const WorldPoint3 Ball::BALL_START_POSITION(640.0, 500.0, 0.0);
 
+
+static void PerformBallPaddleCollision(Ball &ball, Paddle &paddle)
+{
+	const WorldPoint3 &ballPosition = ball.GetPosition();
+	const WorldPoint3 &paddlePosition = paddle.GetPosition();
+	size_t paddleHeight = paddle.GetHeight();
+	size_t paddleWidth = paddle.GetWidth();
+	Real paddleHalfWidth = paddleWidth / 2.0;
+	Real paddleHalfHeight = paddleHeight / 2.0;
+	if (ballPosition.y > paddlePosition.y-paddleHalfHeight)
+	{
+		if (ballPosition.x > paddlePosition.x-paddleHalfWidth &&
+				ballPosition.x < paddlePosition.x + paddleHalfWidth)
+		{
+			if (ballPosition.y < paddlePosition.y+paddleHalfHeight)
+			{
+				WorldPoint3 newBallPosition = ballPosition;
+				ball.mVelocity.y *= -1.0;
+				newBallPosition.y = paddlePosition.y-paddleHalfHeight;
+				ball.SetPosition(newBallPosition);
+			}
+		}
+	}
+}
+
+static void PerformBallBlocksCollision(Ball &ball, BlockList &blockList)
+{
+
+	const WorldPoint3 &ballPosition = ball.GetPosition();
+	for (size_t i=0; i<blockList.size(); ++i)
+	{
+		Block &currentBlock = *(blockList[i]);
+		if (!currentBlock.IsVisible())
+			continue;
+		const WorldPoint3 &blockPosition = currentBlock.GetPosition();
+		size_t blockHeight = currentBlock.GetHeight();
+		size_t blockWidth = currentBlock.GetWidth();
+		Real blockHalfWidth = blockWidth/ 2.0;
+		Real blockHalfHeight = blockHeight/ 2.0;
+
+		if (ballPosition.y > blockPosition.y-blockHalfHeight &&
+				ballPosition.y < blockPosition.y+blockHalfHeight &&
+				ballPosition.x > blockPosition.x-blockHalfWidth &&
+				ballPosition.x < blockPosition.x+blockHalfWidth )
+		{
+			//we have collision need to figure out what edge we hit
+			ball.mVelocity *= -1.0;
+			currentBlock.Hit();
+		}
+
+	}
+}
 int main(int /*argc*/, char ** /*argv*/)
 {
 	std::cout << "start program" << std::endl;
@@ -171,7 +239,6 @@ int main(int /*argc*/, char ** /*argv*/)
 		GCLApplication::SetViewportCamera(myCamera);
 
 
-		typedef std::vector<Block *> BlockList;
 		BlockList blocks;
 		for (size_t i=0; i<NUM_ROW*NUM_COL; ++i)
 		{
@@ -184,26 +251,9 @@ int main(int /*argc*/, char ** /*argv*/)
 		bool isRunning = true;
 		while (isRunning)
 		{
-			const WorldPoint3 &ballPosition = ball.GetPosition();
-			const WorldPoint3 &paddlePosition = paddle.GetPosition();
-			size_t paddleHeight = paddle.GetHeight();
-			size_t paddleWidth = paddle.GetWidth();
-			Real paddleHalfWidth = paddleWidth / 2.0;
-			Real paddleHalfHeight = paddleHeight / 2.0;
-			if (ballPosition.y > paddlePosition.y-paddleHalfHeight)
-			{
-				if (ballPosition.x > paddlePosition.x-paddleHalfWidth &&
-						ballPosition.x < paddlePosition.x + paddleHalfWidth)
-				{
-					if (ballPosition.y < paddlePosition.y+paddleHalfHeight)
-					{
-						WorldPoint3 newBallPosition = ballPosition;
-						ball.mVelocity.y *= -1.0;
-						newBallPosition.y = paddlePosition.y-paddleHalfHeight;
-						ball.SetPosition(newBallPosition);
-					}
-				}
-			}
+
+			PerformBallPaddleCollision(ball, paddle);
+			PerformBallBlocksCollision(ball, blocks);
 
 
 			ball.Update();

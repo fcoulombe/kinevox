@@ -21,6 +21,7 @@
  */
 
 #include <unistd.h>
+#include <cstdlib>
 #include <renderer/OpenCV.h>
 #include <SDL.h>
 
@@ -43,8 +44,8 @@ static const size_t BORDER_SIZE = 5;
 class AGameObject
 {
 public:
-	AGameObject(const char *objSpriteName)
-	: mRenderObject(objSpriteName)
+	AGameObject(const char *objName, const char *objSpriteName)
+	: mRenderObject(objName, objSpriteName)
 	{
 		mRenderObject.SetScale(WorldPoint2(0.5, 0.5));
 	}
@@ -59,14 +60,18 @@ class Block : public AGameObject
 {
 public:
 	Block(size_t blockIndex)
-	: AGameObject("Block")
+	: AGameObject("Block","Block")
 	{
+		std::stringstream s;
+		s.str("Block");
+		s << blockIndex;
+		mRenderObject.SetName(s.str().c_str());
 		const ViewPort &viewPort = GCLApplication::GetRenderer()->GetViewPort();
 
 		size_t spaceX = viewPort.GetWidth()/NUM_COL;
 		size_t spaceY = viewPort.GetHeight()/NUM_ROW;
-(void)spaceX;
-(void)spaceY;
+		(void)spaceX;
+		(void)spaceY;
 		size_t y = blockIndex/NUM_ROW;
 		size_t x = blockIndex%NUM_ROW;
 
@@ -81,9 +86,29 @@ class Paddle : public AGameObject
 {
 public:
 	Paddle()
-	: AGameObject("Paddle")
+	: AGameObject("Paddle", "Paddle")
 	{
 		SetPosition(WorldPoint3(640.0, 500.0, 0.0));
+	}
+
+	void Update()
+	{
+		const ViewPort &viewPort = GCLApplication::GetRenderer()->GetViewPort();
+
+		WorldPoint3 tempPosition = GetPosition();
+		if (Input::IsKeyUp(SDLK_LEFT))
+			tempPosition.x -=5;
+
+		if (Input::IsKeyUp(SDLK_RIGHT))
+			tempPosition.x+=5.;
+
+		Real paddleHalfWidth = (mRenderObject.GetScaledWidth()/2.0);
+		if (tempPosition.x+paddleHalfWidth > viewPort.GetWidth())
+			tempPosition.x = viewPort.GetWidth()-paddleHalfWidth;
+		else if (tempPosition.x-paddleHalfWidth < 0.0)
+			tempPosition.x = 0.+paddleHalfWidth;
+
+		SetPosition(tempPosition);
 	}
 };
 
@@ -92,13 +117,32 @@ class Ball : public AGameObject
 {
 public:
 	Ball()
-	: AGameObject("Ball")
+	: AGameObject("Ball", "Ball"),
+	  mVelocity(-3.0, -1.5, 0.0)
 	{
 		SetPosition(WorldPoint3(640.0, 500.0, 0.0));
 	}
 	void Update()
 	{
-		SetPosition(GetPosition() + mVelocity);
+		const ViewPort &viewPort = GCLApplication::GetRenderer()->GetViewPort();
+
+		WorldPoint3 newPosition = GetPosition()+ mVelocity;
+		if (newPosition.x > viewPort.GetWidth())
+		{
+			mVelocity.x *= -1.0;
+			newPosition.x = viewPort.GetWidth();
+		}
+		else if (newPosition.x < 0.0)
+		{
+			mVelocity.x *= -1.0;
+			newPosition.x = 0.0;
+		}
+		if (newPosition.y < 0.0)
+		{
+			mVelocity.y *= -1.0;
+			newPosition.y = 0.0;
+		}
+		SetPosition(newPosition);
 	}
 	WorldPoint3 mVelocity;
 };
@@ -116,7 +160,7 @@ int main(int /*argc*/, char ** /*argv*/)
 
 		typedef std::vector<Block *> BlockList;
 		BlockList blocks;
-		for (size_t i=0; i<blocks.size(); ++i)
+		for (size_t i=0; i<NUM_ROW*NUM_COL; ++i)
 		{
 			blocks.push_back(new Block(i));
 		}
@@ -128,20 +172,11 @@ int main(int /*argc*/, char ** /*argv*/)
 		while (isRunning)
 		{
 			ball.Update();
-
+			paddle.Update();
 			GCLApplication::Update();
+
 			if (Input::IsKeyUp(SDLK_ESCAPE))
 				isRunning=false;
-
-			WorldPoint3 tempPosition;
-			tempPosition= paddle.GetPosition();
-			if (Input::IsKeyUp(SDLK_LEFT))
-				tempPosition.x -=5;
-
-			if (Input::IsKeyUp(SDLK_RIGHT))
-				tempPosition.x+=5.;
-
-			paddle.SetPosition(tempPosition);
 
 			GCLApplication::Render();
 			usleep(100);

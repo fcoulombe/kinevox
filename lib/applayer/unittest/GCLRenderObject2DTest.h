@@ -38,7 +38,7 @@ void Test()
 
     GCLApplication::Initialize();
 
-    GCLRenderObject2D obj;
+    GCLRenderObject2D obj("TestObject");
     
     GCLApplication::Update();
     GCLApplication::Render();

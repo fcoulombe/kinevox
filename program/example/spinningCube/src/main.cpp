@@ -46,7 +46,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		GCLApplication::SetViewportCamera(myCamera);
 
 
-		GCLRenderObject renderObject;
+		GCLRenderObject renderObject("SpinningCube");
 		renderObject.SetPosition(0,0,-10.0);
 
 		bool isRunning = true;

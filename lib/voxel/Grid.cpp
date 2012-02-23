@@ -66,7 +66,7 @@ Grid::Slice::~Slice()
 
 
 Grid::Grid(size_t x, size_t y, size_t z)
-: RenderObject(Matrix44(true)), //identity
+: RenderObject("Grid", Matrix44(true)), //identity
     X_DIMENSION(x),
   Y_DIMENSION(y),
   Z_DIMENSION(z)

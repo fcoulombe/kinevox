@@ -47,7 +47,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		GCLApplication::SetViewportCamera(myCamera);
 
 
-		GCLRenderObject2D obj;
+		GCLRenderObject2D obj("SpriteExampleTest");
 
 
 		bool isRunning = true;

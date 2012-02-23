@@ -49,7 +49,11 @@ void Test()
 	obj.SetPosition(kPositionTest);
 	Assert_Test(obj.GetPosition() == kPositionTest);
 
-	obj.SetScale(WorldPoint2(0.5, 0.5));
+	const WorldPoint2 kScaleTest(0.5, 0.5);
+	obj.SetScale(kScaleTest);
+	Assert_Test(obj.GetScale() == kScaleTest);
+
+
 	obj.Play();
 
 	for (size_t i=0;i<100; ++i)

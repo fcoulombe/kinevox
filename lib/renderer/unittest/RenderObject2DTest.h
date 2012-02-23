@@ -32,7 +32,7 @@ class MyRenderObject2D : public RenderObject2D
 {
 public:
 	MyRenderObject2D()
-	: RenderObject2D("DefaultSprite") //identity
+	: RenderObject2D("TestObject", "DefaultSprite") //identity
 	{}
 private:
 };
@@ -59,6 +59,28 @@ void Test()
 	AssertMsg_Test(position == obj.GetPosition(), s.str().c_str());
 	}
 
+	//test Get dimensions
+	{
+		s.str("");
+		s<<obj.GetWidth()<< "\n==\n" << 64 << std::endl;
+		AssertMsg_Test(obj.GetWidth() == 64, s.str().c_str());
+
+		s.str("");
+		s<<obj.GetHeight()<< "\n==\n" << 64 << std::endl;
+		AssertMsg_Test(obj.GetHeight() == 64, s.str().c_str());
+
+		s.str("");
+		s<<obj.GetScaledWidth()<< "\n==\n" << 64 << std::endl;
+		AssertMsg_Test(obj.GetScaledWidth() == 64, s.str().c_str());
+
+		s.str("");
+		s<<obj.GetScaledHeight()<< "\n==\n" << 64 << std::endl;
+		AssertMsg_Test(obj.GetScaledHeight() == 64, s.str().c_str());
+
+
+	}
+
+
 	//test setscale
 	{
 	const WorldPoint2 scale(2.0,2.0);
@@ -68,6 +90,11 @@ void Test()
 	//set sprite test
 	{
 		obj.SetSprite("DefaultSprite");
+	}
+
+	//setname test
+	{
+		obj.SetName("ChangedTestName");
 	}
 	obj.Update();
 

@@ -30,12 +30,14 @@ class RenderObject2D
 {
 public:
 	RenderObject2D()
+	: mObjName("Un-Init")
 	{
 		mSprite = NULL;
 	}
-	RenderObject2D(const char *filename)
+	RenderObject2D(const char *name, const char *spriteFilename)
+	: mObjName(name)
 	{
-		mSprite = new Sprite(filename);
+		mSprite = new Sprite(spriteFilename);
 	}
 	virtual ~RenderObject2D()
 	{
@@ -68,7 +70,15 @@ public:
 		mSprite = new Sprite(filename);
 	}
 
+	void SetName(const char *name) { mObjName = name; }
+
+	size_t GetWidth() const { return mSprite->GetWidth(); }
+	size_t GetHeight() const { return mSprite->GetHeight(); }
+
+	size_t GetScaledWidth() const { return mSprite->GetWidth()*mSprite->GetScale().x; }
+	size_t GetScaledHeight() const { return mSprite->GetHeight()*mSprite->GetScale().x; }
 protected:
 	Sprite *mSprite;
+	std::string mObjName;
 };
 }

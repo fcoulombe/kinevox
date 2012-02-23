@@ -66,8 +66,8 @@ const   VertexPNT GCLRenderObject::cube[GCLRenderObject::NUM_VERTICES] = {
 const VertexData GCLRenderObject::data(&cube, GCLRenderObject::NUM_VERTICES, VertexPNT::GetComponentType());
 
 
-GCLRenderObject::GCLRenderObject()
-: RenderObject(Matrix44::IDENTITY),
+GCLRenderObject::GCLRenderObject(const char *name)
+: RenderObject(name, Matrix44::IDENTITY),
   mMaterial("Default")
 {
 	GCLApplication::RegisterRenderObject(this);

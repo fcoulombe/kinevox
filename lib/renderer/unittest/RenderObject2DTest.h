@@ -87,6 +87,15 @@ void Test()
 	obj.SetScale(scale);
 	}
 
+	//test visible
+	{
+
+		obj.SetVisible(false);
+		Assert_Test(obj.IsVisible() == false);
+		obj.SetVisible(true);
+		Assert_Test(obj.IsVisible() == true);
+	}
+
 	//set sprite test
 	{
 		obj.SetSprite("DefaultSprite");

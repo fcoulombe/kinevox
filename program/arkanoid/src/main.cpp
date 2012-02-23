@@ -119,17 +119,20 @@ public:
 class Ball : public AGameObject
 {
 public:
+	static const WorldPoint3 BALL_START_POSITION;
 	Ball()
 	: AGameObject("Ball", "Ball"),
 	  mVelocity(-3.0, -1.5, 0.0)
 	{
-		SetPosition(WorldPoint3(640.0, 500.0, 0.0));
+		SetPosition(BALL_START_POSITION);
 	}
 	void Update()
 	{
 		const ViewPort &viewPort = GCLApplication::GetRenderer()->GetViewPort();
 
 		WorldPoint3 newPosition = GetPosition()+ mVelocity;
+
+		//walls check
 		if (newPosition.x > viewPort.GetWidth())
 		{
 			mVelocity.x *= -1.0;
@@ -145,10 +148,17 @@ public:
 			mVelocity.y *= -1.0;
 			newPosition.y = 0.0;
 		}
+		//check if we're dead and reset
+		else if (newPosition.y > viewPort.GetHeight())
+		{
+			mVelocity *= -1.0;
+			newPosition = BALL_START_POSITION;
+		}
 		SetPosition(newPosition);
 	}
 	WorldPoint3 mVelocity;
 };
+const WorldPoint3 Ball::BALL_START_POSITION(640.0, 500.0, 0.0);
 
 int main(int /*argc*/, char ** /*argv*/)
 {

@@ -110,6 +110,9 @@ public:
 
 		SetPosition(tempPosition);
 	}
+	size_t GetHeight() const { return mRenderObject.GetScaledHeight(); }
+	size_t GetWidth() const { return mRenderObject.GetScaledWidth(); }
+
 };
 
 
@@ -171,6 +174,28 @@ int main(int /*argc*/, char ** /*argv*/)
 		bool isRunning = true;
 		while (isRunning)
 		{
+			const WorldPoint3 &ballPosition = ball.GetPosition();
+			const WorldPoint3 &paddlePosition = paddle.GetPosition();
+			size_t paddleHeight = paddle.GetHeight();
+			size_t paddleWidth = paddle.GetWidth();
+			Real paddleHalfWidth = paddleWidth / 2.0;
+			Real paddleHalfHeight = paddleHeight / 2.0;
+			if (ballPosition.y > paddlePosition.y-paddleHalfHeight)
+			{
+				if (ballPosition.x > paddlePosition.x-paddleHalfWidth &&
+						ballPosition.x < paddlePosition.x + paddleHalfWidth)
+				{
+					if (ballPosition.y < paddlePosition.y+paddleHalfHeight)
+					{
+						WorldPoint3 newBallPosition = ballPosition;
+						ball.mVelocity.y *= -1.0;
+						newBallPosition.y = paddlePosition.y-paddleHalfHeight;
+						ball.SetPosition(newBallPosition);
+					}
+				}
+			}
+
+
 			ball.Update();
 			paddle.Update();
 			GCLApplication::Update();

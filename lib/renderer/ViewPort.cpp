@@ -29,7 +29,7 @@ using namespace GCL;
     const size_t ViewPort::DEFAULT_SCREEN_WIDTH = 320;
     const size_t ViewPort::DEFAULT_SCREEN_HEIGHT = 480;
 #else
-    const size_t ViewPort::DEFAULT_SCREEN_WIDTH = 800;
-    const size_t ViewPort::DEFAULT_SCREEN_HEIGHT = 600;
+    const size_t ViewPort::DEFAULT_SCREEN_WIDTH = 1024;
+    const size_t ViewPort::DEFAULT_SCREEN_HEIGHT = 768;
 #endif
 

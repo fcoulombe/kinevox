@@ -186,6 +186,7 @@ print default_env['ENV']['PATH']
 
 
 sconsFilesList = [
+#third party
 "./3rdParty/il/SConscript",
 "./3rdParty/libfreenect/SConscript",
 "./3rdParty/libpng/SConscript",
@@ -195,22 +196,30 @@ sconsFilesList = [
 "./3rdParty/glew/SConscript",
 "./3rdParty/sdl/SConscript",
 
+#libs
 "./lib/gcl/gcl/SConscript",
-"./lib/gcl/gcl/unittest/SConscript",
+"./lib/sound/SConscript",
 "./lib/input/SConscript",
 "./lib/kinect/SConscript",
-"./lib/kinect/unittest/SConscript",
 "./lib/renderer/SConscript",
+"./lib/voxel/SConscript",
+"./lib/applayer/SConscript",
+
+#unittest
+"./lib/gcl/gcl/unittest/SConscript",
+"./lib/sound/unittest/SConscript",
 "./lib/renderer/unittest/SConscript",
 "./lib/input/unittest/SConscript", #depends on renderer
-"./lib/voxel/SConscript",
+"./lib/kinect/unittest/SConscript",
 "./lib/voxel/unittest/SConscript",
-"./lib/applayer/SConscript",
 "./lib/applayer/unittest/SConscript",
+
+#programs
 "./program/example/example_data/SConscript",
 "./program/example/basicTextureMapping/SConscript",
 "./program/example/spinningCube/SConscript",
 "./program/example/spriteExample/SConscript",
+
 "./program/arkanoid/SConscript",
 "./program/kinevox/SConscript",
 ]

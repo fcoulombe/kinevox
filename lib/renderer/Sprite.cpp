@@ -32,6 +32,7 @@ using namespace GCL;
 
 Sprite::Sprite(const char *filename)
 : mCurrentFrame(0),
+  mScale(1.0,1.0),
   mIsPlaying(false)
 {
 	LoadSprite(filename);
@@ -121,8 +122,9 @@ void Sprite::Render() const
 	mTextureList[whatTexture]->Bind();
 	glBegin (GL_TRIANGLE_STRIP);
 #if 1
-	Real halfWidth = width/2.0;
-	Real halfHeight = height/2.0;
+	Real halfWidth = (width/2.0)*mScale.x;
+	Real halfHeight = (height/2.0)*mScale.y;
+
 	glTexCoord2f (topTextureCoord.x, topTextureCoord.y);
 	glVertex3f (-halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
 	glTexCoord2f (bottomTextureCoord.x, topTextureCoord.y);
@@ -133,13 +135,13 @@ void Sprite::Render() const
 	glVertex3f (halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
 #else
 	glTexCoord2f (0.0, 0.0);
-			glVertex3f (-5, -5, 0.0);
-			glTexCoord2f (1.0, 0.0);
-			glVertex3f (5, -5, 0.0);
-			glTexCoord2f (0.0, 1.0);
-			glVertex3f (-5, 5, 0.0);
-			glTexCoord2f (1.0, 1.0);
-			glVertex3f (5, 5, 0.0);
+	glVertex3f (-5, -5, 0.0);
+	glTexCoord2f (1.0, 0.0);
+	glVertex3f (5, -5, 0.0);
+	glTexCoord2f (0.0, 1.0);
+	glVertex3f (-5, 5, 0.0);
+	glTexCoord2f (1.0, 1.0);
+	glVertex3f (5, 5, 0.0);
 
 #endif
 	glEnd ();

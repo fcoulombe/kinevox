@@ -22,16 +22,12 @@
 
 #include <unistd.h>
 #include <cstdlib>
-#include <renderer/OpenCV.h>
-#include <SDL.h>
+#include <sstream>
 
 #include <applayer/GCLApplication.h>
 #include <applayer/GCLRenderObject2D.h>
 #include <gcl/Exception.h>
-#include <gcl/Point3.h>
 #include <input/Input.h>
-#include <renderer/Camera.h>
-#include <renderer/Material.h>
 #include <renderer/GLRenderer.h>
 
 
@@ -42,6 +38,7 @@ static const size_t NUM_COL 	= 8;
 static const size_t BORDER_SIZE = 0;
 static const WorldPoint3 START_POSITION(640.0, 700.0, 0.0);
 static const WorldPoint3 BALL_INITIAL_VELOCITY(-6.0, -3.0, 0.0);
+
 class AGameObject
 {
 public:
@@ -54,7 +51,6 @@ public:
 	const WorldPoint3 &GetPosition() const { return mRenderObject.GetPosition(); }
 protected:
 	GCLRenderObject2D mRenderObject;
-
 };
 
 class Block : public AGameObject
@@ -75,7 +71,6 @@ public:
 		Real blockHalfHeight = blockHeight/2.0;
 
 		size_t spaceX = (viewPort.GetWidth())/NUM_COL;
-		//size_t spaceY = (viewPort.GetHeight()-BORDER_SIZE)/NUM_COL;
 		size_t spaceY = blockHeight;
 
 		Real x = (int(blockIndex%NUM_COL)*spaceX) + BORDER_SIZE + blockHalfWidth;

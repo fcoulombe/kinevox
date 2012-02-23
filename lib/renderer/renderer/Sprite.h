@@ -57,6 +57,7 @@ public:
 	const WorldPoint3 &GetPosition() const { return mPosition; }
 
 	void SetScale(const WorldPoint2 &scale) { mScale = scale; }
+	const WorldPoint2 &GetScale() const { return mScale; }
 private:
 	void LoadSprite(const char *filename);
 	std::vector<Texture*> mTextureList;

@@ -20,18 +20,18 @@
  * THE SOFTWARE.
  */
 
-#include "applayer/GCLSprite.h"
+#include "applayer/GCLRenderObject2D.h"
 #include "applayer/GCLApplication.h"
 
 using namespace GCL;
 
-GCLSprite::GCLSprite(const char *filename)
-: Sprite(filename)
+GCLRenderObject2D::GCLRenderObject2D(const char *filename)
+: RenderObject2D(filename)
 {
-	GCLApplication::RegisterSprite(this);
+	GCLApplication::RegisterRenderObject2D(this);
 }
 
-GCLSprite::~GCLSprite()
+GCLRenderObject2D::~GCLRenderObject2D()
 {
-	GCLApplication::ReleaseSprite(this);
+	GCLApplication::ReleaseRenderObject2D(this);
 }

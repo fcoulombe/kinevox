@@ -19,22 +19,64 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 #pragma once
 
+#include <gcl/UnitTest.h>
 #include <renderer/RenderObject2D.h>
+#include <renderer/TextureResourceManager.h>
 
-namespace GCL
+using namespace GCL;
+namespace RenderObject2DTest
 {
-class GCLRenderObject2D: public RenderObject2D
+class MyRenderObject2D : public RenderObject2D
 {
 public:
-	GCLRenderObject2D(const char *filename="DefaultSprite");
-
-	~GCLRenderObject2D();
+	MyRenderObject2D()
+	: RenderObject2D("DefaultSprite") //identity
+	{}
 private:
-
-
 };
 
+    void Test();
+void Test()
+{
+	TEST_START
+	TextureResourceManager::Initialize();
+	GLRenderer renderer;
+	MyRenderObject2D obj;
+	RenderObject2DList objList;
+	objList.push_back(&obj);
+
+	std::stringstream s;
+
+	//test setposition
+	{
+	const WorldPoint3 position(1.0,0.0, 0.0);
+	obj.SetPosition(position);
+
+	s.str("");
+	s<<position << "\n==\n" << obj.GetPosition() << std::endl;
+	AssertMsg_Test(position == obj.GetPosition(), s.str().c_str());
+	}
+
+	//test setscale
+	{
+	const WorldPoint2 scale(2.0,2.0);
+	obj.SetScale(scale);
+	}
+
+	//set sprite test
+	{
+		obj.SetSprite("DefaultSprite");
+	}
+	obj.Update();
+
+	renderer.PreRender();
+	renderer.Render(objList);
+	renderer.PostRender();
+
+	TextureResourceManager::Terminate();
+
+
+}
 }

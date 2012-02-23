@@ -36,8 +36,8 @@
 #include "renderer/Material.h"
 #include "renderer/OpenGL.h"
 #include "renderer/RenderObject.h"
+#include "renderer/RenderObject2D.h"
 #include "renderer/Shader.h"
-#include "renderer/Sprite.h"
 #include "renderer/VertexBuffer.h"
 
 
@@ -328,7 +328,7 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 
 }
 
-void GLRenderer::Render(const SpriteList &spriteList)
+void GLRenderer::Render(const RenderObject2DList &renderObjectList)
 {
 #if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
@@ -341,7 +341,7 @@ void GLRenderer::Render(const SpriteList &spriteList)
 	glLoadIdentity();
 #endif
 
-	for (size_t i=0;  i<spriteList.size(); ++i)
+	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
 #if 0
 		glPushMatrix();glErrorCheck();
@@ -360,7 +360,7 @@ void GLRenderer::Render(const SpriteList &spriteList)
 		glPopMatrix();glErrorCheck();
 #else
 	glPushMatrix();glErrorCheck();
-	spriteList[i]->Render();
+	renderObjectList[i]->Render();
 	glPopMatrix();glErrorCheck();
 
 #endif

@@ -47,6 +47,7 @@
 #include "PngLoadingTest.h"
 #include "RenderBufferTest.h"
 #include "RenderObjectTest.h"
+#include "RenderObject2DTest.h"
 #include "RenderObjectWithMaterialTest.h"
 #include "ResourceTest.h"
 #include "ShaderTest.h"
@@ -84,6 +85,7 @@ int main(int /*argc*/, char **argv)
       MaterialTest::Test();
 
       SpriteTest::Test();
+      RenderObject2DTest::Test();
 
       RenderObjectTest::Test();
       RenderObjectWithMaterialTest::Test();

@@ -26,7 +26,7 @@
 #include "GCLRenderObjectWithMaterialTest.h"
 #include "GCLRenderObjectMultipleRenderTest.h"
 #include "GCLRenderTargetTest.h"
-#include "GCLSpriteTest.h"
+#include "GCLRenderObject2DTest.h"
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -38,7 +38,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		GCLRenderTargetTest::Test();
 		GCLRenderObjectWithMaterialTest::Test();
 		GCLRenderObjectMultipleRenderTest::Test();
-		GCLSpriteTest::Test();
+		GCLRenderObject2DTest::Test();
 	}
 	catch (GCLException &e)
 	{

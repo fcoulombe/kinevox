@@ -19,22 +19,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 #pragma once
 
-#include <renderer/RenderObject2D.h>
+#include "renderer/Sprite.h"
 
 namespace GCL
 {
-class GCLRenderObject2D: public RenderObject2D
+
+class RenderObject2D
 {
 public:
-	GCLRenderObject2D(const char *filename="DefaultSprite");
+	RenderObject2D()
+	{
+		mSprite = NULL;
+	}
+	RenderObject2D(const char *filename)
+	{
+		mSprite = new Sprite(filename);
+	}
+	virtual ~RenderObject2D()
+	{
+		if (mSprite)
+			delete mSprite;
+	}
 
-	~GCLRenderObject2D();
-private:
+	void Update()
+	{
 
+		mSprite->Update();
+	}
+	void Render()
+	{
+		mSprite->Render();
+	}
 
+	void SetPosition(Real x, Real y,Real z)
+	{ SetPosition(WorldPoint3(x,y,z));	}
+	void SetPosition(const WorldPoint3 &position)
+	{ mSprite->SetPosition(position); }
+	const WorldPoint3 &GetPosition() const { return mSprite->GetPosition(); }
+
+	void SetScale(const WorldPoint2 &scale) { mSprite->SetScale(scale); }
+
+	void SetSprite(const char *filename)
+	{
+		if (mSprite)
+			delete mSprite;
+		mSprite = new Sprite(filename);
+	}
+
+protected:
+	Sprite *mSprite;
 };
-
 }

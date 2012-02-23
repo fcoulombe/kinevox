@@ -25,7 +25,7 @@
 #include <algorithm>
 
 #include "applayer/GCLRenderObject.h"
-#include "applayer/GCLSprite.h"
+#include "applayer/GCLRenderObject2D.h"
 #include <gcl/Assert.h>
 #include <input/Input.h>
 #include <renderer/GLRenderer.h>
@@ -35,7 +35,7 @@ using namespace GCL;
 
 GLRenderer *GCLApplication::mRenderer = NULL;
 RenderObjectList GCLApplication::mRenderObjectList;
-SpriteList GCLApplication::mSpriteList;
+RenderObject2DList GCLApplication::mRenderObject2DList;
 
 
 /*static */void GCLApplication::Initialize()
@@ -57,9 +57,9 @@ SpriteList GCLApplication::mSpriteList;
 void GCLApplication::Update()
 {
 	Input::ProcessInput();
-	for (size_t i=0; i<mSpriteList.size(); ++i)
+	for (size_t i=0; i<mRenderObject2DList.size(); ++i)
 	{
-		mSpriteList[i]->Update();
+		mRenderObject2DList[i]->Update();
 	}
 }
 void GCLApplication::Render()
@@ -67,7 +67,7 @@ void GCLApplication::Render()
 	GCLAssert(mRenderer);
 	mRenderer->PreRender();
 	mRenderer->Render(mRenderObjectList);
-	mRenderer->Render(mSpriteList);
+	mRenderer->Render(mRenderObject2DList);
 	mRenderer->PostRender();
 }
 
@@ -90,18 +90,20 @@ void GCLApplication::ReleaseRenderObject(GCLRenderObject* renderObjToDelete)
 	mRenderObjectList.erase(it);
 }
 
-void GCLApplication::RegisterSprite(GCLSprite* newSprite)
+void GCLApplication::RegisterRenderObject2D(GCLRenderObject2D* newRenderObject)
 {
-	GCLAssert(newSprite);
-	mSpriteList.push_back(newSprite);
+	GCLAssert(newRenderObject);
+	mRenderObject2DList.push_back(newRenderObject);
 }
 
-void GCLApplication::ReleaseSprite(GCLSprite* spriteToDelete)
+void GCLApplication::ReleaseRenderObject2D(GCLRenderObject2D* renderObjectToDelete)
 {
-	GCLAssert(spriteToDelete);
-	SpriteList::iterator it = std::find(mSpriteList.begin(), mSpriteList.end(), spriteToDelete);
-	GCLAssert(it != mSpriteList.end());
-	mSpriteList.erase(it);
+	GCLAssert(renderObjectToDelete);
+	RenderObject2DList::iterator it = std::find(mRenderObject2DList.begin(),
+												mRenderObject2DList.end(),
+												renderObjectToDelete);
+	GCLAssert(it != mRenderObject2DList.end());
+	mRenderObject2DList.erase(it);
 }
 
 

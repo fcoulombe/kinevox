@@ -30,12 +30,14 @@ class RenderObject2D
 {
 public:
 	RenderObject2D()
-	: mObjName("Un-Init")
+	: mObjName("Un-Init"),
+	  mIsVisible(true)
 	{
 		mSprite = NULL;
 	}
 	RenderObject2D(const char *name, const char *spriteFilename)
-	: mObjName(name)
+	: mObjName(name),
+	  mIsVisible(true)
 	{
 		mSprite = new Sprite(spriteFilename);
 	}
@@ -52,8 +54,12 @@ public:
 	}
 	void Render()
 	{
-		mSprite->Render();
+		if (mIsVisible)
+			mSprite->Render();
 	}
+
+	void SetVisible(bool isVisible = true) { mIsVisible = isVisible; }
+	bool IsVisible() const { return mIsVisible; }
 
 	void SetPosition(Real x, Real y,Real z)
 	{ SetPosition(WorldPoint3(x,y,z));	}
@@ -80,5 +86,6 @@ public:
 protected:
 	Sprite *mSprite;
 	std::string mObjName;
+	bool mIsVisible;
 };
 }

@@ -45,10 +45,11 @@ void Sprite::LoadSprite(const char * filename)
 	std::fstream fp(fullFileName, std::fstream::binary|std::fstream::in);
 	GCLAssertMsg(fp.good(), fullFileName);
 	fp.read((char*)&mHeader, sizeof(SpriteDataHeader));
-	std::cout << "width: " << mHeader.width<<std::endl;
+	/*std::cout << "width: " << mHeader.width<<std::endl;
 	std::cout << "height: " << mHeader.height<<std::endl;
 	std::cout << "frame count: " << mHeader.frameCount<<std::endl;
 	std::cout << "texture count: " << mHeader.textureCount<<std::endl;
+	*/
 	for (size_t i=0; i<mHeader.textureCount; ++i)
 	{
 		uint32_t strLen;

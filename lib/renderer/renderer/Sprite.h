@@ -54,6 +54,9 @@ public:
 	size_t GetFrameCount() const { return mHeader.frameCount; }
 
 	void SetPosition(const WorldPoint3 &position)  	{mPosition = position;	}
+	const WorldPoint3 &GetPosition() const { return mPosition; }
+
+	void SetScale(const WorldPoint2 &scale) { mScale = scale; }
 private:
 	void LoadSprite(const char *filename);
 	std::vector<Texture*> mTextureList;
@@ -62,6 +65,7 @@ private:
 
 	size_t mCurrentFrame;
 	WorldPoint3 mPosition;
+	WorldPoint2 mScale;
 	bool mIsPlaying;
 };
 

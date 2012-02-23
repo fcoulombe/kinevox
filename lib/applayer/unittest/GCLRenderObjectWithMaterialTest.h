@@ -39,7 +39,7 @@ void Test()
 
 	GCLApplication::Initialize();
 
-	GCLRenderObject obj;
+	GCLRenderObject obj("TestObject");
 	Assert_Test(GCLApplication::IsRegistered(obj));
 	Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
 

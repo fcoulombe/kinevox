@@ -25,8 +25,8 @@
 
 using namespace GCL;
 
-GCLRenderObject2D::GCLRenderObject2D(const char *filename)
-: RenderObject2D(filename)
+GCLRenderObject2D::GCLRenderObject2D(const char *name, const char *spriteFilename)
+: RenderObject2D(name, spriteFilename)
 {
 	GCLApplication::RegisterRenderObject2D(this);
 }

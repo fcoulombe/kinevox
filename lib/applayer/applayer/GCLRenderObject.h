@@ -31,7 +31,7 @@ namespace GCL
 class GCLRenderObject : public RenderObject
 {
 public:
-	GCLRenderObject();
+	GCLRenderObject(const char *name);
 
 	~GCLRenderObject();
 	const VertexData &GetVertexData() const

@@ -77,7 +77,8 @@ GCLINLINE std::ostream& operator<<( std::ostream& output, const VertexData &P)
 class RenderObject
 {
 public:
-	RenderObject(const Matrix44 &transform)
+	RenderObject(const char *name, const Matrix44 &transform)
+	: mObjName(name)
 	{
 		mTransform = (transform);
 	}
@@ -110,5 +111,6 @@ public:
 
 protected:
 	Matrix44 mTransform;
+	std::string mObjName;
 };
 }

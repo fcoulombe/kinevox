@@ -29,7 +29,7 @@ namespace GCL
 class GCLRenderObject2D: public RenderObject2D
 {
 public:
-	GCLRenderObject2D(const char *filename="DefaultSprite");
+	GCLRenderObject2D(const char *name, const char *filename="DefaultSprite");
 
 	~GCLRenderObject2D();
 private:

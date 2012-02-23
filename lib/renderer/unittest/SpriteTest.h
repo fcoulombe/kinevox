@@ -40,21 +40,25 @@ void Test()
 	GLRenderer renderer;
 
 	Sprite obj;
-	SpriteList spriteList;
-	spriteList.push_back(&obj);
 	Assert_Test(obj.GetWidth() == 64);
 
 	Assert_Test(obj.GetHeight() == 64);
 	Assert_Test(obj.GetFrameCount() == 128);
 
-	obj.SetPosition(WorldPoint3(320.0, 240.0, 0.0));
+	static const WorldPoint3 kPositionTest(320.0, 240.0, 0.0);
+	obj.SetPosition(kPositionTest);
+	Assert_Test(obj.GetPosition() == kPositionTest);
+
+	obj.SetScale(WorldPoint2(0.5, 0.5));
 	obj.Play();
 
 	for (size_t i=0;i<100; ++i)
 	{
 		obj.Update();
 		renderer.PreRender();
-		renderer.Render(spriteList);
+		glPushMatrix();glErrorCheck();
+		obj.Render();
+		glPopMatrix();glErrorCheck();
 		renderer.PostRender();
 		usleep(1);
 	}
@@ -62,7 +66,6 @@ void Test()
 	obj.Pause();
 	obj.Rewind();
 
-	spriteList.clear();
 	TextureResourceManager::Terminate();
 
 }

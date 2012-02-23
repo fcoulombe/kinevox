@@ -23,12 +23,12 @@
 #include <sstream>
 
 #include <applayer/GCLApplication.h>
-#include <applayer/GCLSprite.h>
+#include <applayer/GCLRenderObject2D.h>
 
 #include <gcl/UnitTest.h>
 
 using namespace GCL;
-namespace GCLSpriteTest
+namespace GCLRenderObject2DTest
 {
 
 
@@ -38,7 +38,7 @@ void Test()
 
     GCLApplication::Initialize();
 
-    GCLSprite obj;
+    GCLRenderObject2D obj;
     
     GCLApplication::Update();
     GCLApplication::Render();

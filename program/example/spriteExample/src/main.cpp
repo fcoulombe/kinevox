@@ -24,8 +24,8 @@
 #include <renderer/OpenCV.h>
 #include <SDL.h>
 
-#include <applayer/GCLSprite.h>
 #include <applayer/GCLApplication.h>
+#include <applayer/GCLRenderObject2D.h>
 #include <gcl/Exception.h>
 #include <input/Input.h>
 #include <renderer/Camera.h>
@@ -47,7 +47,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		GCLApplication::SetViewportCamera(myCamera);
 
 
-		GCLSprite obj;
+		GCLRenderObject2D obj;
 
 
 		bool isRunning = true;

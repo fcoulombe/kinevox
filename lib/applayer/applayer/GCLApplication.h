@@ -31,7 +31,7 @@ namespace GCL
 class Camera;
 class GLRenderer;
 class GCLRenderObject;
-class GCLSprite;
+class GCLRenderObject2D;
 class Input;
 
 class GCLApplication
@@ -45,7 +45,6 @@ public:
 
 	GCLEXPORT static void SetViewportCamera(Camera &camera);
 
-
 	GCLTEST_EXPORT static bool IsRegistered(const GCLRenderObject &obj);
 
 	GCLEXPORT static GLRenderer *GetRenderer() { return mRenderer; }
@@ -53,19 +52,19 @@ private:
 	GCLApplication();
 	~GCLApplication();
 
-	friend class 	GCLRenderObject;
-	friend class GCLSprite;
+	friend class GCLRenderObject;
+	friend class GCLRenderObject2D;
 	static void RegisterRenderObject(GCLRenderObject* newRenderObject);
 	static void ReleaseRenderObject(GCLRenderObject* renderObjectToDelete);
 
-	static void RegisterSprite(GCLSprite* newSpriteObject);
-	static void ReleaseSprite(GCLSprite* spriteToDelete);
+	static void RegisterRenderObject2D(GCLRenderObject2D* newRenderObject);
+	static void ReleaseRenderObject2D(GCLRenderObject2D* renderObjectToDelete);
 
 
 	static GLRenderer *mRenderer;
 
 	static RenderObjectList mRenderObjectList;
-	static SpriteList mSpriteList;
+	static RenderObject2DList mRenderObject2DList;
 };
 
 }

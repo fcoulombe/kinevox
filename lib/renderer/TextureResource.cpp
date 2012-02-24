@@ -354,18 +354,6 @@ TextureResource::TextureResource( const char *textureName )
 	{
 		GCLAssertMsg(false, "this extension is not supported")
 	}
-
-
-	/* glGenTextures( 1, &mTextureHandle );	glErrorCheck();
-  glBindTexture(	 GL_TEXTURE_2D, mTextureHandle );glErrorCheck();
-  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mMinFilter );glErrorCheck();
-  glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mMagFilter );glErrorCheck();
-  glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, mWrapModeS );glErrorCheck();
-  glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, mWrapModeT);glErrorCheck();
-  GLenum bytePerPixel = (mBytePerPixel==4) ? GL_RGBA : GL_RGB;
-  glTexImage2D(	 GL_TEXTURE_2D, 0, bytePerPixel, mWidth, mHeight, 0,mTextureFormat, GL_UNSIGNED_BYTE, imageData );glErrorCheck();
-
-  delete [] imageData;*/
 }
 
 TextureResource::~TextureResource()
@@ -374,7 +362,5 @@ TextureResource::~TextureResource()
 	{
 		delete [] mTextureData.imageData;
 	}
-
-	//glDeleteTextures(1, &mTextureHandle);	glErrorCheck();
 }
 

@@ -70,7 +70,11 @@ Sound::Sound(const char *filename)
 	alSourcei(mSources, AL_BUFFER, mBuffer);
 
 }
-
+Sound::~Sound()
+{
+	alDeleteSources(1, &mSources);
+	alDeleteBuffers(1, &mBuffer);
+}
 bool Sound::LoadSound(const char *filename)
 {
 	const Resource *tempResource = SoundResourceManager::Instance().LoadResource(filename);
@@ -98,8 +102,8 @@ void Sound::Pause()
 
 bool Sound::IsPlaying() const
 {	ALint val;
-	alGetSourcei(mSources,AL_SOURCE_STATE,&val);alErrorCheck();
-	return val != AL_PLAYING;
+alGetSourcei(mSources,AL_SOURCE_STATE,&val);alErrorCheck();
+return val != AL_PLAYING;
 }
 
 Real Sound::GetCurrentTime() const

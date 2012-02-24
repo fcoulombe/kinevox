@@ -32,9 +32,7 @@ class Sound
 {
 public:
 	Sound(const char *filename);
-	~Sound()
-	{
-	}
+	~Sound();
 	bool LoadSound(const char *filename);
 	bool IsValid() const { return mSoundResource!=NULL; }
 	bool IsPlaying() const;

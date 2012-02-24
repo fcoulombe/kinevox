@@ -101,9 +101,10 @@ void Sound::Pause()
 }
 
 bool Sound::IsPlaying() const
-{	ALint val;
-alGetSourcei(mSources,AL_SOURCE_STATE,&val);alErrorCheck();
-return val != AL_PLAYING;
+{
+	ALint val;
+	alGetSourcei(mSources,AL_SOURCE_STATE,&val);alErrorCheck();
+	return val != AL_PLAYING;
 }
 
 Real Sound::GetCurrentTime() const

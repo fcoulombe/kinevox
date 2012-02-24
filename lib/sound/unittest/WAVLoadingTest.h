@@ -20,19 +20,20 @@
  * THE SOFTWARE.
  */
 #pragma once
+#include <fstream>
 #include <sstream>
 
 #include <gcl/UnitTest.h>
+#include <sound/WAVLoaderData.h>
 #include <sound/SoundResource.h>
 
 using namespace GCL;
-namespace SoundTest
+namespace WAVLoadingTest
 {
-
 void Test()
 {
 	TEST_START
-	const char *fullFileName = SOUND_PATH"Explosion.tga";
+	const char *fullFileName = SOUND_PATH"Explosion.wav";
 	std::fstream fp(fullFileName, std::fstream::binary|std::fstream::in);
 	AssertMsg_Test( fp.good(), fullFileName);
 
@@ -45,5 +46,15 @@ void Test()
 	//Assert_Test(data.mWidth==512);
 	//Assert_Test(data.mHeight==512);
 	SoundResource::Unload(data);
+
+	WavHeader header;
+	fp.read((char*)&header, sizeof(WavHeader));
+
+
+	uint8_t *sound_buffer = new uint8_t[header.data_size]; //set aside sound buffer space
+	fp.read((char *)sound_buffer, header.data_size); //read in our whole sound data chunk
+	delete [] sound_buffer;
+	fp.close();
 }
 }
+

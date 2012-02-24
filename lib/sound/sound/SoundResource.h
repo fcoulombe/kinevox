@@ -44,7 +44,7 @@ namespace GCL
 
       }
 
-      GLubyte *imageData;
+      uint8_t *soundData;
     }mSoundData;
 
     static const SoundResource EmptySound;

@@ -1,42 +1,44 @@
 /*
-void Load_Wave_File(char *fname)
+ * Copyright (C) 2011 by Francois Coulombe
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+#pragma once
+
+namespace GCL
 {
-    FILE *fp;
-
-    fp = fopen(fname,"rb);
-    if (fp)
-    {
-        BYTE id[4], *sound_buffer; //four bytes to hold 'RIFF'
-        DWORD size; //32 bit value to hold file size
-        short format_tag, channels, block_align, bits_per_sample; //our 16 values
-        DWORD format_length, sample_rate, avg_bytes_sec, data_size, i; //our 32 bit values
-
-        fread(id, sizeof(BYTE), 4, fp); //read in first four bytes
-        if (!strcmp(id, "RIFF"))
-        { //we had 'RIFF' let's continue
-            fread(size, sizeof(DWORD), 1, fp); //read in 32bit size value
-            fread(id, sizeof(BYTE), 4, fp); //read in 4 byte string now
-            if (!strcmp(id,"WAVE"))
-            { //this is probably a wave file since it contained "WAVE"
-                fread(id, sizeof(BYTE), 4, fp); //read in 4 bytes "fmt ";
-                fread(&format_length, sizeof(DWORD),1,fp);
-                fread(&format_tag, sizeof(short), 1, fp); //check mmreg.h (i think?) for other
-                                                              // possible format tags like ADPCM
-                fread(&channels, sizeof(short),1,fp); //1 mono, 2 stereo
-                fread(&sample_rate, sizeof(DWORD), 1, fp); //like 44100, 22050, etc...
-                fread(&avg_bytes_sec, sizeof(short), 1, fp); //probably won't need this
-                fread(&block_align, sizeof(short), 1, fp); //probably won't need this
-                fread(&bits_per_sample, sizeof(short), 1, fp); //8 bit or 16 bit file?
-                fread(id, sizeof(BYTE), 4, fp); //read in 'data'
-                fread(&data_size, sizeof(DWORD), 1, fp); //how many bytes of sound data we have
-                sound_buffer = (BYTE *) malloc (sizeof(BYTE) * data_size); //set aside sound buffer space
-                fread(sound_buffer, sizeof(BYTE), data_size, fp); //read in our whole sound data chunk
-            }
-            else
-                printf("Error: RIFF file but not a wave file\n");
-        }
-        else
-            printf("Error: not a RIFF file\n");
-    }
+struct WavHeader
+{
+	char riff[4];
+	int32_t fileSize;
+	char WAVE[4];
+	char fmt[4];
+	int32_t pad;
+	int16_t pad2;//check mmreg.h (i think?) for other
+	// possible format tags like ADPCM
+	uint16_t channel;//1 mono, 2 stereo
+	uint32_t sampleRate;//like 44100, 22050, etc...
+	uint16_t avg_bytes_sec; //probably won't need this
+	uint16_t block_align; //probably won't need this
+	uint16_t bits_per_sample; //8 bit or 16 bit file?
+	uint8_t id; //read in 'data'
+	uint32_t data_size; //how many bytes of sound data we have
+};
 }
-*/

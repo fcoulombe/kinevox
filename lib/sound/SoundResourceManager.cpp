@@ -18,41 +18,21 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */#include <iostream>
+ */
 
-#include "SoundTest.h"
-#include "WAVLoadingTest.h"
+#include "sound/SoundResourceManager.h"
+#include "sound/SoundResource.h"
 
+using namespace GCL;
 
-int main(int /*argc*/, char ** /*argv*/)
+SoundResourceManager *SoundResourceManager::smpInstance = NULL;
+
+Resource * SoundResourceManager::Allocate( const char *filename )
 {
-	try
-	{
-		WAVLoadingTest::Test();
-		SoundTest::Test();
-	}
-	catch (GCLException &e)
-	{
-		std::stringstream str;
-		str << "[FAILED] \n";
-		std::string what = e.what();
-		str << what;
+  return new SoundResource(filename);
+}
 
-		str << std::endl;
-		std::string finalOutput;
-		finalOutput = str.str();
-		std::cerr << finalOutput;
-		return -1;
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "[FAILED] " << e.what() << std::endl;
-		return -1;
-	}
-	catch (...)
-	{
-		std::cerr << "[FAILED] not sure what happened" << std::endl;
-	}
+void SoundResourceManager::Free( Resource * /*resource*/ )
+{
 
-	return 0;
 }

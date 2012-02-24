@@ -102,9 +102,5 @@ private:
 				mGlewVersion;
 
 	GLExtensionList mExtensions;
-
-
-
-
 };
 }

@@ -22,9 +22,8 @@
 
 #pragma once
 
-#include "gcl/Assert.h"
-
-#include "ResourceManager.h"
+#include <gcl/Assert.h>
+#include <gcl/ResourceManager.h>
 
 namespace GCL
 {

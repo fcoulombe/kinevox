@@ -22,16 +22,35 @@
 
 #include "sound/Sound.h"
 
-#include <AL/al.h>
-#include <AL/alc.h>
+#include <cstdlib>
 
+#include "sound/OpenAL.h"
+
+#include <gcl/Assert.h>
+
+#include <iostream>
 using namespace GCL;
 
-
+ALCdevice *device=NULL;
+ALCcontext *context = NULL;
 void Sound::Initialize()
 {
-	alcOpenDevice("GCLDevice");
 
+	device = alcOpenDevice(NULL);
+	GCLAssert(device);
+	context=alcCreateContext(device,NULL);
+	alcMakeContextCurrent(context);alErrorCheck();
+
+
+	std::cout << alcGetString(device, ALC_DEVICE_SPECIFIER )<< std::endl;
+	alErrorCheck();
+	ALuint buffer;
+	alGenBuffers(1, &buffer);alErrorCheck();
+	//alBufferData();alErrorCheck();
+
+	//alGenSources();alErrorCheck();
+	//alSourcei();alErrorCheck();
+	//alSourcePlay();alErrorCheck();
 }
 
 
@@ -46,5 +65,9 @@ void Sound::Play()
 
 void Sound::Terminate()
 {
-
+	context=alcGetCurrentContext();
+	device=alcGetContextsDevice(context);
+	alcMakeContextCurrent(NULL);
+	alcDestroyContext(context);
+	alcCloseDevice(device);
 }

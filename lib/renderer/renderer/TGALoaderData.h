@@ -25,7 +25,6 @@
 #include "renderer/OpenGL.h"
 namespace GCL
 {
-
   struct TGAHeader
   {
     GLubyte Header[12];
@@ -46,7 +45,4 @@ namespace GCL
   const GLubyte TGAUncompressedHeader[12] = {0,0, 2,0,0,0,0,0,0,0,0,0};
   // Compressed TGA Header
   const GLubyte TGACompressedHeader[12] = {0,0,10,0,0,0,0,0,0,0,0,0};
-
-
-
 }

@@ -21,21 +21,37 @@
  */
 
 #pragma once
-
+#include <gcl/WorldUnit.h>
+#include "sound/OpenAL.h"
 
 namespace GCL
 {
+class SoundResource;
 
 class Sound
 {
 public:
 	Sound(const char *filename);
-	static void Initialize();
-
+	~Sound()
+	{
+	}
+	bool LoadSound(const char *filename);
+	bool IsValid() const { return mSoundResource!=NULL; }
+	bool IsPlaying() const;
+	void Save(const char *filename);
 	void Play();
-	static void Terminate();
-private:
+	void Stop();
+	void Pause();
+	void Rewind();
 
+	Real GetCurrentTime() const;
+	Real GetTotalTime() const;
+private:
+	ALuint mBuffer;
+	ALuint mSources;
+
+	const SoundResource *mSoundResource;
 };
 
 }
+

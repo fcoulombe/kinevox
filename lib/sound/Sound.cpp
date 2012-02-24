@@ -23,51 +23,90 @@
 #include "sound/Sound.h"
 
 #include <cstdlib>
-
-#include "sound/OpenAL.h"
+#include <iostream>
 
 #include <gcl/Assert.h>
+#include <gcl/Macro.h>
+#include "sound/OpenAL.h"
+#include "sound/SoundResource.h"
+#include "sound/SoundResourceManager.h"
 
-#include <iostream>
 using namespace GCL;
 
-ALCdevice *device=NULL;
-ALCcontext *context = NULL;
-void Sound::Initialize()
+GCLINLINE std::ostream& operator<<( std::ostream& output, const SoundResource &P)
 {
-
-	device = alcOpenDevice(NULL);
-	GCLAssert(device);
-	context=alcCreateContext(device,NULL);
-	alcMakeContextCurrent(context);alErrorCheck();
-
-
-	std::cout << alcGetString(device, ALC_DEVICE_SPECIFIER )<< std::endl;
-	alErrorCheck();
-	ALuint buffer;
-	alGenBuffers(1, &buffer);alErrorCheck();
-	//alBufferData();alErrorCheck();
-
-	//alGenSources();alErrorCheck();
-	//alSourcei();alErrorCheck();
-	//alSourcePlay();alErrorCheck();
+	output << "(dataSize: " << P.mSoundData.header.data_size
+			<< ", sampleRate: " << P.mSoundData.header.sampleRate
+			<< ", format: " << P.mSoundData.header.channel<< ")" << std::endl;
+	return output;
 }
 
 
-Sound::Sound(const char *)
+Sound::Sound(const char *filename)
 {
 
+	bool ret = LoadSound(filename);
+	GCLAssertMsg(ret, (std::string("Failed Loading Sound: ") + std::string(filename)).c_str());
+
+	//std::cout << *mSoundResource << std::endl;
+	alGenBuffers(1, &mBuffer);alErrorCheck();
+	alBufferData(mBuffer,
+			mSoundResource->GetFormat(),
+			mSoundResource->mSoundData.soundData,
+			mSoundResource->mSoundData.header.data_size,
+			mSoundResource->mSoundData.header.sampleRate);alErrorCheck();
+
+	alGenSources(1, &mSources);alErrorCheck();
+	alSourcef(mSources, AL_PITCH, 1);alErrorCheck();
+	alSourcef(mSources, AL_GAIN, 1);alErrorCheck();
+	alSource3f(mSources, AL_POSITION, 0, 0, 0);alErrorCheck();
+	alSource3f(mSources, AL_VELOCITY, 0, 0, 0);alErrorCheck();
+	alSourcei(mSources, AL_LOOPING, AL_FALSE);alErrorCheck();
+
+
+	alListener3f(AL_POSITION, 0, 0, 0);alErrorCheck();
+	alListener3f(AL_VELOCITY, 0, 0, 0);alErrorCheck();
+	//alListener3f(AL_ORIENTATION, 0, 0, -1);alErrorCheck();
+	alSourcei(mSources, AL_BUFFER, mBuffer);
+
 }
+
+bool Sound::LoadSound(const char *filename)
+{
+	const Resource *tempResource = SoundResourceManager::Instance().LoadResource(filename);
+	mSoundResource = static_cast<const SoundResource*>(tempResource);
+	return mSoundResource != 0;
+}
+
 void Sound::Play()
 {
-
+	alSourcePlay(mSources);alErrorCheck();
 }
 
-void Sound::Terminate()
+void Sound::Stop()
 {
-	context=alcGetCurrentContext();
-	device=alcGetContextsDevice(context);
-	alcMakeContextCurrent(NULL);
-	alcDestroyContext(context);
-	alcCloseDevice(device);
+	alSourceStop( mSources);alErrorCheck();
 }
+void Sound::Rewind()
+{
+	alSourceRewind( mSources);alErrorCheck();
+}
+void Sound::Pause()
+{
+	alSourcePause( mSources);alErrorCheck();
+}
+
+bool Sound::IsPlaying() const
+{	ALint val;
+	alGetSourcei(mSources,AL_SOURCE_STATE,&val);alErrorCheck();
+	return val != AL_PLAYING;
+}
+
+Real Sound::GetCurrentTime() const
+{
+	int byteoffset;
+	alGetSourcei(mSources, AL_BYTE_OFFSET, &byteoffset);
+	return Real(byteoffset) / mSoundResource->mSoundData.header.byteRate ;
+}
+
+Real Sound::GetTotalTime() const { return Real(mSoundResource->mSoundData.header.data_size)/ mSoundResource->mSoundData.header.byteRate ; }

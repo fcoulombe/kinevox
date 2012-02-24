@@ -24,12 +24,19 @@
 #include <sstream>
 
 #include <gcl/UnitTest.h>
-#include <sound/WAVLoaderData.h>
+#include <sound/OpenAL.h>
 #include <sound/SoundResource.h>
+#include <sound/WAVLoaderData.h>
 
 using namespace GCL;
 namespace WAVLoadingTest
 {
+static inline ALenum GetFormatFromInfo(uint16_t channels)
+{
+	if (channels == 1)
+		return AL_FORMAT_MONO16;
+	return AL_FORMAT_STEREO16;
+}
 void Test()
 {
 	TEST_START
@@ -47,14 +54,6 @@ void Test()
 	//Assert_Test(data.mHeight==512);
 	SoundResource::Unload(data);
 
-	WavHeader header;
-	fp.read((char*)&header, sizeof(WavHeader));
-
-
-	uint8_t *sound_buffer = new uint8_t[header.data_size]; //set aside sound buffer space
-	fp.read((char *)sound_buffer, header.data_size); //read in our whole sound data chunk
-	delete [] sound_buffer;
-	fp.close();
 }
 }
 

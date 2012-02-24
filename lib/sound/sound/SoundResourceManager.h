@@ -54,7 +54,8 @@ namespace GCL
   private:
     static SoundResourceManager *smpInstance;
 
-    SoundResourceManager() {}
+    SoundResourceManager();
+    ~SoundResourceManager();
   };
 
 }

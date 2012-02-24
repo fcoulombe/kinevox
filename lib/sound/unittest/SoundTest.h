@@ -22,8 +22,12 @@
 #pragma once
 #include <sstream>
 
+#include <gcl/Macro.h>
 #include <gcl/UnitTest.h>
+#include <sound/ALSoundDevice.h>
 #include <sound/Sound.h>
+#include <sound/SoundResource.h>
+#include <sound/SoundResourceManager.h>
 
 using namespace GCL;
 namespace SoundTest
@@ -32,10 +36,26 @@ namespace SoundTest
 void Test()
 {
 	TEST_START
-	Sound::Initialize();
-	Sound sound("Explosion.wav");
-	sound.Play();
 
-	Sound::Terminate();
+	SoundResourceManager::Initialize();
+	ALSoundDevice device;
+	Sound sound(SOUND_PATH"Explosion.wav");
+	//SoundList soundList;
+	//soundList.push_back(&sound);
+
+	sound.Play();
+	while (!sound.IsPlaying())
+	{
+		usleep(10);
+	}
+	sound.Pause();
+	sound.Stop();
+	sound.Rewind();
+
+	Assert_Test(sound.GetCurrentTime() ==0.0 );
+	Assert_Test(abseq(sound.GetTotalTime(),2.297874928, DBL_PRECISION_TOLERANCE));
+
+	SoundResourceManager::Terminate();
+
 }
 }

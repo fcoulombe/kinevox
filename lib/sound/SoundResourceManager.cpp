@@ -36,3 +36,11 @@ void SoundResourceManager::Free( Resource * /*resource*/ )
 {
 
 }
+
+
+SoundResourceManager::SoundResourceManager()
+{
+
+}
+SoundResourceManager::~SoundResourceManager()
+{}

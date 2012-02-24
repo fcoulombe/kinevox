@@ -19,52 +19,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 #pragma once
-
-
-
-#if defined(OS_IPHONE)
-#elif defined(OS_MACOSX)
-#elif OS_LINUX
-#   include <AL/al.h>
-#   include <AL/alc.h>
-#else
-#   error "TBD"
-#endif
-
-
-#include <gcl/Assert.h>
 #include <sstream>
-#define alErrorCheck() do { i_alErrorCheck(__FILE__, __LINE__); }while(0);
-inline void i_alErrorCheck(const char *file, int line)
+
+#include <gcl/Macro.h>
+#include <gcl/UnitTest.h>
+#include <sound/ALSoundDevice.h>
+#include <sound/SoundResource.h>
+#include <sound/SoundResourceManager.h>
+
+using namespace GCL;
+namespace SoundResourceTest
 {
-	ALenum err = alGetError();
-	if (err == AL_NO_ERROR)
-		return;
 
-	std::stringstream s;
-	s<<file << ":" <<  line << ": OpenAL Error" << std::endl;
-	switch (err)
-	{
-	case AL_INVALID_NAME:
-		s<<"a bad name (ID) was passed to an OpenAL function";
-		break;
-	case AL_INVALID_ENUM:
-	  s<<"an invalid enum value was passed to an OpenAL function";
-		break;
-	case AL_INVALID_VALUE:
-	  s<<"an invalid value was passed to an OpenAL function";
-		break;
-	case AL_INVALID_OPERATION:
-	 s<<"the requested operation is not valid";
-		break;
-	case AL_OUT_OF_MEMORY:
-	  s<<"the requested operation resulted in OpenAL running out of memory";
-		break;
-	default:
-	  s<<"OpenAL: don't know what happenedl";
-	}
-	GCLAssertMsg(false, s.str().c_str());
+void Test()
+{
+	TEST_START
 
+	SoundResourceManager::Initialize();
+	ALSoundDevice device;
+
+	SoundResourceManager &soundResourceManager = SoundResourceManager::Instance();
+	const Resource *wavResource;
+	wavResource = soundResourceManager.LoadResource(SOUND_PATH"Explosion.wav");
+	Assert_Test(wavResource);
+
+	SoundResourceManager::Terminate();
+
+}
 }

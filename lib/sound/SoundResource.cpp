@@ -28,7 +28,6 @@
 #include <cstring>
 
 #include "gcl/Assert.h"
-#include "sound/WAVLoaderData.h"
 
 using namespace GCL;
 
@@ -41,18 +40,11 @@ void SoundResource::Unload(SoundData &data)
 }
 
 
-void SoundResource::LoadWav(std::istream& /*fp*/, SoundData & /*data*/)
+void SoundResource::LoadWav(std::istream& fp, SoundData & data)
 {
-	/*
-	data.mWidth = 256;
-	data.mHeight = 256;
-	data.mBytePerPixel = 3;
-	data.mBitdepth = 8;
-	size_t size = data.mWidth * data.mHeight* data.mBytePerPixel ;
-	data.imageData =  new GLubyte[size];
-	fp.read( (char*)data.imageData, size);
-	*/
-	GCLAssert(false && "TBD");
+	fp.read((char*)&data.header, sizeof(WavHeader));
+	data.soundData = new uint8_t[data.header.data_size];
+	fp.read((char *)data.soundData, data.header.data_size);
 }
 
 

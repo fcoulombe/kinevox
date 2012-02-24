@@ -22,8 +22,8 @@
 
 #include "renderer/Sprite.h"
 #include <gcl/Assert.h>
-#include <renderer/ResourceManagerConfig.h>
-#include <renderer/Texture.h>
+#include <gcl/ResourceManagerConfig.h>
+#include "renderer/Texture.h"
 
 #include <fstream>
 

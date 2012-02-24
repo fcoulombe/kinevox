@@ -21,11 +21,35 @@
  */
 #pragma once
 
+#include <gcl/UnitTest.h>
+#include <renderer/TextureResourceManager.h>
 
-//this is a define to ease string concatenation at compile time.
-//the compiler should be able to figure this out at compile time
-//with char pointers but who knows... maybe they didn't feel like it
-#define DATA_PATH  "data/"
-#define TEXTURE_PATH  DATA_PATH"Texture/"
-#define MATERIAL_PATH DATA_PATH"Material/"
-#define SPRITE_PATH DATA_PATH"Sprite/"
+using namespace GCL;
+
+namespace TextureResourceTest
+{
+void Test();
+void Test()
+{
+	TEST_START
+
+	TextureResourceManager::Initialize();
+
+	TextureResourceManager &textureResourceManager = TextureResourceManager::Instance();
+	const Resource *tgaResource;
+	tgaResource = textureResourceManager.LoadResource(TEXTURE_PATH"mushroomtga.tga");
+	Assert_Test(tgaResource);
+
+	//test resource sharing
+	const Resource *tgaResource2;
+	tgaResource2 = textureResourceManager.LoadResource(TEXTURE_PATH"mushroomtga.tga");
+	Assert_Test(tgaResource == tgaResource2);
+#ifndef OS_IPHONE
+	const Resource *pngResource;
+	pngResource = textureResourceManager.LoadResource(TEXTURE_PATH"mushroompng.png");
+	Assert_Test(pngResource);
+#endif
+
+	TextureResourceManager::Terminate();
+}
+}

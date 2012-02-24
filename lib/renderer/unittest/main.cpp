@@ -49,7 +49,7 @@
 #include "RenderObjectTest.h"
 #include "RenderObject2DTest.h"
 #include "RenderObjectWithMaterialTest.h"
-#include "ResourceTest.h"
+#include "TextureResourceTest.h"
 #include "ShaderTest.h"
 #include "SpriteTest.h"
 #include "TextureTest.h"
@@ -79,7 +79,7 @@ int main(int /*argc*/, char **argv)
       VertexBufferTest::Test();
       TgaLoadingTest::Test();
       PngLoadingTest::Test();
-      ResourceTest::Test();
+      TextureResourceTest::Test();
       TextureTest::Test();
       TextureAndShaderTest::Test();
       MaterialTest::Test();

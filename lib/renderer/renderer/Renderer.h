@@ -23,7 +23,6 @@
 #pragma once
 #include <stdint.h>
 #include <vector>
-#include <iostream>
 
 namespace GCL
 {

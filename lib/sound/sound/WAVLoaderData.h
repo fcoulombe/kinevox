@@ -35,10 +35,10 @@ struct WavHeader
 	// possible format tags like ADPCM
 	uint16_t channel;//1 mono, 2 stereo
 	uint32_t sampleRate;//like 44100, 22050, etc...
-	uint16_t avg_bytes_sec; //probably won't need this
+	uint32_t byteRate; //probably won't need this
 	uint16_t block_align; //probably won't need this
-	uint16_t bits_per_sample; //8 bit or 16 bit file?
-	uint8_t id; //read in 'data'
+	uint16_t bitsPerSample; //8 bit or 16 bit file?
+	uint8_t id[4]; //read in 'data'
 	uint32_t data_size; //how many bytes of sound data we have
 };
 }

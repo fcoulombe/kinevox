@@ -20,7 +20,9 @@
  * THE SOFTWARE.
  */#include <iostream>
 
+#include "ALSoundDeviceTest.h"
 #include "SoundTest.h"
+#include "SoundResourceTest.h"
 #include "WAVLoadingTest.h"
 
 
@@ -28,7 +30,9 @@ int main(int /*argc*/, char ** /*argv*/)
 {
 	try
 	{
+		ALSoundDeviceTest::Test();
 		WAVLoadingTest::Test();
+		SoundResourceTest::Test();
 		SoundTest::Test();
 	}
 	catch (GCLException &e)

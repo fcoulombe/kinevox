@@ -23,6 +23,8 @@
 #pragma once
 
 #include <gcl/Resource.h>
+#include "sound/OpenAL.h"
+#include "sound/WAVLoaderData.h"
 
 namespace GCL
 {
@@ -44,6 +46,7 @@ namespace GCL
 
       }
 
+      WavHeader header;
       uint8_t *soundData;
     }mSoundData;
 
@@ -51,6 +54,13 @@ namespace GCL
 
     static void LoadWav(std::istream &is, SoundData &data);
     static void Unload(SoundData &data);
+
+    ALenum GetFormat() const
+    {
+    	if (mSoundData.header.channel == 1)
+    		return AL_FORMAT_MONO8;
+    	return AL_FORMAT_STEREO16;
+    }
   private:
     SoundResource() {}
   };

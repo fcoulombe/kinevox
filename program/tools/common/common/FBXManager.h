@@ -23,6 +23,7 @@
 #pragma once
 
 #include <fbxsdk.h>
+#include "common/MeshData.h"
 
 #ifdef IOS_REF
 #undef IOS_REF
@@ -32,6 +33,8 @@
 
 namespace GCL
 {
+
+
 class FBXManager
 {
 public:
@@ -39,6 +42,8 @@ public:
 	static void Terminate();
 	static bool LoadScene(const char *filename);
 	static KFbxScene *GetScene() { return pScene; }
+	static KFbxNode *GetRootNode() { return pScene->GetRootNode(); }
+	static MeshData GetMeshData();
 	static KFbxSdkManager* pSdkManager;
 	static KFbxScene* pScene;
 };

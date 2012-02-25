@@ -23,10 +23,12 @@
 Import('env')
 
 name = "common"
-incPath = [env.Dir(".").srcnode()]
+#incPath = [env.Dir(".")]
+incPath = [env.Dir("#/program/tools/"+name)]
 dependencies = ['fbx', 'renderer']
 src_files = env.Glob("*.cpp")
 
+env.Append(CPPPATH=incPath)
 lib = env.KStaticLibrary(name, src_files, dependencies)
 env.AddComponent(name, None, incPath, lib, dependencies)
 

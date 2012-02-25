@@ -19,42 +19,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#pragma once
+#include <sstream>
 
-
-#include "BufferWriterTest.h"
-#include "FBXLoadingTest.h"
-
-#include <unistd.h>
+#include <common/BufferWriter.h>
+#include <gcl/UnitTest.h>
 
 using namespace GCL;
-
-
-
-
-int main(int /*argc*/, char **argv)
+namespace BufferWriterTest
 {
-  std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
 
-  try
-  {
-	  BufferWriterTest::Test();
-      FBXLoadingTest::Test();
-  }
-  catch (GCLException & e)
-  {
-      std::stringstream str;
-      str << "[FAILED] " << argv[0] << std::endl;
-      str << e.what();
-      str << std::endl;
-      std::cerr << str.str();
-      return -1;
-  }
-  catch (...)
-  {
-      std::cerr << "[FAILED] " << argv[0] << std::endl;
-      std::cerr << "something went wrong" << std::endl;
-  }
-  std::cout.flush();
-  std::cerr.flush();
-  return 0;
+struct TestData
+{
+	uint32_t val1;
+	uint32_t val2;
+	uint16_t val3;
+	uint16_t val4;
+
+
+};
+BufferWriter &operator<<(BufferWriter &buffer, const TestData &data)
+{
+	buffer.Write(data.val1);
+	buffer.Write(data.val2);
+	buffer.Write(data.val3);
+	buffer.Write(data.val4);
+	return buffer;
+}
+void Test()
+{
+	TEST_START
+	BufferWriter buffer(4096);
+	TestData data;
+	data.val1 = 0;
+	data.val2 = 1;
+	data.val3 = 2;
+	data.val4 = 3;
+	buffer << data;
+	Assert_Test(buffer.GetCurrentOffset() == sizeof(TestData));
+
+	buffer.WriteToFile("testData.dat");
+}
 }

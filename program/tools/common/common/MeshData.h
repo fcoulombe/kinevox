@@ -24,33 +24,55 @@
 
 #include <vector>
 #include <gcl/Point4.h>
+#include "common/BufferWriter.h"
 
 
 namespace GCL
 {
 struct MeshData
 {
-	size_t mVertexCount;
+	uint32_t mVertexCount;
+	uint32_t mIndicesCount;
+	uint32_t mNormalCount;
+	uint32_t mVertexColorCount;
+	uint32_t mMaterialCount;
+	uint32_t mUvCount;
+
 	std::vector<WorldPoint4> mVertexList;
-
-	size_t mNormalCount;
-	std::vector<WorldPoint3> mNormalList;
-
-	size_t mVertexColorCount;
-	std::vector<WorldPoint3> mVertexColor;
-
-	size_t mIndicesCount;
 	std::vector<int> mIndiceList;
+	std::vector<WorldPoint3> mNormalList;
+	std::vector<WorldPoint3> mVertexColor;
+	std::vector<WorldPoint2> mUvList;
 
-	size_t mMaterialCount;
 };
+GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const MeshData &meshData)
+{
+	buffer.Write(meshData.mVertexCount);
+	buffer.Write(meshData.mIndicesCount);
+	buffer.Write(meshData.mNormalCount);
+	buffer.Write(meshData.mVertexColorCount);
+	buffer.Write(meshData.mMaterialCount);
+	buffer.Write(meshData.mUvCount);
+	for (size_t i=0; i<meshData.mIndicesCount; ++i)
+	{
+		int indice = meshData.mIndiceList[i];
+
+		const WorldPoint4 &tempVert = meshData.mVertexList[indice];
+		buffer.Write(tempVert.x);
+		buffer.Write(tempVert.y);
+		buffer.Write(tempVert.z);
+
+	}
+	return buffer;
+}
 GCLINLINE std::ostream& operator<<( std::ostream& output, const MeshData &meshData)
 {
 	output << "PolyVertexCount: " << meshData.mVertexCount<<std::endl;
 	output << "MaterialCount: " << meshData.mMaterialCount <<std::endl;
 	output << "ElemNormCount: " << meshData.mNormalCount <<std::endl;
+	output << "UvCount: " << meshData.mUvCount <<std::endl;
 
-
+/*
 	output << "Normals"<< std::endl;
 	for (size_t i=0; i<meshData.mNormalList.size(); ++i)
 	{
@@ -71,7 +93,7 @@ GCLINLINE std::ostream& operator<<( std::ostream& output, const MeshData &meshDa
 		int indice = meshData.mIndiceList[i];
 		output << indice << std::endl;
 	}
-
+*/
 	return output;
 }
 }

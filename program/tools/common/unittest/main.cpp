@@ -23,6 +23,7 @@
 
 #include "BufferWriterTest.h"
 #include "FBXLoadingTest.h"
+#include "MeshSavingTest.h"
 
 #include <unistd.h>
 
@@ -39,6 +40,7 @@ int main(int /*argc*/, char **argv)
   {
 	  BufferWriterTest::Test();
       FBXLoadingTest::Test();
+      MeshSavingTest::Test();
   }
   catch (GCLException & e)
   {

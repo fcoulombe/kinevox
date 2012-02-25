@@ -1,0 +1,11 @@
+Import('env')
+
+dependencies = ['common']
+src_files = env.Glob("src/*.cpp")
+data_files =[env.Dir("data")]
+
+
+prog = env.KProgram("meshconverter", src_files, dependencies)
+finalProduct = env.Install(env.Dir("$INSTALL_DIR/tools/mesh_converter"), prog)
+a = env.Alias("@MeshConverter",finalProduct) 
+env.Alias("@tools",a) 

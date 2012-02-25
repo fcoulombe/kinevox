@@ -21,9 +21,14 @@
 
 Import('env')
 
-name = "sound_test"
-dependencies = ["sound"]
-data = [ env.Dir("data")]
+name = "common_test"
+dependencies = ["common"]
+data = [ env.Dir("datamisc")]
 src_files = env.Glob("*.cpp")
 
-prog = env.UnitTest(name, src_files, dependencies, data)
+d = env.RSync(data, None)
+env.AlwaysBuild(d)
+
+prog = env.UnitTest(name,  src_files, dependencies, [])
+env.Depends(prog, data)
+

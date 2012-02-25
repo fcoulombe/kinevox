@@ -8,4 +8,5 @@ data_files =[env.Dir("data")]
 prog = env.KProgram("meshconverter", src_files, dependencies)
 finalProduct = env.Install(env.Dir("$INSTALL_DIR/tools/mesh_converter"), prog)
 a = env.Alias("@MeshConverter",finalProduct) 
+env.Depends("@meshconverter", env.Alias("common_test_run")) #run the common test before to build the tools
 env.Alias("@tools",a) 

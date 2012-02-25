@@ -25,6 +25,7 @@
 #include <cstring>
 
 #include <common/BufferWriter.h>
+#include <gcl/File.h>
 #include <gcl/UnitTest.h>
 
 using namespace GCL;
@@ -37,8 +38,6 @@ struct TestData
 	uint32_t val2;
 	uint16_t val3;
 	uint16_t val4;
-
-
 };
 BufferWriter &operator<<(BufferWriter &buffer, const TestData &data)
 {
@@ -74,7 +73,7 @@ void Test()
 	}
 
 	buffer.WriteToFile("testData.dat");
-	std::ifstream fp("testData.dat");
-	Assert_Test(fp.good());
+	GCLFile fp("testData.dat");
+	Assert_Test(fp.GetFileSize());
 }
 }

@@ -38,7 +38,7 @@ void Test()
 	GLRenderer render;
 
 	{
-		Mesh myMesh("data/ExampleMesh.gcm");
+		Mesh myMesh("data/ExampleMesh.mesh");
 		myMesh.Render();
 	}
 

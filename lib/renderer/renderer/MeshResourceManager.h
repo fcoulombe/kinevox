@@ -22,23 +22,40 @@
 
 #pragma once
 
-
-#include "renderer/Material.h"
-#include "renderer/VertexBuffer.h"
+#include <gcl/Assert.h>
+#include <gcl/ResourceManager.h>
 
 namespace GCL
 {
-
-class MeshResource;
-  class Mesh
+  //very simple resource manager for Mesh
+  //when something asks it to load a Mesh, it will hash the name and then
+  //look in the map if we already have this Mesh loaded. if its the case, it will return
+  //a reference and increase the ref count. this is so that we don't waste memory loading similar Meshs
+  class MeshResource;
+  class MeshResourceManager : public ResourceManager
   {
   public:
-	  Mesh(const char *filename="DefaultMesh");
-	  void Render();
+    static void Initialize()
+    {
+      GCLAssert(smpInstance == NULL);
+      smpInstance = new MeshResourceManager();
+    }
+    static void Terminate()
+    {
+      GCLAssert(smpInstance != NULL);
+      delete smpInstance;
+      smpInstance = NULL;
+    }
+    static MeshResourceManager &Instance() {	GCLAssert(smpInstance != NULL);return *smpInstance;}
+
+    Resource *Allocate(const char *filename);
+    void Free(Resource * /*resource*/);
+
   private:
-	  Material mMaterial;
-	  VertexBuffer<VertexPNT> *mVertexBuffer;
-	  const MeshResource *mMeshResource;
+    static MeshResourceManager *smpInstance;
+
+    MeshResourceManager() {}
   };
 
 }
+

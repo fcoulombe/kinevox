@@ -19,26 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 #pragma once
 
+#include <gcl/UnitTest.h>
+#include <renderer/MeshResource.h>
+#include <renderer/MeshResourceManager.h>
 
-#include "renderer/Material.h"
-#include "renderer/VertexBuffer.h"
+using namespace GCL;
 
-namespace GCL
+namespace MeshResourceTest
 {
+void Test();
+void Test()
+{
+	TEST_START
+	MeshResourceManager::Initialize();
 
-class MeshResource;
-  class Mesh
-  {
-  public:
-	  Mesh(const char *filename="DefaultMesh");
-	  void Render();
-  private:
-	  Material mMaterial;
-	  VertexBuffer<VertexPNT> *mVertexBuffer;
-	  const MeshResource *mMeshResource;
-  };
+	MeshResourceManager &meshResourceManager = MeshResourceManager::Instance();
+	const MeshResource *meshResource;
+	meshResource = static_cast<const MeshResource *>(meshResourceManager.LoadResource(MESH_PATH"ExampleMesh.mesh"));
+	Assert_Test(meshResource);
 
+	MeshResourceManager::Terminate();
+}
 }

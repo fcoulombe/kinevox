@@ -44,6 +44,8 @@
 #include "GLRendererTest.h"
 #include "MaterialTest.h"
 #include "MeshTest.h"
+#include "MeshLoadingTest.h"
+#include "MeshResourceTest.h"
 #include "PngLoadingTest.h"
 #include "RenderBufferTest.h"
 #include "RenderObjectTest.h"
@@ -93,6 +95,9 @@ int main(int /*argc*/, char **argv)
       RenderBufferTest::Test();
       FrameBufferTest::Test();
       GeomUtilTest::Test();
+
+      MeshLoadingTest::Test();
+      MeshResourceTest::Test();
       MeshTest::Test();
 
   }

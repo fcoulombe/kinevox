@@ -20,25 +20,19 @@
  * THE SOFTWARE.
  */
 
-#pragma once
+#include "renderer/MeshResourceManager.h"
+#include "renderer/MeshResource.h"
 
+using namespace GCL;
 
-#include "renderer/Material.h"
-#include "renderer/VertexBuffer.h"
+MeshResourceManager *MeshResourceManager::smpInstance = NULL;
 
-namespace GCL
+Resource * MeshResourceManager::Allocate( const char *filename )
 {
+  return new MeshResource(filename);
+}
 
-class MeshResource;
-  class Mesh
-  {
-  public:
-	  Mesh(const char *filename="DefaultMesh");
-	  void Render();
-  private:
-	  Material mMaterial;
-	  VertexBuffer<VertexPNT> *mVertexBuffer;
-	  const MeshResource *mMeshResource;
-  };
+void MeshResourceManager::Free( Resource * /*resource*/ )
+{
 
 }

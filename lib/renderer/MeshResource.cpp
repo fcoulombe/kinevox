@@ -20,25 +20,61 @@
  * THE SOFTWARE.
  */
 
-#pragma once
+#include "renderer/MeshResource.h"
+#include <gcl/Assert.h>
+#include <gcl/File.h>
+
+#include <cstring>
 
 
-#include "renderer/Material.h"
-#include "renderer/VertexBuffer.h"
+using namespace GCL;
 
-namespace GCL
+const MeshResource MeshResource::EmptyMesh;
+
+void MeshResource::Unload(MeshData *data)
 {
-
-class MeshResource;
-  class Mesh
-  {
-  public:
-	  Mesh(const char *filename="DefaultMesh");
-	  void Render();
-  private:
-	  Material mMaterial;
-	  VertexBuffer<VertexPNT> *mVertexBuffer;
-	  const MeshResource *mMeshResource;
-  };
-
+	GCLAssert(data);
+	delete data;
 }
+
+void MeshResource::LoadMesh(GCLFile & fp, MeshData *& data)
+{
+	size_t fileSize = fp.GetFileSize();
+	uint8_t *buffer = new uint8_t[fileSize];
+	data = reinterpret_cast<MeshData*>(buffer);
+	fp.Read(buffer, fileSize);
+}
+
+//this loads TGA files and then upload it to opengl
+MeshResource::MeshResource( const char *MeshName )
+: Resource()
+{
+	mMeshData = NULL;
+	std::string path = Resource::GetResourcePath();
+	path += MeshName;
+
+
+	const char *ext = &(path.c_str()[path.length()-4]);
+	if (strncmp(ext, "mesh", 4) == 0)
+	{
+		GCLFile fp(path.c_str());
+
+		LoadMesh(fp, mMeshData);
+		GCLAssert(mMeshData);
+
+		fp.Close();
+	}
+	else
+	{
+		GCLAssertMsg(false, "this extension is not supported")
+	}
+}
+
+MeshResource::~MeshResource()
+{
+	if (mMeshData)
+	{
+		delete [] mMeshData;
+	}
+}
+

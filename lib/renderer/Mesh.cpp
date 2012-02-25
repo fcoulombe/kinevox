@@ -21,12 +21,16 @@
  */
 
 #include "renderer/Mesh.h"
+#include "renderer/MeshResource.h"
+#include "renderer/MeshResourceManager.h"
 
 using namespace GCL;
 
-Mesh::Mesh(const char * /*filename*/)
-
+Mesh::Mesh(const char * filename)
 {
+	const Resource *tempResource = MeshResourceManager::Instance().LoadResource(filename);
+	mMeshResource = static_cast<const MeshResource*>(tempResource);
+
 
 }
 

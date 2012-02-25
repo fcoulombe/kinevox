@@ -22,23 +22,48 @@
 
 #pragma once
 
-
-#include "renderer/Material.h"
-#include "renderer/VertexBuffer.h"
+#include <gcl/Point3.h>
+#include <gcl/Resource.h>
+#include "renderer/OpenGL.h"
 
 namespace GCL
 {
-
-class MeshResource;
-  class Mesh
+class GCLFile;
+  //this is a resource class that can be shared between difference Mesh instance
+  class MeshResource : public Resource
   {
-  public:
-	  Mesh(const char *filename="DefaultMesh");
-	  void Render();
-  private:
-	  Material mMaterial;
-	  VertexBuffer<VertexPNT> *mVertexBuffer;
-	  const MeshResource *mMeshResource;
-  };
+    public:
 
+    MeshResource(const char *MeshName);
+    ~MeshResource();
+
+    struct MeshData
+    {
+      MeshData()
+  		: mVertexCount(0),
+  		  mIndicesCount(0),
+			mNormalCount(0),
+			mVertexColorCount(0),
+			mMaterialCount(0),
+			mUvCount(0)
+      {}
+      ~MeshData(){}
+
+  	uint32_t mVertexCount;
+  	uint32_t mIndicesCount;
+  	uint32_t mNormalCount;
+  	uint32_t mVertexColorCount;
+  	uint32_t mMaterialCount;
+  	uint32_t mUvCount;
+  	WorldPoint3 *mPositionList;
+    };
+    MeshData *mMeshData;
+
+    static const MeshResource EmptyMesh;
+
+    static void LoadMesh(GCLFile &is, MeshData *&data);
+    static void Unload(MeshData *data);
+  private:
+    MeshResource() {}
+  };
 }

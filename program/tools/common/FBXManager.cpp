@@ -24,6 +24,7 @@
 #include <gcl/Assert.h>
 
 #include <iostream>
+#include <sstream>
 
 using namespace GCL;
 
@@ -96,6 +97,7 @@ bool FBXManager::LoadScene(const char* pFilename)
 		s<<"FBX version number for this FBX SDK is " << lSDKMajor <<"."<< lSDKMinor <<"."<< lSDKRevision<<std::endl;
 		s<<"FBX version number for file " << pFilename << " is " << lFileMajor <<"."<< lFileMinor<<"."<<lFileRevision;
 	}
+	s<<"while loading: " << pFilename << std::endl;
 
 	GCLAssertMsg(lImportStatus, s.str().c_str() );
 

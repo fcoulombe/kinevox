@@ -20,7 +20,9 @@
  * THE SOFTWARE.
  */
 #pragma once
+#include <fstream>
 #include <sstream>
+#include <cstring>
 
 #include <common/BufferWriter.h>
 #include <gcl/UnitTest.h>
@@ -49,6 +51,8 @@ BufferWriter &operator<<(BufferWriter &buffer, const TestData &data)
 void Test()
 {
 	TEST_START
+	std::stringstream s;
+
 	BufferWriter buffer(4096);
 	TestData data;
 	data.val1 = 0;
@@ -57,7 +61,20 @@ void Test()
 	data.val4 = 3;
 	buffer << data;
 	Assert_Test(buffer.GetCurrentOffset() == sizeof(TestData));
+	Assert_Test(memcmp(buffer.GetBuffer(), (const char*)&data,sizeof(TestData))==0);
+
+	//test padding
+	{
+		uint8_t pad = 8;
+		buffer.Write(pad);
+		Assert_Test(buffer.GetCurrentOffset() == sizeof(TestData)+sizeof(uint8_t));
+		buffer.Pad();
+		s<<buffer.GetCurrentOffset() << " == " << sizeof(TestData)+sizeof(uint32_t) << std::endl;
+		AssertMsg_Test(buffer.GetCurrentOffset() == sizeof(TestData)+sizeof(uint32_t), s.str().c_str());
+	}
 
 	buffer.WriteToFile("testData.dat");
+	std::ifstream fp("testData.dat");
+	Assert_Test(fp.good());
 }
 }

@@ -51,6 +51,7 @@ int main(int /*argc*/, char ** argv)
 	    std::cout << data << std::endl;
 
 	    BufferWriter buffer(1024*500);
+	    buffer<<data;
 		buffer.WriteToFile(argv[2]);
 
 		FBXManager::Terminate();
@@ -59,6 +60,7 @@ int main(int /*argc*/, char ** argv)
 	catch(GCLException &e)
 	{
 		std::cerr << e.what() << std::endl;
+		return -1;
 	}
 
 	return 0;

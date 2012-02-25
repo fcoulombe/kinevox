@@ -23,6 +23,7 @@
 
 #include <gcl/UnitTest.h>
 #include <renderer/Mesh.h>
+#include <renderer/MeshResourceManager.h>
 
 using namespace GCL;
 namespace MeshTest
@@ -35,14 +36,17 @@ void Test()
 	TEST_START
 
 	TextureResourceManager::Initialize();
+	MeshResourceManager::Initialize();
+
 	GLRenderer render;
 
 	{
-		Mesh myMesh("data/ExampleMesh.mesh");
+		Mesh myMesh(MESH_PATH"ExampleMesh.mesh");
 		myMesh.Render();
 	}
 
 
+	MeshResourceManager::Terminate();
 	TextureResourceManager::Terminate();
 }
 }

@@ -2,3 +2,4 @@ bin
 build
 gclbuildscript
 lib/gcl
+3rdParty/fbx/obj

@@ -35,91 +35,11 @@ using namespace GCL;
 
 
 
-struct MeshData
-{
-	size_t mVertexCount;
-	std::vector<WorldPoint4> mVertexList;
-
-	size_t mNormalCount;
-	std::vector<WorldPoint3> mNormalList;
-
-	size_t mVertexColorCount;
-	std::vector<WorldPoint3> mVertexColor;
-
-	size_t mMaterialCount;
-};
 
 
-MeshData *LoadFBXFile(const char *filename)
-{
-	FBXManager::Initialize();
 
-    FBXManager::LoadScene(filename);
 
-    KFbxScene* pScene = FBXManager::GetScene();
-
-    KFbxNode* lRootNode = pScene->GetRootNode();
-
-    std::cout << lRootNode->GetTypeName() << std::endl;
-    size_t childCount = lRootNode->GetChildCount();
-    for (size_t i=0; i<childCount; ++i)
-    {
-        KFbxNode* lchild = lRootNode->GetChild(i);
-        std::cout << lchild->GetTypeName() << std::endl;;
-        if (strcmp(lchild->GetTypeName(), "Mesh")==0)
-        {
-        	MeshData meshData;
-
-        	std::cout << "we have a mesh" << std::endl;
-        	KFbxMesh *tempMesh = lchild->GetMesh();
-        	std::cout << "MaterialCount: " << tempMesh->GetElementMaterialCount() <<std::endl;
-        	meshData.mMaterialCount = tempMesh->GetElementMaterialCount();
-
-        	std::cout << "ElemNormCount: " << tempMesh->GetElementNormalCount()<<std::endl;
-        	std::cout << "ElemPolygonGroupCount: " << tempMesh->GetElementPolygonGroupCount()<<std::endl;
-        	std::cout << "ElemUVCount: " << tempMesh->GetElementUVCount()<<std::endl;
-        	std::cout << "ElemVertexColorCount: " << tempMesh->GetElementVertexColorCount()<<std::endl;
-        	std::cout << "PolyVertexCount: " << tempMesh->GetPolygonVertexCount()<<std::endl;
-          	//tempMesh->GetPolygonVertexIndex();
-        	KArrayTemplate<KFbxVector4> pNormals;
-        	tempMesh->GetPolygonVertexNormals(pNormals);
-        	std::cout << "Normals"<< std::endl;
-        	for (int i=0; i<pNormals.GetCount(); ++i)
-        	{
-        		std::cout << pNormals[i][0] << " " << pNormals[i][1] << " " << pNormals[i][2] << std::endl;
-        	}
-        	KFbxVector4* positions = tempMesh->GetControlPoints();
-        	std::cout << "Position" << std::endl;
-        	for (int i=0; i<tempMesh->GetControlPointsCount(); ++i)
-        	{
-        		std::cout << positions[i][0] << " " << positions[i][1] << " " << positions[i][2] << std::endl;
-        	}
-
-        	std::cout << "Polygons" << std::endl;
-
-        	int *polygonVertices = tempMesh->GetPolygonVertices();
-        	for (int i=0; i<tempMesh->GetPolygonVertexCount(); ++i)
-        	{
-        		std::cout << polygonVertices[i] << std::endl;
-        	}
-
-/*        	tempMesh->GetPolygonVertexUVs();
-        	tempMesh->Get*/
-        }
-
-        for (int i=0; i<lchild->GetChildCount(); ++i)
-        {
-            KFbxNode* lchild2 = lchild->GetChild(i);
-            std::cout << lchild2->GetTypeName() << std::endl;;
-        }
-    }
-
-FBXManager::Terminate();
-
-	return NULL;
-}
-
-void SaveMesh(MeshData *mesh, const char *filename)
+void SaveMesh(const MeshData &mesh, const char *filename)
 {
 
 	(void)mesh;
@@ -132,9 +52,20 @@ int main(int /*argc*/, char ** /*argv*/)
 
 	try
 	{
-		MeshData *mesh = LoadFBXFile("data/ExampleMesh.fbx");
-		SaveMesh(mesh, "data/ExampleMesh.mesh");
-		delete mesh;
+		FBXManager::Initialize();
+
+	    FBXManager::LoadScene("data/ExampleMesh.fbx");
+
+	    KFbxScene* pScene = FBXManager::GetScene();
+	    (void)pScene;
+
+	    MeshData data = FBXManager::GetMeshData();
+	    std::cout << data << std::endl;
+
+		SaveMesh(data, "data/ExampleMesh.mesh");
+
+		FBXManager::Terminate();
+
 	}
 	catch(GCLException &e)
 	{

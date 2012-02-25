@@ -20,41 +20,45 @@
  * THE SOFTWARE.
  */
 
+#pragma once
 
-#include "BufferWriterTest.h"
-#include "FBXLoadingTest.h"
-
-#include <unistd.h>
-
-using namespace GCL;
-
-
-
-
-int main(int /*argc*/, char **argv)
+namespace GCL
 {
-  std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
 
-  try
-  {
-	  BufferWriterTest::Test();
-      FBXLoadingTest::Test();
-  }
-  catch (GCLException & e)
-  {
-      std::stringstream str;
-      str << "[FAILED] " << argv[0] << std::endl;
-      str << e.what();
-      str << std::endl;
-      std::cerr << str.str();
-      return -1;
-  }
-  catch (...)
-  {
-      std::cerr << "[FAILED] " << argv[0] << std::endl;
-      std::cerr << "something went wrong" << std::endl;
-  }
-  std::cout.flush();
-  std::cerr.flush();
-  return 0;
+
+class BufferWriter
+{
+public:
+	BufferWriter(size_t bufferSize)
+	: mCurrentOffset(0),
+	  mBufferSize(bufferSize)
+	{
+		buffer = new uint8_t[mBufferSize];
+	}
+	~BufferWriter()
+	{
+		delete [] buffer;
+	}
+	void Pad()
+	{
+		size_t pad = mCurrentOffset%4;
+		(void)pad;
+
+	}
+	template<typename T>
+	void Write(T &val)
+	{
+		memcpy(&(buffer[mCurrentOffset]), &val, sizeof(T));
+		mCurrentOffset += sizeof(T);
+	}
+	void WriteToFile(const char *)
+	{
+
+	}
+	size_t GetCurrentOffset() const { return mCurrentOffset; }
+private:
+	uint8_t *buffer;
+	size_t mCurrentOffset;
+	size_t mBufferSize;
+};
 }

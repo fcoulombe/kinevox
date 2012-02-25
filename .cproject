@@ -233,9 +233,10 @@
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>false</runAllBuilders>
 					</target>
-					<target name="@SpinningCube" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+					<target name="common_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
-						<buildTarget>@SpinningCube</buildTarget>
+						<buildArguments/>
+						<buildTarget>common_test_run --verbose</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>false</runAllBuilders>

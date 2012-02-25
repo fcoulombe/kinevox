@@ -21,6 +21,8 @@
  */
 
 #pragma once
+#include <iostream>
+#include <fstream>
 
 namespace GCL
 {
@@ -41,21 +43,26 @@ public:
 	}
 	void Pad()
 	{
-		size_t pad = mCurrentOffset%4;
-		(void)pad;
+		size_t pad = 4-mCurrentOffset%4;
+		//std::cout << "cur: " << mCurrentOffset << "add: " << pad << std::endl;
+		mCurrentOffset +=pad;
 
 	}
 	template<typename T>
 	void Write(T &val)
 	{
+		//std::cout << "adding: " <<sizeof(T) << " to: " << mCurrentOffset << std::endl;
 		memcpy(&(buffer[mCurrentOffset]), &val, sizeof(T));
 		mCurrentOffset += sizeof(T);
 	}
-	void WriteToFile(const char *)
+	void WriteToFile(const char *filename)
 	{
-
+		std::ofstream fp(filename, std::ios::out|std::ios::binary);
+		fp.write((const char *)buffer, mCurrentOffset);
+		fp.close();
 	}
 	size_t GetCurrentOffset() const { return mCurrentOffset; }
+	uint8_t *GetBuffer() { return buffer; }
 private:
 	uint8_t *buffer;
 	size_t mCurrentOffset;

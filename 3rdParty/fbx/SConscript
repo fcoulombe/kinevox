@@ -1,0 +1,31 @@
+import platform
+
+Import('env')
+
+
+name = "fbx"
+dependencies = []
+
+def SetCFlags(ienv):
+    configuration = GetOption('configuration')
+    if platform.architecture()[0] == "32bit":
+        ienv.Append(CPPPATH=[env.Dir('include')]) 
+    elif platform.architecture()[0] == "64bit":
+        print "64bit!"
+    else:
+        print "unsupported architecture: %s" % platform.architecture()[0] 
+	
+		
+def SetLFlags(ienv):
+    platform.machine(),  platform.architecture()[0]
+	 
+    if platform.architecture()[0] == "32bit":
+        file = env.File("#3rdParty/fbx/lib/gcc4/x86/libfbxsdk-2012.2-static.a")
+        ienv.Append(LIBS=[file, 'pthread', 'dl']) 
+        
+    elif platform.architecture()[0] == "64bit":
+        print "64 bit!!"
+    else:
+        print "unsupported architecture: %s" % platform.architecture()[0] 
+    
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

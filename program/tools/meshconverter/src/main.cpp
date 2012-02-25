@@ -34,27 +34,15 @@
 using namespace GCL;
 
 
-
-
-
-
-
-void SaveMesh(const MeshData &mesh, const char *filename)
-{
-
-	(void)mesh;
-	(void)filename;
-}
-
-int main(int /*argc*/, char ** /*argv*/)
+int main(int /*argc*/, char ** argv)
 {
 	std::cout << "start program" << std::endl;
-
+	std::cout << "Mesh Convert from: " << argv[1] << " to: " << argv[2] << std::endl;
 	try
 	{
 		FBXManager::Initialize();
 
-	    FBXManager::LoadScene("data/ExampleMesh.fbx");
+	    FBXManager::LoadScene(argv[1]);
 
 	    KFbxScene* pScene = FBXManager::GetScene();
 	    (void)pScene;
@@ -62,7 +50,8 @@ int main(int /*argc*/, char ** /*argv*/)
 	    MeshData data = FBXManager::GetMeshData();
 	    std::cout << data << std::endl;
 
-		SaveMesh(data, "data/ExampleMesh.mesh");
+	    BufferWriter buffer(1024*500);
+		buffer.WriteToFile(argv[2]);
 
 		FBXManager::Terminate();
 

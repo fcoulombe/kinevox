@@ -187,6 +187,7 @@ print default_env['ENV']['PATH']
 
 sconsFilesList = [
 #third party
+"./3rdParty/fbx/SConscript",
 "./3rdParty/il/SConscript",
 "./3rdParty/libfreenect/SConscript",
 "./3rdParty/libpng/SConscript",
@@ -204,6 +205,15 @@ sconsFilesList = [
 "./lib/renderer/SConscript",
 "./lib/voxel/SConscript",
 "./lib/applayer/SConscript",
+
+#tools
+"./program/tools/common/SConscript",
+"./program/tools/common/unittest/SConscript",
+
+"./program/tools/meshconverter/SConscript",
+
+#tools unittest
+
 
 #unittest
 "./lib/gcl/gcl/unittest/SConscript",

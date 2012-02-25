@@ -19,11 +19,14 @@
 # THE SOFTWARE.
 # 
 
+ 
 Import('env')
 
-name = "sound_test"
-dependencies = ["sound"]
-data = [ env.Dir("data")]
+name = "common"
+incPath = [env.Dir(".").srcnode()]
+dependencies = ['fbx', 'renderer']
 src_files = env.Glob("*.cpp")
 
-prog = env.UnitTest(name, src_files, dependencies, data)
+lib = env.KStaticLibrary(name, src_files, dependencies)
+env.AddComponent(name, None, incPath, lib, dependencies)
+

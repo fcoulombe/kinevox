@@ -222,6 +222,7 @@
 				<buildTargets>
 					<target name="@build_all @run_all --verbose --compiler=clang --configuration=opt" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
+						<buildArguments/>
 						<buildTarget>@build_all @run_all --verbose --compiler=clang --configuration=opt</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
@@ -229,22 +230,22 @@
 					</target>
 					<target name="@BasicTextureMapping" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
+						<buildArguments/>
 						<buildTarget>@BasicTextureMapping</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>false</runAllBuilders>
 					</target>
-					<target name="gcl_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+					<target name="renderer_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
 						<buildArguments/>
-						<buildTarget>gcl_test_run --verbose</buildTarget>
+						<buildTarget>renderer_test_run --verbose</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>false</runAllBuilders>
 					</target>
 					<target name="@build_all @run_all --verbose --configuration=debug" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
-						<buildArguments/>
 						<buildTarget>@build_all @run_all --verbose --configuration=debug</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
@@ -252,6 +253,7 @@
 					</target>
 					<target name="@Arkanoid" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
+						<buildArguments/>
 						<buildTarget>@Arkanoid</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
@@ -259,6 +261,7 @@
 					</target>
 					<target name="@MeshConverter --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
+						<buildArguments/>
 						<buildTarget>@MeshConverter --verbose</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>

@@ -87,20 +87,17 @@ bool FBXManager::LoadScene(const char* pFilename)
 	const bool lImportStatus = lImporter->Initialize(pFilename, -1, pSdkManager->GetIOSettings());
 	lImporter->GetFileVersion(lFileMajor, lFileMinor, lFileRevision);
 
-	if( !lImportStatus )
+	std::stringstream s;
+	s<< "Call to KFbxImporter::Initialize() failed." << std::endl;
+	s<<"Error returned: " <<  lImporter->GetLastErrorString() << std::endl<<std::endl;
+	if (lImporter->GetLastErrorID() == KFbxIO::eFILE_VERSION_NOT_SUPPORTED_YET ||
+			lImporter->GetLastErrorID() == KFbxIO::eFILE_VERSION_NOT_SUPPORTED_ANYMORE)
 	{
-		printf("Call to KFbxImporter::Initialize() failed.\n");
-		printf("Error returned: %s\n\n", lImporter->GetLastErrorString());
-
-		if (lImporter->GetLastErrorID() == KFbxIO::eFILE_VERSION_NOT_SUPPORTED_YET ||
-				lImporter->GetLastErrorID() == KFbxIO::eFILE_VERSION_NOT_SUPPORTED_ANYMORE)
-		{
-			printf("FBX version number for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
-			printf("FBX version number for file %s is %d.%d.%d\n\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
-		}
-
-		return false;
+		s<<"FBX version number for this FBX SDK is " << lSDKMajor <<"."<< lSDKMinor <<"."<< lSDKRevision<<std::endl;
+		s<<"FBX version number for file " << pFilename << " is " << lFileMajor <<"."<< lFileMinor<<"."<<lFileRevision;
 	}
+
+	GCLAssertMsg(lImportStatus, s.str().c_str() );
 
 	printf("FBX version number for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
 
@@ -173,27 +170,41 @@ MeshData FBXManager::GetMeshData()
 		if (strcmp(lchild->GetTypeName(), "Mesh")==0)
 		{
 
-			KFbxMesh *tempMesh = lchild->GetMesh();
+			const KFbxMesh *tempMesh = lchild->GetMesh();
+
+			const KFbxLayer* layer = tempMesh->GetLayer(0);
+
+			const KFbxLayerElementArrayTemplate<KFbxVector4> &normals = layer->GetNormals()->GetDirectArray();
+			//const KFbxLayerElementVertexColor* vertexColor = layer->GetVertexColors()->GetDirectArray();
+			const KArrayTemplate<KFbxLayerElementUV const*> &uvs = layer->GetUVSets();
 			meshData.mMaterialCount = tempMesh->GetElementMaterialCount();
-			meshData.mNormalCount = tempMesh->GetElementNormalCount();
-			meshData.mVertexCount = tempMesh->GetPolygonVertexCount();
+			meshData.mNormalCount = normals.GetCount();
+			meshData.mIndicesCount = tempMesh->GetPolygonVertexCount();
+
+			meshData.mVertexCount = tempMesh->GetControlPointsCount();
+			meshData.mUvCount = uvs.GetCount();
 			//std::cout << "ElemPolygonGroupCount: " << tempMesh->GetElementPolygonGroupCount()<<std::endl;
 			//std::cout << "ElemUVCount: " << tempMesh->GetElementUVCount()<<std::endl;
 			//std::cout << "ElemVertexColorCount: " << tempMesh->GetElementVertexColorCount()<<std::endl;
 
 			//tempMesh->GetPolygonVertexIndex();
-			KArrayTemplate<KFbxVector4> pNormals;
-			tempMesh->GetPolygonVertexNormals(pNormals);
-			GCLAssert(meshData.mNormalCount);
-
-			for (int i=0; i<pNormals.GetCount(); ++i)
+			for (int i=0; i<normals.GetCount(); ++i)
 			{
 				WorldPoint3 tempNormal;
-				tempNormal.x = pNormals[i][0];
-				tempNormal.y = pNormals[i][1];
-				tempNormal.z = pNormals[i][2];
+				tempNormal.x = normals[i][0];
+				tempNormal.y = normals[i][1];
+				tempNormal.z = normals[i][2];
 				meshData.mNormalList.push_back(tempNormal);
 			}
+/*			for (int i=0; i<uvs.GetCount(); ++i)
+			{
+				WorldPoint2 tempUv;
+				KFbxLayerElementUV &tempFbxUv =uvs[i];
+				tempFbxUv.GetDirectArray()
+				tempUv.x =uvs[i][0];
+				tempUv.y = uvs[i][1];
+				meshData.mUvList.push_back(tempUv);
+			}*/
 			KFbxVector4* vertices = tempMesh->GetControlPoints();
 
 			for (int i=0; i<tempMesh->GetControlPointsCount(); ++i)
@@ -204,7 +215,6 @@ MeshData FBXManager::GetMeshData()
 				position.z = vertices[i][2];
 				position.w = vertices[i][3];
 				meshData.mVertexList.push_back(position);
-
 			}
 
 			int *polygonVertices = tempMesh->GetPolygonVertices();

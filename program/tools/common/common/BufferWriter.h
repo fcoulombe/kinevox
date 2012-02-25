@@ -24,6 +24,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <gcl/Assert.h>
+
 namespace GCL
 {
 
@@ -57,7 +59,9 @@ public:
 	}
 	void WriteToFile(const char *filename)
 	{
-		std::ofstream fp(filename, std::ios::out|std::ios::binary);
+		std::fstream fp(filename, std::ios::out|std::ios::binary);
+		GCLAssert(fp.good());
+		//std::cout << "should write: " << mCurrentOffset << std::endl;
 		fp.write((const char *)buffer, mCurrentOffset);
 		fp.close();
 	}

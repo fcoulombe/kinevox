@@ -228,10 +228,10 @@
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>false</runAllBuilders>
 					</target>
-					<target name="@BasicTextureMapping" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+					<target name="@MeshLoading" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 						<buildCommand>scons</buildCommand>
 						<buildArguments/>
-						<buildTarget>@BasicTextureMapping</buildTarget>
+						<buildTarget>@MeshLoading</buildTarget>
 						<stopOnError>true</stopOnError>
 						<useDefaultCommand>true</useDefaultCommand>
 						<runAllBuilders>false</runAllBuilders>

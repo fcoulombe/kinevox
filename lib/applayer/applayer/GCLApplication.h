@@ -48,6 +48,8 @@ public:
 	GCLTEST_EXPORT static bool IsRegistered(const GCLRenderObject &obj);
 
 	GCLEXPORT static GLRenderer *GetRenderer() { return mRenderer; }
+	GCLEXPORT static void RegisterCustomRenderObject(RenderObject* newRenderObject);
+
 private:
 	GCLApplication();
 	~GCLApplication();

@@ -1,0 +1,13 @@
+Import('env')
+
+
+
+dependencies = ['applayer', 'example_data']
+
+src_files = env.Glob("src/*.cpp")
+prog = env.KProgram("meshLoading", src_files, dependencies)
+finalProduct = env.Install(env.Dir("$INSTALL_DIR/example"), prog)
+env.Alias("@MeshLoading",finalProduct) 
+env.Depends(env.Alias("@MeshLoading"), env.Alias("@example_data"))
+env.Alias("@examples", env.Alias("@MeshLoading"))
+Default(finalProduct)

@@ -229,6 +229,7 @@ sconsFilesList = [
 "./program/example/basicTextureMapping/SConscript",
 "./program/example/spinningCube/SConscript",
 "./program/example/spriteExample/SConscript",
+"./program/example/meshLoading/SConscript",
 
 "./program/arkanoid/SConscript",
 "./program/kinevox/SConscript",

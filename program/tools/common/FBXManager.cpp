@@ -33,7 +33,7 @@ KFbxScene* FBXManager::pScene = NULL;
 
 void FBXManager::Initialize()
 {
-	std::cout << "FBXManager::Initialize" << std::endl;
+	//std::cout << "FBXManager::Initialize" << std::endl;
 	pSdkManager = KFbxSdkManager::Create();
 
 	GCLAssert(pSdkManager && "Unable to create the FBX SDK manager\n");
@@ -61,7 +61,7 @@ void FBXManager::Initialize()
 
 void FBXManager::Terminate()
 {
-	std::cout << "FBXManager::Terminate()" << std::endl;
+	//std::cout << "FBXManager::Terminate()" << std::endl;
 	GCLAssert(pSdkManager);
 	pSdkManager->Destroy();
 	pSdkManager = NULL;
@@ -70,12 +70,12 @@ void FBXManager::Terminate()
 
 bool FBXManager::LoadScene(const char* pFilename)
 {
-	std::cout << "FBXManager::LoadScene()" << std::endl;
+	//std::cout << "FBXManager::LoadScene()" << std::endl;
 
 	int lFileMajor, lFileMinor, lFileRevision;
 	int lSDKMajor,  lSDKMinor,  lSDKRevision;
 	//int lFileFormat = -1;
-	int i, lAnimStackCount;
+	//int i, lAnimStackCount;
 	bool lStatus;
 
 	// Get the file version number generate by the FBX SDK.
@@ -101,16 +101,16 @@ bool FBXManager::LoadScene(const char* pFilename)
 
 	GCLAssertMsg(lImportStatus, s.str().c_str() );
 
-	printf("FBX version number for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
+	//printf("FBX version number for this FBX SDK is %d.%d.%d\n", lSDKMajor, lSDKMinor, lSDKRevision);
 
 	if (lImporter->IsFBX())
 	{
-		printf("FBX version number for file %s is %d.%d.%d\n\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
+		//printf("FBX version number for file %s is %d.%d.%d\n\n", pFilename, lFileMajor, lFileMinor, lFileRevision);
 
 		// From this point, it is possible to access animation stack information without
 		// the expense of loading the entire file.
 
-		printf("Animation Stack Information\n");
+		/*printf("Animation Stack Information\n");
 
 		lAnimStackCount = lImporter->GetAnimStackCount();
 
@@ -135,7 +135,7 @@ bool FBXManager::LoadScene(const char* pFilename)
 			printf("         Import State: %s\n", lTakeInfo->mSelect ? "true" : "false");
 			printf("\n");
 		}
-
+*/
 		// Set the import states. By default, the import states are always set to
 		// true. The code below shows how to change these states.
 		IOS_REF.SetBoolProp(IMP_FBX_MATERIAL,        true);
@@ -163,12 +163,12 @@ MeshData FBXManager::GetMeshData()
 
 	KFbxNode* lRootNode = pScene->GetRootNode();
 
-	std::cout << lRootNode->GetTypeName() << std::endl;
+	//std::cout << lRootNode->GetTypeName() << std::endl;
 	size_t childCount = lRootNode->GetChildCount();
 	for (size_t i=0; i<childCount; ++i)
 	{
 		KFbxNode* lchild = lRootNode->GetChild(i);
-		std::cout << lchild->GetTypeName() << std::endl;;
+		//std::cout << lchild->GetTypeName() << std::endl;;
 		if (strcmp(lchild->GetTypeName(), "Mesh")==0)
 		{
 

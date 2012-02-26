@@ -39,7 +39,7 @@ void Test()
     FBXManager::LoadScene("datamisc/ExampleMesh.fbx");
 
     MeshData data = FBXManager::GetMeshData();
-std::cout << data << std::endl;
+//std::cout << data << std::endl;
     FBXManager::Terminate();
 }
 }

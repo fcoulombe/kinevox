@@ -36,8 +36,8 @@ using namespace GCL;
 
 int main(int /*argc*/, char ** argv)
 {
-	std::cout << "start program" << std::endl;
-	std::cout << "Mesh Convert from: " << argv[1] << " to: " << argv[2] << std::endl;
+	//std::cout << "start program" << std::endl;
+	//std::cout << "Mesh Convert from: " << argv[1] << " to: " << argv[2] << std::endl;
 	try
 	{
 		FBXManager::Initialize();
@@ -48,7 +48,7 @@ int main(int /*argc*/, char ** argv)
 	    (void)pScene;
 
 	    MeshData data = FBXManager::GetMeshData();
-	    std::cout << data << std::endl;
+	  //  std::cout << data << std::endl;
 
 	    BufferWriter buffer(1024*500);
 	    buffer<<data;

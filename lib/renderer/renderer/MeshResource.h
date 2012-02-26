@@ -55,7 +55,6 @@ class GCLFile;
   	uint32_t mVertexColorCount;
   	uint32_t mMaterialCount;
   	uint32_t mUvCount;
-  	WorldPoint3 *mPositionList;
     };
     MeshData *mMeshData;
 

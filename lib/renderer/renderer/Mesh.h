@@ -24,20 +24,21 @@
 
 
 #include "renderer/Material.h"
-#include "renderer/VertexBuffer.h"
+#include "renderer/MeshResource.h"
+#include "renderer/Vertex.h"
 
 namespace GCL
 {
 
-class MeshResource;
   class Mesh
   {
   public:
 	  Mesh(const char *filename="DefaultMesh");
-	  void Render();
+	  const void * GetVertexData() const { return ((uint8_t*)mMeshResource->mMeshData)+sizeof(MeshResource::MeshData); }
+	  VertexComponents GetVertexType() const { return ePOSITION; }
+	  size_t GetVertexCount() const { return mMeshResource->mMeshData->mIndicesCount; }
   private:
 	  Material mMaterial;
-	  VertexBuffer<VertexPNT> *mVertexBuffer;
 	  const MeshResource *mMeshResource;
   };
 

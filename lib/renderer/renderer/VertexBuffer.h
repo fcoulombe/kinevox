@@ -88,7 +88,7 @@ public:
 	void Render()
 	{
 		PreRender();
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, mVertexCount);glErrorCheck();
+		glDrawArrays(GL_QUADS, 0, mVertexCount);glErrorCheck();
 		PostRender();
 	}
 

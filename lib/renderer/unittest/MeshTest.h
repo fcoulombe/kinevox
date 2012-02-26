@@ -29,8 +29,30 @@ using namespace GCL;
 namespace MeshTest
 {
 
+class MeshRenderObject : public RenderObject
+{
+public:
+	MeshRenderObject()
+	: RenderObject("MyRenderObject", Matrix44(true)), //identity
+	  mMesh(MESH_PATH"ExampleMesh.mesh")
+	{
+		mVertexData.mVertexCount =mMesh.GetVertexCount();
+		mVertexData.mVertexType = mMesh.GetVertexType();
+		mVertexData.mVertexData = mMesh.GetVertexData();
+	}
 
-    void Test();
+	const VertexData &GetVertexData() const
+	{
+		return mVertexData;
+	}
+	const Material &GetMaterial() const { return mMaterial; }
+private:
+	Material mMaterial;
+	Mesh mMesh;
+	VertexData mVertexData;
+};
+
+void Test();
 void Test()
 {
 	TEST_START
@@ -39,10 +61,29 @@ void Test()
 	MeshResourceManager::Initialize();
 
 	GLRenderer render;
-
 	{
-		Mesh myMesh(MESH_PATH"ExampleMesh.mesh");
-		myMesh.Render();
+		Mesh mesh(MESH_PATH"ExampleMesh.mesh");
+		const void * data = mesh.GetVertexData();
+		Assert_Test(data);
+		VertexComponents vertexType = mesh.GetVertexType();
+		Assert_Test(vertexType == ePOSITION);
+		size_t count = mesh.GetVertexCount();
+		Assert_Test(count == 24); //cube
+
+		/*const WorldPoint3 *vertexData = (const WorldPoint3 *)(data);
+		for (size_t i=0; i<count; ++i)
+		{
+			std::cout << "indice: " << i << " " << vertexData[i] << std::endl;
+		}*/
+
+	}
+	{
+		MeshRenderObject myMesh;
+		RenderObjectList renderList;
+		renderList.push_back(&myMesh);
+		render.PreRender();
+		render.Render(renderList);
+		render.PostRender();
 	}
 
 

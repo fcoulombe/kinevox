@@ -29,6 +29,7 @@
 #include <gcl/Assert.h>
 #include <input/Input.h>
 #include <renderer/GLRenderer.h>
+#include <renderer/MeshResourceManager.h>
 #include <renderer/TextureResourceManager.h>
 
 using namespace GCL;
@@ -41,6 +42,7 @@ RenderObject2DList GCLApplication::mRenderObject2DList;
 /*static */void GCLApplication::Initialize()
 {
 	TextureResourceManager::Initialize();
+	MeshResourceManager::Initialize();
 	GCLAssert(mRenderer == NULL);
 	mRenderer = new GLRenderer();
 }
@@ -49,6 +51,7 @@ RenderObject2DList GCLApplication::mRenderObject2DList;
 	GCLAssert(mRenderer);
 	delete mRenderer;
 	mRenderer = NULL;
+	MeshResourceManager::Terminate();
 	TextureResourceManager::Terminate();
 }
 
@@ -74,6 +77,12 @@ void GCLApplication::Render()
 void GCLApplication::SetViewportCamera(Camera &camera)
 {
 	mRenderer->SetCamera(camera);
+}
+
+void GCLApplication::RegisterCustomRenderObject(RenderObject* newRenderObj)
+{
+	GCLAssert(newRenderObj);
+	mRenderObjectList.push_back(newRenderObj);
 }
 
 void GCLApplication::RegisterRenderObject(GCLRenderObject* newRenderObj)

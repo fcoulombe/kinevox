@@ -1,0 +1,13 @@
+Import('env')
+
+name = "ogg"
+dependencies = []
+
+def SetCFlags(ienv):
+	ienv.ParseConfig('pkg-config --cflags '+name)
+
+def SetLFlags(ienv):
+	ienv.ParseConfig('pkg-config --libs '+name)
+	
+	
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

@@ -1,0 +1,15 @@
+Import('env')
+
+name = "vorbis"
+dependencies = []
+
+def SetCFlags(ienv):
+	ienv.ParseConfig('pkg-config --cflags '+name)
+	ienv.ParseConfig('pkg-config --cflags vorbisfile')
+	
+def SetLFlags(ienv):
+	ienv.ParseConfig('pkg-config --libs '+name)
+	ienv.ParseConfig('pkg-config --libs vorbisfile')
+    
+	
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

@@ -21,6 +21,8 @@
  */#include <iostream>
 
 #include "ALSoundDeviceTest.h"
+#include "MusicTest.h"
+#include "OggVorbisStreamTest.h"
 #include "SoundTest.h"
 #include "SoundResourceTest.h"
 #include "WAVLoadingTest.h"
@@ -34,6 +36,8 @@ int main(int /*argc*/, char ** /*argv*/)
 		WAVLoadingTest::Test();
 		SoundResourceTest::Test();
 		SoundTest::Test();
+		OggVorbisStreamTest::Test();
+		//Music::Test();
 	}
 	catch (GCLException &e)
 	{

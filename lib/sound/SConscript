@@ -23,7 +23,7 @@ Import('env')
 
 name = "sound"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['gcl', 'openal']
+dependencies = ['gcl', 'openal', 'ogg','vorbis']
 
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")

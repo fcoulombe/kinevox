@@ -22,20 +22,13 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <kinect/Freenect.h>
+#	if defined(__GNUC__)
+#		define COMP_VERSION __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__
+#		if __llvm__ && __clang__
+#			pragma clang system_header
+#		else
+#			pragma GCC system_header
+#		endif
+#	endif
+#include <libfreenect.h>
 
-//struct freenect_device;
-namespace GCL
-{
-
-uint8_t *GetKinectRgbData();
-uint8_t *GetKinectDepthData();
-freenect_video_format GetKinectVideoFormat();
-void TiltUp();
-void TiltDown();
-void ResetTilt();
-
-bool SynchronizeDrawingData();
-bool InitKinect();
-}

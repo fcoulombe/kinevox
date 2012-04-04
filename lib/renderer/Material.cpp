@@ -76,23 +76,23 @@ void Material::LoadMaterial(const char *filename)
 #endif
 	WorldPoint4 ambient;
 	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "ambient: "FLOAT_FLAG" "FLOAT_FLAG" "FLOAT_FLAG" "FLOAT_FLAG, &ambient.x, &ambient.y, &ambient.z, &ambient.w);
+	sscanf(buffer, "ambient: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &ambient.x, &ambient.y, &ambient.z, &ambient.w);
 
 	WorldPoint4 diffuse;
 	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "diffuse: "FLOAT_FLAG" "FLOAT_FLAG" "FLOAT_FLAG" "FLOAT_FLAG, &diffuse.x, &diffuse.y, &diffuse.z, &diffuse.w);
+	sscanf(buffer, "diffuse: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &diffuse.x, &diffuse.y, &diffuse.z, &diffuse.w);
 
 	WorldPoint4 specular;
 	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "specular: "FLOAT_FLAG" "FLOAT_FLAG" "FLOAT_FLAG" "FLOAT_FLAG, &specular.x, &specular.y, &specular.z, &specular.w);
+	sscanf(buffer, "specular: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &specular.x, &specular.y, &specular.z, &specular.w);
 
 	WorldPoint4 emissive;
 	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "emissive: "FLOAT_FLAG" "FLOAT_FLAG" "FLOAT_FLAG" "FLOAT_FLAG, &emissive.x, &emissive.y, &emissive.z, &emissive.w);
+	sscanf(buffer, "emissive: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &emissive.x, &emissive.y, &emissive.z, &emissive.w);
 
 	Real shininess;
 	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "shininess: "FLOAT_FLAG, &shininess);
+	sscanf(buffer, "shininess: " FLOAT_FLAG, &shininess);
 
 
 	fp.close();

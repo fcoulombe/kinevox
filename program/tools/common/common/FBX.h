@@ -22,29 +22,13 @@
 
 #pragma once
 
-#include <common/FBX.h>
-#include "common/MeshData.h"
+#	if defined(__GNUC__)
+#		define COMP_VERSION __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__
+#		if __llvm__ && __clang__
+#			pragma clang system_header
+#		else
+#			pragma GCC system_header
+#		endif
+#	endif
+#include <fbxsdk.h>
 
-#ifdef IOS_REF
-#undef IOS_REF
-#define IOS_REF (*(pSdkManager->GetIOSettings()))
-#endif
-
-
-namespace GCL
-{
-
-
-class FBXManager
-{
-public:
-	static void Initialize();
-	static void Terminate();
-	static bool LoadScene(const char *filename);
-	static KFbxScene *GetScene() { return pScene; }
-	static KFbxNode *GetRootNode() { return pScene->GetRootNode(); }
-	static MeshData GetMeshData();
-	static KFbxSdkManager* pSdkManager;
-	static KFbxScene* pScene;
-};
-}

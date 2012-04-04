@@ -9,7 +9,8 @@ dependencies = []
 def SetCFlags(ienv):
     configuration = GetOption('configuration')
     if platform.architecture()[0] == "32bit":
-        ienv.Append(CPPPATH=[env.Dir('include')]) 
+        #ienv.Append(CPPPATH=[env.Dir('include')])
+        ienv.Append(CPPPATH=[env.Dir('#3rdParty/fbx/include')]) 
     elif platform.architecture()[0] == "64bit":
         print "64bit!"
     else:

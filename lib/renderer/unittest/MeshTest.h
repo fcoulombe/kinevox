@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <sstream>
 #include <gcl/UnitTest.h>
 #include <renderer/Mesh.h>
 #include <renderer/MeshResourceManager.h>
@@ -61,6 +62,7 @@ void Test()
 	MeshResourceManager::Initialize();
 
 	GLRenderer render;
+	std::stringstream s;
 	{
 		Mesh mesh(MESH_PATH"ExampleMesh.mesh");
 		const void * data = mesh.GetVertexData();
@@ -68,7 +70,8 @@ void Test()
 		VertexComponents vertexType = mesh.GetVertexType();
 		Assert_Test(vertexType == ePOSITION);
 		size_t count = mesh.GetVertexCount();
-		Assert_Test(count == 24); //cube
+		s<<count << " == " << 21930<<std::endl;
+		AssertMsg_Test(count == 21930, s.str().c_str()); //cube
 
 		/*const WorldPoint3 *vertexData = (const WorldPoint3 *)(data);
 		for (size_t i=0; i<count; ++i)

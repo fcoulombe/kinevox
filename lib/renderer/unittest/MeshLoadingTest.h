@@ -40,12 +40,12 @@ void Test()
 	Assert_Test(testData2);
 
 	MeshResource::MeshData testData;
-	testData.mVertexCount = 8;
-	testData.mIndicesCount = 24;
-	testData.mNormalCount = 8;
+	testData.mVertexCount = 3677;
+	testData.mIndicesCount = 21930;
+	testData.mNormalCount = 3677;
 	testData.mVertexColorCount = 0;
 	testData.mMaterialCount = 1;
-	testData.mUvCount = 0;
+	testData.mUvCount = 1;
 
 	std::stringstream s;
 	s<< testData.mVertexCount << " == " << testData2->mVertexCount << std::endl;

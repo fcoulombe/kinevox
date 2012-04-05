@@ -194,8 +194,8 @@ MeshData FBXManager::GetMeshData()
 			{
 				WorldPoint3 tempNormal;
 				tempNormal.x = normals[i][0];
-				tempNormal.y = normals[i][1];
-				tempNormal.z = normals[i][2];
+				tempNormal.y = normals[i][2];
+				tempNormal.z = normals[i][1];
 				meshData.mNormalList.push_back(tempNormal);
 			}
 /*			for (int i=0; i<uvs.GetCount(); ++i)
@@ -213,8 +213,8 @@ MeshData FBXManager::GetMeshData()
 			{
 				WorldPoint4 position;
 				position.x = vertices[i][0];
-				position.y = vertices[i][1];
-				position.z = vertices[i][2];
+				position.y = vertices[i][2];
+				position.z = vertices[i][1];
 				position.w = vertices[i][3];
 				meshData.mVertexList.push_back(position);
 			}

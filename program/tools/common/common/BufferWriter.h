@@ -48,7 +48,7 @@ public:
 		size_t pad = 4-mCurrentOffset%4;
 		//std::cout << "cur: " << mCurrentOffset << "add: " << pad << std::endl;
 		mCurrentOffset +=pad;
-
+		GCLAssertMsg(mCurrentOffset <= mBufferSize, "your buffer is too small. please increase its size");
 	}
 	template<typename T>
 	void Write(T &val)
@@ -56,6 +56,7 @@ public:
 		//std::cout << "adding: " <<sizeof(T) << " to: " << mCurrentOffset << std::endl;
 		memcpy(&(buffer[mCurrentOffset]), &val, sizeof(T));
 		mCurrentOffset += sizeof(T);
+		GCLAssertMsg(mCurrentOffset <= mBufferSize, "your buffer is too small. please increase its size");
 	}
 	void WriteToFile(const char *filename)
 	{

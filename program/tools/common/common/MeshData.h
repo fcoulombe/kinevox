@@ -62,7 +62,11 @@ GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const MeshData &meshD
 		buffer.Write(tempVert.y);
 		buffer.Write(tempVert.z);
 
+		const WorldPoint2 &tempUv = meshData.mUvList[indice];
+		buffer.Write(tempUv.x);
+		buffer.Write(tempUv.y);
 	}
+
 	return buffer;
 }
 GCLINLINE std::ostream& operator<<( std::ostream& output, const MeshData &meshData)

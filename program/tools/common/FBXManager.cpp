@@ -178,13 +178,11 @@ MeshData FBXManager::GetMeshData()
 
 			const KFbxLayerElementArrayTemplate<KFbxVector4> &normals = layer->GetNormals()->GetDirectArray();
 			//const KFbxLayerElementVertexColor* vertexColor = layer->GetVertexColors()->GetDirectArray();
-			const KArrayTemplate<KFbxLayerElementUV const*> &uvs = layer->GetUVSets();
 			meshData.mMaterialCount = tempMesh->GetElementMaterialCount();
 			meshData.mNormalCount = normals.GetCount();
 			meshData.mIndicesCount = tempMesh->GetPolygonVertexCount();
 
 			meshData.mVertexCount = tempMesh->GetControlPointsCount();
-			meshData.mUvCount = uvs.GetCount();
 			//std::cout << "ElemPolygonGroupCount: " << tempMesh->GetElementPolygonGroupCount()<<std::endl;
 			//std::cout << "ElemUVCount: " << tempMesh->GetElementUVCount()<<std::endl;
 			//std::cout << "ElemVertexColorCount: " << tempMesh->GetElementVertexColorCount()<<std::endl;
@@ -198,15 +196,19 @@ MeshData FBXManager::GetMeshData()
 				tempNormal.z = normals[i][1];
 				meshData.mNormalList.push_back(tempNormal);
 			}
-/*			for (int i=0; i<uvs.GetCount(); ++i)
+
+			const KArrayTemplate<KFbxLayerElementUV const*> &uvst = layer->GetUVSets();
+			KFbxLayerElementUV const* uvs = uvst[0];
+			meshData.mUvCount = uvs->GetDirectArray().GetCount();
+			for (int i=0; i<uvs->GetDirectArray().GetCount(); ++i)
 			{
 				WorldPoint2 tempUv;
-				KFbxLayerElementUV &tempFbxUv =uvs[i];
-				tempFbxUv.GetDirectArray()
-				tempUv.x =uvs[i][0];
-				tempUv.y = uvs[i][1];
+				const KFbxVector2 &tempFbxUv =uvs->GetDirectArray()[i];
+				tempUv.x = tempFbxUv[0];
+				tempUv.y = tempFbxUv[1];
 				meshData.mUvList.push_back(tempUv);
-			}*/
+			}
+			meshData.mUvCount  = meshData.mUvList.size();
 			KFbxVector4* vertices = tempMesh->GetControlPoints();
 
 			for (int i=0; i<tempMesh->GetControlPointsCount(); ++i)

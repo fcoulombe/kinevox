@@ -48,12 +48,12 @@ void Test()
 	{
 		s.str("");
 		MeshData testData;
-		testData.mVertexCount = 3677;
-		testData.mIndicesCount = 21930;
-		testData.mNormalCount = 3677;
+		testData.mVertexCount = 8;
+		testData.mIndicesCount = 36;
+		testData.mNormalCount = 8;
 		testData.mVertexColorCount = 0;
 		testData.mMaterialCount = 1;
-		testData.mUvCount = 1;
+		testData.mUvCount = 36;
 
 		MeshData *testData2 = reinterpret_cast<MeshData*>(buffer.GetBuffer());
 

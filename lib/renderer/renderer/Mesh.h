@@ -35,7 +35,7 @@ namespace GCL
   public:
 	  Mesh(const char *filename="DefaultMesh");
 	  const void * GetVertexData() const { return ((uint8_t*)mMeshResource->mMeshData)+sizeof(MeshResource::MeshData); }
-	  VertexComponents GetVertexType() const { return ePOSITION; }
+	  VertexComponents GetVertexType() const { return (VertexComponents)(ePOSITION|eTEXTURE_COORD); }
 	  size_t GetVertexCount() const { return mMeshResource->mMeshData->mIndicesCount; }
   private:
 	  Material mMaterial;

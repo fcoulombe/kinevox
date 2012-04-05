@@ -68,7 +68,7 @@ void Test()
 		const void * data = mesh.GetVertexData();
 		Assert_Test(data);
 		VertexComponents vertexType = mesh.GetVertexType();
-		Assert_Test(vertexType == ePOSITION);
+		Assert_Test(vertexType == (VertexComponents)(ePOSITION|eTEXTURE_COORD));
 		size_t count = mesh.GetVertexCount();
 		s<<count << " == " << 21930<<std::endl;
 		AssertMsg_Test(count == 21930, s.str().c_str()); //cube

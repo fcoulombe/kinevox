@@ -45,7 +45,7 @@ void Test()
 	testData.mNormalCount = 3677;
 	testData.mVertexColorCount = 0;
 	testData.mMaterialCount = 1;
-	testData.mUvCount = 1;
+	testData.mUvCount = 21930;
 
 	std::stringstream s;
 	s<< testData.mVertexCount << " == " << testData2->mVertexCount << std::endl;

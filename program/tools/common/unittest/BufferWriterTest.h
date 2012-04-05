@@ -38,6 +38,9 @@ struct TestData
 	uint32_t val2;
 	uint16_t val3;
 	uint16_t val4;
+	WorldPoint2 p2;
+	WorldPoint3 p3;
+	WorldPoint4 p4;
 };
 BufferWriter &operator<<(BufferWriter &buffer, const TestData &data)
 {
@@ -45,6 +48,9 @@ BufferWriter &operator<<(BufferWriter &buffer, const TestData &data)
 	buffer.Write(data.val2);
 	buffer.Write(data.val3);
 	buffer.Write(data.val4);
+	buffer << data.p2;
+	buffer << data.p3;
+	buffer << data.p4;
 	return buffer;
 }
 void Test()
@@ -58,6 +64,16 @@ void Test()
 	data.val2 = 1;
 	data.val3 = 2;
 	data.val4 = 3;
+	data.p2.x = 1.5;
+	data.p2.y = 1.7;
+	data.p3.x = 1.5;
+	data.p3.y = 1.7;
+	data.p3.z = 1.0;
+	data.p4.x = 1.5;
+	data.p4.y = 1.7;
+	data.p4.z = 1.0;
+	data.p4.w = 0.5;
+
 	buffer << data;
 	Assert_Test(buffer.GetCurrentOffset() == sizeof(TestData));
 	Assert_Test(memcmp(buffer.GetBuffer(), (const char*)&data,sizeof(TestData))==0);

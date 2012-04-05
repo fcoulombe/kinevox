@@ -25,6 +25,9 @@
 #include <fstream>
 
 #include <gcl/Assert.h>
+#include <gcl/Point2.h>
+#include <gcl/Point3.h>
+#include <gcl/Point4.h>
 
 namespace GCL
 {
@@ -73,4 +76,26 @@ private:
 	size_t mCurrentOffset;
 	size_t mBufferSize;
 };
+
+GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const WorldPoint2 &data)
+{
+	buffer.Write(data.x);
+	buffer.Write(data.y);
+	return buffer;
+}
+GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const WorldPoint3 &data)
+{
+	buffer.Write(data.x);
+	buffer.Write(data.y);
+	buffer.Write(data.z);
+	return buffer;
+}
+GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const WorldPoint4 &data)
+{
+	buffer.Write(data.x);
+	buffer.Write(data.y);
+	buffer.Write(data.z);
+	buffer.Write(data.w);
+	return buffer;
+}
 }

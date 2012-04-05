@@ -62,6 +62,11 @@ GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const MeshData &meshD
 		buffer.Write(tempVert.y);
 		buffer.Write(tempVert.z);
 
+		const WorldPoint3 &tempNormal = meshData.mNormalList[indice];
+		buffer.Write(tempNormal.x);
+		buffer.Write(tempNormal.y);
+		buffer.Write(tempNormal.z);
+
 		const WorldPoint2 &tempUv = meshData.mUvList[i];
 		buffer.Write(tempUv.x);
 		buffer.Write(tempUv.y);

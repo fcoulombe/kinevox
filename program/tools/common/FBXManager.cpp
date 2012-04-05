@@ -179,7 +179,6 @@ MeshData FBXManager::GetMeshData()
 			const KFbxLayerElementArrayTemplate<KFbxVector4> &normals = layer->GetNormals()->GetDirectArray();
 			//const KFbxLayerElementVertexColor* vertexColor = layer->GetVertexColors()->GetDirectArray();
 			meshData.mMaterialCount = tempMesh->GetElementMaterialCount();
-			meshData.mNormalCount = normals.GetCount();
 			meshData.mIndicesCount = tempMesh->GetPolygonVertexCount();
 
 			meshData.mVertexCount = tempMesh->GetControlPointsCount();
@@ -188,6 +187,7 @@ MeshData FBXManager::GetMeshData()
 			//std::cout << "ElemVertexColorCount: " << tempMesh->GetElementVertexColorCount()<<std::endl;
 
 			//tempMesh->GetPolygonVertexIndex();
+			meshData.mNormalCount = normals.GetCount();
 			for (int i=0; i<normals.GetCount(); ++i)
 			{
 				WorldPoint3 tempNormal;

@@ -50,7 +50,7 @@ int main(int /*argc*/, char ** argv)
 	    MeshData data = FBXManager::GetMeshData();
 	  //  std::cout << data << std::endl;
 
-	    BufferWriter buffer(1024*500);
+	    BufferWriter buffer(1024*1500);
 	    buffer<<data;
 		buffer.WriteToFile(argv[2]);
 

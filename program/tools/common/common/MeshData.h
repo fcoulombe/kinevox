@@ -25,10 +25,11 @@
 #include <vector>
 #include <gcl/Point4.h>
 #include "common/BufferWriter.h"
-
+#include "common/MaterialData.h"
 
 namespace GCL
 {
+
 struct MeshData
 {
 	uint32_t mVertexCount;
@@ -43,6 +44,8 @@ struct MeshData
 	std::vector<WorldPoint3> mNormalList;
 	std::vector<WorldPoint3> mVertexColor;
 	std::vector<WorldPoint2> mUvList;
+
+	MaterialData mMaterialData;
 
 };
 GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const MeshData &meshData)
@@ -71,6 +74,7 @@ GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const MeshData &meshD
 		buffer.Write(tempUv.x);
 		buffer.Write(tempUv.y);
 	}
+	buffer << meshData.mMaterialData ;
 
 	return buffer;
 }

@@ -135,7 +135,7 @@ bool FBXManager::LoadScene(const char* pFilename)
 			printf("         Import State: %s\n", lTakeInfo->mSelect ? "true" : "false");
 			printf("\n");
 		}
-*/
+		 */
 		// Set the import states. By default, the import states are always set to
 		// true. The code below shows how to change these states.
 		IOS_REF.SetBoolProp(IMP_FBX_MATERIAL,        true);
@@ -178,7 +178,21 @@ MeshData FBXManager::GetMeshData()
 
 			const KFbxLayerElementArrayTemplate<KFbxVector4> &normals = layer->GetNormals()->GetDirectArray();
 			//const KFbxLayerElementVertexColor* vertexColor = layer->GetVertexColors()->GetDirectArray();
-			meshData.mMaterialCount = tempMesh->GetElementMaterialCount();
+
+			meshData.mMaterialCount = lchild->GetMaterialCount();
+			for (size_t i=0; i<meshData.mMaterialCount; ++i)
+			{
+				const KFbxSurfaceMaterial* tempMat = lchild->GetMaterial(i);
+
+				std::string matFullName = tempMat->GetName() ;
+				size_t pos = matFullName.find("__");
+				std::string matName = matFullName.substr(0, pos);
+				std::string texName = matFullName.substr(pos+2, matFullName.length());
+				texName[texName.length()-4]='.';
+				meshData.mMaterialData.mStringTable.mStringList.push_back(matName);
+				meshData.mMaterialData.mStringTable.mStringList.push_back(texName);
+			}
+
 			meshData.mIndicesCount = tempMesh->GetPolygonVertexCount();
 
 			meshData.mVertexCount = tempMesh->GetControlPointsCount();

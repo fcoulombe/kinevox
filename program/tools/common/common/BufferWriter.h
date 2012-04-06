@@ -23,8 +23,10 @@
 #pragma once
 #include <iostream>
 #include <fstream>
+#include <string>
 
 #include <gcl/Assert.h>
+#include <gcl/Memory.h>
 #include <gcl/Point2.h>
 #include <gcl/Point3.h>
 #include <gcl/Point4.h>
@@ -48,9 +50,8 @@ public:
 	}
 	void Pad()
 	{
-		size_t pad = 4-mCurrentOffset%4;
+		mCurrentOffset = Memory::Align32(mCurrentOffset);
 		//std::cout << "cur: " << mCurrentOffset << "add: " << pad << std::endl;
-		mCurrentOffset +=pad;
 		GCLAssertMsg(mCurrentOffset <= mBufferSize, "your buffer is too small. please increase its size");
 	}
 	template<typename T>
@@ -61,6 +62,14 @@ public:
 		mCurrentOffset += sizeof(T);
 		GCLAssertMsg(mCurrentOffset <= mBufferSize, "your buffer is too small. please increase its size");
 	}
+	//assumes null terminated string
+	void Write(const char *str, size_t len)
+	{
+		memcpy(&(buffer[mCurrentOffset]), str, len+1);
+		mCurrentOffset += len+1;
+		GCLAssertMsg(mCurrentOffset <= mBufferSize, "your buffer is too small. please increase its size");
+	}
+
 	void WriteToFile(const char *filename)
 	{
 		std::fstream fp(filename, std::ios::out|std::ios::binary);
@@ -96,6 +105,16 @@ GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const WorldPoint4 &data
 	buffer.Write(data.y);
 	buffer.Write(data.z);
 	buffer.Write(data.w);
+	return buffer;
+}
+GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const std::string &stringData)
+{
+	size_t len = stringData.length();
+	uint32_t paddedLen = uint32_t(Memory::Align32(len));
+	buffer.Write(paddedLen);
+	buffer.Write(stringData.c_str(), len);
+	buffer.Pad();
+
 	return buffer;
 }
 }

@@ -29,40 +29,40 @@
 namespace GCL
 {
 class GCLFile;
-  //this is a resource class that can be shared between difference Mesh instance
-  class MeshResource : public Resource
-  {
-    public:
+//this is a resource class that can be shared between difference Mesh instance
+class MeshResource : public Resource
+{
+public:
 
-    MeshResource(const char *MeshName);
-    ~MeshResource();
+	MeshResource(const char *MeshName);
+	~MeshResource();
 
-    struct MeshData
-    {
-      MeshData()
-  		: mVertexCount(0),
-  		  mIndicesCount(0),
-			mNormalCount(0),
-			mVertexColorCount(0),
-			mMaterialCount(0),
-			mUvCount(0)
-      {}
-      ~MeshData(){}
+	struct MeshData
+	{
+		MeshData()
+		: mVertexCount(0),
+		  mIndicesCount(0),
+		  mNormalCount(0),
+		  mVertexColorCount(0),
+		  mMaterialCount(0),
+		  mUvCount(0)
+		{}
+		~MeshData(){}
 
-  	uint32_t mVertexCount;
-  	uint32_t mIndicesCount;
-  	uint32_t mNormalCount;
-  	uint32_t mVertexColorCount;
-  	uint32_t mMaterialCount;
-  	uint32_t mUvCount;
-    };
-    MeshData *mMeshData;
+		uint32_t mVertexCount;
+		uint32_t mIndicesCount;
+		uint32_t mNormalCount;
+		uint32_t mVertexColorCount;
+		uint32_t mMaterialCount;
+		uint32_t mUvCount;
+	};
+	MeshData *mMeshData;
 
-    static const MeshResource EmptyMesh;
+	static const MeshResource EmptyMesh;
 
-    static void LoadMesh(GCLFile &is, MeshData *&data);
-    static void Unload(MeshData *data);
-  private:
-    MeshResource() {}
-  };
+	static void LoadMesh(GCLFile &is, MeshData *&data);
+	static void Unload(MeshData *data);
+private:
+	MeshResource() {}
+};
 }

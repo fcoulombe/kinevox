@@ -157,9 +157,9 @@ bool FBXManager::LoadScene(const char* pFilename)
 }
 
 
-MeshData FBXManager::GetMeshData()
+ToolMeshData FBXManager::GetMeshData()
 {
-	MeshData meshData;
+	ToolMeshData meshData;
 
 	KFbxNode* lRootNode = pScene->GetRootNode();
 

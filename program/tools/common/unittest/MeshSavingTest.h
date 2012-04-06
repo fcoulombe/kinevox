@@ -38,7 +38,7 @@ void Test()
 
 	FBXManager::LoadScene("datamisc/ExampleMesh.fbx");
 
-	MeshData data = FBXManager::GetMeshData();
+	ToolMeshData data = FBXManager::GetMeshData();
 	//std::cout << data << std::endl;
 
 	BufferWriter buffer(1024*500);
@@ -47,7 +47,7 @@ void Test()
 	std::stringstream s;
 	{
 		s.str("");
-		MeshData testData;
+		ToolMeshData testData;
 		testData.mVertexCount = 8;
 		testData.mIndicesCount = 36;
 		testData.mNormalCount = 8;
@@ -55,7 +55,7 @@ void Test()
 		testData.mMaterialCount = 1;
 		testData.mUvCount = 36;
 
-		MeshData *testData2 = reinterpret_cast<MeshData*>(buffer.GetBuffer());
+		ToolMeshData *testData2 = reinterpret_cast<ToolMeshData*>(buffer.GetBuffer());
 
 		s<< testData.mVertexCount << " == " << testData2->mVertexCount << std::endl;
 		AssertMsg_Test(testData.mVertexCount  == testData2->mVertexCount, s.str().c_str());

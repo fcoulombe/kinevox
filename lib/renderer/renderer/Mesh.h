@@ -30,16 +30,17 @@
 namespace GCL
 {
 
-  class Mesh
-  {
-  public:
-	  Mesh(const char *filename="DefaultMesh");
-	  const void * GetVertexData() const { return ((uint8_t*)mMeshResource->mMeshData)+sizeof(MeshResource::MeshData); }
-	  VertexComponents GetVertexType() const { return (VertexComponents)(ePOSITION|eNORMAL|eTEXTURE_COORD); }
-	  size_t GetVertexCount() const { return mMeshResource->mMeshData->mIndicesCount; }
-  private:
-	  Material mMaterial;
-	  const MeshResource *mMeshResource;
-  };
+class Mesh
+{
+public:
+	Mesh(const char *filename="DefaultMesh");
+	const void * GetVertexData() const { return mMeshResource->mMeshData->GetVertexData(); }
+	VertexComponents GetVertexType() const { return (VertexComponents)(ePOSITION|eNORMAL|eTEXTURE_COORD); }
+	size_t GetVertexCount() const { return mMeshResource->mMeshData->mIndicesCount; }
+	const Material &GetMaterial() const { return *mMaterial; }
+private:
+	Material *mMaterial;
+	const MeshResource *mMeshResource;
+};
 
 }

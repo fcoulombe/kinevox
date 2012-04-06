@@ -31,5 +31,7 @@ Mesh::Mesh(const char * filename)
 	const Resource *tempResource = MeshResourceManager::Instance().LoadResource(filename);
 	mMeshResource = static_cast<const MeshResource*>(tempResource);
 
+	const char *materialName = mMeshResource->mMeshData->GetMaterialName();
+	mMaterial = new Material(materialName);
 }
 

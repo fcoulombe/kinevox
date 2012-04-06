@@ -37,6 +37,13 @@ public:
 	MeshResource(const char *MeshName);
 	~MeshResource();
 
+	struct MaterialData
+	{
+		//WorldPoint4 mDiffuse;
+		//WorldPoint4 mAmbient;
+		//WorldPoint4 mEmissive;
+		Real mShininess;
+	};
 	struct MeshData
 	{
 		MeshData()
@@ -55,6 +62,10 @@ public:
 		uint32_t mVertexColorCount;
 		uint32_t mMaterialCount;
 		uint32_t mUvCount;
+		uint32_t mMaterialNameLen;
+		const char *GetMaterialName() const { return (const char*)(this)+sizeof(MeshData); }
+		const void *GetVertexData() const { return (uint8_t*)(this)+sizeof(MeshData)+mMaterialNameLen; }
+
 	};
 	MeshData *mMeshData;
 

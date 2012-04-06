@@ -52,8 +52,13 @@ int main(int /*argc*/, char ** argv)
 
 	    BufferWriter buffer(1024*1500);
 	    buffer<<data;
-		buffer.WriteToFile(argv[2]);
 
+	    const std::string outputMeshFileName(argv[2]);
+	    buffer.WriteToFile(outputMeshFileName);
+
+	    size_t pos = outputMeshFileName.find("data/Mesh");
+	    const std::string outputMatFileName = outputMeshFileName.substr(0, pos)+"data/Material/" + data.mMaterialData.matName+".mat";
+		data.mMaterialData.WriteToFile(outputMatFileName);
 		FBXManager::Terminate();
 
 	}

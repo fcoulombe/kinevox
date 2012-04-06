@@ -70,7 +70,7 @@ public:
 		GCLAssertMsg(mCurrentOffset <= mBufferSize, "your buffer is too small. please increase its size");
 	}
 
-	void WriteToFile(const char *filename)
+	void WriteToFile(const std::string &filename)
 	{
 		std::fstream fp(filename, std::ios::out|std::ios::binary);
 		GCLAssert(fp.good());
@@ -110,7 +110,7 @@ GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const WorldPoint4 &data
 GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const std::string &stringData)
 {
 	size_t len = stringData.length();
-	uint32_t paddedLen = uint32_t(Memory::Align32(len));
+	uint32_t paddedLen = uint32_t(Memory::Align32(len+1));
 	buffer.Write(paddedLen);
 	buffer.Write(stringData.c_str(), len);
 	buffer.Pad();

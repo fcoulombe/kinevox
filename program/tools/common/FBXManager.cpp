@@ -189,8 +189,8 @@ ToolMeshData FBXManager::GetMeshData()
 				std::string matName = matFullName.substr(0, pos);
 				std::string texName = matFullName.substr(pos+2, matFullName.length());
 				texName[texName.length()-4]='.';
-				meshData.mMaterialData.mStringTable.mStringList.push_back(matName);
-				meshData.mMaterialData.mStringTable.mStringList.push_back(texName);
+				meshData.mMaterialData.matName = (matName);
+				meshData.mMaterialData.texName = (texName);
 			}
 
 			meshData.mIndicesCount = tempMesh->GetPolygonVertexCount();

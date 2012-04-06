@@ -56,6 +56,7 @@ GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const ToolMeshData &m
 	buffer.Write(meshData.mVertexColorCount);
 	buffer.Write(meshData.mMaterialCount);
 	buffer.Write(meshData.mUvCount);
+	buffer << meshData.mMaterialData.matName;
 	for (size_t i=0; i<meshData.mIndicesCount; ++i)
 	{
 		int indice = meshData.mIndiceList[i];
@@ -74,7 +75,7 @@ GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const ToolMeshData &m
 		buffer.Write(tempUv.x);
 		buffer.Write(tempUv.y);
 	}
-	buffer << meshData.mMaterialData ;
+	//buffer << meshData.mMaterialData ;
 
 	return buffer;
 }

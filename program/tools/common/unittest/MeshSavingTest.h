@@ -79,6 +79,8 @@ void Test()
 		buffer.WriteToFile("ExampleMesh.mesh");
 	}
 
+	data.mMaterialData.WriteToFile(data.mMaterialData.matName+".mat");
+
 
 	FBXManager::Terminate();
 }

@@ -46,9 +46,8 @@ public:
 	{
 		return mVertexData;
 	}
-	const Material &GetMaterial() const { return mMaterial; }
+	const Material &GetMaterial() const { return mMesh.GetMaterial(); }
 private:
-	Material mMaterial;
 	Mesh mMesh;
 	VertexData mVertexData;
 };

@@ -23,7 +23,7 @@
 #pragma once
 
 #include <common/FBX.h>
-#include "common/MeshData.h"
+#include "common/ToolMeshData.h"
 
 #ifdef IOS_REF
 #undef IOS_REF
@@ -43,7 +43,7 @@ public:
 	static bool LoadScene(const char *filename);
 	static KFbxScene *GetScene() { return pScene; }
 	static KFbxNode *GetRootNode() { return pScene->GetRootNode(); }
-	static MeshData GetMeshData();
+	static ToolMeshData GetMeshData();
 	static KFbxSdkManager* pSdkManager;
 	static KFbxScene* pScene;
 };

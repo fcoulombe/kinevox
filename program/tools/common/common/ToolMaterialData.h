@@ -23,37 +23,46 @@
 #pragma once
 
 #include <string>
-#include <vector>
+#include <gcl/Point4.h>
 #include "common/BufferWriter.h"
+#include "common/ToolStringTableData.h"
 
 
 namespace GCL
 {
-struct StringTableData
-{
-	std::vector<std::string> mStringList;
 
+
+struct ToolMaterialData
+{
+	WorldPoint4 mDiffuse;
+	WorldPoint4 mAmbient;
+	WorldPoint4 mEmissive;
+	Real mShininess;
+
+	enum StringTableId
+	{
+		MATERIAL_NAME,
+		TEXTURE_NAME
+	};
+	ToolStringTableData mStringTable;
 };
 
-
-GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const StringTableData &stringTableData)
+GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const ToolMaterialData &materialData)
 {
-	uint32_t stringCount = uint32_t(stringTableData.mStringList.size());
-	buffer.Write(stringCount);
-	for (size_t i=0; i<stringTableData.mStringList.size(); ++i)
-	{
-		buffer << stringTableData.mStringList[i];
-	}
-
+	buffer << materialData.mDiffuse;
+	buffer << materialData.mAmbient;
+	buffer << materialData.mEmissive;
+	buffer << materialData.mStringTable;
 	return buffer;
 }
-
-GCLINLINE std::ostream& operator<<( std::ostream& output, const StringTableData &stringTableData)
+GCLINLINE std::ostream& operator<<( std::ostream& output, const ToolMaterialData &materialData)
 {
-	for (size_t i=0; i<stringTableData.mStringList.size(); ++i)
-	{
-		output << stringTableData.mStringList[i] << std::endl;
-	}
+
+	output << materialData.mDiffuse<<std::endl;
+	output << materialData.mAmbient<<std::endl;
+	output << materialData.mEmissive<<std::endl;
+	output << materialData.mStringTable<<std::endl;
+
 	return output;
 }
 }

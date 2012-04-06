@@ -25,12 +25,12 @@
 #include <vector>
 #include <gcl/Point4.h>
 #include "common/BufferWriter.h"
-#include "common/MaterialData.h"
+#include "common/ToolMaterialData.h"
 
 namespace GCL
 {
 
-struct MeshData
+struct ToolMeshData
 {
 	uint32_t mVertexCount;
 	uint32_t mIndicesCount;
@@ -45,10 +45,10 @@ struct MeshData
 	std::vector<WorldPoint3> mVertexColor;
 	std::vector<WorldPoint2> mUvList;
 
-	MaterialData mMaterialData;
+	ToolMaterialData mMaterialData;
 
 };
-GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const MeshData &meshData)
+GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const ToolMeshData &meshData)
 {
 	buffer.Write(meshData.mVertexCount);
 	buffer.Write(meshData.mIndicesCount);
@@ -78,7 +78,7 @@ GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const MeshData &meshD
 
 	return buffer;
 }
-GCLINLINE std::ostream& operator<<( std::ostream& output, const MeshData &meshData)
+GCLINLINE std::ostream& operator<<( std::ostream& output, const ToolMeshData &meshData)
 {
 	output << "PolyVertexCount: " << meshData.mVertexCount<<std::endl;
 	output << "MaterialCount: " << meshData.mMaterialCount <<std::endl;

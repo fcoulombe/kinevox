@@ -47,7 +47,7 @@ int main(int /*argc*/, char ** argv)
 	    KFbxScene* pScene = FBXManager::GetScene();
 	    (void)pScene;
 
-	    MeshData data = FBXManager::GetMeshData();
+	    ToolMeshData data = FBXManager::GetMeshData();
 	  //  std::cout << data << std::endl;
 
 	    BufferWriter buffer(1024*1500);

@@ -58,38 +58,70 @@ void Test()
 	TEST_START
 	std::stringstream s;
 
-	BufferWriter buffer(4096);
-	TestData data;
-	data.val1 = 0;
-	data.val2 = 1;
-	data.val3 = 2;
-	data.val4 = 3;
-	data.p2.x = 1.5;
-	data.p2.y = 1.7;
-	data.p3.x = 1.5;
-	data.p3.y = 1.7;
-	data.p3.z = 1.0;
-	data.p4.x = 1.5;
-	data.p4.y = 1.7;
-	data.p4.z = 1.0;
-	data.p4.w = 0.5;
+	//test stream in
+	{
+		BufferWriter buffer(4096);
+		TestData data;
+		data.val1 = 0;
+		data.val2 = 1;
+		data.val3 = 2;
+		data.val4 = 3;
+		data.p2.x = 1.5;
+		data.p2.y = 1.7;
+		data.p3.x = 1.5;
+		data.p3.y = 1.7;
+		data.p3.z = 1.0;
+		data.p4.x = 1.5;
+		data.p4.y = 1.7;
+		data.p4.z = 1.0;
+		data.p4.w = 0.5;
 
-	buffer << data;
-	Assert_Test(buffer.GetCurrentOffset() == sizeof(TestData));
-	Assert_Test(memcmp(buffer.GetBuffer(), (const char*)&data,sizeof(TestData))==0);
+		buffer << data;
+		Assert_Test(buffer.GetCurrentOffset() == sizeof(TestData));
+		Assert_Test(memcmp(buffer.GetBuffer(), (const char*)&data,sizeof(TestData))==0);
 
+
+		buffer.WriteToFile("testData.dat");
+		GCLFile fp("testData.dat");
+		Assert_Test(fp.GetFileSize());
+	}
 	//test padding
 	{
+		BufferWriter buffer(4096);
 		uint8_t pad = 8;
 		buffer.Write(pad);
-		Assert_Test(buffer.GetCurrentOffset() == sizeof(TestData)+sizeof(uint8_t));
+		Assert_Test(buffer.GetCurrentOffset() == sizeof(uint8_t));
 		buffer.Pad();
-		s<<buffer.GetCurrentOffset() << " == " << sizeof(TestData)+sizeof(uint32_t) << std::endl;
-		AssertMsg_Test(buffer.GetCurrentOffset() == sizeof(TestData)+sizeof(uint32_t), s.str().c_str());
+		s<<buffer.GetCurrentOffset() << " == " << sizeof(uint32_t) << std::endl;
+		AssertMsg_Test(buffer.GetCurrentOffset() == sizeof(uint32_t), s.str().c_str());
+	}
+	//test padding when no need to
+	{
+		BufferWriter buffer(4096);
+		uint32_t pad = 8;
+		buffer.Write(pad);
+		Assert_Test(buffer.GetCurrentOffset() == sizeof(uint32_t));
+		buffer.Pad();
+		s<<buffer.GetCurrentOffset() << " == " << sizeof(uint32_t) << std::endl;
+		AssertMsg_Test(buffer.GetCurrentOffset() == sizeof(uint32_t), s.str().c_str());
 	}
 
-	buffer.WriteToFile("testData.dat");
-	GCLFile fp("testData.dat");
-	Assert_Test(fp.GetFileSize());
+	//string writing test
+	{
+		BufferWriter buffer(4096);
+
+		const std::string kTestStringValue("myString");
+		size_t curOffset = buffer.GetCurrentOffset();
+		uint8_t *rawBuffer = buffer.GetBuffer();
+		std::string testStr(kTestStringValue);
+		buffer << testStr;
+		const std::string testStr2((const char*)&(rawBuffer[curOffset+sizeof(uint32_t)]));
+		Assert_Test(kTestStringValue == testStr2);
+		size_t newOffset = buffer.GetCurrentOffset();
+
+		s.str("");
+		s<<newOffset-curOffset-sizeof(uint32_t) << " == " << kTestStringValue.length() <<std::endl;
+		AssertMsg_Test(newOffset-curOffset-sizeof(uint32_t) == Memory::Align32(kTestStringValue.length()+1), s.str().c_str());
+	}
 }
 }

@@ -20,47 +20,22 @@
  * THE SOFTWARE.
  */
 
+#pragma once
 
-#include "BufferWriterTest.h"
-#include "TTFLoadingTest.h"
-
-#include "FBXLoadingTest.h"
-#include "MeshSavingTest.h"
-
-#include <unistd.h>
-
-using namespace GCL;
+#include <common/FreeType.h>
 
 
-
-
-int main(int /*argc*/, char **argv)
+namespace GCL
 {
-  std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
 
-  try
-  {
-	  BufferWriterTest::Test();
-	  TTFLoadingTest::Test();
 
-	  FBXLoadingTest::Test();
-      MeshSavingTest::Test();
-  }
-  catch (GCLException & e)
-  {
-      std::stringstream str;
-      str << "[FAILED] " << argv[0] << std::endl;
-      str << e.what();
-      str << std::endl;
-      std::cerr << str.str();
-      return -1;
-  }
-  catch (...)
-  {
-      std::cerr << "[FAILED] " << argv[0] << std::endl;
-      std::cerr << "something went wrong" << std::endl;
-  }
-  std::cout.flush();
-  std::cerr.flush();
-  return 0;
+class TTFManager
+{
+public:
+	static void Initialize();
+	static void Terminate();
+	static bool LoadScene(const char *filename);
+	static FT_Library  library;
+
+};
 }

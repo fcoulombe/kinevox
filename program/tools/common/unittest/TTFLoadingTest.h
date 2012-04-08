@@ -19,48 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#pragma once
+#include <sstream>
 
-
-#include "BufferWriterTest.h"
-#include "TTFLoadingTest.h"
-
-#include "FBXLoadingTest.h"
-#include "MeshSavingTest.h"
-
-#include <unistd.h>
+#include <common/TTFManager.h>
+#include <gcl/UnitTest.h>
 
 using namespace GCL;
-
-
-
-
-int main(int /*argc*/, char **argv)
+namespace TTFLoadingTest
 {
-  std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
 
-  try
-  {
-	  BufferWriterTest::Test();
-	  TTFLoadingTest::Test();
 
-	  FBXLoadingTest::Test();
-      MeshSavingTest::Test();
-  }
-  catch (GCLException & e)
-  {
-      std::stringstream str;
-      str << "[FAILED] " << argv[0] << std::endl;
-      str << e.what();
-      str << std::endl;
-      std::cerr << str.str();
-      return -1;
-  }
-  catch (...)
-  {
-      std::cerr << "[FAILED] " << argv[0] << std::endl;
-      std::cerr << "something went wrong" << std::endl;
-  }
-  std::cout.flush();
-  std::cerr.flush();
-  return 0;
+void Test()
+{
+	TEST_START
+
+	TTFManager::Initialize();
+
+    TTFManager::LoadScene("datamisc/FreeMono.ttf");
+
+    TTFManager::Terminate();
+}
 }

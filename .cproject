@@ -31,6 +31,7 @@
 									<listOptionValue builtIn="false" value="/usr/include/vorbis"/>
 									<listOptionValue builtIn="false" value="/usr/local/include"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/libfreenect"/>
+									<listOptionValue builtIn="false" value="/usr/include/freetype2"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.789564479" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -41,6 +42,7 @@
 									<listOptionValue builtIn="false" value="/usr/include/vorbis"/>
 									<listOptionValue builtIn="false" value="/usr/local/include"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/libfreenect"/>
+									<listOptionValue builtIn="false" value="/usr/include/freetype2"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1095843922" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -51,6 +53,7 @@
 									<listOptionValue builtIn="false" value="/usr/include/vorbis"/>
 									<listOptionValue builtIn="false" value="/usr/local/include"/>
 									<listOptionValue builtIn="false" value="/usr/local/include/libfreenect"/>
+									<listOptionValue builtIn="false" value="/usr/include/freetype2"/>
 								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1368770674" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
@@ -251,9 +254,9 @@
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
 			</target>
-			<target name="sound_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+			<target name="common_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
-				<buildTarget>sound_test_run --verbose</buildTarget>
+				<buildTarget>common_test_run --verbose</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
@@ -277,6 +280,14 @@
 				<buildCommand>scons</buildCommand>
 				<buildArguments/>
 				<buildTarget>@MeshConverter --verbose</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>false</runAllBuilders>
+			</target>
+			<target name="renderer_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>scons</buildCommand>
+				<buildArguments/>
+				<buildTarget>renderer_test_run --verbose</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>

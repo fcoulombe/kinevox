@@ -68,6 +68,18 @@ void Test()
 		TextureResource::Unload(data);
 	}
 
+	//tga saving
+	{
+		const char *fullFileName = TEXTURE_PATH"mushroomtga.tga";
+		std::fstream fp(fullFileName, std::fstream::binary|std::fstream::in);
+
+		TextureResource::TextureData data;
+		TextureResource::LoadTga(fp, data);
+		fp.close();
+		TextureResource::SaveTga("tgasavingtest.tga", data.mWidth, data.mHeight, data.mBytePerPixel,data.imageData);
+		TextureResource::Unload(data);
+	}
+
 	//tga compressed
 	{
 		const char *fullFileName =TEXTURE_PATH"mushroomcompressedtga.tga";

@@ -20,47 +20,37 @@
  * THE SOFTWARE.
  */
 
+#pragma once
 
-#include "BufferWriterTest.h"
-#include "TTFLoadingTest.h"
+#	if defined(__GNUC__)
+#		define COMP_VERSION __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__
+#		if __llvm__ && __clang__
+#			pragma clang system_header
+#		else
+#			pragma GCC system_header
+#		endif
+#	endif
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
-#include "FBXLoadingTest.h"
-#include "MeshSavingTest.h"
-
-#include <unistd.h>
-
-using namespace GCL;
 
 
+#undef __FTERRORS_H__
+#define FT_ERRORDEF( e, v, s )  { e, s },
+#define FT_ERROR_START_LIST     {
+#define FT_ERROR_END_LIST       { 0, 0 } };
+
+	const struct
+	{
+		int          err_code;
+		const char*  err_msg;
+	} ft_errors[] =
+
+#include FT_ERRORS_H
 
 
-int main(int /*argc*/, char **argv)
-{
-  std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
+#define FTErrorCheck(x) do {\
+		const std::string errMsg = ft_errors[x].err_msg;\
+		GCLAssertMsg( x == FT_Err_Ok,errMsg);}while(false);\
+\
 
-  try
-  {
-	  BufferWriterTest::Test();
-	  TTFLoadingTest::Test();
-
-	  FBXLoadingTest::Test();
-      MeshSavingTest::Test();
-  }
-  catch (GCLException & e)
-  {
-      std::stringstream str;
-      str << "[FAILED] " << argv[0] << std::endl;
-      str << e.what();
-      str << std::endl;
-      std::cerr << str.str();
-      return -1;
-  }
-  catch (...)
-  {
-      std::cerr << "[FAILED] " << argv[0] << std::endl;
-      std::cerr << "something went wrong" << std::endl;
-  }
-  std::cout.flush();
-  std::cerr.flush();
-  return 0;
-}

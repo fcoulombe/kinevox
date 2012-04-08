@@ -25,7 +25,7 @@ Import('env')
 name = "common"
 #incPath = [env.Dir(".")]
 incPath = [env.Dir("#/program/tools/"+name)]
-dependencies = ['fbx', 'renderer']
+dependencies = ['fbx', 'freetype', 'renderer']
 src_files = env.Glob("*.cpp")
 
 env.Append(CPPPATH=incPath)

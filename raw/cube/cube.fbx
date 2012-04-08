@@ -11,9 +11,9 @@ FBXHeaderExtension:  {
         Year: 2012
         Month: 04
         Day: 05
-        Hour: 14
-        Minute: 05
-        Second: 33
+        Hour: 20
+        Minute: 59
+        Second: 15
         Millisecond: 0
     }
     Creator: "FBX SDK/FBX Plugins build 20070228"
@@ -21,7 +21,7 @@ FBXHeaderExtension:  {
         FlagPLE: 0
     }
 }
-CreationTime: "2012-04-05 14:05:33:000"
+CreationTime: "2012-04-05 20:59:15:000"
 Creator: "Blender version 2.58 (sub 0)"
 
 ; Object definitions
@@ -1639,7 +1639,7 @@ Objects:  {
 		AudioColor: 0,1,0
 		CameraOrthoZoom: 1
 	}
-	Material: "Material::Material__mushroomtga_tga", "" {
+	Material: "Material::Cube__mushroomtga_tga", "" {
 		Version: 102
 		ShadingModel: "lambert"
 		MultiLayer: 0
@@ -1770,7 +1770,7 @@ Relations:  {
     }
     Model: "Model::Camera Switcher", "CameraSwitcher" {
     }
-	Material: "Material::Material__mushroomtga_tga", "" {
+	Material: "Material::Cube__mushroomtga_tga", "" {
 	}
 	Texture: "Texture::mushroomtga_tga", "TextureVideoClip" {
 	}
@@ -1785,7 +1785,7 @@ Connections:  {
 	Connect: "OO", "Model::Cube", "Model::Scene"
 	Connect: "OO", "Model::Lamp", "Model::Scene"
 	Connect: "OO", "Model::Camera", "Model::Scene"
-	Connect: "OO", "Material::Material__mushroomtga_tga", "Model::Cube"
+	Connect: "OO", "Material::Cube__mushroomtga_tga", "Model::Cube"
 	Connect: "OO", "Texture::mushroomtga_tga", "Model::Cube"
 	Connect: "OO", "Video::mushroomtga_tga", "Texture::mushroomtga_tga"
 }

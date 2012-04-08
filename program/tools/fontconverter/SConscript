@@ -1,0 +1,12 @@
+Import('env')
+
+dependencies = ['common']
+src_files = env.Glob("src/*.cpp")
+data_files =[env.Dir("data")]
+
+
+prog = env.KProgram("fontconverter", src_files, dependencies)
+finalProduct = env.Install(env.Dir("$INSTALL_DIR/tools/font_converter"), prog)
+a = env.Alias("@FontConverter",finalProduct) 
+env.Depends("@meshconverter", env.Alias("common_test_run")) #run the common test before to build the tools
+env.Alias("@tools",a) 

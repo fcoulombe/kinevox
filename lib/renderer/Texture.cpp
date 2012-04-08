@@ -126,83 +126,6 @@ const uint8_t *Texture::GetTextureFromVRAM() const
 #endif
 }
 
-#include <fstream>
-//franky disable strict aliasing warning for this save funcgtion
-#if defined(__GNUC__)
-#  pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#endif
-
-void iSave(const char *filename, size_t width, size_t height, size_t bytePerPixel,const uint8_t *data );
-void iSave(const char *filename, size_t width, size_t height, size_t bytePerPixel,const uint8_t *data )
-{
-	const char *ext = &(filename[strlen(filename)-3]);
-	if (strncmp(ext, "tga", 3)==0)
-	{
-		uint16_t x = width;
-		uint16_t y = height;
-		// split x and y sizes into bytes
-
-		//assemble the header
-		uint8_t header[18]={
-				0, //1			1
-				0, //2 garbage	2
-				2, //1 type		3
-				0, //1			4
-				0, //2			5
-				0, //3			6
-				0, //4			7
-				0, //5 garbage	8
-				0, //1			9
-				0, //2 xstart	10
-				0, //1			11
-				0, //2 ystart	12
-				0, //1 			13
-				0, //2 width	14
-				0, //1			15
-				0, //2 height	16
-				0, //1 bpp		17
-				0, //1 desc		18
-		};
-
-		*(uint16_t*)&(header[8]) = 0;
-		*(uint16_t*)&(header[10]) = 0;
-		*(uint16_t*)&(header[12]) = x;
-		*(uint16_t*)&(header[14]) = y;
-		*(uint8_t*)&(header[16]) = bytePerPixel*8;
-
-		size_t imageSize = sizeof (uint8_t)*width*height*bytePerPixel;
-		//swap the R and the B
-		uint8_t *tempData = new uint8_t[imageSize];
-		memcpy(tempData, data, imageSize);
-		for(GLuint cswap = 0; cswap < imageSize; cswap += bytePerPixel)
-		{
-			uint8_t temp = tempData[cswap];
-			tempData[cswap] = tempData[cswap+2];
-			tempData[cswap+2] = temp;
-		}
-		// write header and data to file
-		std::fstream File(filename, std::ios::out | std::ios::binary);
-		File.write ((const char *)&header, sizeof (uint8_t)*18);
-		File.write ((const char *)tempData, imageSize);
-		File.close();
-
-		delete[] data;
-		data=NULL;
-		//SaveTga(filename);
-	}
-	else if (strncmp(ext, "png", 3)==0)
-	{
-		GCLAssert(false && "TBD");
-		//SavePng(filename);
-	}
-	else
-	{
-		std::string s("This extension is not supported: ");
-		s += ext;
-		GCLAssertMsg(false, s)
-	}
-
-}
 
 //TODO: push this in the texture resource
 void Texture::Save(const char *filename)
@@ -211,7 +134,7 @@ void Texture::Save(const char *filename)
 	std::string nameResource(filename);
 	nameResource += "res.tga";
 
-	iSave(name.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,GetTextureFromVRAM());
+	TextureResource::SaveTga(name.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,GetTextureFromVRAM());
 	//test saving the resource version and not the vram version
 	//iSave(nameResource.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,mTextureResource->mTextureData.imageData);
 

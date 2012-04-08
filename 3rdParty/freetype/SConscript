@@ -1,0 +1,13 @@
+Import('env')
+
+name = "freetype"
+dependencies = []
+
+def SetCFlags(ienv):
+	ienv.ParseConfig('pkg-config --cflags freetype2')
+
+def SetLFlags(ienv):
+	ienv.ParseConfig('pkg-config --libs freetype2')
+	
+	
+env.AddComponent(name, None, None, None, dependencies, SetCFlags, SetLFlags)

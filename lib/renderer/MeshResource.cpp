@@ -34,7 +34,8 @@ const MeshResource MeshResource::EmptyMesh;
 void MeshResource::Unload(MeshData *data)
 {
 	GCLAssert(data);
-	delete data;
+	uint8_t *buffer =(uint8_t *)data;
+	delete [] buffer;
 }
 
 void MeshResource::LoadMesh(GCLFile & fp, MeshData *& data)
@@ -74,7 +75,7 @@ MeshResource::~MeshResource()
 {
 	if (mMeshData)
 	{
-		delete [] mMeshData;
+		Unload(mMeshData);
 	}
 }
 

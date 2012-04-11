@@ -66,5 +66,6 @@ void Test()
 	s<< testData.mUvCount << " == " << testData2->mUvCount << std::endl;
 	AssertMsg_Test(testData.mUvCount  == testData2->mUvCount, s.str().c_str());
 
+	MeshResource::Unload(testData2);
 }
 }

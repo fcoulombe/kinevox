@@ -29,14 +29,20 @@
 #include "renderer/TextureResource.h"
 #include "renderer/TextureResourceManager.h"
 
-
-
 using namespace GCL;
 
+Texture::~Texture()
+{
+	glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
+	glDeleteTextures(1, &mTextureId); glErrorCheck();
+	if (mTextureResource)
+		TextureResourceManager::Instance().ReleaseResource(mTextureResource);
+}
 
 Texture::Texture(const char *filename)
 : mTextureId(-1)
 {
+	mTextureResource = NULL;
 	bool ret = LoadTexture(filename);
 	GCLAssertMsg(ret, (std::string("Failed Loading Testure: ") + std::string(filename)).c_str());
 
@@ -85,7 +91,7 @@ void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, cons
 	else
 #endif
 		glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[bytesPerPixel-1], width, height, 0,
-						BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();
+				BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();
 
 	glBindTexture(GL_TEXTURE_2D, 0);glErrorCheck();
 }
@@ -133,8 +139,9 @@ void Texture::Save(const char *filename)
 	std::string name(filename);
 	std::string nameResource(filename);
 	nameResource += "res.tga";
-
-	TextureResource::SaveTga(name.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,GetTextureFromVRAM());
+	const uint8_t *buffer = GetTextureFromVRAM();
+	TextureResource::SaveTga(name.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,buffer);
+	delete [] buffer;
 	//test saving the resource version and not the vram version
 	//iSave(nameResource.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,mTextureResource->mTextureData.imageData);
 

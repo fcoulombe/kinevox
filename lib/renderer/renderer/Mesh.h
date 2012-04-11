@@ -34,6 +34,7 @@ class Mesh
 {
 public:
 	Mesh(const char *filename="DefaultMesh");
+	~Mesh();
 	const void * GetVertexData() const { return mMeshResource->mMeshData->GetVertexData(); }
 	VertexComponents GetVertexType() const { return (VertexComponents)(ePOSITION|eNORMAL|eTEXTURE_COORD); }
 	size_t GetVertexCount() const { return mMeshResource->mMeshData->mIndicesCount; }

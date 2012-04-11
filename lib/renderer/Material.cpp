@@ -38,6 +38,12 @@ Material::Material(const char *filename)
 	LoadMaterial(filename);
 }
 
+Material::~Material()
+{
+	delete mShader;
+	delete mTexture;
+}
+
 void Material::LoadMaterial(const char *filename)
 {
 	if (mShader )
@@ -94,14 +100,10 @@ void Material::LoadMaterial(const char *filename)
 	fp.getline(buffer, BUFFER_SIZE);
 	sscanf(buffer, "shininess: " FLOAT_FLAG, &shininess);
 
-
 	fp.close();
-
 
 	mShader = new Shader();
 	mTexture = new Texture(texture);
-
-
 }
 
 
@@ -113,9 +115,9 @@ void Material::Bind() const
 	mTexture->Bind();
 }
 
-void Material::SetTexture(Texture &texture)
+void Material::SetTexture(const char *texture)
 {
 	if (mTexture)
 		delete mTexture;
-	mTexture = &texture;
+	mTexture = new Texture(texture);
 }

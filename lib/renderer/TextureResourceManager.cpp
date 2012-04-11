@@ -32,7 +32,7 @@ Resource * TextureResourceManager::Allocate( const char *filename )
   return new TextureResource(filename);
 }
 
-void TextureResourceManager::Free( Resource * /*resource*/ )
+void TextureResourceManager::Free( Resource * resource )
 {
-
+	delete resource;
 }

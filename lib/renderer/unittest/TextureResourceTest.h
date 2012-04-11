@@ -50,6 +50,9 @@ void Test()
 	Assert_Test(pngResource);
 #endif
 
+	textureResourceManager.ReleaseResource(tgaResource);
+	textureResourceManager.ReleaseResource(tgaResource2);
+	textureResourceManager.ReleaseResource(pngResource);
 	TextureResourceManager::Terminate();
 }
 }

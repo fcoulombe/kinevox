@@ -32,7 +32,7 @@ Resource * MeshResourceManager::Allocate( const char *filename )
   return new MeshResource(filename);
 }
 
-void MeshResourceManager::Free( Resource * /*resource*/ )
+void MeshResourceManager::Free( Resource * resource )
 {
-
+	delete resource;
 }

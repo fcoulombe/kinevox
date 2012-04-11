@@ -26,22 +26,6 @@
 #include <gcl/UnitTest.h>
 #include <renderer/TextureResource.h>
 
-
-#include <ctype.h>
-#include <math.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <wchar.h>
-#include <wctype.h>
-#include <unistd.h>
-
-#include <algorithm>
-#include <ostream>  // NOLINT
-#include <sstream>
-#include <vector>
-
-
 using namespace GCL;
 
 namespace TgaLoadingTest
@@ -96,22 +80,5 @@ void Test()
 		Assert_Test(data.mHeight==512);
 		TextureResource::Unload(data);
 	}
-
-	{
-		std::fstream fp(TEXTURE_PATH"texture.raw", std::fstream::binary|std::fstream::in);
-		AssertMsg_Test( fp.good(), TEXTURE_PATH"texture.raw");
-
-
-		TextureResource::TextureData data;
-		TextureResource::LoadRaw(fp, data);
-		fp.close();
-		Assert_Test(data.imageData);
-		Assert_Test(data.mBitdepth==8);
-		Assert_Test(data.mBytePerPixel==3);
-		Assert_Test(data.mWidth==256);
-		Assert_Test(data.mHeight==256);
-		TextureResource::Unload(data);
-	}
-
 }
 }

@@ -42,6 +42,7 @@ void Test()
 {
 	TEST_START
 	TextureResourceManager::Initialize();
+	{
 	GLRenderer renderer;
 	MyRenderObject2D obj;
 	RenderObject2DList objList;
@@ -110,7 +111,7 @@ void Test()
 	renderer.PreRender();
 	renderer.Render(objList);
 	renderer.PostRender();
-
+	}
 	TextureResourceManager::Terminate();
 
 

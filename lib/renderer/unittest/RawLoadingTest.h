@@ -20,44 +20,35 @@
  * THE SOFTWARE.
  */
 #pragma once
-#include <sstream>
 
-#include <applayer/GCLApplication.h>
-#include <applayer/GCLRenderObject.h>
+#include <fstream>
 
 #include <gcl/UnitTest.h>
+#include <renderer/TextureResource.h>
 
 using namespace GCL;
-namespace GCLRenderObjectMultipleRenderTest
+
+namespace RawLoadingTest
 {
-
-
+void Test();
 void Test()
 {
 	TEST_START
-
-	GCLApplication::Initialize();
 	{
-	GCLRenderObject obj("TestObject");
-	Assert_Test(GCLApplication::IsRegistered(obj));
-	Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
-
-	const WorldPoint3 position(0.0,0.0, -10.0);
-	obj.SetPosition(position);
-	Matrix44 positionTestMat(true); //identity
-	positionTestMat.SetPosition(position);
-	std::stringstream s;
-	s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;
-	AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
+		std::fstream fp(TEXTURE_PATH"texture.raw", std::fstream::binary|std::fstream::in);
+		AssertMsg_Test( fp.good(), TEXTURE_PATH"texture.raw");
 
 
-	for (size_t i=0;i<100; ++i)
-	{
-	GCLApplication::Update();
-	GCLApplication::Render();
-	usleep(1);
+		TextureResource::TextureData data;
+		TextureResource::LoadRaw(fp, data);
+		fp.close();
+		Assert_Test(data.imageData);
+		Assert_Test(data.mBitdepth==8);
+		Assert_Test(data.mBytePerPixel==3);
+		Assert_Test(data.mWidth==256);
+		Assert_Test(data.mHeight==256);
+		TextureResource::Unload(data);
 	}
-	}
-	GCLApplication::Terminate();
+
 }
 }

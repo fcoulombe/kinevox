@@ -135,11 +135,9 @@ inline void i_glErrorCheck(const char *file, int line)
         case GL_INVALID_FRAMEBUFFER_OPERATION:
         s<<"The command is trying to render to or read from the framebuffer while the currently bound framebuffer is not framebuffer complete (i.e. the return value from glCheckFramebufferStatus is not GL_FRAMEBUFFER_COMPLETE). The offending command is ignored and has no other side effect than to set the error flag.";
             break;
-
 #endif
 	default:
 	  s<<"OpenGL: don't know what happenedl";
 	}
 	GCLAssertMsg(false, s.str().c_str());
-
 }

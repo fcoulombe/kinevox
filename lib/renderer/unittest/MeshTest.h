@@ -62,6 +62,7 @@ void Test()
 
 	GLRenderer render;
 	std::stringstream s;
+#if 1
 	{
 		Mesh mesh(MESH_PATH"ExampleMesh.mesh");
 		const void * data = mesh.GetVertexData();
@@ -79,7 +80,8 @@ void Test()
 		}*/
 
 	}
-	{
+#endif
+	/*{
 		MeshRenderObject myMesh;
 		RenderObjectList renderList;
 		renderList.push_back(&myMesh);
@@ -88,7 +90,7 @@ void Test()
 		render.PostRender();
 	}
 
-
+*/
 	MeshResourceManager::Terminate();
 	TextureResourceManager::Terminate();
 }

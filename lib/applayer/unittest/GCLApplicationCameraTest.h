@@ -36,14 +36,12 @@ void Test()
 	TEST_START
 
 	GCLApplication::Initialize();
-
 	Camera camera;
 	camera.Update();
 	GCLApplication::SetViewportCamera(camera);
 
 	GCLApplication::Update();
 	GCLApplication::Render();
-
 	GCLApplication::Terminate();
 }
 }

@@ -37,6 +37,7 @@ void Test()
 
 
 	TextureResourceManager::Initialize();
+	{
 	GLRenderer renderer;
 
 	Sprite obj;
@@ -69,7 +70,7 @@ void Test()
 
 	obj.Pause();
 	obj.Rewind();
-
+	}
 	TextureResourceManager::Terminate();
 
 }

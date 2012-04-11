@@ -35,7 +35,7 @@ void Test()
 {
 	TEST_START
 	TextureResourceManager::Initialize();
-
+	{
 	GLRenderer *renderer = new GLRenderer();
 
 
@@ -55,6 +55,7 @@ void Test()
 	renderer->PostRender();
 
 	delete renderer;
+	}
 	TextureResourceManager::Terminate();
 
 }

@@ -35,3 +35,8 @@ Mesh::Mesh(const char * filename)
 	mMaterial = new Material(materialName);
 }
 
+Mesh::~Mesh()
+{
+	delete mMaterial;
+	MeshResourceManager::Instance().ReleaseResource(mMeshResource);
+}

@@ -40,6 +40,7 @@ void Test()
 	meshResource = static_cast<const MeshResource *>(meshResourceManager.LoadResource(MESH_PATH"ExampleMesh.mesh"));
 	Assert_Test(meshResource);
 
+	MeshResourceManager::Instance().ReleaseResource(meshResource);
 	MeshResourceManager::Terminate();
 }
 }

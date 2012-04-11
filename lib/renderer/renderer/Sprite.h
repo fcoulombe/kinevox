@@ -41,7 +41,7 @@ class Sprite
 {
 public:
 	Sprite(const char *filename="DefaultSprite");
-
+	~Sprite();
 	void Render() const;
 
 	void Update();

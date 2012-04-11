@@ -29,6 +29,15 @@
 
 using namespace GCL;
 
+Sprite::~Sprite()
+{
+	for (size_t i=0; i<mTextureList.size(); ++i)
+	{
+		Texture *tempTexture = mTextureList[i];
+		delete tempTexture;
+	}
+	mTextureList.clear();
+}
 
 Sprite::Sprite(const char *filename)
 : mCurrentFrame(0),

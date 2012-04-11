@@ -50,5 +50,6 @@ void Test()
 	Assert_Test(data.mHeight==512);
 #endif
 	fclose(fp);
+	TextureResource::Unload(data);
 }
 }

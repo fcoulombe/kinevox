@@ -37,12 +37,12 @@ void Test()
     TEST_START
 
     GCLApplication::Initialize();
-
+    {
     GCLRenderObject2D obj("TestObject");
     
     GCLApplication::Update();
     GCLApplication::Render();
-
+    }
     GCLApplication::Terminate();
 }
 }

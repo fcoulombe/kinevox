@@ -47,6 +47,7 @@
 #include "MeshLoadingTest.h"
 #include "MeshResourceTest.h"
 #include "PngLoadingTest.h"
+#include "RawLoadingTest.h"
 #include "RenderBufferTest.h"
 #include "RenderObjectTest.h"
 #include "RenderObject2DTest.h"
@@ -64,21 +65,19 @@
 
 using namespace GCL;
 
-
-
-
 int main(int /*argc*/, char **argv)
 {
   std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
 
   try
-  {
+  {/*
       GLRendererTest::Test();
       CameraTest::Test();
-
       ShaderTest::Test();
+
       VertexTest::Test();
       VertexBufferTest::Test();
+      RawLoadingTest::Test();
       TgaLoadingTest::Test();
       PngLoadingTest::Test();
       TextureResourceTest::Test();
@@ -97,9 +96,8 @@ int main(int /*argc*/, char **argv)
       GeomUtilTest::Test();
 
       MeshLoadingTest::Test();
-      MeshResourceTest::Test();
+      MeshResourceTest::Test();*/
       MeshTest::Test();
-
   }
   catch (GCLException & e)
   {

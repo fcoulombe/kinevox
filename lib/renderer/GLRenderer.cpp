@@ -40,14 +40,10 @@
 #include "renderer/Shader.h"
 #include "renderer/VertexBuffer.h"
 
-
-
 using namespace GCL;
-
 
 void GLRenderer::Init3DState()
 {
-
 	int sdlInitSuccessful = SDL_Init(SDL_INIT_VIDEO);
 	GCLAssert(sdlInitSuccessful>= 0);
 

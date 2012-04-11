@@ -23,7 +23,7 @@
 
 #include <gcl/UnitTest.h>
 #include <renderer/Texture.h>
-#include <renderer/Shader.h>
+//#include <renderer/Shader.h>
 #include <renderer/Vertex.h>
 
 using namespace GCL;
@@ -36,6 +36,10 @@ public:
 	MyRenderObject()
 	: RenderObject("MyRenderObject", Matrix44(true)) //identity
 	{}
+	~MyRenderObject()
+	{
+
+	}
 	const VertexData &GetVertexData() const
 	{
 		return data;
@@ -57,50 +61,45 @@ static const   VertexPNT square[4] = {
 
 const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
 
-    bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
+bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 {
 	return false;
 }
-    void Test();
+void Test();
 void Test()
 {
 	TEST_START
 
 	TextureResourceManager::Initialize();
-	GLRenderer renderer;
-	Shader shader;
-	shader.Bind();
+	{
+		GLRenderer renderer;
+		Shader shader;
+		shader.Bind();
 
-	Texture texture1(TEXTURE_PATH"mushroomcompressedtga.tga");
-	texture1.Bind();
-
-	Texture texture2(TEXTURE_PATH"HappyFish.tga");
-	texture2.Bind();
-
-	MyRenderObject obj1;
-	const WorldPoint3 position1(2.5,0.0, -10.0);
-	obj1.SetPosition(position1);
-	obj1.GetMaterial().SetTexture(texture1);
+		MyRenderObject obj1;
+		const WorldPoint3 position1(2.5,0.0, -10.0);
+		obj1.SetPosition(position1);
+		obj1.GetMaterial().SetTexture(TEXTURE_PATH"mushroomcompressedtga.tga");
 
 
-	MyRenderObject obj2;
-	const WorldPoint3 position2(-2.5,0.0, -10.0);
-	obj2.SetPosition(position2);
-	obj2.GetMaterial().SetTexture(texture2);
+		MyRenderObject obj2;
+		const WorldPoint3 position2(-2.5,0.0, -10.0);
+		obj2.SetPosition(position2);
+		obj2.GetMaterial().SetTexture(TEXTURE_PATH"HappyFish.tga");
 
-	RenderObjectList renderObjectList;
-	renderObjectList.push_back(&obj1);
+		RenderObjectList renderObjectList;
+		renderObjectList.push_back(&obj1);
 
-	renderObjectList.push_back(&obj2);
-	renderer.PreRender();
-	renderer.Render(renderObjectList);
-	renderer.PostRender();
+		renderObjectList.push_back(&obj2);
+		renderer.PreRender();
+		renderer.Render(renderObjectList);
+		renderer.PostRender();
 
-	        /*target.Save("TextureAndShaderTest.tga");
+		/*target.Save("TextureAndShaderTest.tga");
 	        Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
-	 */
+		 */
+	}
 	TextureResourceManager::Terminate();
-
 }
 }

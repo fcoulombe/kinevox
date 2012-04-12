@@ -1,0 +1,161 @@
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   obj:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Addr4
+   fun:_mesa_make_extension_string
+   fun:_mesa_make_current
+   fun:intelMakeCurrent
+   obj:/usr/lib/i386-linux-gnu/dri/i965_dri.so
+   obj:/usr/lib/i386-linux-gnu/mesa/libGL.so.1.2
+   fun:glXMakeContextCurrent
+   fun:glXMakeCurrent
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   fun:SDL_SetVideoMode
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/lib/i386-linux-gnu/libdrm_intel.so.1.0.0
+   fun:drm_intel_bo_alloc
+   fun:brw_init_caches
+   fun:brw_init_state
+   fun:brwCreateContext
+   obj:/usr/lib/i386-linux-gnu/dri/i965_dri.so
+   obj:/usr/lib/i386-linux-gnu/dri/i965_dri.so
+   obj:/usr/lib/i386-linux-gnu/dri/i965_dri.so
+   obj:/usr/lib/i386-linux-gnu/mesa/libGL.so.1.2
+   obj:/usr/lib/i386-linux-gnu/mesa/libGL.so.1.2
+   fun:glXCreateContext
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   fun:SDL_VideoInit
+   fun:SDL_InitSubSystem
+   fun:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   obj:/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+   fun:XrmGetStringDatabase
+   obj:/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+   fun:XGetDefault
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/i386-linux-gnu/libxcb.so.1.1.0
+   obj:/usr/lib/i386-linux-gnu/libxcb.so.1.1.0
+   fun:xcb_connect_to_display_with_auth_info
+   fun:xcb_connect
+   fun:_XConnectXCB
+   fun:XOpenDisplay
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   fun:SDL_VideoInit
+   fun:SDL_InitSubSystem
+   fun:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XGetVisualInfo
+   obj:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/i386-linux-gnu/libX11.so.6.3.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   fun:SDL_VideoInit
+   fun:SDL_InitSubSystem
+   fun:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcDefaultMapModifiers
+   fun:XSetLocaleModifiers
+   obj:/usr/lib/libSDL-1.2.so.0.11.3
+   fun:SDL_VideoInit
+   fun:SDL_InitSubSystem
+   fun:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Cond
+   fun:inflateReset2
+   fun:inflateInit2_
+   fun:inflateInit_
+   fun:png_create_read_struct_2
+   fun:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/lib/i386-linux-gnu/libdrm_intel.so.1.0.0
+   fun:drm_intel_bo_alloc
+   obj:/usr/lib/i386-linux-gnu/dri/i965_dri.so
+   fun:brw_upload_cache
+   obj:/usr/lib/i386-linux-gnu/dri/i965_dri.so
+   obj:*
+}
+

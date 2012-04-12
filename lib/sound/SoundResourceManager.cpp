@@ -32,9 +32,9 @@ Resource * SoundResourceManager::Allocate( const char *filename )
   return new SoundResource(filename);
 }
 
-void SoundResourceManager::Free( Resource * /*resource*/ )
+void SoundResourceManager::Free( Resource * resource )
 {
-
+	delete resource;
 }
 
 

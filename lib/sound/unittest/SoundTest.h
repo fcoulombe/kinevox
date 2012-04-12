@@ -38,6 +38,7 @@ void Test()
 	TEST_START
 
 	SoundResourceManager::Initialize();
+	{
 	ALSoundDevice device;
 	Sound sound(SOUND_PATH"Explosion.wav");
 	//SoundList soundList;
@@ -54,7 +55,7 @@ void Test()
 
 	Assert_Test(sound.GetCurrentTime() ==0.0 );
 	Assert_Test(abseq(sound.GetTotalTime(),2.297874928, DBL_PRECISION_TOLERANCE));
-
+	}
 	SoundResourceManager::Terminate();
 
 }

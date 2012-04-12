@@ -74,6 +74,7 @@ Sound::~Sound()
 {
 	alDeleteSources(1, &mSources);
 	alDeleteBuffers(1, &mBuffer);
+	SoundResourceManager::Instance().ReleaseResource(mSoundResource);
 }
 bool Sound::LoadSound(const char *filename)
 {

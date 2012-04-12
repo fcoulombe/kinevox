@@ -44,6 +44,7 @@ void Test()
 	wavResource = soundResourceManager.LoadResource(SOUND_PATH"Explosion.wav");
 	Assert_Test(wavResource);
 
+	soundResourceManager.ReleaseResource(wavResource);
 	SoundResourceManager::Terminate();
 
 }

@@ -37,6 +37,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		SoundResourceTest::Test();
 		SoundTest::Test();
 		OggVorbisStreamTest::Test();
+
 		//Music::Test();
 	}
 	catch (GCLException &e)

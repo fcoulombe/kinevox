@@ -240,7 +240,6 @@
 		<buildTargets>
 			<target name="@build_all @run_all --verbose --compiler=clang --configuration=opt" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
-				<buildArguments/>
 				<buildTarget>@build_all @run_all --verbose --compiler=clang --configuration=opt</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -248,29 +247,31 @@
 			</target>
 			<target name="@MeshLoading" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
+				<buildArguments/>
 				<buildTarget>@MeshLoading</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
 			</target>
-			<target name="common_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+			<target name="common_test_run --verbose --use-valgrind" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
 				<buildArguments/>
-				<buildTarget>common_test_run --verbose</buildTarget>
+				<buildTarget>common_test_run --verbose --use-valgrind</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
 			</target>
-			<target name="@build_all @run_all --verbose --configuration=debug" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+			<target name="@build_all @run_all --verbose --configuration=debug --use-valgrind" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
 				<buildArguments/>
-				<buildTarget>@build_all @run_all --verbose --configuration=debug</buildTarget>
+				<buildTarget>@build_all @run_all --verbose --configuration=debug --use-valgrind</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
 			</target>
 			<target name="@Arkanoid" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
+				<buildArguments/>
 				<buildTarget>@Arkanoid</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -278,22 +279,24 @@
 			</target>
 			<target name="@MeshConverter --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
+				<buildArguments/>
 				<buildTarget>@MeshConverter --verbose</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
 			</target>
-			<target name="renderer_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+			<target name="sound_test_run --verbose --use-valgrind" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
-				<buildTarget>renderer_test_run --verbose</buildTarget>
+				<buildArguments/>
+				<buildTarget>sound_test_run --verbose --use-valgrind</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
 			</target>
-			<target name="gcl_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+			<target name="gcl_test_run --verbose --use-valgrind" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
 				<buildArguments/>
-				<buildTarget>gcl_test_run --verbose</buildTarget>
+				<buildTarget>gcl_test_run --verbose --use-valgrind</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>

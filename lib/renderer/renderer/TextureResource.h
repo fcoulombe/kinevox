@@ -44,7 +44,8 @@ namespace GCL
           //mWrapModeS(GL_CLAMP),
           //mWrapModeT(GL_CLAMP)
           mWrapModeS(GL_CLAMP_TO_EDGE),
-          mWrapModeT(GL_CLAMP_TO_EDGE)
+          mWrapModeT(GL_CLAMP_TO_EDGE),
+          mTextureFormat(GL_RGB)
       {
         imageData = NULL;
       }

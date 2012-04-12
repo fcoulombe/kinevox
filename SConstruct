@@ -220,7 +220,7 @@ sconsFilesList = [
 
 #unittest
 "./lib/gcl/gcl/unittest/SConscript",
-#"./lib/sound/unittest/SConscript",
+"./lib/sound/unittest/SConscript",
 "./lib/renderer/unittest/SConscript",
 "./lib/input/unittest/SConscript", #depends on renderer
 "./lib/kinect/unittest/SConscript",

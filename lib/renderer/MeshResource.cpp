@@ -31,19 +31,20 @@ using namespace GCL;
 
 const MeshResource MeshResource::EmptyMesh;
 
-void MeshResource::Unload(MeshData *data)
+void MeshResource::Unload(const MeshData *data)
 {
 	GCLAssert(data);
 	uint8_t *buffer =(uint8_t *)data;
 	delete [] buffer;
 }
 
-void MeshResource::LoadMesh(GCLFile & fp, MeshData *& data)
+const MeshResource::MeshData * MeshResource::LoadMesh(GCLFile & fp)
 {
 	size_t fileSize = fp.GetFileSize();
 	uint8_t *buffer = new uint8_t[fileSize];
-	data = reinterpret_cast<MeshData*>(buffer);
+	const MeshData *data = reinterpret_cast<const MeshData*>(buffer);
 	fp.Read(buffer, fileSize);
+	return data;
 }
 
 //this loads TGA files and then upload it to opengl
@@ -60,7 +61,7 @@ MeshResource::MeshResource( const char *MeshName )
 	{
 		GCLFile fp(path.c_str());
 
-		LoadMesh(fp, mMeshData);
+		mMeshData =LoadMesh(fp);
 		GCLAssert(mMeshData);
 
 		fp.Close();

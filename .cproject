@@ -238,17 +238,16 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
 		<buildTargets>
-			<target name="@build_all @run_all --verbose --compiler=clang --configuration=debug" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+			<target name="@build_all @run_all --verbose --compiler=clang --configuration=opt" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
 				<buildArguments/>
-				<buildTarget>@build_all @run_all --verbose --compiler=clang --configuration=debug</buildTarget>
+				<buildTarget>@build_all @run_all --verbose --compiler=clang --configuration=opt</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
 			</target>
 			<target name="@MeshLoading" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
-				<buildArguments/>
 				<buildTarget>@MeshLoading</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -256,6 +255,7 @@
 			</target>
 			<target name="common_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
+				<buildArguments/>
 				<buildTarget>common_test_run --verbose</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -263,6 +263,7 @@
 			</target>
 			<target name="@build_all @run_all --verbose --configuration=debug" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
+				<buildArguments/>
 				<buildTarget>@build_all @run_all --verbose --configuration=debug</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -270,7 +271,6 @@
 			</target>
 			<target name="@Arkanoid" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
-				<buildArguments/>
 				<buildTarget>@Arkanoid</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -278,7 +278,6 @@
 			</target>
 			<target name="@MeshConverter --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
-				<buildArguments/>
 				<buildTarget>@MeshConverter --verbose</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
@@ -286,8 +285,15 @@
 			</target>
 			<target name="renderer_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
-				<buildArguments/>
 				<buildTarget>renderer_test_run --verbose</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>false</runAllBuilders>
+			</target>
+			<target name="gcl_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>scons</buildCommand>
+				<buildArguments/>
+				<buildTarget>gcl_test_run --verbose</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>

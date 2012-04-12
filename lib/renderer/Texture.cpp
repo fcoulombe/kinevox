@@ -31,6 +31,7 @@
 
 using namespace GCL;
 
+#include <iostream>
 Texture::~Texture()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
@@ -61,33 +62,44 @@ Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
 static const GLenum BytePerPixel[] =
 {
 		GL_LUMINANCE,
-		GL_LUMINANCE,
+		GL_LUMINANCE_ALPHA,
 		GL_RGB,
 		GL_RGBA
 };
 static const GLenum BytesPerPixel[] =
 {
 		GL_LUMINANCE,
-		GL_LUMINANCE,
+		GL_LUMINANCE_ALPHA,
 		GL_RGB,
 		GL_RGBA,
+};
+static const GLenum GLUInternalFormat[] =
+{
+		GL_LUMINANCE,
+		GL_LUMINANCE_ALPHA,
+		GL_RGB,
+		GL_RGBA
 };
 void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, const uint8_t *data )
 {
 	glGenTextures(1, &mTextureId); glErrorCheck();
 	glBindTexture(GL_TEXTURE_2D, mTextureId);glErrorCheck();
+
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);glErrorCheck();
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL); glErrorCheck();
+
 	GCLAssert(bytesPerPixel <= GL_RGBA);
 	/*glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[bytesPerPixel-1], width, height, 0,
 			BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);glErrorCheck();*/
 #ifndef ES1
 	if (data)
-		gluBuild2DMipmaps( GL_TEXTURE_2D, 3, width,height, BytesPerPixel[bytesPerPixel-1], GL_UNSIGNED_BYTE, data);
+		gluBuild2DMipmaps( GL_TEXTURE_2D, GLUInternalFormat[bytesPerPixel-1],
+				width,height, BytesPerPixel[bytesPerPixel-1],
+				GL_UNSIGNED_BYTE, data);
 	else
 #endif
 		glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[bytesPerPixel-1], width, height, 0,
@@ -142,7 +154,4 @@ void Texture::Save(const char *filename)
 	const uint8_t *buffer = GetTextureFromVRAM();
 	TextureResource::SaveTga(name.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,buffer);
 	delete [] buffer;
-	//test saving the resource version and not the vram version
-	//iSave(nameResource.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,mTextureResource->mTextureData.imageData);
-
 }

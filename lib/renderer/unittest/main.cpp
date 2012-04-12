@@ -70,8 +70,8 @@ int main(int /*argc*/, char **argv)
   std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
 
   try
-  {/*
-      GLRendererTest::Test();
+  {
+	  GLRendererTest::Test();
       CameraTest::Test();
       ShaderTest::Test();
 
@@ -80,11 +80,13 @@ int main(int /*argc*/, char **argv)
       RawLoadingTest::Test();
       TgaLoadingTest::Test();
       PngLoadingTest::Test();
-      TextureResourceTest::Test();
-      TextureTest::Test();
-      TextureAndShaderTest::Test();
-      MaterialTest::Test();
 
+      TextureResourceTest::Test();
+	  TextureTest::Test();
+
+      TextureAndShaderTest::Test();
+
+      MaterialTest::Test();
       SpriteTest::Test();
       RenderObject2DTest::Test();
 
@@ -96,7 +98,7 @@ int main(int /*argc*/, char **argv)
       GeomUtilTest::Test();
 
       MeshLoadingTest::Test();
-      MeshResourceTest::Test();*/
+      MeshResourceTest::Test();
       MeshTest::Test();
   }
   catch (GCLException & e)

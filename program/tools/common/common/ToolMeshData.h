@@ -32,6 +32,15 @@ namespace GCL
 
 struct ToolMeshData
 {
+	ToolMeshData()
+	:mVertexCount(0),
+	mIndicesCount(0),
+	mNormalCount(0),
+	mVertexColorCount(0),
+	mMaterialCount(0),
+	mUvCount(0)
+	{}
+
 	uint32_t mVertexCount;
 	uint32_t mIndicesCount;
 	uint32_t mNormalCount;

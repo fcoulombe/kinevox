@@ -78,10 +78,9 @@ void Test()
 		{
 			std::cout << "indice: " << i << " " << vertexData[i] << std::endl;
 		}*/
-
 	}
 #endif
-	/*{
+	{
 		MeshRenderObject myMesh;
 		RenderObjectList renderList;
 		renderList.push_back(&myMesh);
@@ -90,7 +89,7 @@ void Test()
 		render.PostRender();
 	}
 
-*/
+
 	MeshResourceManager::Terminate();
 	TextureResourceManager::Terminate();
 }

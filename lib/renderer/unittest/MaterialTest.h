@@ -45,6 +45,10 @@ void Test()
 	material.SetTexture(TEXTURE_PATH"HappyFish.tga");
 	material.Bind();
 	}
+	{
+	Material material("mario_mario_fire_png");
+	material.Bind();
+	}
 
 
 	TextureResourceManager::Terminate();

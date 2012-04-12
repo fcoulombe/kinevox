@@ -21,6 +21,7 @@
  */
 #pragma once
 
+#include <sstream>
 #include <gcl/UnitTest.h>
 #include <renderer/Texture.h>
 
@@ -39,27 +40,45 @@ void Test()
 
 	TextureResourceManager::Initialize();
 	GLRenderer renderer;
+	std::stringstream s;
+	//png
+	{
+		Texture texture(TEXTURE_PATH"mario_fire.png");
+		texture.Bind();
+		s.str("");
+		s<<texture.GetWidth() << " == " << 256 << std::endl;
+		AssertMsg_Test(texture.GetWidth() == 256, s.str().c_str());
+		s.str("");
+		s<<texture.GetHeight() << " == " << 256 << std::endl;
+		AssertMsg_Test(texture.GetHeight() == 256, s.str().c_str());
+
+#ifndef OS_IPHONE
+		texture.Save("mario_fire.png.tga");
+#endif
+		//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
+
+	}
 
 	//rgba
 	{
-	Texture texture(TEXTURE_PATH"mushroomtga.tga");
-	texture.Bind();
-	Assert_Test(texture.GetWidth() == 512);
-	Assert_Test(texture.GetHeight() == 512);
-
+		Texture texture(TEXTURE_PATH"mushroomtga.tga");
+		texture.Bind();
+		Assert_Test(texture.GetWidth() == 512);
+		Assert_Test(texture.GetHeight() == 512);
 
 #ifndef OS_IPHONE
-	texture.Save("MushroomTest.tga");
+		texture.Save("MushroomTest.tga");
 #endif
-	//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
+		//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 	}
+
 	//rgb
 	{
-	Texture texture(TEXTURE_PATH"HappyFish.tga");
-	texture.Bind();
+		Texture texture(TEXTURE_PATH"HappyFish.tga");
+		texture.Bind();
 
 #ifndef OS_IPHONE
-	texture.Save("HappyFishTest.tga");
+		texture.Save("HappyFishTest.tga");
 #endif
 	}
 	TextureResourceManager::Terminate();

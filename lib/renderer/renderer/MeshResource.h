@@ -67,12 +67,12 @@ public:
 		const void *GetVertexData() const { return (uint8_t*)(this)+sizeof(MeshData)+mMaterialNameLen; }
 
 	};
-	MeshData *mMeshData;
+	const MeshData *mMeshData;
 
 	static const MeshResource EmptyMesh;
 
-	static void LoadMesh(GCLFile &is, MeshData *&data);
-	static void Unload(MeshData *data);
+	static const MeshData *LoadMesh(GCLFile &is);
+	static void Unload(const MeshData *data);
 private:
 	MeshResource() {}
 };

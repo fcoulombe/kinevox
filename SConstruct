@@ -126,7 +126,7 @@ if compiler == 'g++':
     cflags.append("-std=c++0x");
     cflags.append("-pedantic")
     lflags.append("-L/usr/lib/")
-
+    lflags.append("-rdynamic");
 
 elif compiler == 'clang':
     if default_env['PLATFORM']=='darwin':
@@ -188,6 +188,7 @@ print default_env['ENV']['PATH']
 sconsFilesList = [
 #third party
 "./3rdParty/fbx/SConscript",
+"./3rdParty/freetype/SConscript",
 "./3rdParty/il/SConscript",
 "./3rdParty/libfreenect/SConscript",
 "./3rdParty/libpng/SConscript",
@@ -219,7 +220,7 @@ sconsFilesList = [
 
 #unittest
 "./lib/gcl/gcl/unittest/SConscript",
-"./lib/sound/unittest/SConscript",
+#"./lib/sound/unittest/SConscript",
 "./lib/renderer/unittest/SConscript",
 "./lib/input/unittest/SConscript", #depends on renderer
 "./lib/kinect/unittest/SConscript",

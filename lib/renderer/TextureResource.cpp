@@ -34,8 +34,8 @@ const TextureResource TextureResource::EmptyTexture;
 
 void TextureResource::Unload(TextureData &data)
 {
-	GCLAssert(data.imageData);
-	delete [] data.imageData;
+	if (data.imageData)
+		delete [] data.imageData;
 }
 
 
@@ -69,6 +69,7 @@ TextureResource::TextureResource( const char *textureName )
 
 		LoadPng(fp, data);
 		GCLAssert(data.imageData);
+		fclose(fp);
 #else
 		GCLAssertMsg(false, "cant load png on iphone yet" );
 #endif
@@ -86,10 +87,8 @@ TextureResource::TextureResource( const char *textureName )
 
 TextureResource::~TextureResource()
 {
-	if (mTextureData.imageData)
-	{
-		delete [] mTextureData.imageData;
-	}
+	Unload(mTextureData);
+
 }
 
 

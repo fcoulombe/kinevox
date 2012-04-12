@@ -40,11 +40,12 @@ void Test()
 	ALSoundDevice device;
 
 	OggStream stream(MUSIC_PATH"ExampleMusic.ogg");
-	size_t i;
+
 
 	stream.Play();
-	i=0;
-	while (i<10000000) //(stream.IsPlaying())
+	size_t i=0;
+	const size_t kLoopCount = 10; //10000000;
+	while (i<kLoopCount) //(stream.IsPlaying())
 	{
 		stream.Update();
 		++i;
@@ -52,7 +53,7 @@ void Test()
 	stream.Stop();
 	stream.Play();
 	i=0;
-	while (i<10000000) //(stream.IsPlaying())
+	while (i<kLoopCount) //(stream.IsPlaying())
 	{
 		stream.Update();
 		++i;

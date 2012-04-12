@@ -34,6 +34,13 @@ namespace GCL
 
 struct ToolMaterialData
 {
+	ToolMaterialData()
+	: mDiffuse(0.6,0.6,0.6,1.0),
+	  mAmbient(0.3,0.3,0.3,1.0),
+	  mEmissive(0.0,0.0,0.0,0.0),
+	  mSpecular(0.6,0.6,0.6,1.0),
+	  mShininess(1.0)
+	{}
 	WorldPoint4 mDiffuse;
 	WorldPoint4 mAmbient;
 	WorldPoint4 mEmissive;

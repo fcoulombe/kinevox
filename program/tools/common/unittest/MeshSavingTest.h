@@ -79,7 +79,8 @@ void Test()
 		buffer.WriteToFile("ExampleMesh.mesh");
 	}
 
-	data.mMaterialData.WriteToFile(data.mMaterialData.matName+".mat");
+	const std::string matFilename = data.mMaterialData.matName+".mat";
+	data.mMaterialData.WriteToFile(matFilename);
 
 
 	FBXManager::Terminate();

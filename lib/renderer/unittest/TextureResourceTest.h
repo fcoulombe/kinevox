@@ -35,24 +35,28 @@ void Test()
 
 	TextureResourceManager::Initialize();
 
-	TextureResourceManager &textureResourceManager = TextureResourceManager::Instance();
-	const Resource *tgaResource;
-	tgaResource = textureResourceManager.LoadResource(TEXTURE_PATH"mushroomtga.tga");
-	Assert_Test(tgaResource);
+	{
+		TextureResourceManager &textureResourceManager = TextureResourceManager::Instance();
 
-	//test resource sharing
-	const Resource *tgaResource2;
-	tgaResource2 = textureResourceManager.LoadResource(TEXTURE_PATH"mushroomtga.tga");
-	Assert_Test(tgaResource == tgaResource2);
 #ifndef OS_IPHONE
-	const Resource *pngResource;
-	pngResource = textureResourceManager.LoadResource(TEXTURE_PATH"mushroompng.png");
-	Assert_Test(pngResource);
+		const TextureResource *pngResource;
+		pngResource = static_cast<const TextureResource *>(textureResourceManager.LoadResource(TEXTURE_PATH"mushroompng.png"));
+		Assert_Test(pngResource);
 #endif
+		const TextureResource *tgaResource;
+		tgaResource = static_cast<const TextureResource *>(textureResourceManager.LoadResource(TEXTURE_PATH"mushroomtga.tga"));
+		Assert_Test(tgaResource);
 
-	textureResourceManager.ReleaseResource(tgaResource);
-	textureResourceManager.ReleaseResource(tgaResource2);
-	textureResourceManager.ReleaseResource(pngResource);
+		//test resource sharing
+		const TextureResource *tgaResource2;
+		tgaResource2 = static_cast<const TextureResource *>(textureResourceManager.LoadResource(TEXTURE_PATH"mushroomtga.tga"));
+		Assert_Test(tgaResource == tgaResource2);
+
+
+		textureResourceManager.ReleaseResource(tgaResource);
+		textureResourceManager.ReleaseResource(tgaResource2);
+		textureResourceManager.ReleaseResource(pngResource);
+	}
 	TextureResourceManager::Terminate();
 }
 }

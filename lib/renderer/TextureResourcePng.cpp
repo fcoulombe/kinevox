@@ -126,15 +126,15 @@ void TextureResource::LoadPng(FILE *source, TextureData &textureData)
 	//A little for-loop here to set all the row pointers to the starting
 	//Adresses for every row in the buffer
 	for (size_t i = 0; i < imgHeight; i++) {
-		unsigned int q = (imgHeight- i - 1) * stride;
+		unsigned int q = (imgHeight - i - 1) * stride;
 		rowPtrs[i] = (png_bytep)data + q;
 	}
 
 	png_read_image(pngPtr, rowPtrs);
 
-	textureData.imageData = (GLubyte *)rowPtrs;
+	textureData.imageData = (GLubyte *)data;
 
-	delete [] data;
+	delete [] rowPtrs;
 	//And don't forget to clean up the read and info structs !
 	png_destroy_read_struct(&pngPtr, &infoPtr,(png_infopp)0);
 }

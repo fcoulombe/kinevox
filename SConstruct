@@ -164,7 +164,7 @@ if not GetOption('verbose'):
     default_env['INSTALLSTR'] = '[install] $TARGET'
 
 default_env['INSTALL_DIR'] = '#/bin/' + variant 
-
+default_env['BUILD_VARIANT'] = variant
     
 ##############################################
 ##############################################
@@ -199,6 +199,7 @@ sconsFilesList = [
 "./3rdParty/vorbis/SConscript",
 "./3rdParty/glew/SConscript",
 "./3rdParty/sdl/SConscript",
+"./3rdParty/pthread/SConscript",
 
 #libs
 "./lib/gcl/gcl/SConscript",

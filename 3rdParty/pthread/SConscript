@@ -1,0 +1,14 @@
+Import('env')
+
+
+name = "pthread"
+dependencies = []
+
+def SetCFlags(ienv):
+	void = ""
+		
+def SetLFlags(ienv):
+	ienv.Append(LIBS=['pthread']) 
+
+	
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

@@ -81,7 +81,9 @@ TextureResource::TextureResource( const char *textureName )
 	}
 	else
 	{
-		GCLAssertMsg(false, "this extension is not supported")
+		std::stringstream s;
+		s<<"this extension is not supported: "<<ext;
+		GCLAssertMsg(false, s.str().c_str());
 	}
 }
 

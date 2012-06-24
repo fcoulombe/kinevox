@@ -16,5 +16,6 @@ def SetLFlags(ienv):
 		ienv['FRAMEWORKS'] = ['OpenGL']
 	else:
 		ienv.ParseConfig('pkg-config --libs gl')
+		ienv.ParseConfig('pkg-config --libs glu')
 	
 env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

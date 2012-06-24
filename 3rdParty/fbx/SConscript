@@ -12,7 +12,7 @@ def SetCFlags(ienv):
         #ienv.Append(CPPPATH=[env.Dir('include')])
         ienv.Append(CPPPATH=[env.Dir('#3rdParty/fbx/include')]) 
     elif platform.architecture()[0] == "64bit":
-        print "64bit!"
+        ienv.Append(CPPPATH=[env.Dir('#3rdParty/fbx/include')])  
     else:
         print "unsupported architecture: %s" % platform.architecture()[0] 
 	
@@ -21,11 +21,12 @@ def SetLFlags(ienv):
     platform.machine(),  platform.architecture()[0]
 	 
     if platform.architecture()[0] == "32bit":
-        file = env.File("#3rdParty/fbx/lib/gcc4/x86/libfbxsdk-2012.2-static.a")
+        file = env.File("#3rdParty/fbx/lib/gcc4/x86/libfbxsdk-2013.1-static.a")
         ienv.Append(LIBS=[file, 'pthread', 'dl']) 
         
     elif platform.architecture()[0] == "64bit":
-        print "64 bit!!"
+        file = env.File("#3rdParty/fbx/lib/gcc4/x64/libfbxsdk-2013.1-static.a")
+        ienv.Append(LIBS=[file, 'pthread', 'dl'])  
     else:
         print "unsupported architecture: %s" % platform.architecture()[0] 
     

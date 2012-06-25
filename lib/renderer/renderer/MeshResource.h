@@ -58,11 +58,15 @@ public:
 
 		uint32_t mVertexCount;
 		uint32_t mIndicesCount;
+
 		uint32_t mNormalCount;
 		uint32_t mVertexColorCount;
+
 		uint32_t mMaterialCount;
 		uint32_t mUvCount;
-		uint32_t mMaterialNameLen;
+		uint8_t pad[4];
+		uint32_t mMaterialNameLen; //the name len is part of the string write up
+
 		const char *GetMaterialName() const { return (const char*)(this)+sizeof(MeshData); }
 		const void *GetVertexData() const { return (uint8_t*)(this)+sizeof(MeshData)+mMaterialNameLen; }
 

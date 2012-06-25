@@ -29,6 +29,7 @@
 #include <gcl/Exception.h>
 #include <input/Input.h>
 #include <renderer/GLRenderer.h>
+#include <renderer/ViewPort.h>
 
 
 using namespace GCL;
@@ -36,7 +37,12 @@ using namespace GCL;
 static const size_t NUM_ROW 	= 5;
 static const size_t NUM_COL 	= 8;
 static const size_t BORDER_SIZE = 0;
-static const WorldPoint3 START_POSITION(640.0, 700.0, 0.0);
+static const size_t BASE_X_RESOLUTION = 1024;
+static const size_t BASE_Y_RESOLUTION = 768;
+static const Real X_RATIO = (Real)ViewPort::DEFAULT_SCREEN_WIDTH / (Real)BASE_X_RESOLUTION;
+static const Real Y_RATIO = (Real)ViewPort::DEFAULT_SCREEN_HEIGHT / (Real)BASE_Y_RESOLUTION;
+
+static const WorldPoint3 START_POSITION(640.0*X_RATIO, 700.0*Y_RATIO, 0.0);
 static const WorldPoint3 BALL_INITIAL_VELOCITY(-6.0, -3.0, 0.0);
 
 class AGameObject
@@ -246,10 +252,8 @@ int main(int /*argc*/, char ** /*argv*/)
 		bool isRunning = true;
 		while (isRunning)
 		{
-
 			PerformBallPaddleCollision(ball, paddle);
 			PerformBallBlocksCollision(ball, blocks);
-
 
 			ball.Update();
 			paddle.Update();

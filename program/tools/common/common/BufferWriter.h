@@ -43,6 +43,7 @@ public:
 	  mBufferSize(bufferSize)
 	{
 		buffer = new uint8_t[mBufferSize];
+		memset(buffer, 0xfe, mBufferSize);
 	}
 	~BufferWriter()
 	{
@@ -50,9 +51,22 @@ public:
 	}
 	void Pad()
 	{
+#if USE_64BIT_PLATFORM
+		mCurrentOffset = Memory::Align64(mCurrentOffset);
+#else
 		mCurrentOffset = Memory::Align32(mCurrentOffset);
+#endif
 		//std::cout << "cur: " << mCurrentOffset << "add: " << pad << std::endl;
 		GCLAssertMsg(mCurrentOffset <= mBufferSize, "your buffer is too small. please increase its size");
+	}
+
+	static size_t GetPaddingSize()
+	{
+#if USE_64BIT_PLATFORM
+		return sizeof(uint64_t);;
+#else
+		return sizeof(uint32_t);
+#endif
 	}
 	template<typename T>
 	void Write(T &val)
@@ -110,7 +124,7 @@ GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const WorldPoint4 &data
 GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const std::string &stringData)
 {
 	size_t len = stringData.length();
-	uint32_t paddedLen = uint32_t(Memory::Align32(len+1));
+	uint32_t paddedLen = uint32_t(Memory::Align(len+1));
 	buffer.Write(paddedLen);
 	buffer.Write(stringData.c_str(), len);
 	buffer.Pad();

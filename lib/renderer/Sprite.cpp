@@ -22,6 +22,7 @@
 
 #include "renderer/Sprite.h"
 #include <gcl/Assert.h>
+#include <gcl/File.h>
 #include <gcl/ResourceManagerConfig.h>
 #include "renderer/Texture.h"
 
@@ -47,38 +48,37 @@ Sprite::Sprite(const char *filename)
 	LoadSprite(filename);
 }
 
+
 void Sprite::LoadSprite(const char * filename)
 {
 	const std::string fullFileName(std::string(SPRITE_PATH) + std::string(filename) + std::string(".spr"));
 
-	std::fstream fp(fullFileName, std::fstream::binary|std::fstream::in);
-	GCLAssertMsg(fp.good(), fullFileName);
-	fp.read((char*)&mHeader, sizeof(SpriteDataHeader));
-	/*std::cout << "width: " << mHeader.width<<std::endl;
-	std::cout << "height: " << mHeader.height<<std::endl;
-	std::cout << "frame count: " << mHeader.frameCount<<std::endl;
-	std::cout << "texture count: " << mHeader.textureCount<<std::endl;
-	*/
-	for (size_t i=0; i<mHeader.textureCount; ++i)
+	GCLFile fp(fullFileName.c_str());
+
+	size_t fileSize = fp.GetFileSize();
+	mSpriteData = new uint8_t[fileSize];
+	fp.Read((char*)mSpriteData, fileSize);
+	mHeader = (SpriteDataHeader*)mSpriteData;
+
+	uint8_t *currentPtr = mSpriteData+sizeof(SpriteDataHeader);
+	for (size_t i=0; i<mHeader->textureCount; ++i)
 	{
-		uint32_t strLen;
-		fp.read((char*)&strLen, sizeof(uint32_t));
+		uint32_t strLen = *(uint32_t*)currentPtr;
+		currentPtr += sizeof(uint32_t);
 
-		char *buffer = (char*)alloca(strLen+1);
-		fp.read(buffer, strLen+1);
+		const char *filename = (const char *)currentPtr;
+		currentPtr += strLen+1;
 
-		std::string fullFileName(TEXTURE_PATH);
-		fullFileName += buffer;
-		Texture *texture = new Texture(fullFileName.c_str());
+		std::string fullTextureFileName(TEXTURE_PATH);
+		fullTextureFileName += filename;
+		Texture *texture = new Texture(fullTextureFileName.c_str());
 
-		GCLAssertMsg(mHeader.width <= texture->GetWidth(), std::string(filename) + ": You have a sprite that is bigger than your texture");
-		GCLAssertMsg(mHeader.height <= texture->GetHeight(), std::string(filename) + ": You have a sprite that is bigger than your texture");
+		GCLAssertMsg(mHeader->width <= texture->GetWidth(), std::string(filename) + ": You have a sprite that is bigger than your texture");
+		GCLAssertMsg(mHeader->height <= texture->GetHeight(), std::string(filename) + ": You have a sprite that is bigger than your texture");
 
 		mTextureList.push_back(texture);
 	}
-	fp.close();
 }
-
 
 void Sprite::Play()
 {
@@ -99,7 +99,7 @@ void Sprite::Rewind()
 void Sprite::Update()
 {
 	++mCurrentFrame;
-	if (mCurrentFrame>=mHeader.frameCount)
+	if (mCurrentFrame>=mHeader->frameCount)
 		mCurrentFrame = 0;
 }
 
@@ -113,8 +113,8 @@ void Sprite::Render() const
 	//we use the size of the first texture to detemrine everything else
 	size_t width = firstTexture.GetWidth();
 	size_t height = firstTexture.GetHeight();
-	size_t framePerWidth = width/mHeader.width;
-	size_t rowPerTexture = height/mHeader.height;
+	size_t framePerWidth = width/mHeader->width;
+	size_t rowPerTexture = height/mHeader->height;
 
 	//size_t offset = mHeader.width*mCurrentFrame;
 	size_t whatRow = mCurrentFrame/framePerWidth;
@@ -124,8 +124,8 @@ void Sprite::Render() const
 	whatRow = whatRow- (whatTexture*rowPerTexture);
 
 	WorldPoint2 topTextureCoord, bottomTextureCoord;
-	Real widthRatio = mHeader.width/Real(width);
-	Real heightRatio = mHeader.height/Real(height);
+	Real widthRatio = mHeader->width/Real(width);
+	Real heightRatio = mHeader->height/Real(height);
 	topTextureCoord.x = whatCol*widthRatio;
 	topTextureCoord.y = whatRow*heightRatio;
 	bottomTextureCoord.x = topTextureCoord.x +widthRatio;

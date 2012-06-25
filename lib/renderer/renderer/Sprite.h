@@ -34,6 +34,7 @@ struct SpriteDataHeader
 	uint16_t height;
 	uint32_t frameCount;
 	uint32_t textureCount;
+	uint8_t pad[4]; //padding to 64bits
 };
 
 class Texture;
@@ -49,9 +50,9 @@ public:
 	void Pause();
 	void Rewind();
 
-	size_t GetWidth() const { return mHeader.width; }
-	size_t GetHeight() const { return mHeader.height; }
-	size_t GetFrameCount() const { return mHeader.frameCount; }
+	size_t GetWidth() const { return mHeader->width; }
+	size_t GetHeight() const { return mHeader->height; }
+	size_t GetFrameCount() const { return mHeader->frameCount; }
 
 	void SetPosition(const WorldPoint3 &position)  	{mPosition = position;	}
 	const WorldPoint3 &GetPosition() const { return mPosition; }
@@ -62,7 +63,8 @@ private:
 	void LoadSprite(const char *filename);
 	std::vector<Texture*> mTextureList;
 
-	SpriteDataHeader mHeader;
+	SpriteDataHeader *mHeader;
+	uint8_t *mSpriteData;
 
 	size_t mCurrentFrame;
 	WorldPoint3 mPosition;

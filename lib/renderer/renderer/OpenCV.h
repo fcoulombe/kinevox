@@ -24,5 +24,6 @@
 
 #include <gcl/PushWarnings.h>
 
-#include <cv.h>
+//#include <cv.h>
+#include <opencv2/opencv.hpp>
 #include <gcl/PopWarnings.h>

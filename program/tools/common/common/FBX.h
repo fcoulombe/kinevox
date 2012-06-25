@@ -31,4 +31,6 @@
 #		endif
 #	endif
 #include <fbxsdk.h>
+#include <fbxsdk/fbxsdk_compatibility.h>
+#include <fbxsdk/fileio/fbx/fbxio.h>
 

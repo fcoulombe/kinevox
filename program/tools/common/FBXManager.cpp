@@ -22,6 +22,7 @@
 
 #include "common/FBXManager.h"
 #include <gcl/Assert.h>
+#include <gcl/Path.h>
 
 #include <iostream>
 #include <sstream>
@@ -43,7 +44,8 @@ void FBXManager::Initialize()
 	pSdkManager->SetIOSettings(ios);
 
 	// Load plugins from the executable directory
-	KString lPath = KFbxGetApplicationDirectory();
+	//KString lPath = KFbxGetApplicationDirectory();
+	KString lPath(Path::GetApplicationPath().c_str());
 #if defined(KARCH_ENV_WIN)
 	KString lExtension = "dll";
 #elif defined(KARCH_ENV_MACOSX)
@@ -91,8 +93,8 @@ bool FBXManager::LoadScene(const char* pFilename)
 	std::stringstream s;
 	s<< "Call to KFbxImporter::Initialize() failed." << std::endl;
 	s<<"Error returned: " <<  lImporter->GetLastErrorString() << std::endl<<std::endl;
-	if (lImporter->GetLastErrorID() == KFbxIO::eFILE_VERSION_NOT_SUPPORTED_YET ||
-			lImporter->GetLastErrorID() == KFbxIO::eFILE_VERSION_NOT_SUPPORTED_ANYMORE)
+	if (lImporter->GetLastErrorID() == FbxIOBase::eFileVersionNotSupportedYet ||
+			lImporter->GetLastErrorID() == FbxIOBase::eFileVersionNotSupportedAnymore)
 	{
 		s<<"FBX version number for this FBX SDK is " << lSDKMajor <<"."<< lSDKMinor <<"."<< lSDKRevision<<std::endl;
 		s<<"FBX version number for file " << pFilename << " is " << lFileMajor <<"."<< lFileMinor<<"."<<lFileRevision;
@@ -176,7 +178,7 @@ ToolMeshData FBXManager::GetMeshData()
 
 			const KFbxLayer* layer = tempMesh->GetLayer(0);
 
-			const KFbxLayerElementArrayTemplate<KFbxVector4> &normals = layer->GetNormals()->GetDirectArray();
+			const FbxLayerElementArrayTemplate<KFbxVector4> &normals = layer->GetNormals()->GetDirectArray();
 			//const KFbxLayerElementVertexColor* vertexColor = layer->GetVertexColors()->GetDirectArray();
 
 			meshData.mMaterialCount = lchild->GetMaterialCount();
@@ -211,7 +213,7 @@ ToolMeshData FBXManager::GetMeshData()
 				meshData.mNormalList.push_back(tempNormal);
 			}
 
-			const KArrayTemplate<KFbxLayerElementUV const*> &uvst = layer->GetUVSets();
+			const FbxArray<KFbxLayerElementUV const*> &uvst = layer->GetUVSets();
 			KFbxLayerElementUV const* uvs = uvst[0];
 			meshData.mUvCount = uvs->GetDirectArray().GetCount();
 			for (int i=0; i<uvs->GetDirectArray().GetCount(); ++i)

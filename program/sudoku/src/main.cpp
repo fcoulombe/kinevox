@@ -36,6 +36,10 @@ using namespace GCL;
 
 static const size_t NUM_ROW 	=9;
 static const size_t NUM_COL 	=9;
+
+static const size_t NUM_ROW_GROUP 	=3;
+static const size_t NUM_COL_GROUP 	=3;
+
 static const size_t BORDER_SIZE = 0;
 static const size_t BASE_X_RESOLUTION = 1024;
 static const size_t BASE_Y_RESOLUTION = 768;
@@ -55,6 +59,7 @@ public:
 	}
 	void SetPosition(const WorldPoint3 &position) { mRenderObject.SetPosition(position); }
 	const WorldPoint3 &GetPosition() const { return mRenderObject.GetPosition(); }
+	void SetVisible(bool isVisible) { mRenderObject.SetVisible(isVisible); }
 protected:
 	GCLRenderObject2D mRenderObject;
 };
@@ -95,11 +100,12 @@ public:
 	size_t GetHeight() const { return mRenderObject.GetScaledHeight(); }
 	size_t GetWidth() const { return mRenderObject.GetScaledWidth(); }
 	size_t GetCellIndex() const { return mCellIndex; }
-private:
-	size_t mCellIndex;
 	Group *mGroup;
 	Column *mColumn;
 	Row *mRow;
+private:
+	size_t mCellIndex;
+
 };
 typedef std::vector<Cell *> CellList;
 class Group
@@ -107,16 +113,19 @@ class Group
 public:
 	CellList mCellList;
 };
+typedef std::vector<Group> GroupList;
 class Column
 {
 public:
 	CellList mCellList;
 };
+typedef std::vector<Column> ColumnList;
 class Row
 {
 public:
 	CellList mCellList;
 };
+typedef std::vector<Row> RowList;
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -130,11 +139,40 @@ int main(int /*argc*/, char ** /*argv*/)
 
 
 		CellList cells;
-		for (size_t i=0; i<NUM_ROW*NUM_COL; ++i)
+		RowList rows;
+		rows.resize(NUM_COL);
+		ColumnList columns;
+		columns.resize(NUM_ROW);
+		GroupList groups;
+		groups.resize((NUM_COL/3)*(NUM_ROW/3));
+		for (size_t i=0; i<NUM_ROW; ++i)
 		{
-			cells.push_back(new Cell(i));
-		}
+			Row *currentRow = &(rows[i]);
+			for (size_t j=0; j<NUM_COL; ++j)
+			{
+				Cell *newCell = new Cell(i*NUM_COL+j);
+				newCell->mRow = currentRow;
+				currentRow->mCellList.push_back(newCell);
+				cells.push_back(newCell);
 
+				size_t groupId = (j/NUM_ROW_GROUP)+((i/NUM_COL_GROUP)*NUM_ROW_GROUP);
+				Group *tempGroup = &(groups[groupId]);
+				tempGroup->mCellList.push_back(newCell);
+				newCell->mGroup= tempGroup;
+			}
+		}
+		for (size_t i=0; i<NUM_ROW; ++i)
+		{
+			Column *currentColumn = &(columns[i]);
+
+			for (size_t j=0; j<rows.size(); ++j)
+			{
+				Row *tempRow = &(rows[j]);
+				Cell *tempCel = tempRow->mCellList[i];
+				currentColumn->mCellList.push_back(tempCel);
+				tempCel->mColumn = currentColumn;
+			}
+		}
 		const size_t halfCellWidth = cells[0]->GetWidth()/2;
 		const size_t halfCellHeight = cells[0]->GetHeight()/2;
 
@@ -147,6 +185,12 @@ int main(int /*argc*/, char ** /*argv*/)
 				isRunning=false;
 			size_t x = Input::GetMouseX() ;
 			size_t y = Input::GetMouseY() ;
+
+			for (size_t i=0; i<cells.size(); ++i)
+			{
+				Cell *tempCell = cells[i];
+				tempCell->SetVisible(true);
+			}
 			for (size_t i=0; i<cells.size(); ++i)
 			{
 				Cell *tempCell = cells[i];
@@ -158,6 +202,10 @@ int main(int /*argc*/, char ** /*argv*/)
 				{
 					std::cout<<"X: "<<x<<" Y: "<<y<<std::endl;
 					std::cout << "Cell: " << tempCell->GetCellIndex() << std::endl;
+					for (size_t k=0; k<tempCell->mGroup->mCellList.size(); ++k)
+					{
+						tempCell->mGroup->mCellList[k]->SetVisible(false);
+					}
 				}
 			}
 

@@ -38,6 +38,7 @@ Sprite::~Sprite()
 		delete tempTexture;
 	}
 	mTextureList.clear();
+	delete [] mSpriteData;
 }
 
 Sprite::Sprite(const char *filename)

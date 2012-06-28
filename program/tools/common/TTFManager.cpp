@@ -128,6 +128,12 @@ void GenerateAsciiFont(const FT_Face &face)
 	}
 
 	TextureResource::SaveTga("glysavetest.tga",imageSize, imageSize, numChannel, buffer);
+	delete [] buffer;
+	for (size_t i=0; i<charArray.size(); ++i)
+	{
+		delete [] charArray[i];
+	}
+	charArray.clear();
 }
 
 bool TTFManager::LoadScene(const char* pFilename)

@@ -235,6 +235,8 @@ sconsFilesList = [
 "./program/example/spriteExample/SConscript",
 "./program/example/meshLoading/SConscript",
 
+
+"./program/sudoku/SConscript",
 "./program/arkanoid/SConscript",
 "./program/kinevox/SConscript",
 ]

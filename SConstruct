@@ -239,7 +239,7 @@ sconsFilesList = [
 "./program/kinevox/SConscript",
 ]
 if GetOption('genValgrindSuppressions'):
-    sconsFileList.append("./tools/valgrindgen/SConscript") #this tool generates some rules for valgrind so that it ignores certain pattern of memory errors that we don't care about
+    sconsFilesList.append("./tools/valgrindgen/SConscript") #this tool generates some rules for valgrind so that it ignores certain pattern of memory errors that we don't care about
 
 #default_env.StampTime("start SConscript Parse...")
 default_env.SConsWalkList(sconsFilesList, './SConscript', variant)

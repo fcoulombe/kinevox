@@ -1,0 +1,18 @@
+Import('env')
+
+dependencies = ['applayer']
+src_files = env.Glob("src/*.cpp")
+data_files =[env.Dir("data")]
+
+builtData = env.Data(data_files)
+d = env.RSync(env.Dir("$INSTALL_DIR/sudoku/data/"), data_files)
+env.Depends(d, builtData)
+env.AlwaysBuild(d)
+
+
+prog = env.KProgram("sudoku", src_files, dependencies)
+finalProduct = env.Install(env.Dir("$INSTALL_DIR/sudoku"), prog)
+env.Alias("@Sudoku",finalProduct) 
+env.Alias("@Sudoku",d) 
+
+Default(finalProduct)

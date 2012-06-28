@@ -180,7 +180,15 @@
    fun:png_create_read_struct_2
    fun:*
 }
-
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Cond
+   fun:inflateReset2
+   fun:inflateInit2_
+   fun:png_create_read_struct_2
+   fun:png_create_read_struct
+   fun:*
+}
 {
    <insert_a_suppression_name_here>
    Memcheck:Leak
@@ -219,4 +227,190 @@
    obj:/usr/lib/libopenal.so.1.13.0
    obj:/usr/lib/libopenal.so.1.13.0
    fun:alcOpenDevice
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Value8
+   fun:_ZN13fbxsdk_2013_120FbxMaterialConverter26ConnectTexturesToMaterialsEPNS_7FbxNodeE
+   fun:_ZN13fbxsdk_2013_120FbxMaterialConverter26ConnectTexturesToMaterialsERNS_8FbxSceneE
+   fun:_ZN13fbxsdk_2013_113FbxReaderFbx64ReadEPNS_11FbxDocumentEPNS_5FbxIOE
+   fun:_ZN13fbxsdk_2013_113FbxReaderFbx64ReadEPNS_11FbxDocumentE
+   fun:_ZN13fbxsdk_2013_111FbxImporter13ImportProcessEPNS_11FbxDocumentE
+   fun:_ZN13fbxsdk_2013_111FbxImporter6ImportEPNS_11FbxDocumentEb
+   fun:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Value8
+   fun:_ZN13fbxsdk_2013_120FbxMaterialConverter26ConnectTexturesToMaterialsEPNS_7FbxNodeE
+   fun:_ZN13fbxsdk_2013_120FbxMaterialConverter26ConnectTexturesToMaterialsERNS_8FbxSceneE
+   fun:_ZN13fbxsdk_2013_113FbxReaderFbx64ReadEPNS_11FbxDocumentEPNS_5FbxIOE
+   fun:_ZN13fbxsdk_2013_113FbxReaderFbx64ReadEPNS_11FbxDocumentE
+   fun:_ZN13fbxsdk_2013_111FbxImporter13ImportProcessEPNS_11FbxDocumentE
+   fun:_ZN13fbxsdk_2013_111FbxImporter6ImportEPNS_11FbxDocumentEb
+   fun:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Value8
+   fun:_ZN13fbxsdk_2013_120FbxMaterialConverter26ConnectTexturesToMaterialsEPNS_7FbxNodeE
+   fun:_ZN13fbxsdk_2013_120FbxMaterialConverter26ConnectTexturesToMaterialsERNS_8FbxSceneE
+   fun:_ZN13fbxsdk_2013_113FbxReaderFbx64ReadEPNS_11FbxDocumentEPNS_5FbxIOE
+   fun:_ZN13fbxsdk_2013_113FbxReaderFbx64ReadEPNS_11FbxDocumentE
+   fun:_ZN13fbxsdk_2013_111FbxImporter13ImportProcessEPNS_11FbxDocumentE
+   fun:_ZN13fbxsdk_2013_111FbxImporter6ImportEPNS_11FbxDocumentEb
+   fun:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XrmInitParseInfo
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   fun:XrmGetStringDatabase
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   fun:XGetDefault
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   fun:_XlcCreateLC
+   fun:_XlcDefaultLoader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSetLocaleModifiers
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   fun:SDL_VideoInit
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   ioctl(generic)
+   fun:ioctl
+   fun:drmIoctl
+   fun:drm_intel_bo_gem_create_from_name
+   fun:intel_region_alloc_for_handle
+   fun:intel_update_renderbuffers
+   fun:intel_prepare_render
+   fun:intelMakeCurrent
+   obj:/usr/lib/x86_64-linux-gnu/dri/i915_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+   fun:glXMakeContextCurrent
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   ioctl(generic)
+   fun:ioctl
+   fun:drmIoctl
+   obj:/usr/lib/x86_64-linux-gnu/libdrm_intel.so.1.0.0
+   fun:intel_batchbuffer_reset
+   fun:intel_batchbuffer_init
+   fun:intelInitContext
+   fun:i915CreateContext
+   obj:/usr/lib/x86_64-linux-gnu/dri/i915_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/dri/i915_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/dri/i915_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Cond
+   fun:drm_intel_bufmgr_gem_init
+   obj:/usr/lib/x86_64-linux-gnu/dri/i915_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/dri/i915_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+   fun:glXChooseVisual
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   fun:SDL_SetVideoMode
+   fun:*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   ioctl(generic)
+   fun:ioctl
+   fun:drmIoctl
+   fun:drm_intel_bufmgr_gem_init
+   obj:/usr/lib/x86_64-linux-gnu/dri/i915_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/dri/i915_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+   fun:glXChooseVisual
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   ioctl(generic)
+   fun:ioctl
+   fun:drmIoctl
+   fun:drmCommandWriteRead
+   obj:/usr/lib/x86_64-linux-gnu/dri/i915_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/dri/i915_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/dri/i915_dri.so
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+   obj:/usr/lib/x86_64-linux-gnu/mesa/libGL.so.1.2
+   fun:glXChooseVisual
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   fun:_XlcCreateLC
+   fun:_XlcUtf8Loader
+   fun:_XOpenLC
+   fun:_XlcCurrentLC
+   fun:XSetLocaleModifiers
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   fun:SDL_VideoInit
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XlcDefaultMapModifiers
+   fun:XSetLocaleModifiers
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   obj:/usr/lib/x86_64-linux-gnu/libSDL-1.2.so.0.11.3
+   fun:SDL_VideoInit
+   fun:*
 }

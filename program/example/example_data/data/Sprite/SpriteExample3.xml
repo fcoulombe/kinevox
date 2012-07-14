@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<gclsprite>
+    
+    <header width="64" height="64" frame_count="16"/>
+    <textures>
+        <texture filename="SpriteExample2.png"/>
+    </textures> 
+    
+</gclsprite>

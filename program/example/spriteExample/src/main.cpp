@@ -48,11 +48,14 @@ int main(int /*argc*/, char ** /*argv*/)
 
 
 		GCLRenderObject2D obj("SpriteExampleTest");
+		//obj.SetPosition(100.0, 100.0, 0.0);
+		GCLRenderObject2D obj2("SpriteExampleTest2", "SpriteExample2");
+		GCLRenderObject2D obj3("SpriteExampleTest3", "SpriteExample3");
 
 
 		bool isRunning = true;
-		Real x = 0.0;
-		Real y = 0.0;
+		Real x = 100.0;
+		Real y = 100.0;
 		while (isRunning)
 		{
 			GCLApplication::Update();
@@ -60,19 +63,22 @@ int main(int /*argc*/, char ** /*argv*/)
 				isRunning=false;
 
 			if (Input::IsKeyUp(SDLK_UP))
-				y+=0.01;
+				y-=0.1;
 			if (Input::IsKeyUp(SDLK_DOWN))
-				y-=0.01;
+				y+=0.1;
 
 			if (Input::IsKeyUp(SDLK_LEFT))
-				x-=0.01;
+				x-=0.1;
 			if (Input::IsKeyUp(SDLK_RIGHT))
-				x+=0.01;
+				x+=0.1;
 
 
 			obj.SetPosition(WorldPoint3(x,y,0.0));
+			obj2.SetPosition(WorldPoint3(x+100,y,0.0));
+			obj3.SetPosition(WorldPoint3(x+200,y,0.0));
+
 			GCLApplication::Render();
-			usleep(100);
+			usleep(1000000);
 			std::cout.flush();
 		}
 	}

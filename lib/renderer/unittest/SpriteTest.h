@@ -55,7 +55,11 @@ void Test()
 	Assert_Test(obj.GetScale() == kScaleTest);
 
 
+
+	Assert_Test(obj.IsPlaying() == false);
 	obj.Play();
+
+	Assert_Test(obj.IsPlaying() == true);
 
 	for (size_t i=0;i<100; ++i)
 	{
@@ -69,6 +73,8 @@ void Test()
 	}
 
 	obj.Pause();
+
+	Assert_Test(obj.IsPlaying() == false);
 	obj.Rewind();
 	}
 	TextureResourceManager::Terminate();

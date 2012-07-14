@@ -99,6 +99,8 @@ void Sprite::Rewind()
 
 void Sprite::Update()
 {
+	if (!IsPlaying())
+		return;
 	++mCurrentFrame;
 	if (mCurrentFrame>=mHeader->frameCount)
 		mCurrentFrame = 0;
@@ -128,9 +130,9 @@ void Sprite::Render() const
 	Real widthRatio = mHeader->width/Real(width);
 	Real heightRatio = mHeader->height/Real(height);
 	topTextureCoord.x = whatCol*widthRatio;
-	topTextureCoord.y = whatRow*heightRatio;
+	topTextureCoord.y = 1.0-whatRow*heightRatio;
 	bottomTextureCoord.x = topTextureCoord.x +widthRatio;
-	bottomTextureCoord.y = topTextureCoord.y +heightRatio;
+	bottomTextureCoord.y = topTextureCoord.y -heightRatio;
 
 	//std::cout << "top " << topTextureCoord << std::endl;
 	//std::cout << "bot " <<bottomTextureCoord << std::endl;
@@ -138,17 +140,17 @@ void Sprite::Render() const
 	mTextureList[whatTexture]->Bind();
 	glBegin (GL_TRIANGLE_STRIP);
 #if 1
-	Real halfWidth = (width/2.0)*mScale.x;
-	Real halfHeight = (height/2.0)*mScale.y;
+	Real halfWidth = (mHeader->width/2.0)*mScale.x;
+	Real halfHeight = (mHeader->height/2.0)*mScale.y;
 
-	glTexCoord2f (topTextureCoord.x, topTextureCoord.y);
-	glVertex3f (-halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
 	glTexCoord2f (bottomTextureCoord.x, topTextureCoord.y);
 	glVertex3f (halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
-	glTexCoord2f (topTextureCoord.x, bottomTextureCoord.y);
-	glVertex3f (-halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
+	glTexCoord2f (topTextureCoord.x, topTextureCoord.y);
+	glVertex3f (-halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
 	glTexCoord2f (bottomTextureCoord.x, bottomTextureCoord.y);
 	glVertex3f (halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
+	glTexCoord2f (topTextureCoord.x, bottomTextureCoord.y);
+	glVertex3f (-halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
 #else
 	glTexCoord2f (0.0, 0.0);
 	glVertex3f (-5, -5, 0.0);

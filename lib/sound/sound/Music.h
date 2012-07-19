@@ -22,7 +22,7 @@
 
 #pragma once
 #include <gcl/WorldUnit.h>
-#include "sound/OpenAL.h"
+#include <3rdparty/OpenAL.h>
 
 namespace GCL
 {
@@ -42,7 +42,7 @@ public:
 	void Pause();
 	void Rewind();
 
-	Real GetCurrentTime() const;
+	Real GetCurrentPlayTime() const;
 	Real GetTotalTime() const;
 private:
 	ALuint mBuffer;

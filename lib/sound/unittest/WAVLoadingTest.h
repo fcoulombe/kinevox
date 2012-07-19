@@ -23,8 +23,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <3rdparty/OpenAL.h>
 #include <gcl/UnitTest.h>
-#include <sound/OpenAL.h>
 #include <sound/SoundResource.h>
 #include <sound/WAVLoaderData.h>
 

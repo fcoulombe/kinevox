@@ -71,6 +71,7 @@ void Test()
 
 
 	{
+        WinDriver winDriver;
 	GLRenderer renderer;
 
 	MyRenderObject obj;
@@ -84,6 +85,7 @@ void Test()
 	renderer.PreRender();
 	renderer.Render(objList);
 	renderer.PostRender();
+    winDriver.SwapBuffer();
 	}
 
 	TextureResourceManager::Terminate();

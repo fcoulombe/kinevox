@@ -23,24 +23,16 @@
 
 #include <gcl/UnitTest.h>
 
-#include <input/Input.h>
+#include <windriver/WinDriver.h>
 
 using namespace GCL;
-namespace InputTest
+namespace WinDriverTest
 {
 
 void Test()
 {
 	TEST_START
 
-	//const Rect<int> &ProcessSelection();
-	Input::ProcessInput();
-	Input::IsKeyUp(SDLK_UP);
-	Input::IsKeyUp(SDLK_DOWN);
-	Input::IsKeyUp(SDLK_LEFT);
-	Input::IsKeyUp(SDLK_RIGHT);
-	Input::IsLMouseDown();
-	Input::GetMouseX();
-	Input::GetMouseY();
+	WinDriver windows;
 }
 }

@@ -22,8 +22,8 @@
 
 #pragma once
 
+#include <3rdparty/OpenAL.h>
 #include <gcl/Resource.h>
-#include "sound/OpenAL.h"
 #include "sound/WAVLoaderData.h"
 
 namespace GCL

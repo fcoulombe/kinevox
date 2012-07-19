@@ -24,8 +24,9 @@
 
 #include <gcl/Macro.h>
 
-#include "sound/OpenAL.h"
-#include "sound/OggVorbis.h"
+#include <3rdparty/OpenAL.h>
+#include <3rdparty/OggVorbis.h>
+
 namespace GCL
 {
 class OggStream

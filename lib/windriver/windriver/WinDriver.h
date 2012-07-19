@@ -21,31 +21,23 @@
  */
 
 #pragma once
-#include <cstdlib>
-#include <stdint.h>
-#include <map>
-#include <SDL.h>
 
-#include <gcl/Rect.h>
+#include <3rdparty/Sdl.h>
+#include "windriver/ViewPort.h"
+
 
 
 namespace GCL
 {
-class Input
+class WinDriver
 {
 public:
-	static const Rect<int> &ProcessSelection();
-	static void ProcessInput();
-	static bool IsKeyUp(uint32_t key);
-	static bool IsLMouseDown();
-	static size_t GetMouseX();
-	static size_t GetMouseY();
+    WinDriver();
+    ~WinDriver();
+    void SwapBuffer();
 
-
+    const ViewPort &GetViewPort() const { return mViewPort; }
 private:
-	static std::map<uint32_t, bool> keys;
-	static bool isLMousedown ;
-	static size_t mouseX;
-	static size_t mouseY;
+    ViewPort mViewPort;
 };
 }

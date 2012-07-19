@@ -62,6 +62,7 @@ void Test()
 	TEST_START
 	TextureResourceManager::Initialize();
 	{
+        WinDriver winDriver;
 	GLRenderer renderer;
 	MyRenderObject obj;
 	RenderObjectList objList;
@@ -137,6 +138,7 @@ void Test()
 	renderer.PreRender();
 	renderer.Render(objList);
 	renderer.PostRender();
+    winDriver.SwapBuffer();
 	}
 	TextureResourceManager::Terminate();
 

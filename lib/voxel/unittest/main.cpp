@@ -23,8 +23,6 @@
 #include <iostream>
 #include <sstream>
 
-#include <SDL.h>
-
 #include "voxel/Cube.h"
 #include "voxel/Grid.h"
 #include "voxel/Voxel.h"

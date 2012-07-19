@@ -21,9 +21,9 @@
 
 Import('env')
 
-name = "input"
+name = "windriver"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['gcl', 'sdl']
+dependencies = ['gcl', 'opengl', 'sdl']
 
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")

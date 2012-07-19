@@ -23,6 +23,7 @@
 #include <sstream>
 
 #include <gcl/Macro.h>
+#include <gcl/Time.h>
 #include <gcl/UnitTest.h>
 #include <sound/ALSoundDevice.h>
 #include <sound/Sound.h>
@@ -47,13 +48,13 @@ void Test()
 	sound.Play();
 	while (!sound.IsPlaying())
 	{
-		usleep(10);
+		Time::SleepMs(1);
 	}
 	sound.Pause();
 	sound.Stop();
 	sound.Rewind();
 
-	Assert_Test(sound.GetCurrentTime() ==0.0 );
+	Assert_Test(sound.GetCurrentPlayTime() ==0.0 );
 	Assert_Test(abseq(sound.GetTotalTime(),2.297874928, DBL_PRECISION_TOLERANCE));
 	}
 	SoundResourceManager::Terminate();

@@ -22,7 +22,7 @@
 Import('env')
 
 name = "voxel_test"
-dependencies = ["voxel"]
+dependencies = ["voxel", "windriver"]
 data = [ env.Dir("data")]
 
 src_files = env.Glob("*.cpp")

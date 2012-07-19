@@ -25,9 +25,9 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <3rdparty/OpenAL.h>
 #include <gcl/Assert.h>
 #include <gcl/Macro.h>
-#include "sound/OpenAL.h"
 #include "sound/SoundResource.h"
 #include "sound/SoundResourceManager.h"
 
@@ -107,7 +107,7 @@ bool Music::IsPlaying() const
 	return val != AL_PLAYING;
 }
 
-Real Music::GetCurrentTime() const
+Real Music::GetCurrentPlayTime() const
 {
 	int byteoffset;
 	alGetSourcei(mSources, AL_BYTE_OFFSET, &byteoffset);

@@ -25,13 +25,13 @@
 
 #include <gcl/Exception.h>
 
-#include "InputTest.h"
+#include "WinDriverTest.h"
 
 int main(int /*argc*/, char ** argv)
 {
 	try
 	{
-		InputTest::Test();
+		WinDriverTest::Test();
 	}
 	catch (GCLException &e)
 	{

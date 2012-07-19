@@ -1,0 +1,14 @@
+Import('env')
+
+
+name = "zlib"
+dependencies = []
+
+def SetCFlags(ienv):
+	ienv.Append(CPPPATH=[env.Dir('#3rdParty/zlib/zlib')])
+		
+ 
+def SetLFlags(ienv):
+	void = ""
+	
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

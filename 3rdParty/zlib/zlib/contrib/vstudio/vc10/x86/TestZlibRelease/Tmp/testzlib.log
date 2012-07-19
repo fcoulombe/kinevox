@@ -1,0 +1,15 @@
+﻿  adler32.c
+  compress.c
+  crc32.c
+  deflate.c
+  infback.c
+  inffast.c
+  inflate.c
+  inftrees.c
+  testzlib.c
+  trees.c
+  uncompr.c
+  zutil.c
+  Generating code
+  Finished generating code
+  testzlib.vcxproj -> C:\src\kinevox\3rdParty\zlib\zlib\contrib\vstudio\vc10\x86\TestZlibRelease\testzlib.exe

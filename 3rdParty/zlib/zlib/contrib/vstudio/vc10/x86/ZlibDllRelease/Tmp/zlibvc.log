@@ -1,0 +1,31 @@
+﻿  Microsoft (R) Macro Assembler Version 10.00.30319.01
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+   Assembling: match686.asm
+  Microsoft (R) Macro Assembler Version 10.00.30319.01
+  Copyright (C) Microsoft Corporation.  All rights reserved.
+  
+   Assembling: inffas32.asm
+  adler32.c
+  compress.c
+  crc32.c
+  deflate.c
+  gzclose.c
+  gzlib.c
+  gzread.c
+  gzwrite.c
+  infback.c
+  inffast.c
+  inflate.c
+  inftrees.c
+  ioapi.c
+  iowin32.c
+  trees.c
+  uncompr.c
+  zutil.c
+  unzip.c
+  zip.c
+     Creating library x86\ZlibDllRelease\zlibwapi.lib and object x86\ZlibDllRelease\zlibwapi.exp
+  Generating code
+  Finished generating code
+  zlibvc.vcxproj -> C:\src\kinevox\3rdParty\zlib\zlib\contrib\vstudio\vc10\x86\ZlibDllRelease\zlibwapi.dll

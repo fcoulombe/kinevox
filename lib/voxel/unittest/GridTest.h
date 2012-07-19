@@ -27,6 +27,7 @@
 #include <renderer/TextureResourceManager.h>
 
 #include "voxel/Grid.h"
+#include <windriver/WinDriver.h>
 
 using namespace GCL;
 namespace GridTest
@@ -36,7 +37,8 @@ void Test()
 	TEST_START
 	TextureResourceManager::Initialize();
 	{
-	GLRenderer *renderer = new GLRenderer();
+        WinDriver winDriver;
+	GLRenderer renderer;
 
 
 	Shader shader;
@@ -50,11 +52,11 @@ void Test()
 	RenderObjectList renderList;
 	renderList.push_back(&grid);
 
-	renderer->PreRender();
-	renderer->Render(renderList);
-	renderer->PostRender();
+	renderer.PreRender();
+	renderer.Render(renderList);
+	renderer.PostRender();
+    winDriver.SwapBuffer();
 
-	delete renderer;
 	}
 	TextureResourceManager::Terminate();
 

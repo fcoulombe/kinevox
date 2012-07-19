@@ -23,7 +23,7 @@
 #include <sstream>
 
 #include <renderer/Sprite.h>
-
+#include <gcl/Time.h>
 #include <gcl/UnitTest.h>
 
 using namespace GCL;
@@ -38,7 +38,8 @@ void Test()
 
 	TextureResourceManager::Initialize();
 	{
-	GLRenderer renderer;
+        WinDriver winDriver;
+        GLRenderer renderer;
 
 	Sprite obj;
 	Assert_Test(obj.GetWidth() == 64);
@@ -69,7 +70,8 @@ void Test()
 		obj.Render();
 		glPopMatrix();glErrorCheck();
 		renderer.PostRender();
-		usleep(1);
+        winDriver.SwapBuffer();
+		Time::SleepMs(1);
 	}
 
 	obj.Pause();

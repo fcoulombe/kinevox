@@ -60,7 +60,8 @@ void Test()
     #ifndef ENABLE_SHADERS
 	TextureResourceManager::Initialize();
 	{
-		GLRenderer renderer;
+        WinDriver winDriver;
+        GLRenderer renderer;
 		Shader shader;
 		shader.Bind();
 		Assert_Test(shader.IsValid());
@@ -147,11 +148,12 @@ void Test()
 		renderer.PreRender();
 		renderer.Render(RenderObjectList());
 		renderer.PostRender();
+        winDriver.SwapBuffer();
 		Shader::ResetDefault();
 	}
 
 	{
-
+        WinDriver winDriver;
 		GLRenderer renderer;
 		MyRenderObject obj;
 		const WorldPoint3 position(0.0,0.0, -10.0);
@@ -165,7 +167,8 @@ void Test()
 			renderer.PreRender();
 			renderer.Render(renderList);
 			renderer.PostRender();
-			usleep(10);
+            winDriver.SwapBuffer();
+			Time::SleepMs(10);
 		}
 
 		Shader::ResetDefault();

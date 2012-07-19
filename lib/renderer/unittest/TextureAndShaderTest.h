@@ -73,7 +73,8 @@ void Test()
 
 	TextureResourceManager::Initialize();
 	{
-		GLRenderer renderer;
+        WinDriver winDriver;
+        GLRenderer renderer;
 		Shader shader;
 		shader.Bind();
 
@@ -95,6 +96,7 @@ void Test()
 		renderer.PreRender();
 		renderer.Render(renderObjectList);
 		renderer.PostRender();
+        winDriver.SwapBuffer();
 
 		/*target.Save("TextureAndShaderTest.tga");
 	        Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));

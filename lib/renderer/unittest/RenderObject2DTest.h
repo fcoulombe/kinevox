@@ -43,6 +43,7 @@ void Test()
 	TEST_START
 	TextureResourceManager::Initialize();
 	{
+        WinDriver winDriver;
 	GLRenderer renderer;
 	MyRenderObject2D obj;
 	RenderObject2DList objList;
@@ -107,13 +108,12 @@ void Test()
 		obj.SetName("ChangedTestName");
 	}
 	obj.Update();
-
+    const ViewPort &viewport = winDriver.GetViewPort();
 	renderer.PreRender();
-	renderer.Render(objList);
+	renderer.Render(objList, viewport.GetWidth(), viewport.GetHeight());
 	renderer.PostRender();
+    winDriver.SwapBuffer();
 	}
 	TextureResourceManager::Terminate();
-
-
 }
 }

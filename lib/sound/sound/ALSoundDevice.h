@@ -25,7 +25,7 @@
 #include <string>
 
 #include "sound/SoundDevice.h"
-#include "sound/OpenAL.h"
+#include <3rdparty/OpenAL.h>
 
 
 namespace GCL

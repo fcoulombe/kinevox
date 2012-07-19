@@ -23,7 +23,6 @@
 #include <iostream>
 #include <sstream>
 
-#include <SDL.h>
 #include <gcl/Assert.h>
 
 /*#include <renderer/Camera.h>
@@ -60,8 +59,6 @@
 #include "TgaLoadingTest.h"
 #include "VertexBufferTest.h"
 #include "VertexTest.h"
-
-#include <unistd.h>
 
 using namespace GCL;
 
@@ -108,6 +105,7 @@ int main(int /*argc*/, char **argv)
       str << e.what();
       str << std::endl;
       std::cerr << str.str();
+      std::cerr.flush();
       return -1;
   }
   catch (...)

@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include "renderer/ViewPort.h"
+#include "windriver/ViewPort.h"
 
 
 using namespace GCL;

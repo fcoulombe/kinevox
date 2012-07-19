@@ -31,7 +31,7 @@ namespace VertexBufferTest
 void Test()
 {
 	TEST_START
-
+        WinDriver winDriver;
 	GLRenderer renderer;
 
 	Shader shader;

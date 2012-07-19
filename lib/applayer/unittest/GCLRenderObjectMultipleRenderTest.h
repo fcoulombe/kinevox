@@ -24,7 +24,7 @@
 
 #include <applayer/GCLApplication.h>
 #include <applayer/GCLRenderObject.h>
-
+#include <gcl/Time.h>
 #include <gcl/UnitTest.h>
 
 using namespace GCL;
@@ -52,10 +52,10 @@ void Test()
 
 
 	for (size_t i=0;i<100; ++i)
-	{
+    {
+        GCLApplication::Render();
 	GCLApplication::Update();
-	GCLApplication::Render();
-	usleep(1);
+	Time::SleepMs(1);
 	}
 	}
 	GCLApplication::Terminate();

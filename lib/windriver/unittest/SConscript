@@ -21,8 +21,8 @@
 
 Import('env')
 
-name = "input_test"
-dependencies = ["input"]
+name = "windriver_test"
+dependencies = ["windriver"]
 data = []
 
 src_files = env.Glob("*.cpp")

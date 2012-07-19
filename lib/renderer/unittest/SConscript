@@ -22,7 +22,7 @@
 Import('env')
 
 name = "renderer_test"
-dependencies = ["renderer", "glew"]
+dependencies = ["renderer", 'windriver']
 data = [ env.Dir("data")]
 
 src_files = env.Glob("*.cpp")

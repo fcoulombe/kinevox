@@ -39,6 +39,7 @@ void Test()
 	TEST_START
 
 	TextureResourceManager::Initialize();
+    WinDriver winDriver;
 	GLRenderer renderer;
 	std::stringstream s;
 	//png

@@ -2,11 +2,24 @@ Import('env')
 
 name = "libfreenect"
 dependencies = []
+ENABLE_FREENECT = 0
 
 def SetCFlags(ienv):
-	ienv.ParseConfig('pkg-config --cflags libfreenect')
+    if ENABLE_FREENECT:
+        if ienv['PLATFORM'] == "win32":
+	        ienv.Append(CPPPATH=[env.Dir('#3rdParty/vorbis/include')])
+        else:
+	        ienv.ParseConfig('pkg-config --cflags libfreenect')
+    else:
+        ienv.Append(CFLAGS=["-DENABLE_FREENECT=0"])
+        ienv.Append(CPPFLAGS=["-DENABLE_FREENECT=0"])
+        
 
 def SetLFlags(ienv):
-	ienv.ParseConfig('pkg-config --libs libfreenect')
+    if ENABLE_FREENECT:
+        if ienv['PLATFORM'] == "win32":
+	        ienv.Append(LIBS=[env.Dir('#3rdParty/vorbis/lib/win32')])
+        else:
+    	    ienv.ParseConfig('pkg-config --libs libfreenect')
 	
 env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

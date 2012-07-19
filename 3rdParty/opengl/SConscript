@@ -5,16 +5,20 @@ name = "opengl"
 dependencies = []
 
 def SetCFlags(ienv):
-	if ienv['PLATFORM']=='darwin':
+    if ienv['PLATFORM'] == "win32":
+	    void = "" #ienv.Append(CPPPATH=[env.Dir('#3rdParty/vorbis/include')])
+    elif ienv['PLATFORM']=='darwin':
 		ienv['FRAMEWORKS'] = ['OpenGL']
 		ienv.Append(CPPFLAGS=['-FOpenGL']) #adding the opengl framework
-	else:
+    else:
 		ienv.ParseConfig('pkg-config --cflags gl')
 		
 def SetLFlags(ienv):
-	if ienv['PLATFORM']=='darwin':
+    if ienv['PLATFORM'] == "win32":
+	    ienv.Append(LIBS=['OpenGL32.lib', 'GLU32.lib'])
+    elif ienv['PLATFORM']=='darwin':
 		ienv['FRAMEWORKS'] = ['OpenGL']
-	else:
+    else:
 		ienv.ParseConfig('pkg-config --libs gl')
 		ienv.ParseConfig('pkg-config --libs glu')
 	

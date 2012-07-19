@@ -31,6 +31,11 @@
 #	include <vorbis/codec.h>
 #	include <vorbis/vorbisenc.h>
 #	include <vorbis/vorbisfile.h>
+#elif OS_WIN32
+#	include <ogg/ogg.h>
+#	include <vorbis/codec.h>
+#	include <vorbis/vorbisenc.h>
+#	include <vorbis/vorbisfile.h>
 #else
 #   error "TBD"
 #endif

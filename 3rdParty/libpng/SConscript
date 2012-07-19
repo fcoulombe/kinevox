@@ -1,13 +1,19 @@
 Import('env')
 
 name = "libpng"
-dependencies = []
+dependencies = ['zlib']
 
 def SetCFlags(ienv):
-	ienv.ParseConfig('pkg-config --cflags libpng')
+    if ienv['PLATFORM'] == "win32":
+	    ienv.Append(CPPPATH=[env.Dir('#3rdParty/libpng/include')])
+    else:
+	    ienv.ParseConfig('pkg-config --cflags libpng')
 
 def SetLFlags(ienv):
-	ienv.ParseConfig('pkg-config --libs libpng')
+    if ienv['PLATFORM'] == "win32":
+	    ienv.Append(LIBS=[env.File('#3rdParty/libpng/lib/libpng.lib')])
+    else:
+	    ienv.ParseConfig('pkg-config --libs libpng')
 	
 	
-env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags,[env.File('#3rdParty/libpng/bin/libpng12.dll'),env.File('#3rdParty/libpng/bin/zlib1.dll')])

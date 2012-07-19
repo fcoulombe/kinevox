@@ -4,10 +4,16 @@ name = "ogg"
 dependencies = []
 
 def SetCFlags(ienv):
-	ienv.ParseConfig('pkg-config --cflags '+name)
+    if ienv['PLATFORM'] == "win32":
+	    ienv.Append(CPPPATH=[env.Dir('#3rdParty/ogg/include')])
+    else:
+	    ienv.ParseConfig('pkg-config --cflags '+name)
 
 def SetLFlags(ienv):
-	ienv.ParseConfig('pkg-config --libs '+name)
+    if ienv['PLATFORM'] == "win32":
+	    ienv.Append(LIBS=[env.File('#3rdParty/ogg/lib/win32/libogg_static.lib')])
+    else:
+	    ienv.ParseConfig('pkg-config --libs '+name)
 	
 	
 env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

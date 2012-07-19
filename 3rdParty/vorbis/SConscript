@@ -4,12 +4,19 @@ name = "vorbis"
 dependencies = []
 
 def SetCFlags(ienv):
-	ienv.ParseConfig('pkg-config --cflags '+name)
-	ienv.ParseConfig('pkg-config --cflags vorbisfile')
+    if ienv['PLATFORM'] == "win32":
+	    ienv.Append(CPPPATH=[env.Dir('#3rdParty/vorbis/include')])
+    else:
+        ienv.ParseConfig('pkg-config --cflags '+name)
+        ienv.ParseConfig('pkg-config --cflags vorbisfile')
 	
 def SetLFlags(ienv):
-	ienv.ParseConfig('pkg-config --libs '+name)
-	ienv.ParseConfig('pkg-config --libs vorbisfile')
+    if ienv['PLATFORM'] == "win32":
+        ienv.Append(LIBS=[env.File('#3rdParty/vorbis/lib/win32/libvorbis_static.lib')])
+        ienv.Append(LIBS=[env.File('#3rdParty/vorbis/lib/win32/libvorbisfile_static.lib')])
+    else:
+	    ienv.ParseConfig('pkg-config --libs '+name)
+	    ienv.ParseConfig('pkg-config --libs vorbisfile')
     
 	
 env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

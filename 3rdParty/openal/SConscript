@@ -5,9 +5,15 @@ name = "openal"
 dependencies = []
 
 def SetCFlags(ienv):
-	ienv.ParseConfig('pkg-config --cflags openal')
+    if ienv['PLATFORM'] == "win32":
+	    ienv.Append(CPPPATH=[env.Dir('C:\Program Files\OpenAL 1.1 SDK\include')])
+    else:
+	    ienv.ParseConfig('pkg-config --cflags openal')
 		
 def SetLFlags(ienv):
-	ienv.ParseConfig('pkg-config --libs openal')
+    if ienv['PLATFORM'] == "win32":
+	    ienv.Append(LIBS=[env.File('C:\\Program Files\\OpenAL 1.1 SDK\\libs\\Win32\\OpenAL32.lib')])
+    else:
+	    ienv.ParseConfig('pkg-config --libs openal')
 	
 env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

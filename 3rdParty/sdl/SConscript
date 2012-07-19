@@ -4,16 +4,24 @@ name = "sdl"
 dependencies = []
 
 def SetCFlags(ienv):
-	if ienv['PLATFORM']=='darwin':
-		ienv.ParseConfig('sdl-config --cflags')
-	else:
-		ienv.ParseConfig('pkg-config --cflags sdl')
+    if ienv['PLATFORM'] == "win32":
+        ienv.Append(CPPPATH=[env.Dir('#3rdParty/sdl/include')])
+        ienv.Append(CFLAGS=["-Dmain=SDL_main"])
+        ienv.Append(CPPFLAGS=["-Dmain=SDL_main"])
+    elif ienv['PLATFORM']=='darwin':
+        ienv.ParseConfig('sdl-config --cflags')
+    else:
+        ienv.ParseConfig('pkg-config --cflags sdl')
 
 def SetLFlags(ienv):
-	if ienv['PLATFORM']=='darwin':
-		ienv.ParseConfig('sdl-config --libs')
-	else:
-		ienv.ParseConfig('pkg-config --libs sdl')
+    if ienv['PLATFORM'] == "win32":
+        ienv.Append(LIBS=[env.File('#3rdParty/sdl/lib/x86/SDL.lib')])
+        ienv.Append(LIBS=[env.File('#3rdParty/sdl/lib/x86/SDLmain.lib')])
+        ienv.AppendUnique(LINKFLAGS=["/SUBSYSTEM:WINDOWS"])
+    elif ienv['PLATFORM']=='darwin':
+        ienv.ParseConfig('sdl-config --libs')
+    else:
+        ienv.ParseConfig('pkg-config --libs sdl')
 	
 	
-env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags, [env.File('#3rdParty/sdl/lib/x86/SDL.dll')])

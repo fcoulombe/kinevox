@@ -4,10 +4,16 @@ name = "glew"
 dependencies = []
 
 def SetCFlags(ienv):
-	ienv.ParseConfig('pkg-config --cflags glew')
+    if ienv['PLATFORM'] == "win32":
+	    ienv.Append(CPPPATH=[env.Dir('#3rdParty/glew/glew/include')])
+    else:
+	    ienv.ParseConfig('pkg-config --cflags glew')
 
 def SetLFlags(ienv):
-	ienv.ParseConfig('pkg-config --libs glew')
+    if ienv['PLATFORM'] == "win32":
+	    ienv.Append(LIBS=[env.File('#3rdParty/glew/glew/lib/glew32.lib')])
+    else:
+	    ienv.ParseConfig('pkg-config --libs glew')
 	
 	
-env.AddComponent(name, None, None, None, dependencies, SetCFlags, SetLFlags)
+env.AddComponent(name, None, None, None, dependencies, SetCFlags, SetLFlags,[env.File('#3rdParty/glew/glew/bin/glew32.dll')])

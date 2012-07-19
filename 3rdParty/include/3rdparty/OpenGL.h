@@ -44,6 +44,11 @@
 #   include <GL/gl.h>
 #   include <GL/glu.h>
 #   include <GL/glext.h>
+#elif OS_WIN32
+#   include <windows.h>
+#   include <GL/gl.h>
+#   include <GL/glu.h>
+#   include <GL/glext.h>
 #else
 #   error "TBD"
 #endif
@@ -87,7 +92,7 @@
 
 #endif
 
-#if defined(ES1 ) || true
+#if defined(ES1 ) || 1
 #define ENABLE_SHADERS 0
 #else
 #define ENABLE_SHADERS 1

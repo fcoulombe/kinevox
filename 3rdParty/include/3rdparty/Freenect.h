@@ -30,5 +30,7 @@
 #			pragma GCC system_header
 #		endif
 #	endif
+#if ENABLE_FREENECT
 #include <libfreenect.h>
+#endif
 

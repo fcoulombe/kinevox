@@ -55,7 +55,7 @@ AddOption('--gen-valgrind-suppressions', action="store_true",
 AddOption('--compiler', action="store",
           type='string', 
           dest="compiler",
-          default='g++',
+          default='vc',
           help='specify the compiler')
 
 AddOption('--configuration', action="store",
@@ -94,7 +94,13 @@ if not os.path.exists(default_env.Dir("#gclbuildscript").abspath):
     print "The buildscript doesn't seem to be installed. I will fetch it for you from github"
     
     gitClone("git@github.com:fcoulombe/gclbuildscript.git", "./gclbuildscript")
-    os.symlink("gclbuildscript/site_scons", "site_scons")
+    if default_env['PLATFORM'] == "win32":
+	    print "making link!"
+	    import ctypes
+	    kdll = ctypes.windll.LoadLibrary("kernel32.dll")
+	    kdll.CreateSymbolicLinkA("gclbuildscript/site_scons", "site_scons", 0)
+    else:
+	    os.symlink("gclbuildscript/site_scons", "site_scons")
     
 if not os.path.exists(default_env.Dir("#lib/gcl").abspath):
     #git clone the build script
@@ -112,13 +118,19 @@ if not os.path.exists(default_env.Dir("#lib/gcl").abspath):
 compiler = GetOption('compiler')
 
 lflags = [] 
-cflags = [ "-g", "-Wall", "-Werror", "-Wextra", '-fexceptions', '-ftrapv', '-DFBXSDK_NEW_API'] #, '-fvisibility=hidden']   
+cflags = [ ]
 if default_env['PLATFORM']=='darwin':
     cflags.append("-DOS_MACOSX")
+elif default_env['PLATFORM']=='win32':
+    cflags.append("-DOS_WIN32")
 else:
     cflags.append("-DOS_LINUX")                  
 
+configuration = GetOption('configuration')
 if compiler == 'g++':
+    extracflags = [ "-g", "-Wall",  '-fexceptions', '-ftrapv', '-DFBXSDK_NEW_API'] #, '-fvisibility=hidden']   
+    cflags = cflags+extracflags
+    cflags.append("-Werror -Wextra" )
     default_env['CXX'] = 'g++'
     default_env['CC'] = 'gcc'
     #default_env['CXX'] = 'scan-build g++'
@@ -127,8 +139,14 @@ if compiler == 'g++':
     #cflags.append("-pedantic")
     lflags.append("-L/usr/lib/")
     lflags.append("-rdynamic");
-
+    if configuration == 'debug':
+        cflags.append("-O0")
+    elif configuration == 'opt':
+        cflags.append("-O3")
 elif compiler == 'clang':
+    extracflags = [ "-g", "-Wall",  '-fexceptions', '-ftrapv', '-DFBXSDK_NEW_API'] #, '-fvisibility=hidden']   
+    cflags = cflags+extracflags
+    
     if default_env['PLATFORM']=='darwin':
         default_env['CXX'] = '/Developer//usr/bin/clang++'
         default_env['CC'] = '/Developer//usr/bin/clang'
@@ -137,16 +155,30 @@ elif compiler == 'clang':
         default_env['CC'] = '/usr/bin/clang'
     cflags.append("-std=c++0x");
     cflags.append("-pedantic")
+    cflags.append("-Werror -Wextra" )
     lflags.append("-L/usr/lib/")
-
+    if configuration == 'debug':
+        cflags.append("-O0")
+    elif configuration == 'opt':
+        cflags.append("-O3")
+elif compiler == 'vc':
+    default_env['CXX'] = 'cl.exe'
+    default_env['CC'] = 'cl.exe'
+    cflags.append("/WX")
+    cflags.append("/EHsc")
+    cflags.append("/ZI")
+    if configuration == 'debug':
+        cflags.append("-Od")
+    elif configuration == 'opt':
+        cflags.append("-O3")
+    #lflags.append("/NODEFAULTLIB:library")
+    lflags.append("/DEBUG")
+    cflags.append("/MDd")
+default_env.Append(CPPPATH=[default_env.Dir("#3rdParty/include")])
 #default_env['CXX'] = 'scan-build -k'
 #default_env['CC'] = 'scan-build -k'
 
-configuration = GetOption('configuration')
-if configuration == 'debug':
-    cflags.append("-O0")
-elif configuration == 'opt':
-    cflags.append("-O3")
+
                         
 default_env.AppendUnique(CPPFLAGS=cflags )
 default_env.AppendUnique(CFLAGS=cflags)
@@ -178,10 +210,15 @@ default_env.Tool('RSync', toolpath=['site_scons/site_tools'])
 default_env.Tool('Data', toolpath=['site_scons/site_tools'])
 default_env.Tool('UnitTest', toolpath=['site_scons/site_tools'])
 
-
-default_env['ENV']['PATH'] = '/usr/local/bin:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/Developer/usr/bin' 
-default_env['ENV']['PKG_CONFIG_PATH'] = '/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig'
-print default_env['ENV']['PATH']
+if default_env['PLATFORM']=='win32':
+    #default_env['ENV']['PATH'] += "C:\Program Files/Microsoft Visual Studio 10.0/VC/bin/"
+    print "1"
+    os.system("\"c:\Program Files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat\"")
+    print "2"
+else:
+    default_env['ENV']['PATH'] = '/usr/local/bin:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/Developer/usr/bin' 
+    default_env['ENV']['PKG_CONFIG_PATH'] = '/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig'
+    print default_env['ENV']['PATH']
 
 
 
@@ -191,6 +228,7 @@ sconsFilesList = [
 "./3rdParty/freetype/SConscript",
 "./3rdParty/il/SConscript",
 "./3rdParty/libfreenect/SConscript",
+"./3rdParty/zlib/SConscript",
 "./3rdParty/libpng/SConscript",
 "./3rdParty/opencv/SConscript",
 "./3rdParty/opengl/SConscript",
@@ -204,6 +242,7 @@ sconsFilesList = [
 #libs
 "./lib/gcl/gcl/SConscript",
 "./lib/sound/SConscript",
+"./lib/windriver/SConscript",
 "./lib/input/SConscript",
 "./lib/kinect/SConscript",
 "./lib/renderer/SConscript",
@@ -222,6 +261,7 @@ sconsFilesList = [
 #unittest
 "./lib/gcl/gcl/unittest/SConscript",
 "./lib/sound/unittest/SConscript",
+"./lib/windriver/unittest/SConscript",
 "./lib/renderer/unittest/SConscript",
 "./lib/input/unittest/SConscript", #depends on renderer
 "./lib/kinect/unittest/SConscript",

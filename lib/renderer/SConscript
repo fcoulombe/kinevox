@@ -23,10 +23,13 @@ Import('env')
 
 name = "renderer"
 incPath = [env.Dir("#/lib/%s" % name)]
-dependencies = [ 'gcl', 'sdl', 'opencv', 'opengl', 'libpng']
+dependencies = [ 'gcl', 'opencv', 'opengl', 'glew', 'libpng']
 
 
 if  env['PLATFORM']=='posix':
+	dependencies.append('glew')
+	glewPreProc = ["-DENABLE_GLEW=1"]
+elif  env['PLATFORM']=='win32':
 	dependencies.append('glew')
 	glewPreProc = ["-DENABLE_GLEW=1"]
 elif env['PLATFORM']=='darwin':

@@ -23,7 +23,7 @@
 #pragma once
 
 #include <stdint.h>
-#include <kinect/Freenect.h>
+#include <3rdparty/Freenect.h>
 
 //struct freenect_device;
 namespace GCL

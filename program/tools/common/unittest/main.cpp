@@ -20,14 +20,12 @@
  * THE SOFTWARE.
  */
 
-
 #include "BufferWriterTest.h"
 #include "TTFLoadingTest.h"
 
 #include "FBXLoadingTest.h"
 #include "MeshSavingTest.h"
 
-#include <unistd.h>
 
 using namespace GCL;
 

@@ -24,82 +24,23 @@
 #include "renderer/GLRenderer.h"
 
 #include <sstream>
-//#if !defined(ES1) && !defined(ES2)
-#include <SDL.h>
-#include <SDL_video.h>
-//#endif
 
+#include <3rdparty/OpenGL.h>
 #include <gcl/Assert.h>
 #include <gcl/StringUtil.h>
 
 #include "renderer/GLRenderUtils.h"
 #include "renderer/Material.h"
-#include "renderer/OpenGL.h"
 #include "renderer/RenderObject.h"
 #include "renderer/RenderObject2D.h"
 #include "renderer/Shader.h"
 #include "renderer/VertexBuffer.h"
 
+
 using namespace GCL;
 
 void GLRenderer::Init3DState()
 {
-	int sdlInitSuccessful = SDL_Init(SDL_INIT_VIDEO);
-	GCLAssert(sdlInitSuccessful>= 0);
-
-	const SDL_VideoInfo* info = NULL;
-	int width = mViewPort.GetWidth();
-	int height = mViewPort.GetHeight();
-#ifdef ES1
-	int flags = SDL_OPENGL | SDL_WINDOW_SHOWN;
-#else
-	int flags = SDL_OPENGL;
-#endif
-
-#if 0 //defined(OS_IPHONE)
-	SDL_Window *window;
-	SDL_Renderer *r;
-	/* create window and renderer */
-	window =
-			SDL_CreateWindow(NULL, 0, 0, width, height,
-					SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN);
-	if (!window) {
-		printf("Could not initialize Window\n");
-		return 1;
-	}
-
-	r = SDL_CreateRenderer(window, -1, 0);
-	if (!r) {
-		printf("Could not create renderer\n");
-		return 1;
-	}
-
-#else
-	info = SDL_GetVideoInfo( );
-
-	if( !info )
-	{
-		fprintf( stderr, "Video query failed: %s\n",
-				SDL_GetError( ) );
-		return;
-	}
-	int bpp = info->vfmt->BitsPerPixel;
-
-	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
-	SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
-	SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
-	SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
-	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-	//std::cout << "GLRenderer::Init3DState> w " << width << " h " <<  height << " bpp " << bpp << " f " << flags ;
-	if( SDL_SetVideoMode( width, height, bpp, flags ) == 0 )
-	{
-		std::stringstream s;
-		s<<"Video mode set failed: " <<	SDL_GetError( ) << std::endl;
-		GCLAssertMsg(false,  s.str().c_str());
-		return;
-	}
-#endif
-
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); glErrorCheck();
 	glClearDepth(1.0); glErrorCheck();
 	glDepthMask(GL_TRUE); glErrorCheck();
@@ -116,82 +57,8 @@ void GLRenderer::Init3DState()
 #endif
 
 
-	glViewport(0,0,width,height); glErrorCheck();
-
 }
 
-void GLRenderer::Init2DState()
-{
-
-#if !defined(ES1) && !defined(ES2)
-	int sdlInitSuccessful = SDL_Init(SDL_INIT_VIDEO);
-	GCLAssert(sdlInitSuccessful>= 0);
-
-	// tell system which funciton to process when exit() call is made
-	atexit(SDL_Quit);
-
-	const SDL_VideoInfo* info = NULL;
-	int width = 1024;
-	int height = 768;
-	info = SDL_GetVideoInfo( );
-
-	if( !info )
-	{
-		fprintf( stderr, "Video query failed: %s\n", SDL_GetError( ) );
-		return;
-
-	}
-
-
-	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 4 );
-	SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 4 );
-	SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 4 );
-	SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 4 );
-#ifdef __APPLE__
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,      32);
-#else
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,      16);
-#endif
-	SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
-	if( SDL_SetVideoMode( width, height, info->vfmt->BitsPerPixel, SDL_OPENGL ) == 0 ) {
-		fprintf( stderr, "Video mode set failed: %s\n",
-				SDL_GetError( ) );
-		return;
-
-	}
-
-
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); glErrorCheck();
-	glClearDepth(1.0); glErrorCheck();
-	glDepthMask(GL_FALSE); glErrorCheck();
-	glDepthFunc(GL_LESS); glErrorCheck();
-	glDisable(GL_DEPTH_TEST); glErrorCheck();
-	glDisable(GL_BLEND); glErrorCheck();
-	glDisable(GL_ALPHA_TEST); glErrorCheck();
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
-	glShadeModel(GL_FLAT); glErrorCheck();
-	glEnable(GL_TEXTURE_2D); glErrorCheck();
-
-	glGenTextures(1, &gl_depth_tex); glErrorCheck();
-	glBindTexture(GL_TEXTURE_2D, gl_depth_tex); glErrorCheck();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); glErrorCheck();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); glErrorCheck();
-	glGenTextures(1, &gl_rgb_tex); glErrorCheck();
-	glBindTexture(GL_TEXTURE_2D, gl_rgb_tex); glErrorCheck();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); glErrorCheck();
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); glErrorCheck();
-	glViewport(0,0,width,height); glErrorCheck();
-	glMatrixMode(GL_PROJECTION); glErrorCheck();
-	glLoadIdentity(); glErrorCheck();
-	glOrtho (0, width, height, 0, -1.0f, 1.0f); glErrorCheck();
-	glMatrixMode(GL_MODELVIEW); glErrorCheck();
-	glLoadIdentity(); glErrorCheck();
-#else
-
-	GCLAssert(false && "TBD");
-#endif
-
-}
 
 
 
@@ -203,8 +70,9 @@ GLRenderer::GLRenderer()
 	mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
 	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
 	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
-#if !defined(ES1)
-	mShadingLanguageVersion = std::string((const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));glErrorCheck();
+#if !defined(ES1) && !defined(OS_WIN32)
+    const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);glErrorCheck();
+	mShadingLanguageVersion = std::string(ver);
 #endif
 	char delim = ' ';
 	std::string extString((const char *) glGetString(GL_EXTENSIONS));
@@ -220,7 +88,6 @@ GLRenderer::GLRenderer()
 }
 GLRenderer::~GLRenderer()
 {
-	SDL_Quit();
 }
 
 bool GLRenderer::Update()
@@ -238,7 +105,6 @@ void GLRenderer::PreRender()
 }
 void GLRenderer::PostRender()
 {
-	SDL_GL_SwapBuffers();glErrorCheck();
 
 }
 
@@ -324,12 +190,12 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 
 }
 
-void GLRenderer::Render(const RenderObject2DList &renderObjectList)
+void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t width, size_t height)
 {
 #if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho (0, mViewPort.GetWidth(), mViewPort.GetHeight(), 0, -1.0f, 1.0f); glErrorCheck();
+	glOrtho (0, height, width, 0, -1.0f, 1.0f); glErrorCheck();
 #endif
 
 #if ENABLE_FIX_PIPELINE
@@ -419,8 +285,6 @@ void GLRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
 	glTexCoord2f(0, 1); glVertex3f(640,480,0);
 	glEnd(); glErrorCheck();
 
-
-	SDL_GL_SwapBuffers();glErrorCheck();
 #else 
 	GCLAssert(false && "TBD");
 #endif

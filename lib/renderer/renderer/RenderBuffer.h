@@ -21,7 +21,7 @@
  */
 
 #pragma once
-#include "renderer/OpenGL.h"
+#include <3rdparty/OpenGL.h>
 
 
 namespace GCL

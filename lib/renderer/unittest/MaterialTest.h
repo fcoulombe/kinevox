@@ -35,6 +35,7 @@ void Test()
 	TEST_START
 
 	TextureResourceManager::Initialize();
+    WinDriver windriver;
 	GLRenderer render;
 
 	{
@@ -49,7 +50,6 @@ void Test()
 	Material material("mario_mario_fire_png");
 	material.Bind();
 	}
-
 
 	TextureResourceManager::Terminate();
 }

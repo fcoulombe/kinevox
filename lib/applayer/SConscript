@@ -23,7 +23,7 @@ Import('env')
 
 name = "applayer"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['input', 'renderer']
+dependencies = ['input', 'windriver', 'renderer']
 
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")

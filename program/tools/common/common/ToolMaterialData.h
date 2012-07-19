@@ -60,7 +60,7 @@ struct ToolMaterialData
 	{
 		std::ofstream fp(filename);
 		std::cout << filename << std::endl;
-		GCLAssert(fp.good());
+		GCLAssertMsg(fp.good(), filename);
 		fp << "shader: default" << std::endl;
 		fp << "texture: data/Texture/" << texName<<std::endl;
 		fp << "ambient: " << mAmbient.x << " " << mAmbient.y << " " << mAmbient.z << " " << mAmbient.w << std::endl;

@@ -23,9 +23,9 @@
 #pragma once
 
 #include <iostream>
+#include <3rdparty/OpenGL.h>
 #include <gcl/Assert.h>
 #include <gcl/Point3.h>
-#include "renderer/OpenGL.h"
 
 namespace GCL
 {

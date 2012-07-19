@@ -36,7 +36,7 @@ namespace GCL
     virtual ~Renderer() {}
     virtual bool Update() =0;
     virtual void Render(const RenderObjectList &renderObjectList) =0;
-    virtual void Render(const RenderObject2DList &renderObjectList) =0;
+    virtual void Render(const RenderObject2DList &renderObjectList, size_t width, size_t height) =0;
     virtual void Render(uint8_t *rgb_front, uint8_t *depth_front) =0;
   protected:
   };

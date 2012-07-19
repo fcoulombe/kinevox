@@ -29,7 +29,6 @@
 
 #include "renderer/Camera.h"
 #include "renderer/Renderer.h"
-#include "renderer/ViewPort.h"
 
 
 namespace GCL
@@ -46,14 +45,12 @@ public:
 	void PreRender();
 	void PostRender();
 	virtual void Render(const RenderObjectList &renderObjectList);
-	virtual void Render(const RenderObject2DList &spriteList);
+	virtual void Render(const RenderObject2DList &spriteList, size_t width, size_t height);
 	void Render(uint8_t *rgb_front, uint8_t *depth_front);
 	void RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth);
 
-
 	void SetCamera(Camera &camera) { mCamera = &camera; }
 
-	const ViewPort &GetViewPort() const { return mViewPort; }
 
 	uint32_t gl_depth_tex;
 	uint32_t gl_rgb_tex;
@@ -90,10 +87,8 @@ public:
 
 private:
 	void Init3DState();
-	void Init2DState();
 
 	Camera *mCamera;
-	ViewPort mViewPort;
 
 	std::string mVendor,
 				mVersion,

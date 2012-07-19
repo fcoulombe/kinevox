@@ -27,7 +27,7 @@
 #include <gcl/Math.h>
 
 #include "renderer/GLRenderer.h"
-#include "renderer/OpenGL.h"
+#include <3rdparty/OpenGL.h>
 
 using namespace GCL;
 

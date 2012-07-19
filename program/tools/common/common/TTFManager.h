@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <common/FreeType.h>
+#include <3rdparty/FreeType.h>
 
 
 namespace GCL

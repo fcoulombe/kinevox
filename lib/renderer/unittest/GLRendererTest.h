@@ -23,7 +23,7 @@
 
 #include <gcl/UnitTest.h>
 #include <renderer/GLRenderer.h>
-#include <renderer/OpenGL.h>
+#include <windriver/WinDriver.h>
 
 using namespace GCL;
 namespace GLRendererTest
@@ -33,19 +33,19 @@ namespace GLRendererTest
 void Test()
 {
 	TEST_START
-
-	GLRenderer *renderer =  new GLRenderer();
+    WinDriver winDriver;
+	GLRenderer renderer;
 
 
 	std::cout << "OpenGL Stats"<<std::endl;
-	std::cout << "Version: " << renderer->GetVersion()<<std::endl;
-	std::cout << "Vendor: " << renderer->GetVendor()<<std::endl;
-	std::cout << "Renderer: " << renderer->GetRenderer()<<std::endl;
-	std::cout << "ShadingLanguageVersion: " << renderer->GetShadingLanguageVersion()<<std::endl;
-	std::cout << "GlewVersion: " << renderer->GetGlewVersion()<<std::endl;
+	std::cout << "Version: " << renderer.GetVersion()<<std::endl;
+	std::cout << "Vendor: " << renderer.GetVendor()<<std::endl;
+	std::cout << "Renderer: " << renderer.GetRenderer()<<std::endl;
+	std::cout << "ShadingLanguageVersion: " << renderer.GetShadingLanguageVersion()<<std::endl;
+	std::cout << "GlewVersion: " << renderer.GetGlewVersion()<<std::endl;
 
 	/*std::cout << "Extensions: " << std::endl;
-	const std::vector<std::string> &ext = renderer->GetExtensions();
+	const std::vector<std::string> &ext = renderer.GetExtensions();
 	for (size_t i=0; i<ext.size();++i)
 	{
 		std::cout << ext[i] << std::endl;;
@@ -53,35 +53,35 @@ void Test()
 
 #ifdef OS_IPHONE
 #   ifdef ES1
-    Assert_Test(renderer->IsExtensionSupported("GL_OES_framebuffer_object"));
-    Assert_Test(renderer->IsExtensionSupported("GL_OES_vertex_array_object"));
-    Assert_Test(renderer->IsExtensionSupported("GL_IMG_texture_compression_pvrtc"));
+    Assert_Test(renderer.IsExtensionSupported("GL_OES_framebuffer_object"));
+    Assert_Test(renderer.IsExtensionSupported("GL_OES_vertex_array_object"));
+    Assert_Test(renderer.IsExtensionSupported("GL_IMG_texture_compression_pvrtc"));
 #   elif defined(ES2)
 #       error "TBD: implement extension check for ES2"
 #   else
 #       error "INVALID"
 #   endif
 #else
-	Assert_Test(renderer->IsExtensionSupported("GL_ARB_shading_language_100"));
-	Assert_Test(renderer->IsExtensionSupported("GL_ARB_fragment_program"));
-	Assert_Test(renderer->IsExtensionSupported("GL_ARB_multitexture"));
-	Assert_Test(renderer->IsExtensionSupported("GL_ARB_pixel_buffer_object"));
-	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_buffer_object"));
-	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_program"));
-	Assert_Test(renderer->IsExtensionSupported("GL_ARB_vertex_shader"));
-	Assert_Test(renderer->IsExtensionSupported("GL_EXT_framebuffer_object"));
-	//Assert_Test(renderer->IsExtensionSupported("GL_EXT_texture_compression_dxt1"));
+	Assert_Test(renderer.IsExtensionSupported("GL_ARB_shading_language_100"));
+	Assert_Test(renderer.IsExtensionSupported("GL_ARB_fragment_program"));
+	Assert_Test(renderer.IsExtensionSupported("GL_ARB_multitexture"));
+	Assert_Test(renderer.IsExtensionSupported("GL_ARB_pixel_buffer_object"));
+	Assert_Test(renderer.IsExtensionSupported("GL_ARB_vertex_buffer_object"));
+	Assert_Test(renderer.IsExtensionSupported("GL_ARB_vertex_program"));
+	Assert_Test(renderer.IsExtensionSupported("GL_ARB_vertex_shader"));
+	Assert_Test(renderer.IsExtensionSupported("GL_EXT_framebuffer_object"));
+	//Assert_Test(renderer.IsExtensionSupported("GL_EXT_texture_compression_dxt1"));
 #endif
 
 	{
 		std::stringstream s;
-		s<<renderer->GetViewPort().GetHeight()<<"=="<<ViewPort::DEFAULT_SCREEN_HEIGHT;
-		AssertMsg_Test(renderer->GetViewPort().GetHeight()==ViewPort::DEFAULT_SCREEN_HEIGHT, s.str().c_str());
+		s<<winDriver.GetViewPort().GetHeight()<<"=="<<ViewPort::DEFAULT_SCREEN_HEIGHT;
+		AssertMsg_Test(winDriver.GetViewPort().GetHeight()==ViewPort::DEFAULT_SCREEN_HEIGHT, s.str().c_str());
 	}
 	{
 		std::stringstream s;
-		s<<renderer->GetViewPort().GetWidth()<<"=="<<ViewPort::DEFAULT_SCREEN_WIDTH;
-		AssertMsg_Test(renderer->GetViewPort().GetWidth()==ViewPort::DEFAULT_SCREEN_WIDTH, s.str().c_str());
+		s<<winDriver.GetViewPort().GetWidth()<<"=="<<ViewPort::DEFAULT_SCREEN_WIDTH;
+		AssertMsg_Test(winDriver.GetViewPort().GetWidth()==ViewPort::DEFAULT_SCREEN_WIDTH, s.str().c_str());
 	}
 
 	Matrix44 projection = GLRenderer::GetGLProjection();
@@ -117,6 +117,5 @@ void Test()
 	Assert_Test(glewGetExtension("GL_ARB_vertex_shader"));
 	//Assert_Test(glewGetExtension("GL_EXT_texture_compression_dxt1"));
 #endif
-	delete renderer;
 }
 }

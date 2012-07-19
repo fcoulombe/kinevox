@@ -31,10 +31,12 @@
 #include <renderer/GLRenderer.h>
 #include <renderer/MeshResourceManager.h>
 #include <renderer/TextureResourceManager.h>
+#include <windriver/WinDriver.h>
 
 using namespace GCL;
 
 GLRenderer *GCLApplication::mRenderer = NULL;
+WinDriver *GCLApplication::mWinDriver = NULL;
 RenderObjectList GCLApplication::mRenderObjectList;
 RenderObject2DList GCLApplication::mRenderObject2DList;
 
@@ -44,6 +46,7 @@ RenderObject2DList GCLApplication::mRenderObject2DList;
 	TextureResourceManager::Initialize();
 	MeshResourceManager::Initialize();
 	GCLAssert(mRenderer == NULL);
+    mWinDriver = new WinDriver();
 	mRenderer = new GLRenderer();
 }
 /*static */void GCLApplication::Terminate()
@@ -51,6 +54,9 @@ RenderObject2DList GCLApplication::mRenderObject2DList;
 	GCLAssert(mRenderer);
 	delete mRenderer;
 	mRenderer = NULL;
+    GCLAssert(mWinDriver);
+    delete mWinDriver;
+    mWinDriver = NULL;
 	MeshResourceManager::Terminate();
 	TextureResourceManager::Terminate();
 }
@@ -67,11 +73,14 @@ void GCLApplication::Update()
 }
 void GCLApplication::Render()
 {
+    GCLAssert(mWinDriver);
 	GCLAssert(mRenderer);
 	mRenderer->PreRender();
 	mRenderer->Render(mRenderObjectList);
-	mRenderer->Render(mRenderObject2DList);
+    const ViewPort &tempViewPort = mWinDriver->GetViewPort();
+	mRenderer->Render(mRenderObject2DList, tempViewPort.GetWidth(), tempViewPort.GetHeight());
 	mRenderer->PostRender();
+    mWinDriver->SwapBuffer();
 }
 
 void GCLApplication::SetViewportCamera(Camera &camera)

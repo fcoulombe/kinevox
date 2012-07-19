@@ -73,9 +73,10 @@ void Test()
 	TextureResourceManager::Initialize();
 
 	{
+        WinDriver winDriver;
 		GLRenderer renderer;
-		size_t width = renderer.GetViewPort().GetWidth();
-		size_t height = renderer.GetViewPort().GetHeight();
+		size_t width = winDriver.GetViewPort().GetWidth();
+		size_t height = winDriver.GetViewPort().GetHeight();
 
 		RenderBuffer depthRenderBuffer(width, height);
 		depthRenderBuffer.Bind();
@@ -89,6 +90,7 @@ void Test()
 			renderer.PreRender();
 			renderer.Render(RenderObjectList());
 			renderer.PostRender();
+            winDriver.SwapBuffer();
 			FrameBuffer::ResetDefault();
 		}
 		catch (GCLException &e)
@@ -99,6 +101,8 @@ void Test()
 	}
 
 	{
+
+        WinDriver winDriver;
 		GLRenderer renderer;
 
 		Camera myCamera;
@@ -109,8 +113,8 @@ void Test()
 		renderObjectList.push_back(&obj);
 
 		renderer.SetCamera(myCamera);
-		size_t width = renderer.GetViewPort().GetWidth();
-		size_t height = renderer.GetViewPort().GetHeight();
+		size_t width = winDriver.GetViewPort().GetWidth();
+		size_t height = winDriver.GetViewPort().GetHeight();
 
 		RenderBuffer depthRenderBuffer(width, height);
 		depthRenderBuffer.Bind();
@@ -124,6 +128,7 @@ void Test()
 			renderer.PreRender();
 			renderer.Render(renderObjectList);
 			renderer.PostRender();
+            winDriver.SwapBuffer();
 			FrameBuffer::ResetDefault();
 		}
 		catch (GCLException &e)

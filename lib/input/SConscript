@@ -23,7 +23,7 @@ Import('env')
 
 name = "input"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['gcl', 'sdl']
+dependencies = ['gcl', 'windriver']
 
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")

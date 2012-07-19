@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+#if ENABLE_FREENECT
 #include "kinect/KinectDriver.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -327,3 +327,4 @@ void TiltDown()
 }
 
 }
+#endif

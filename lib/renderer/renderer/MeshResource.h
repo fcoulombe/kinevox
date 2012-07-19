@@ -22,9 +22,9 @@
 
 #pragma once
 
+#include <3rdparty/OpenGL.h>
 #include <gcl/Point3.h>
 #include <gcl/Resource.h>
-#include "renderer/OpenGL.h"
 
 namespace GCL
 {

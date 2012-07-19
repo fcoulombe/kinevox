@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <common/FBX.h>
+#include <3rdparty/FBX.h>
 #include "common/ToolMeshData.h"
 
 #ifdef IOS_REF

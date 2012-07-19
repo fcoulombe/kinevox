@@ -20,13 +20,10 @@
  * THE SOFTWARE.
  */
 
-#include <unistd.h>
-#include <renderer/OpenCV.h>
-#include <SDL.h>
-
 #include <applayer/GCLApplication.h>
 #include <applayer/GCLRenderObject2D.h>
 #include <gcl/Exception.h>
+#include <gcl/Time.h>
 #include <input/Input.h>
 #include <renderer/Camera.h>
 #include <renderer/Material.h>
@@ -78,7 +75,7 @@ int main(int /*argc*/, char ** /*argv*/)
 			obj3.SetPosition(WorldPoint3(x+200,y,0.0));
 
 			GCLApplication::Render();
-			usleep(1000000);
+			Time::SleepMs(1000);
 			std::cout.flush();
 		}
 	}

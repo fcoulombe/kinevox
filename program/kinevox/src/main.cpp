@@ -20,10 +20,10 @@
  * THE SOFTWARE.
  */
 
-#include <unistd.h>
-
-
 #include <applayer/GCLApplication.h>
+#if ENABLE_FREENECT
+
+#include <gcl/Time.h> 
 #include <input/Input.h>
 #include <kinect/KinectDriver.h>
 #include <renderer/Camera.h>
@@ -44,8 +44,6 @@ int main(int /*argc*/, char ** /*argv*/)
 	GCLApplication::Initialize();
 	Camera myCamera;
 	GCLApplication::SetViewportCamera(myCamera);
-
-
 
   IplImage* rgbImg;
   IplImage* depthImg;
@@ -81,8 +79,6 @@ int main(int /*argc*/, char ** /*argv*/)
       if (Input::IsKeyUp(SDLK_PAGEDOWN))
     	  myCamera.TiltDown();
 
-
-
       if(Input::IsKeyUp(306)) { //left ctrl
           printf("start tracking!\n");
       }
@@ -99,10 +95,17 @@ int main(int /*argc*/, char ** /*argv*/)
       //renderer->Render((uint8_t*)rgbImg->imageData, (uint8_t*)depthImg->imageData);
 
 		GCLApplication::Render();
-		usleep(100);
+		Time::SleepMs(100);
 		std::cout.flush();
     }
 
   return 0;
 }
+#else
 
+int main(int /*argc*/, char ** /*argv*/)
+{
+
+    return 0;
+}
+#endif

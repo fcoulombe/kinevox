@@ -25,7 +25,7 @@
 #include <vector>
 #include <gcl/GCLExport.h>
 #include <renderer/Renderer.h>
-
+#include <windriver/WinDriver.h>
 namespace GCL
 {
 class Camera;
@@ -33,6 +33,7 @@ class GLRenderer;
 class GCLRenderObject;
 class GCLRenderObject2D;
 class Input;
+class WinDriver;
 
 class GCLApplication
 {
@@ -48,6 +49,7 @@ public:
 	GCLTEST_EXPORT static bool IsRegistered(const GCLRenderObject &obj);
 
 	GCLEXPORT static GLRenderer *GetRenderer() { return mRenderer; }
+    GCLEXPORT static WinDriver *GetWinDriver() { return mWinDriver; }
 	GCLEXPORT static void RegisterCustomRenderObject(RenderObject* newRenderObject);
 
 private:
@@ -64,6 +66,7 @@ private:
 
 
 	static GLRenderer *mRenderer;
+    static WinDriver *mWinDriver;
 
 	static RenderObjectList mRenderObjectList;
 	static RenderObject2DList mRenderObject2DList;

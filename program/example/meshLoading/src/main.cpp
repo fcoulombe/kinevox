@@ -20,12 +20,9 @@
  * THE SOFTWARE.
  */
 
-#include <unistd.h>
-#include <renderer/OpenCV.h>
-#include <SDL.h>
-
 #include <applayer/GCLRenderObject.h>
 #include <applayer/GCLApplication.h>
+#include <gcl/Time.h>
 #include <input/Input.h>
 #include <renderer/Camera.h>
 #include <renderer/Material.h>
@@ -117,7 +114,7 @@ int main(int /*argc*/, char ** /*argv*/)
 			}
 
 			GCLApplication::Render();
-			usleep(100);
+			Time::SleepMs(100);
 			std::cout.flush();
 		}
 	}

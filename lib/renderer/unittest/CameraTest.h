@@ -22,12 +22,12 @@
 #pragma once
 #include <iomanip>
 
+#include <3rdparty/OpenGL.h>
 #include <gcl/UnitTest.h>
 
 #include <renderer/Camera.h>
 #include <renderer/GLRenderer.h>
-#include <renderer/OpenGL.h>
-#include <renderer/ViewPort.h>
+#include <windriver/WinDriver.h>
 
 using namespace GCL;
 namespace CameraTest
@@ -38,6 +38,7 @@ void Test()
 {
 	TEST_START
 
+    WinDriver winDriver;
 	GLRenderer renderer;
 
 	Camera camera;

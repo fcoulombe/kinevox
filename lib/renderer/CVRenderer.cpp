@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+#if ENABLE_OPENCV
 #include "renderer/CVRenderer.h"
 
 #include <highgui.h>
@@ -66,3 +66,4 @@ void OpenCVRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
 	cvShowImage("depth", depthImg);
 
 }
+#endif

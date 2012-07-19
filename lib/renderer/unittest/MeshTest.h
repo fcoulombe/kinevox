@@ -60,6 +60,7 @@ void Test()
 	TextureResourceManager::Initialize();
 	MeshResourceManager::Initialize();
 
+    WinDriver windriver;
 	GLRenderer render;
 	std::stringstream s;
 #if 1
@@ -87,6 +88,7 @@ void Test()
 		render.PreRender();
 		render.Render(renderList);
 		render.PostRender();
+        windriver.SwapBuffer();
 	}
 
 

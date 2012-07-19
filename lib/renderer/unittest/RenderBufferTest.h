@@ -57,8 +57,8 @@ static const   VertexPNT square[4] = {
 };
 const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
 
-bool CompareImages(const char */*filename1*/, const char */*filename2*/);
-bool CompareImages(const char */*filename1*/, const char */*filename2*/)
+bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
+bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 {
 	return false;
 }
@@ -69,20 +69,23 @@ void Test()
 	TEST_START
 	TextureResourceManager::Initialize();
 	{
+        WinDriver winDriver;
 		GLRenderer renderer;
-		size_t width = renderer.GetViewPort().GetWidth();
-		size_t height = renderer.GetViewPort().GetHeight();
+		size_t width = winDriver.GetViewPort().GetWidth();
+		size_t height = winDriver.GetViewPort().GetHeight();
 		RenderBuffer target(width, height);;
 		target.Bind();
 		renderer.PreRender();
 		renderer.Render(RenderObjectList());
 		renderer.PostRender();
+        winDriver.SwapBuffer();
 	}
 
 	{
-		GLRenderer renderer;
-		size_t width = renderer.GetViewPort().GetWidth();
-		size_t height = renderer.GetViewPort().GetHeight();
+        WinDriver winDriver;
+        GLRenderer renderer;
+		size_t width = winDriver.GetViewPort().GetWidth();
+		size_t height = winDriver.GetViewPort().GetHeight();
 		RenderBuffer target(width, height);;
 		target.Bind();
 
@@ -92,6 +95,7 @@ void Test()
 		renderer.PreRender();
 		renderer.Render(renderObjectList);
 		renderer.PostRender();
+        winDriver.SwapBuffer();
 	}
 
 	Shader shader;

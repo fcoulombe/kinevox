@@ -20,16 +20,16 @@
  * THE SOFTWARE.
  */
 
-#include <unistd.h>
 #include <cstdlib>
 #include <sstream>
 
 #include <applayer/GCLApplication.h>
 #include <applayer/GCLRenderObject2D.h>
 #include <gcl/Exception.h>
+#include <gcl/Time.h>
 #include <input/Input.h>
 #include <renderer/GLRenderer.h>
-#include <renderer/ViewPort.h>
+#include <windriver/ViewPort.h>
 
 
 using namespace GCL;
@@ -78,7 +78,7 @@ public:
 		s.str("Cell");
 		s << mCellIndex;
 		mRenderObject.SetName(s.str().c_str());
-		const ViewPort &viewPort = GCLApplication::GetRenderer()->GetViewPort();
+		const ViewPort &viewPort = GCLApplication::GetWinDriver()->GetViewPort();
 
 		size_t blockWidth = mRenderObject.GetWidth();
 		size_t blockHeight = mRenderObject.GetHeight();
@@ -211,7 +211,7 @@ int main(int /*argc*/, char ** /*argv*/)
 
 
 			GCLApplication::Render();
-			usleep(100);
+			Time::SleepMs(100);
 			std::cout.flush();
 		}
 	}

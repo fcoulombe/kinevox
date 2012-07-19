@@ -21,8 +21,9 @@
  */
 
 #include <iostream>
+#include <3rdparty/Sdl.h>
 
-int main()
+int main(int /*argc*/, char ** /*argv*/)
 {
 
 	return 0;

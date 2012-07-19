@@ -20,7 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include <unistd.h>
 #include <cstdlib>
 #include <sstream>
 #include <vector>
@@ -55,8 +54,12 @@ int main(int /*argc*/, char ** argv)
 
 	    const std::string outputMeshFileName(argv[2]);
 	    buffer.WriteToFile(outputMeshFileName);
-
+#if OS_WIN32
+        size_t pos = outputMeshFileName.find("data\\Mesh");
+#else
 	    size_t pos = outputMeshFileName.find("data/Mesh");
+#endif
+        GCLAssert(pos != std::string::npos);
 	    const std::string outputMatFileName = outputMeshFileName.substr(0, pos)+"data/Material/" + data.mMaterialData.matName+".mat";
 		data.mMaterialData.WriteToFile(outputMatFileName);
 		FBXManager::Terminate();

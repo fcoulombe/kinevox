@@ -58,7 +58,7 @@ struct ToolMaterialData
 
 	void WriteToFile(const std::string &filename)
 	{
-		std::ofstream fp(filename);
+		std::ofstream fp(filename.c_str());
 		std::cout << filename << std::endl;
 		GCLAssertMsg(fp.good(), filename);
 		fp << "shader: default" << std::endl;

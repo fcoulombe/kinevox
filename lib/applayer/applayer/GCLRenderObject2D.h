@@ -33,8 +33,6 @@ public:
 
 	~GCLRenderObject2D();
 private:
-
-
 };
 
 }

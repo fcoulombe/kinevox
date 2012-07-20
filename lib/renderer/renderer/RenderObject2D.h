@@ -49,7 +49,6 @@ public:
 
 	void Update()
 	{
-
 		mSprite->Update();
 	}
 	void Render()

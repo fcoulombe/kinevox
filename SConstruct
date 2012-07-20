@@ -55,7 +55,7 @@ AddOption('--gen-valgrind-suppressions', action="store_true",
 AddOption('--compiler', action="store",
           type='string', 
           dest="compiler",
-          default='vc',
+          default='gcc',
           help='specify the compiler')
 
 AddOption('--configuration', action="store",

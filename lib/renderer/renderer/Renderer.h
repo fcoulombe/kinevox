@@ -22,6 +22,7 @@
 
 #pragma once
 #include <stdint.h>
+#include <cstdlib>
 #include <vector>
 
 namespace GCL

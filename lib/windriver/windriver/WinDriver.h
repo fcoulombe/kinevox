@@ -37,7 +37,10 @@ public:
     void SwapBuffer();
 
     const ViewPort &GetViewPort() const { return mViewPort; }
+    SDL_Surface* GetScreen() { return mScreen;}
 private:
     ViewPort mViewPort;
+    SDL_Surface *mScreen;
+
 };
 }

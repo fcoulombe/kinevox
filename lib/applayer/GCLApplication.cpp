@@ -31,6 +31,7 @@
 #include <renderer/GLRenderer.h>
 #include <renderer/MeshResourceManager.h>
 #include <renderer/TextureResourceManager.h>
+#include <windriver/FontResourceManager.h>
 #include <windriver/WinDriver.h>
 
 using namespace GCL;
@@ -44,6 +45,7 @@ RenderObject2DList GCLApplication::mRenderObject2DList;
 /*static */void GCLApplication::Initialize()
 {
 	TextureResourceManager::Initialize();
+	FontResourceManager::Initialize();
 	MeshResourceManager::Initialize();
 	GCLAssert(mRenderer == NULL);
     mWinDriver = new WinDriver();
@@ -58,6 +60,7 @@ RenderObject2DList GCLApplication::mRenderObject2DList;
     delete mWinDriver;
     mWinDriver = NULL;
 	MeshResourceManager::Terminate();
+	FontResourceManager::Terminate();
 	TextureResourceManager::Terminate();
 }
 

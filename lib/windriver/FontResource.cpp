@@ -20,42 +20,32 @@
  * THE SOFTWARE.
  */
 
-#include <iostream>
-#include <sstream>
+#include "windriver/FontResource.h"
 
-#include <gcl/Exception.h>
+#include "gcl/Assert.h"
 
-#include "FontResourceTest.h"
-#include "TTFFontTest.h"
-#include "WinDriverTest.h"
+using namespace GCL;
 
-int main(int /*argc*/, char ** argv)
+
+FontResource::FontResource( const char *fontName )
+: Resource()
 {
-	try
-	{
-		FontResourceTest::Test();
-		TTFFontTest::Test();
-		WinDriverTest::Test();
-	}
-	catch (GCLException &e)
-	{
-		std::stringstream str;
-		str << "[FAILED] " << argv[0] << std::endl;
-		str << e.what();
-		str << std::endl;
-		std::cerr << str.str();
-		return -1;
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "[FAILED] " << e.what() << std::endl;
-		return -1;
-	}
-	catch (...)
-	{
-		std::cerr << "[FAILED] not sure what happened" << std::endl;
-	}
+	std::string path = Resource::GetResourcePath();
+	path += fontName;
 
+	std::string msg("trying to loads " );
+	msg += path.c_str();
+	msg += "\n";
 
-	return 0;
+	mFont = TTF_OpenFont(path.c_str(), 12);
+
+	GCLAssertMsg(mFont,msg.c_str());
+
 }
+
+FontResource::~FontResource()
+{
+	TTF_CloseFont(mFont);
+}
+
+

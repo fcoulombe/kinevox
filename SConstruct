@@ -124,13 +124,21 @@ if default_env['PLATFORM']=='darwin':
 elif default_env['PLATFORM']=='win32':
     cflags.append("-DOS_WIN32")
 else:
-    cflags.append("-DOS_LINUX")                  
+    cflags.append("-DOS_LINUX") 
+                     
+if platform.architecture()[0] == "32bit":
+    cflags.append('-DUSE_64BIT_PLATFORM=0')
+elif platform.architecture()[0] == "64bit":
+    cflags.append('-DUSE_64BIT_PLATFORM=1')
+else:
+    print "unsupported architecture: %s" % platform.architecture()[0] 
 
 configuration = GetOption('configuration')
-if compiler == 'g++':
+if compiler == 'gcc':
     extracflags = [ "-g", "-Wall",  '-fexceptions', '-ftrapv', '-DFBXSDK_NEW_API'] #, '-fvisibility=hidden']   
-    cflags = cflags+extracflags
-    cflags.append("-Werror -Wextra" )
+    cflags.extend(extracflags)
+    cflags.append("-Werror")
+    cflags.append("-Wextra")
     default_env['CXX'] = 'g++'
     default_env['CC'] = 'gcc'
     #default_env['CXX'] = 'scan-build g++'
@@ -174,15 +182,16 @@ elif compiler == 'vc':
     #lflags.append("/NODEFAULTLIB:library")
     lflags.append("/DEBUG")
     cflags.append("/MDd")
+else:
+    print "this isn't good"
 default_env.Append(CPPPATH=[default_env.Dir("#3rdParty/include")])
 #default_env['CXX'] = 'scan-build -k'
 #default_env['CC'] = 'scan-build -k'
 
 
-                        
 default_env.AppendUnique(CPPFLAGS=cflags )
 default_env.AppendUnique(CFLAGS=cflags)
-default_env.AppendUnique(CXXFLAGS=cflags)
+#default_env.AppendUnique(CXXFLAGS=cflags)
 default_env.AppendUnique(LINKFLAGS=lflags)
 variant ="%s-%s-%s-%s" % (default_env['CC'], platform.machine(),  platform.architecture()[0], configuration) 
 print variant
@@ -273,6 +282,7 @@ sconsFilesList = [
 "./program/example/basicTextureMapping/SConscript",
 "./program/example/spinningCube/SConscript",
 "./program/example/spriteExample/SConscript",
+"./program/example/textRenderingExample/SConscript",
 "./program/example/meshLoading/SConscript",
 
 

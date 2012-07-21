@@ -22,6 +22,7 @@
 
 #include "common/TTFManager.h"
 #include <gcl/Assert.h>
+#include <gcl/PixelBuffer.h>
 #include <renderer/TextureResource.h>
 
 #include <iostream>
@@ -127,7 +128,7 @@ void GenerateAsciiFont(const FT_Face &face)
 			}
 	}
 
-	TextureResource::SaveTga("glysavetest.tga",imageSize, imageSize, numChannel, buffer);
+	PixelBuffer::SaveTga("glysavetest.tga",imageSize, imageSize, numChannel, buffer);
 	delete [] buffer;
 	for (size_t i=0; i<charArray.size(); ++i)
 	{

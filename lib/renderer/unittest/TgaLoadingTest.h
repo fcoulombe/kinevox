@@ -23,6 +23,7 @@
 
 #include <fstream>
 
+#include <gcl/PixelBuffer.h>
 #include <gcl/UnitTest.h>
 #include <renderer/TextureResource.h>
 
@@ -60,7 +61,7 @@ void Test()
 		TextureResource::TextureData data;
 		TextureResource::LoadTga(fp, data);
 		fp.close();
-		TextureResource::SaveTga("tgasavingtest.tga", data.mWidth, data.mHeight, data.mBytePerPixel,data.imageData);
+		PixelBuffer::SaveTga("tgasavingtest.tga", data.mWidth, data.mHeight, data.mBytePerPixel,data.imageData);
 		TextureResource::Unload(data);
 	}
 

@@ -72,7 +72,6 @@ namespace GCL
     static void LoadPng(FILE *is, TextureData &data);
     static void LoadTga(std::istream &is, TextureData &data);
     static void LoadRaw(std::istream &is, TextureData &data);
-    static void SaveTga(const char *filename, size_t width, size_t height, size_t bytePerPixel,const uint8_t *data );
 
     static void Unload(TextureData &data);
   private:

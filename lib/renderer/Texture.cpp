@@ -25,6 +25,7 @@
 #include <cstring>
 #include <stdint.h>
 
+#include <gcl/PixelBuffer.h>
 #include <gcl/SafeCast.h>
 #include "renderer/TextureResource.h"
 #include "renderer/TextureResourceManager.h"
@@ -152,6 +153,6 @@ void Texture::Save(const char *filename)
 	std::string nameResource(filename);
 	nameResource += "res.tga";
 	const uint8_t *buffer = GetTextureFromVRAM();
-	TextureResource::SaveTga(name.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,buffer);
+	PixelBuffer::SaveTga(name.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,buffer);
 	delete [] buffer;
 }

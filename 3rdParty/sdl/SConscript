@@ -21,6 +21,7 @@ def SetLFlags(ienv):
     elif ienv['PLATFORM']=='darwin':
         ienv.ParseConfig('sdl-config --libs')
     else:
+        ienv.AppendUnique(LIBS=["SDL_ttf"])
         ienv.ParseConfig('pkg-config --libs sdl')
 	
 dllDep = []

@@ -79,7 +79,8 @@ WinDriver::WinDriver()
     SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     //std::cout << "GLRenderer::Init3DState> w " << width << " h " <<  height << " bpp " << bpp << " f " << flags ;
-    if( SDL_SetVideoMode( width, height, bpp, flags ) == 0 )
+    mScreen = SDL_SetVideoMode( width, height, bpp, flags ) ;
+    if(!mScreen)
     {
         std::stringstream s;
         s<<"Video mode set failed: " <<	SDL_GetError( ) << std::endl;

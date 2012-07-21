@@ -20,42 +20,20 @@
  * THE SOFTWARE.
  */
 
-#include <iostream>
-#include <sstream>
+#pragma once
+#include <cstdlib>
 
-#include <gcl/Exception.h>
-
-#include "FontResourceTest.h"
-#include "TTFFontTest.h"
-#include "WinDriverTest.h"
-
-int main(int /*argc*/, char ** argv)
+namespace GCL
 {
-	try
-	{
-		FontResourceTest::Test();
-		TTFFontTest::Test();
-		WinDriverTest::Test();
-	}
-	catch (GCLException &e)
-	{
-		std::stringstream str;
-		str << "[FAILED] " << argv[0] << std::endl;
-		str << e.what();
-		str << std::endl;
-		std::cerr << str.str();
-		return -1;
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "[FAILED] " << e.what() << std::endl;
-		return -1;
-	}
-	catch (...)
-	{
-		std::cerr << "[FAILED] not sure what happened" << std::endl;
-	}
-
-
-	return 0;
+class FontResource;
+class PixelBuffer;
+class TTFFont
+{
+public:
+	TTFFont(const char *fontName, size_t point);
+	~TTFFont();
+	void DrawText(PixelBuffer &buffer, const char * text, size_t x, size_t y) ;
+private:
+	const FontResource *mFontResource;
+};
 }

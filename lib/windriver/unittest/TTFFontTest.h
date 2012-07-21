@@ -19,43 +19,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#pragma once
 
-#include <iostream>
-#include <sstream>
+#include <gcl/UnitTest.h>
+#include <gcl/ResourceManagerConfig.h>
+#include <gcl/PixelBuffer.h>
+#include <windriver/TTFFont.h>
 
-#include <gcl/Exception.h>
-
-#include "FontResourceTest.h"
-#include "TTFFontTest.h"
-#include "WinDriverTest.h"
-
-int main(int /*argc*/, char ** argv)
+using namespace GCL;
+namespace TTFFontTest
 {
-	try
-	{
-		FontResourceTest::Test();
-		TTFFontTest::Test();
-		WinDriverTest::Test();
-	}
-	catch (GCLException &e)
-	{
-		std::stringstream str;
-		str << "[FAILED] " << argv[0] << std::endl;
-		str << e.what();
-		str << std::endl;
-		std::cerr << str.str();
-		return -1;
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "[FAILED] " << e.what() << std::endl;
-		return -1;
-	}
-	catch (...)
-	{
-		std::cerr << "[FAILED] not sure what happened" << std::endl;
-	}
 
-
-	return 0;
+void Test()
+{
+	TEST_START
+	FontResourceManager::Initialize();
+	{
+		TTFFont font(FONT_PATH"FreeMono.ttf", 12);
+		PixelBuffer buffer;
+		font.DrawText(buffer, "HelloWorld", 100, 100);
+		PixelBuffer::SaveTga("TestTTFFont.tga", buffer.mWidth, buffer.mHeight, buffer.mBytesPerPixel, buffer.mPixels);
+	}
+	FontResourceManager::Terminate();
+}
 }

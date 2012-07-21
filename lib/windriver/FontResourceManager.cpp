@@ -20,42 +20,19 @@
  * THE SOFTWARE.
  */
 
-#include <iostream>
-#include <sstream>
+#include "windriver/FontResourceManager.h"
+#include "windriver/FontResource.h"
 
-#include <gcl/Exception.h>
+using namespace GCL;
 
-#include "FontResourceTest.h"
-#include "TTFFontTest.h"
-#include "WinDriverTest.h"
+FontResourceManager *FontResourceManager::smpInstance = NULL;
 
-int main(int /*argc*/, char ** argv)
+Resource * FontResourceManager::Allocate( const char *filename )
 {
-	try
-	{
-		FontResourceTest::Test();
-		TTFFontTest::Test();
-		WinDriverTest::Test();
-	}
-	catch (GCLException &e)
-	{
-		std::stringstream str;
-		str << "[FAILED] " << argv[0] << std::endl;
-		str << e.what();
-		str << std::endl;
-		std::cerr << str.str();
-		return -1;
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "[FAILED] " << e.what() << std::endl;
-		return -1;
-	}
-	catch (...)
-	{
-		std::cerr << "[FAILED] not sure what happened" << std::endl;
-	}
+  return new FontResource(filename);
+}
 
-
-	return 0;
+void FontResourceManager::Free( Resource * resource )
+{
+	delete resource;
 }

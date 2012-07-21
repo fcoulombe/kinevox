@@ -19,43 +19,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#pragma once
 
-#include <iostream>
-#include <sstream>
+#include <gcl/UnitTest.h>
+#include <windriver/FontResource.h>
+#include <windriver/FontResourceManager.h>
 
-#include <gcl/Exception.h>
+using namespace GCL;
 
-#include "FontResourceTest.h"
-#include "TTFFontTest.h"
-#include "WinDriverTest.h"
-
-int main(int /*argc*/, char ** argv)
+namespace FontResourceTest
 {
-	try
-	{
-		FontResourceTest::Test();
-		TTFFontTest::Test();
-		WinDriverTest::Test();
-	}
-	catch (GCLException &e)
-	{
-		std::stringstream str;
-		str << "[FAILED] " << argv[0] << std::endl;
-		str << e.what();
-		str << std::endl;
-		std::cerr << str.str();
-		return -1;
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "[FAILED] " << e.what() << std::endl;
-		return -1;
-	}
-	catch (...)
-	{
-		std::cerr << "[FAILED] not sure what happened" << std::endl;
-	}
+void Test();
+void Test()
+{
+	TEST_START
 
+	FontResourceManager::Initialize();
 
-	return 0;
+	{
+		FontResourceManager &fontResourceManager = FontResourceManager::Instance();
+
+		const FontResource *fontResource;
+		fontResource = static_cast<const FontResource *>(fontResourceManager.LoadResource(FONT_PATH"FreeMono.ttf"));
+		Assert_Test(fontResource);
+		fontResourceManager.ReleaseResource(fontResource);
+	}
+	FontResourceManager::Terminate();
+}
 }

@@ -23,7 +23,7 @@ Import('env')
 
 name = "windriver_test"
 dependencies = ["windriver"]
-data = []
+data = [env.Dir('data')]
 
 src_files = env.Glob("*.cpp")
 prog = env.UnitTest(name,  src_files, dependencies, data)

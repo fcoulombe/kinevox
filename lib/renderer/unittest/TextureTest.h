@@ -23,7 +23,10 @@
 
 #include <sstream>
 #include <gcl/UnitTest.h>
+#include <gcl/PixelBuffer.h>
 #include <renderer/Texture.h>
+#include <windriver/TTFFont.h>
+#include <windriver/FontResourceManager.h>
 
 using namespace GCL;
 namespace TextureTest
@@ -39,7 +42,8 @@ void Test()
 	TEST_START
 
 	TextureResourceManager::Initialize();
-    WinDriver winDriver;
+	FontResourceManager::Initialize();
+	WinDriver winDriver;
 	GLRenderer renderer;
 	std::stringstream s;
 	//png
@@ -54,7 +58,7 @@ void Test()
 		AssertMsg_Test(texture.GetHeight() == 256, s.str().c_str());
 
 #ifndef OS_IPHONE
-		texture.Save("mario_fire.png.tga");
+		texture.Save("PNGTextureTest.tga");
 #endif
 		//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 
@@ -68,7 +72,7 @@ void Test()
 		Assert_Test(texture.GetHeight() == 512);
 
 #ifndef OS_IPHONE
-		texture.Save("MushroomTest.tga");
+		texture.Save("RGBATextureTest.tga");
 #endif
 		//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 	}
@@ -79,9 +83,26 @@ void Test()
 		texture.Bind();
 
 #ifndef OS_IPHONE
-		texture.Save("HappyFishTest.tga");
+		texture.Save("RGBTextureTest.tga");
 #endif
 	}
+
+	//Pixel Buffer Texture
+	{
+		TTFFont font(FONT_PATH"FreeMono.ttf", 12);
+		PixelBuffer buffer;
+		font.DrawText(buffer, "HelloWorld", 100, 100);
+		buffer.PadToNextPOT();
+
+		Texture testTexture(buffer);
+		testTexture.Bind();
+
+#ifndef OS_IPHONE
+		testTexture.Save("PixelBufferTextureTest.tga");
+#endif
+
+	}
+	FontResourceManager::Terminate();
 	TextureResourceManager::Terminate();
 }
 }

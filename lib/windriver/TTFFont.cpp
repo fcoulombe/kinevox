@@ -52,13 +52,22 @@ void TTFFont::DrawText(PixelBuffer &buffer, const char * text, size_t /*x*/, siz
 
 	fontSurface = TTF_RenderText_Solid(mFontResource->mFont, text, fColor);
 
-	size_t bufferSize = fontSurface->format->BytesPerPixel*fontSurface->w*fontSurface->h;
+	//size_t bufferSize = fontSurface->format->BytesPerPixel*fontSurface->w*fontSurface->h;
+	size_t bufferSize = 3*fontSurface->w*fontSurface->h;
 	buffer.mPixels = new uint8_t[bufferSize];
-	memcpy(buffer.mPixels, fontSurface->pixels, bufferSize);
+	memset(buffer.mPixels, 0, bufferSize);
+	//memcpy(buffer.mPixels, fontSurface->pixels, bufferSize);
+	for (int i=0; i<fontSurface->format->BytesPerPixel*fontSurface->w*fontSurface->h; ++i)
+	{
+		uint8_t* ptr = (uint8_t*)(fontSurface->pixels);
+		if (ptr[i])
+			*(SDL_Color*)(&(buffer.mPixels[i*3])) = fColor;
+
+	}
 	buffer.mHeight = fontSurface->h;
 	buffer.mWidth = fontSurface->w;
-	buffer.mBitsPerPixel = fontSurface->format->BytesPerPixel*8;
-	buffer.mBytesPerPixel = fontSurface->format->BytesPerPixel;
+	buffer.mBitsPerPixel = 3*8;//fontSurface->format->BytesPerPixel*8;
+	buffer.mBytesPerPixel = 3;//fontSurface->format->BytesPerPixel;
 
 	SDL_FreeSurface(fontSurface);
 }

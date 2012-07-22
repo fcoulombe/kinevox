@@ -159,11 +159,12 @@ elif compiler == 'clang':
         default_env['CXX'] = '/Developer//usr/bin/clang++'
         default_env['CC'] = '/Developer//usr/bin/clang'
     else:
-        default_env['CXX'] = '/usr/bin/clang++'
-        default_env['CC'] = '/usr/bin/clang'
+        default_env['CXX'] = 'clang++'
+        default_env['CC'] = 'clang'
     cflags.append("-std=c++0x");
     cflags.append("-pedantic")
-    cflags.append("-Werror -Wextra" )
+    cflags.append("-Wextra" )
+    #cflags.append("-Werror" )
     lflags.append("-L/usr/lib/")
     if configuration == 'debug':
         cflags.append("-O0")

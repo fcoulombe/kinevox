@@ -41,6 +41,19 @@ Texture::~Texture()
 		TextureResourceManager::Instance().ReleaseResource(mTextureResource);
 }
 
+Texture::Texture(const PixelBuffer &buffer)
+: mTextureId(-1)
+{
+	mTextureResource = NULL;
+	mTextureData.width = buffer.mWidth;;
+	mTextureData.height= buffer.mHeight;
+	mTextureData.bytesPerPixel = buffer.mBytesPerPixel;
+
+	Initialize(mTextureData.width, mTextureData.height,
+			mTextureData.bytesPerPixel, buffer.mPixels);
+
+}
+
 Texture::Texture(const char *filename)
 : mTextureId(-1)
 {
@@ -131,13 +144,13 @@ const uint8_t *Texture::GetTextureFromVRAM() const
 	long imageSize = mTextureData.GetImageSizeInBytes();
 	uint8_t *data = new uint8_t[imageSize];
 
-	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);glErrorCheck();
 
 	if (mTextureResource)
 		glGetTexImage(GL_TEXTURE_2D, 0, mTextureResource->mTextureData.mTextureFormat, GL_UNSIGNED_BYTE, data);
 	else
 		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
+	glErrorCheck();
 	return data;
 #else
 	GCLAssert(false && "unsupported");

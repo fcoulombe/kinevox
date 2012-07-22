@@ -28,6 +28,7 @@
 namespace GCL
 {
 class TextureResource;
+class PixelBuffer;
 
 struct TextureData
 {
@@ -38,6 +39,7 @@ struct TextureData
 class Texture
 {
 public:
+	Texture(const PixelBuffer &buffer);
 	Texture(const char *filename);
 	Texture(size_t width, size_t height, size_t bypesPerPixel = 4);
 	~Texture();

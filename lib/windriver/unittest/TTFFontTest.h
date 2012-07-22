@@ -38,7 +38,16 @@ void Test()
 		TTFFont font(FONT_PATH"FreeMono.ttf", 12);
 		PixelBuffer buffer;
 		font.DrawText(buffer, "HelloWorld", 100, 100);
-		PixelBuffer::SaveTga("TestTTFFont.tga", buffer.mWidth, buffer.mHeight, buffer.mBytesPerPixel, buffer.mPixels);
+		PixelBuffer::SaveTga("TestTTFFont.tga",
+							buffer.mWidth, buffer.mHeight,
+							buffer.mBytesPerPixel,
+							buffer.mPixels);
+		buffer.PadToNextPOT();
+		PixelBuffer::SaveTga("TestTTFFont2.tga",
+									buffer.mWidth, buffer.mHeight,
+									buffer.mBytesPerPixel,
+									buffer.mPixels);
+
 	}
 	FontResourceManager::Terminate();
 }

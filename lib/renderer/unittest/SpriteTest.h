@@ -29,8 +29,6 @@
 using namespace GCL;
 namespace SpriteTest
 {
-
-
 void Test()
 {
 	TEST_START
@@ -38,46 +36,45 @@ void Test()
 
 	TextureResourceManager::Initialize();
 	{
-        WinDriver winDriver;
-        GLRenderer renderer;
+		WinDriver winDriver;
+		GLRenderer renderer;
 
-	Sprite obj;
-	Assert_Test(obj.GetWidth() == 64);
+		Sprite obj;
+		Assert_Test(obj.GetWidth() == 64);
 
-	Assert_Test(obj.GetHeight() == 64);
-	Assert_Test(obj.GetFrameCount() == 128);
+		Assert_Test(obj.GetHeight() == 64);
+		Assert_Test(obj.GetFrameCount() == 128);
 
-	static const WorldPoint3 kPositionTest(320.0, 240.0, 0.0);
-	obj.SetPosition(kPositionTest);
-	Assert_Test(obj.GetPosition() == kPositionTest);
+		static const WorldPoint3 kPositionTest(320.0, 240.0, 0.0);
+		obj.SetPosition(kPositionTest);
+		Assert_Test(obj.GetPosition() == kPositionTest);
 
-	const WorldPoint2 kScaleTest(0.5, 0.5);
-	obj.SetScale(kScaleTest);
-	Assert_Test(obj.GetScale() == kScaleTest);
+		const WorldPoint2 kScaleTest(0.5, 0.5);
+		obj.SetScale(kScaleTest);
+		Assert_Test(obj.GetScale() == kScaleTest);
 
 
+		Assert_Test(obj.IsPlaying() == false);
+		obj.Play();
 
-	Assert_Test(obj.IsPlaying() == false);
-	obj.Play();
+		Assert_Test(obj.IsPlaying() == true);
 
-	Assert_Test(obj.IsPlaying() == true);
+		for (size_t i=0;i<100; ++i)
+		{
+			obj.Update();
+			renderer.PreRender();
+			glPushMatrix();glErrorCheck();
+			obj.Render();
+			glPopMatrix();glErrorCheck();
+			renderer.PostRender();
+			winDriver.SwapBuffer();
+			Time::SleepMs(1);
+		}
 
-	for (size_t i=0;i<100; ++i)
-	{
-		obj.Update();
-		renderer.PreRender();
-		glPushMatrix();glErrorCheck();
-		obj.Render();
-		glPopMatrix();glErrorCheck();
-		renderer.PostRender();
-        winDriver.SwapBuffer();
-		Time::SleepMs(1);
-	}
+		obj.Pause();
 
-	obj.Pause();
-
-	Assert_Test(obj.IsPlaying() == false);
-	obj.Rewind();
+		Assert_Test(obj.IsPlaying() == false);
+		obj.Rewind();
 	}
 	TextureResourceManager::Terminate();
 

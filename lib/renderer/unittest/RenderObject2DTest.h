@@ -37,82 +37,79 @@ public:
 private:
 };
 
-    void Test();
+void Test();
 void Test()
 {
 	TEST_START
 	TextureResourceManager::Initialize();
 	{
-        WinDriver winDriver;
-	GLRenderer renderer;
-	MyRenderObject2D obj;
-	RenderObject2DList objList;
-	objList.push_back(&obj);
+		WinDriver winDriver;
+		GLRenderer renderer;
+		MyRenderObject2D obj;
+		RenderObject2DList objList;
+		objList.push_back(&obj);
 
-	std::stringstream s;
+		std::stringstream s;
 
-	//test setposition
-	{
-	const WorldPoint3 position(1.0,0.0, 0.0);
-	obj.SetPosition(position);
+		//test setposition
+		{
+			const WorldPoint3 position(1.0,0.0, 0.0);
+			obj.SetPosition(position);
 
-	s.str("");
-	s<<position << "\n==\n" << obj.GetPosition() << std::endl;
-	AssertMsg_Test(position == obj.GetPosition(), s.str().c_str());
-	}
+			s.str("");
+			s<<position << "\n==\n" << obj.GetPosition() << std::endl;
+			AssertMsg_Test(position == obj.GetPosition(), s.str().c_str());
+		}
 
-	//test Get dimensions
-	{
-		s.str("");
-		s<<obj.GetWidth()<< "\n==\n" << 64 << std::endl;
-		AssertMsg_Test(obj.GetWidth() == 64, s.str().c_str());
+		//test Get dimensions
+		{
+			s.str("");
+			s<<obj.GetWidth()<< "\n==\n" << 64 << std::endl;
+			AssertMsg_Test(obj.GetWidth() == 64, s.str().c_str());
 
-		s.str("");
-		s<<obj.GetHeight()<< "\n==\n" << 64 << std::endl;
-		AssertMsg_Test(obj.GetHeight() == 64, s.str().c_str());
+			s.str("");
+			s<<obj.GetHeight()<< "\n==\n" << 64 << std::endl;
+			AssertMsg_Test(obj.GetHeight() == 64, s.str().c_str());
 
-		s.str("");
-		s<<obj.GetScaledWidth()<< "\n==\n" << 64 << std::endl;
-		AssertMsg_Test(obj.GetScaledWidth() == 64, s.str().c_str());
+			s.str("");
+			s<<obj.GetScaledWidth()<< "\n==\n" << 64 << std::endl;
+			AssertMsg_Test(obj.GetScaledWidth() == 64, s.str().c_str());
 
-		s.str("");
-		s<<obj.GetScaledHeight()<< "\n==\n" << 64 << std::endl;
-		AssertMsg_Test(obj.GetScaledHeight() == 64, s.str().c_str());
-
-
-	}
+			s.str("");
+			s<<obj.GetScaledHeight()<< "\n==\n" << 64 << std::endl;
+			AssertMsg_Test(obj.GetScaledHeight() == 64, s.str().c_str());
+		}
 
 
-	//test setscale
-	{
-	const WorldPoint2 scale(2.0,2.0);
-	obj.SetScale(scale);
-	}
+		//test setscale
+		{
+			const WorldPoint2 scale(2.0,2.0);
+			obj.SetScale(scale);
+		}
 
-	//test visible
-	{
+		//test visible
+		{
+			obj.SetVisible(false);
+			Assert_Test(obj.IsVisible() == false);
+			obj.SetVisible(true);
+			Assert_Test(obj.IsVisible() == true);
+		}
 
-		obj.SetVisible(false);
-		Assert_Test(obj.IsVisible() == false);
-		obj.SetVisible(true);
-		Assert_Test(obj.IsVisible() == true);
-	}
+		//set sprite test
+		{
+			obj.SetSprite("DefaultSprite");
+		}
 
-	//set sprite test
-	{
-		obj.SetSprite("DefaultSprite");
-	}
-
-	//setname test
-	{
-		obj.SetName("ChangedTestName");
-	}
-	obj.Update();
-    const ViewPort &viewport = winDriver.GetViewPort();
-	renderer.PreRender();
-	renderer.Render(objList, viewport.GetWidth(), viewport.GetHeight());
-	renderer.PostRender();
-    winDriver.SwapBuffer();
+		//setname test
+		{
+			obj.SetName("ChangedTestName");
+		}
+		obj.Update();
+		const ViewPort &viewport = winDriver.GetViewPort();
+		renderer.PreRender();
+		renderer.Render(objList, viewport.GetWidth(), viewport.GetHeight());
+		renderer.PostRender();
+		winDriver.SwapBuffer();
 	}
 	TextureResourceManager::Terminate();
 }

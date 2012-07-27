@@ -34,7 +34,6 @@ void Test()
 {
 	TEST_START
 
-
 	GCLFile fp(MESH_PATH"ExampleMesh.mesh");
 	const MeshResource::MeshData *testData2 = MeshResource::LoadMesh(fp);
 	Assert_Test(testData2);

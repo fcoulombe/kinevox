@@ -46,7 +46,7 @@ namespace GCL
       delete smpInstance;
       smpInstance = NULL;
     }
-    static MeshResourceManager &Instance() {	GCLAssert(smpInstance != NULL);return *smpInstance;}
+    static MeshResourceManager &Instance() { GCLAssert(smpInstance != NULL);return *smpInstance;}
 
     Resource *Allocate(const char *filename);
     void Free(Resource * /*resource*/);

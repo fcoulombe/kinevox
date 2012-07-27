@@ -81,7 +81,7 @@ public:
 	size_t GetHeight() const { return mSprite->GetHeight(); }
 
 	size_t GetScaledWidth() const { return mSprite->GetWidth()*mSprite->GetScale().x; }
-	size_t GetScaledHeight() const { return mSprite->GetHeight()*mSprite->GetScale().x; }
+	size_t GetScaledHeight() const { return mSprite->GetHeight()*mSprite->GetScale().y; }
 protected:
 	Sprite *mSprite;
 	std::string mObjName;

@@ -37,6 +37,7 @@ void Test()
 	TEST_START
 
 	SoundResourceManager::Initialize();
+	{
 	ALSoundDevice device;
 
 	SoundResourceManager &soundResourceManager = SoundResourceManager::Instance();
@@ -45,6 +46,7 @@ void Test()
 	Assert_Test(wavResource);
 
 	soundResourceManager.ReleaseResource(wavResource);
+	}
 	SoundResourceManager::Terminate();
 
 }

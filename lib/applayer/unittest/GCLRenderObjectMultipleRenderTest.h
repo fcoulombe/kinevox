@@ -38,25 +38,25 @@ void Test()
 
 	GCLApplication::Initialize();
 	{
-	GCLRenderObject obj("TestObject");
-	Assert_Test(GCLApplication::IsRegistered(obj));
-	Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
+		GCLRenderObject obj("TestObject");
+		Assert_Test(GCLApplication::IsRegistered(obj));
+		Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
 
-	const WorldPoint3 position(0.0,0.0, -10.0);
-	obj.SetPosition(position);
-	Matrix44 positionTestMat(true); //identity
-	positionTestMat.SetPosition(position);
-	std::stringstream s;
-	s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;
-	AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
+		const WorldPoint3 position(0.0,0.0, -10.0);
+		obj.SetPosition(position);
+		Matrix44 positionTestMat(true); //identity
+		positionTestMat.SetPosition(position);
+		std::stringstream s;
+		s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;
+		AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
 
 
-	for (size_t i=0;i<100; ++i)
-    {
-        GCLApplication::Render();
-	GCLApplication::Update();
-	Time::SleepMs(1);
-	}
+		for (size_t i=0;i<100; ++i)
+		{
+			GCLApplication::Render();
+			GCLApplication::Update();
+			Time::SleepMs(1);
+		}
 	}
 	GCLApplication::Terminate();
 }

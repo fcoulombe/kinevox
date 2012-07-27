@@ -26,7 +26,6 @@
 #include <gcl/ResourceManagerConfig.h>
 #include "renderer/Texture.h"
 
-#include <fstream>
 
 using namespace GCL;
 

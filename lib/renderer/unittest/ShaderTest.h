@@ -46,22 +46,22 @@ private:
 	Material mMaterial;
 };
 static const   VertexPNT square[4] = {
-				{WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
-				{WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
-				{WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
-				{WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
-		};
+		{WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
+		{WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
+		{WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
+		{WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
+};
 const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
-    
-    void Test();
+
+void Test();
 void Test()
 {
 	TEST_START
-    #ifndef ENABLE_SHADERS
+#ifndef ENABLE_SHADERS
 	TextureResourceManager::Initialize();
 	{
-        WinDriver winDriver;
-        GLRenderer renderer;
+		WinDriver winDriver;
+		GLRenderer renderer;
 		Shader shader;
 		shader.Bind();
 		Assert_Test(shader.IsValid());
@@ -148,12 +148,12 @@ void Test()
 		renderer.PreRender();
 		renderer.Render(RenderObjectList());
 		renderer.PostRender();
-        winDriver.SwapBuffer();
+		winDriver.SwapBuffer();
 		Shader::ResetDefault();
 	}
 
 	{
-        WinDriver winDriver;
+		WinDriver winDriver;
 		GLRenderer renderer;
 		MyRenderObject obj;
 		const WorldPoint3 position(0.0,0.0, -10.0);
@@ -167,7 +167,7 @@ void Test()
 			renderer.PreRender();
 			renderer.Render(renderList);
 			renderer.PostRender();
-            winDriver.SwapBuffer();
+			winDriver.SwapBuffer();
 			Time::SleepMs(10);
 		}
 

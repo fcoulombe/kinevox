@@ -32,7 +32,29 @@
 
 using namespace GCL;
 
-#include <iostream>
+
+static const GLenum BytePerPixel[] =
+{
+		GL_LUMINANCE,
+		GL_LUMINANCE_ALPHA,
+		GL_RGB,
+		GL_RGBA
+};
+static const GLenum BytesPerPixel[] =
+{
+		GL_LUMINANCE,
+		GL_LUMINANCE_ALPHA,
+		GL_RGB,
+		GL_RGBA,
+};
+static const GLenum GLUInternalFormat[] =
+{
+		GL_LUMINANCE,
+		GL_LUMINANCE_ALPHA,
+		GL_RGB,
+		GL_RGBA
+};
+
 Texture::~Texture()
 {
 	glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
@@ -73,27 +95,7 @@ Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
 	mTextureResource = NULL;
 	Initialize(width, height, bytesPerPixel);
 }
-static const GLenum BytePerPixel[] =
-{
-		GL_LUMINANCE,
-		GL_LUMINANCE_ALPHA,
-		GL_RGB,
-		GL_RGBA
-};
-static const GLenum BytesPerPixel[] =
-{
-		GL_LUMINANCE,
-		GL_LUMINANCE_ALPHA,
-		GL_RGB,
-		GL_RGBA,
-};
-static const GLenum GLUInternalFormat[] =
-{
-		GL_LUMINANCE,
-		GL_LUMINANCE_ALPHA,
-		GL_RGB,
-		GL_RGBA
-};
+
 void Texture::Initialize(size_t width, size_t height, size_t bytesPerPixel, const uint8_t *data )
 {
 	glGenTextures(1, &mTextureId); glErrorCheck();
@@ -127,15 +129,12 @@ bool Texture::LoadTexture(const char *filename)
 	const Resource *tempResource = TextureResourceManager::Instance().LoadResource(filename);
 	mTextureResource = static_cast<const TextureResource*>(tempResource);
 
-
 	mTextureData.width = mTextureResource->mTextureData.mWidth;
 	mTextureData.height= mTextureResource->mTextureData.mHeight;
 	mTextureData.bytesPerPixel = mTextureResource->mTextureData.mBytePerPixel;
 
 	return mTextureResource != 0;
 }
-
-
 
 const uint8_t *Texture::GetTextureFromVRAM() const
 {

@@ -52,6 +52,5 @@ int main(int /*argc*/, char ** argv)
 		std::cerr << "[FAILED] not sure what happened" << std::endl;
 	}
 
-
 	return 0;
 }

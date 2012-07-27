@@ -21,41 +21,38 @@
  */
 
 #include "input/Input.h"
-#if 1
 
 #include <algorithm>
 #include <iostream>
 #include <sstream>
 
-
 #include <gcl/Assert.h>
 #include <gcl/Point2.h>
 #include <gcl/Rect.h>
 
-
 namespace GCL
 {
 const size_t KEYS_STATE_ARRAY_SIZE = 350;
-std::map<uint32_t, bool> Input::keys;
-bool Input::isLMousedown = false;
-size_t Input::mouseX=0;
-size_t Input::mouseY=0;
+std::map<uint32_t, bool> Input::smKeys;
+bool Input::smIsLMousedown = false;
+size_t Input::smMouseX=0;
+size_t Input::smMouseY=0;
 
 size_t Input::GetMouseX()
 {
-	return mouseX;
+	return smMouseX;
 }
 size_t Input::GetMouseY()
 {
-	return mouseY;
+	return smMouseY;
 }
 bool Input::IsLMouseDown()
 {
-	return isLMousedown;
+	return smIsLMousedown;
 }
 bool Input::IsKeyUp(uint32_t key)
 {
-	return keys[key];
+	return smKeys[key];
 }
 void Input::ProcessInput()
 {
@@ -67,46 +64,43 @@ void Input::ProcessInput()
 		switch (event.type)
 		{
 		case SDL_KEYDOWN:
-			keys[event.key.keysym.sym] = true;
+			smKeys[event.key.keysym.sym] = true;
 			break;
 		case SDL_KEYUP:
 			//printf("%d %s\n",event.key.keysym.sym, SDL_GetKeyName(event.key.keysym.sym));
-			keys[event.key.keysym.sym] = false;
+			smKeys[event.key.keysym.sym] = false;
 
 			break;
 		case SDL_MOUSEMOTION:
 			/*printf("Mouse moved by %d,%d to (%d,%d)\n",
 						event.motion.xrel, event.motion.yrel,
 						event.motion.x, event.motion.y);*/
-
-			mouseX = event.button.x;
-			mouseY = event.button.y;
+			smMouseX = event.button.x;
+			smMouseY = event.button.y;
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 			/*printf("Mouse button %d pressed at (%d,%d)\n",
 						event.button.button, event.button.x, event.button.y);*/
-			isLMousedown = true;
-
-			mouseX = event.button.x;
-			mouseY = event.button.y;
+			smIsLMousedown = true;
+			smMouseX = event.button.x;
+			smMouseY = event.button.y;
 			break;
 		case SDL_MOUSEBUTTONUP:
 			/*printf("Mouse button %d pressed at (%d,%d)\n",
 						event.button.button, event.button.x, event.button.y);*/
-			isLMousedown = false;
-			mouseX = event.button.x;
-			mouseY = event.button.y;
+			smIsLMousedown = false;
+			smMouseX = event.button.x;
+			smMouseY = event.button.y;
 
 			break;
 		case SDL_QUIT:
 			exit(0);
 		}
 	}
-	if (mouseX>640)
+	if (smMouseX>640)
 	{
-		mouseX -= 640;
+		smMouseX -= 640;
 	}
-
 }
 
 
@@ -156,10 +150,8 @@ const Rect<int> &Input::ProcessSelection()
 			hasSelection = true;
 			/*selection.width = selection.x - currentPos.x;
 			selection.height =selection.y -  currentPos.y;*/
-
 		}
 	}
 	return selection;
 }
 }
-#endif

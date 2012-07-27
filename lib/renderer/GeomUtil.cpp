@@ -27,7 +27,6 @@ using namespace GCL;
 
 void GeomUtil::MakeMeshSphere(std::vector<WorldPoint3>& dst, Real radius)
 {
-
 	const size_t resolution = 16;
 	const Real halfPI = PI * 0.5;
 	Real interp = 1.0 / (Real)resolution;

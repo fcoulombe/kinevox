@@ -42,7 +42,8 @@ public:
 	 const Material &GetMaterial() const { return mMaterial; }
 private:
 	Material mMaterial;
-	//friend class GCLApplication;
+
+	//default vertex data
 	static const size_t NUM_VERTICES = 24;
 	static const VertexPNT cube[NUM_VERTICES];
 	static const VertexData data;

@@ -23,7 +23,6 @@
 
 #include <gcl/UnitTest.h>
 #include <renderer/Texture.h>
-//#include <renderer/Shader.h>
 #include <renderer/Vertex.h>
 
 using namespace GCL;
@@ -49,7 +48,6 @@ public:
 private:
 	Material mMaterial;
 	static const VertexData data;
-
 };
 
 static const   VertexPNT square[4] = {

@@ -22,14 +22,13 @@
 
 #pragma once
 
-
 #include "renderer/Material.h"
 #include "renderer/MeshResource.h"
 #include "renderer/Vertex.h"
 
 namespace GCL
 {
-
+class Material;
 class Mesh
 {
 public:

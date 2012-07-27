@@ -27,13 +27,11 @@
 using namespace GCL;
 namespace VertexTest
 {
-    void Test();
+void Test();
 void Test()
 {
 	TEST_START
 
-	//#pragma clang diagnostic push
-	//#pragma clang diagnostic ignored "-Wunused-variable"
 	{
 		VertexP p;
 		std::stringstream s;
@@ -130,6 +128,5 @@ void Test()
 		AssertMsg_Test(pn.OffsetToNormal() == sizeof(WorldPoint3),s.str().c_str());
 
 	}
-	//#pragma clang diagnostic pop
 }
 }

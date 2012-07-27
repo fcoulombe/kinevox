@@ -23,8 +23,7 @@
 #pragma once
 
 #include <vector>
-
-#include "renderer/Material.h"
+#include <gcl/Point3.h>
 
 namespace GCL
 {

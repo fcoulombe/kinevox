@@ -28,8 +28,6 @@
 
 using namespace GCL;
 
-
-
 const char *PositionVShaderStr =
 		"uniform mat4 ProjectionMatrix;\n"
 		"uniform mat4 ModelViewMatrix;\n"

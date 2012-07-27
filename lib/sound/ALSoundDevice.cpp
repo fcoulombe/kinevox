@@ -49,5 +49,4 @@ const char *ALSoundDevice::GetDeviceSpecifier() const
 	const char *temp = alcGetString(mDevice, ALC_DEVICE_SPECIFIER );
 	alErrorCheck();
 	return temp;
-
 }

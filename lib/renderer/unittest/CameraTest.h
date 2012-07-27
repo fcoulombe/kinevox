@@ -70,15 +70,10 @@ void Test()
 	}
 #endif
 
-
-
 	renderer.SetCamera(camera);
 	ViewPort viewport;
 
 	camera.Update();
-
-
-
 
 	//std::cout << *(Matrix44*)&camera << std::endl;
 	camera.Update();

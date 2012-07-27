@@ -65,7 +65,6 @@ RenderObject2DList GCLApplication::mRenderObject2DList;
 }
 
 
-
 void GCLApplication::Update()
 {
 	Input::ProcessInput();

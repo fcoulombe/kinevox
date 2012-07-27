@@ -23,10 +23,8 @@
 #pragma once
 
 #include <gcl/Point4.h>
-#include <gcl/ResourceManagerConfig.h>
 namespace GCL
 {
-
 class Texture;
 class Shader;
 class Material
@@ -48,7 +46,6 @@ private:
 	WorldPoint4 mspecular;
 	WorldPoint4 mEmissive;
 	Real mShininess;
-
 };
 
 }

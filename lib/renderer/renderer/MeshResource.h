@@ -22,9 +22,8 @@
 
 #pragma once
 
-#include <3rdparty/OpenGL.h>
-#include <gcl/Point3.h>
 #include <gcl/Resource.h>
+#include <gcl/WorldUnit.h>
 
 namespace GCL
 {
@@ -33,7 +32,6 @@ class GCLFile;
 class MeshResource : public Resource
 {
 public:
-
 	MeshResource(const char *MeshName);
 	~MeshResource();
 

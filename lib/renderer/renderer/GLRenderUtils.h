@@ -30,7 +30,7 @@
 namespace GCL
 {
 
-inline void DrawCube(const WorldPoint3 &position, Real size)
+GCLINLINE void DrawCube(const WorldPoint3 &position, Real size)
 {
 	const Real halfSize = size/2;
 #if !defined(ES1) && !defined(ES2)
@@ -80,7 +80,7 @@ inline void DrawCube(const WorldPoint3 &position, Real size)
 
 }
 
-inline void WriteCube(WorldPoint3* cubeData, const WorldPoint3 &position, Real size)
+GCLINLINE void WriteCube(WorldPoint3* cubeData, const WorldPoint3 &position, Real size)
 {
 	const Real halfSize = size/2;
 
@@ -119,8 +119,5 @@ inline void WriteCube(WorldPoint3* cubeData, const WorldPoint3 &position, Real s
 	*cubeData = WorldPoint3(position.x+halfSize, position.y+halfSize, position.z-halfSize);
 	*cubeData = WorldPoint3(position.x+halfSize, position.y-halfSize, position.z-halfSize);
 	*cubeData = WorldPoint3(position.x+halfSize, position.y-halfSize, position.z+halfSize);
-
-
 }
-
 }

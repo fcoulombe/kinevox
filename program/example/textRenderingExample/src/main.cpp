@@ -24,6 +24,7 @@
 #include <applayer/GCLRenderObject2D.h>
 #include <gcl/Assert.h>
 #include <gcl/Exception.h>
+#include <gcl/ResourceManagerConfig.h>
 #include <gcl/Time.h>
 #include <input/Input.h>
 #include <renderer/Camera.h>

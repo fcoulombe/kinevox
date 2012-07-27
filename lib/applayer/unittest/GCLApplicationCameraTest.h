@@ -23,7 +23,7 @@
 #include <sstream>
 
 #include <applayer/GCLApplication.h>
-#include <applayer/GCLRenderObject.h>
+#include <renderer/Camera.h>
 
 #include <gcl/UnitTest.h>
 

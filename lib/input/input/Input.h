@@ -24,8 +24,8 @@
 #include <cstdlib>
 #include <stdint.h>
 #include <map>
-#include <SDL.h>
-
+//we put this in the header since people use SDL enum for keys and we don't want them to have to include sdl manually. include input and its all there by default
+#include <3rdparty/Sdl.h>
 #include <gcl/Rect.h>
 
 
@@ -40,12 +40,10 @@ public:
 	static bool IsLMouseDown();
 	static size_t GetMouseX();
 	static size_t GetMouseY();
-
-
 private:
-	static std::map<uint32_t, bool> keys;
-	static bool isLMousedown ;
-	static size_t mouseX;
-	static size_t mouseY;
+	static std::map<uint32_t, bool> smKeys;
+	static bool smIsLMousedown ;
+	static size_t smMouseX;
+	static size_t smMouseY;
 };
 }

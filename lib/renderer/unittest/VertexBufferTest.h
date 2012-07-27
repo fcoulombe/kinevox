@@ -27,11 +27,11 @@
 using namespace GCL;
 namespace VertexBufferTest
 {
-    void Test();
+void Test();
 void Test()
 {
 	TEST_START
-        WinDriver winDriver;
+	WinDriver winDriver;
 	GLRenderer renderer;
 
 	Shader shader;

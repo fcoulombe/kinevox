@@ -39,7 +39,6 @@ public:
 
 	void Update();
 
-
 	const Matrix44 &GetTransform() const { return mCameraMatrix; }
 	const Matrix44 &GetModelView() const { return mModelViewMatrix; }
 	const Matrix44 &GetProjection() const { return mProjectionMatrix; }

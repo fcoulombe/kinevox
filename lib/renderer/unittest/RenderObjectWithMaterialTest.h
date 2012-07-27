@@ -56,38 +56,35 @@ private:
 	Material mMaterial;
 };
 static const   VertexPNT square[4] = {
-			{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-			{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-			{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-			{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
+		{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
+		{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+		{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+		{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
 
 const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
-    void Test();
+void Test();
 void Test()
 {
 	TEST_START
 
 	TextureResourceManager::Initialize();
-
-
 	{
-        WinDriver winDriver;
-	GLRenderer renderer;
+		WinDriver winDriver;
+		GLRenderer renderer;
 
-	MyRenderObject obj;
-	RenderObjectList objList;
+		MyRenderObject obj;
+		RenderObjectList objList;
 
-	objList.push_back(&obj);
+		objList.push_back(&obj);
 
-	Material material("Default");
-	material.Bind();
+		Material material("Default");
+		material.Bind();
 
-	renderer.PreRender();
-	renderer.Render(objList);
-	renderer.PostRender();
-    winDriver.SwapBuffer();
+		renderer.PreRender();
+		renderer.Render(objList);
+		renderer.PostRender();
+		winDriver.SwapBuffer();
 	}
-
 	TextureResourceManager::Terminate();
 }
 }

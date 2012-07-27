@@ -31,7 +31,6 @@
 
 using namespace GCL;
 
-
 void TextureResource::LoadTga(std::istream& fp, TextureData &data)
 {
 	TGAHeader header ;

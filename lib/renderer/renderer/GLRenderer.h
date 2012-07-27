@@ -51,10 +51,6 @@ public:
 
 	void SetCamera(Camera &camera) { mCamera = &camera; }
 
-
-	uint32_t gl_depth_tex;
-	uint32_t gl_rgb_tex;
-
 	struct RenderState
 	{
 		void SetTextureEnabled(bool isEnabled);
@@ -97,5 +93,9 @@ private:
 				mGlewVersion;
 
 	GLExtensionList mExtensions;
+
+
+	uint32_t gl_depth_tex;
+	uint32_t gl_rgb_tex;
 };
 }

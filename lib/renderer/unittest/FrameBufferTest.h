@@ -101,7 +101,6 @@ void Test()
 	}
 
 	{
-
         WinDriver winDriver;
 		GLRenderer renderer;
 

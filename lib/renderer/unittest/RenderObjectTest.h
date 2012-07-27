@@ -49,96 +49,96 @@ private:
 };
 
 static const   VertexPNT square[4] = {
-				{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-				{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-				{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-				{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
+		{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
+		{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+		{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+		{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
 
 const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
-    
-    void Test();
+
+void Test();
 void Test()
 {
 	TEST_START
 	TextureResourceManager::Initialize();
 	{
-        WinDriver winDriver;
-	GLRenderer renderer;
-	MyRenderObject obj;
-	RenderObjectList objList;
-	objList.push_back(&obj);
+		WinDriver winDriver;
+		GLRenderer renderer;
+		MyRenderObject obj;
+		RenderObjectList objList;
+		objList.push_back(&obj);
 
-	std::stringstream s;
-	//test initial transform is identity
-	{
-	const Matrix44 &transform = obj.GetTransform();
-	s<<std::endl<<transform<<std::endl<<"=="<<std::endl<<Matrix44::IDENTITY;
-	AssertMsg_Test(transform == Matrix44::IDENTITY, s.str().c_str());
-	}
+		std::stringstream s;
+		//test initial transform is identity
+		{
+			const Matrix44 &transform = obj.GetTransform();
+			s<<std::endl<<transform<<std::endl<<"=="<<std::endl<<Matrix44::IDENTITY;
+			AssertMsg_Test(transform == Matrix44::IDENTITY, s.str().c_str());
+		}
 
-	//test settransform
-	{
-	obj.SetTransform(Matrix44::IDENTITY);
-	s.str("");
-	s<<std::endl<<obj.GetTransform()<<std::endl<<"=="<<std::endl<<Matrix44::IDENTITY;
-	AssertMsg_Test(obj.GetTransform() == Matrix44::IDENTITY, s.str().c_str());
-	}
-	//test setposition
-	{
-	const WorldPoint3 position(0.0,0.0, -10.0);
-	obj.SetPosition(position);
-	Matrix44 positionTestMat(Matrix44::IDENTITY);
-	positionTestMat.SetPosition(position);
-	s.str("");
-	s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;
-	AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
+		//test settransform
+		{
+			obj.SetTransform(Matrix44::IDENTITY);
+			s.str("");
+			s<<std::endl<<obj.GetTransform()<<std::endl<<"=="<<std::endl<<Matrix44::IDENTITY;
+			AssertMsg_Test(obj.GetTransform() == Matrix44::IDENTITY, s.str().c_str());
+		}
+		//test setposition
+		{
+			const WorldPoint3 position(0.0,0.0, -10.0);
+			obj.SetPosition(position);
+			Matrix44 positionTestMat(Matrix44::IDENTITY);
+			positionTestMat.SetPosition(position);
+			s.str("");
+			s<<positionTestMat << "\n==\n" << obj.GetTransform() << std::endl;
+			AssertMsg_Test(positionTestMat == obj.GetTransform(), s.str().c_str());
 
-	obj.SetTransform(Matrix44::IDENTITY);
-	}
+			obj.SetTransform(Matrix44::IDENTITY);
+		}
 
-	//test orientation
-	{
-	obj.SetOrientation(90.0,0.0,0.0);
-	Matrix44 rotationTestMat;
-	rotationTestMat.SetRotationX(90.0);
-	s.str("");
-	s<<rotationTestMat << "\n==\n" << obj.GetTransform() << std::endl;
-	AssertMsg_Test(rotationTestMat == obj.GetTransform(), s.str().c_str());
-	obj.SetTransform(Matrix44::IDENTITY);
-	}
+		//test orientation
+		{
+			obj.SetOrientation(90.0,0.0,0.0);
+			Matrix44 rotationTestMat;
+			rotationTestMat.SetRotationX(90.0);
+			s.str("");
+			s<<rotationTestMat << "\n==\n" << obj.GetTransform() << std::endl;
+			AssertMsg_Test(rotationTestMat == obj.GetTransform(), s.str().c_str());
+			obj.SetTransform(Matrix44::IDENTITY);
+		}
 
-	//test concat position and orientation
-	{
-	obj.SetOrientation(90.0,0.0,0.0);
-	obj.SetPosition(10.0,0.0,0.0);
-	Matrix44 concatTestMat;
-	concatTestMat.SetRotationX(90.0);
-	concatTestMat.SetPosition(WorldPoint3(10.0,0.0,0.0));
-	s.str("");
-	s<<concatTestMat << "\n==\n" << obj.GetTransform() << std::endl;
-	AssertMsg_Test(concatTestMat == obj.GetTransform(), s.str().c_str());
-	obj.SetTransform(Matrix44::IDENTITY);
-	}
-	//test concat2 position and orientation
-	{
+		//test concat position and orientation
+		{
+			obj.SetOrientation(90.0,0.0,0.0);
+			obj.SetPosition(10.0,0.0,0.0);
+			Matrix44 concatTestMat;
+			concatTestMat.SetRotationX(90.0);
+			concatTestMat.SetPosition(WorldPoint3(10.0,0.0,0.0));
+			s.str("");
+			s<<concatTestMat << "\n==\n" << obj.GetTransform() << std::endl;
+			AssertMsg_Test(concatTestMat == obj.GetTransform(), s.str().c_str());
+			obj.SetTransform(Matrix44::IDENTITY);
+		}
+		//test concat2 position and orientation
+		{
 
-	obj.SetPosition(10.0,0.0,0.0);
-	obj.SetOrientation(90.0,0.0,0.0);
+			obj.SetPosition(10.0,0.0,0.0);
+			obj.SetOrientation(90.0,0.0,0.0);
 
-	Matrix44 concatTestMat;
-	concatTestMat.SetRotationX(90.0);
-	concatTestMat.SetPosition(WorldPoint3(10.0,0.0,0.0));
-	s.str("");
-	s<<concatTestMat << "\n==\n" << obj.GetTransform() << std::endl;
-	AssertMsg_Test(concatTestMat == obj.GetTransform(), s.str().c_str());
-	obj.SetTransform(Matrix44::IDENTITY);
+			Matrix44 concatTestMat;
+			concatTestMat.SetRotationX(90.0);
+			concatTestMat.SetPosition(WorldPoint3(10.0,0.0,0.0));
+			s.str("");
+			s<<concatTestMat << "\n==\n" << obj.GetTransform() << std::endl;
+			AssertMsg_Test(concatTestMat == obj.GetTransform(), s.str().c_str());
+			obj.SetTransform(Matrix44::IDENTITY);
 
-	}
+		}
 
-	renderer.PreRender();
-	renderer.Render(objList);
-	renderer.PostRender();
-    winDriver.SwapBuffer();
+		renderer.PreRender();
+		renderer.Render(objList);
+		renderer.PostRender();
+		winDriver.SwapBuffer();
 	}
 	TextureResourceManager::Terminate();
 

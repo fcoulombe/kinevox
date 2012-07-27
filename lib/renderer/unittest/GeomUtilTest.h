@@ -55,12 +55,12 @@ static const   VertexPNT square[4] = {
 };
 const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
 
-    bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
+bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 {
 	return false;
 }
-    void Test();
+void Test();
 
 void Test()
 {
@@ -81,7 +81,7 @@ void Test()
 	}
 
 	{
-        WinDriver winDriver;
+		WinDriver winDriver;
 		GLRenderer renderer;
 
 		Camera myCamera;
@@ -107,7 +107,7 @@ void Test()
 			renderer.PreRender();
 			renderer.Render(renderObjectList);
 			renderer.PostRender();
-            winDriver.SwapBuffer();
+			winDriver.SwapBuffer();
 			FrameBuffer::ResetDefault();
 		}
 		catch (GCLException &e)

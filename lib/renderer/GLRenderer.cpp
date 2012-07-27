@@ -55,12 +55,7 @@ void GLRenderer::Init3DState()
 	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); glErrorCheck();
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
 #endif
-
-
 }
-
-
-
 
 GLRenderer::GLRenderer()
 {
@@ -71,7 +66,7 @@ GLRenderer::GLRenderer()
 	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
 	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
 #if !defined(ES1) && !defined(OS_WIN32)
-    const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);glErrorCheck();
+	const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);glErrorCheck();
 	mShadingLanguageVersion = std::string(ver);
 #endif
 	char delim = ' ';
@@ -92,7 +87,6 @@ GLRenderer::~GLRenderer()
 
 bool GLRenderer::Update()
 {
-
 	return true;
 }
 
@@ -101,11 +95,9 @@ void GLRenderer::PreRender()
 {
 	glClearColor(0.0, 0.0, 1.0, 0.0); glErrorCheck();
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); glErrorCheck();
-
 }
 void GLRenderer::PostRender()
 {
-
 }
 
 void GLRenderer::Render(const RenderObjectList &renderObjectList)
@@ -142,7 +134,6 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		glEnd ();
 		glPopMatrix();glErrorCheck();
 #else
-
 		const Material &tempMaterial = renderObjectList[i]->GetMaterial();
 		tempMaterial.Bind();
 
@@ -160,24 +151,23 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		}
 		break;
 		case ePOSITION|eNORMAL:
-	{
-		VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.mVertexCount);
-		buffer.Render();
-	}
-	break;
+		{
+			VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.mVertexCount);
+			buffer.Render();
+		}
+		break;
 		case ePOSITION|eTEXTURE_COORD:
-	{
-		VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.mVertexCount);
-		buffer.Render();
-	}
-	break;
+		{
+			VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.mVertexCount);
+			buffer.Render();
+		}
+		break;
 		case ePOSITION|eNORMAL|eTEXTURE_COORD:
-	{
-
-		VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.mVertexCount);
-		buffer.Render();
-	}
-	break;
+		{
+			VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.mVertexCount);
+			buffer.Render();
+		}
+		break;
 		}
 #endif
 	}
@@ -190,12 +180,12 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 
 }
 
-void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t width, size_t height)
+void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t viewportWidth, size_t viewportHeight)
 {
 #if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho (0, height, width, 0, -1.0f, 1.0f); glErrorCheck();
+	glOrtho (0, viewportHeight, viewportWidth, 0, -1.0f, 1.0f); glErrorCheck();
 #endif
 
 #if ENABLE_FIX_PIPELINE
@@ -221,10 +211,9 @@ void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t width
 		glEnd ();
 		glPopMatrix();glErrorCheck();
 #else
-	glPushMatrix();glErrorCheck();
-	renderObjectList[i]->Render();
-	glPopMatrix();glErrorCheck();
-
+		glPushMatrix();glErrorCheck();
+		renderObjectList[i]->Render();
+		glPopMatrix();glErrorCheck();
 #endif
 	}
 }

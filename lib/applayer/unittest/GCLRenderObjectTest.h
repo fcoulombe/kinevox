@@ -31,7 +31,6 @@ using namespace GCL;
 namespace GCLRenderObjectTest
 {
 
-
 void Test()
 {
 	TEST_START

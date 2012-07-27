@@ -27,7 +27,6 @@
 #include <gcl/Math.h>
 
 #include "renderer/GLRenderer.h"
-#include <3rdparty/OpenGL.h>
 
 using namespace GCL;
 
@@ -51,7 +50,6 @@ void Camera::Update()
 {
 	mProjectionMatrix.SetPerspective(mFov,mAspect,mNear,mFar);
 	mModelViewMatrix = Inverse(mCameraMatrix);
-	//glLoadMatrixd(reinterpret_cast<const GLreal*>(&mModelViewMatrix));glErrorCheck();
 }
 
 

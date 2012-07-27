@@ -33,7 +33,6 @@ namespace GCL
     eTEXTURE_COORD 	= 1<<2
   };
 
-
   struct VertexP
   {
     WorldPoint3 position;

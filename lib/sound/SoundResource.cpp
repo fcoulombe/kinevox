@@ -24,7 +24,6 @@
 
 
 #include <fstream>
-#include <iostream>
 #include <cstring>
 
 #include "gcl/Assert.h"

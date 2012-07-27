@@ -22,27 +22,26 @@
 
 #pragma once
 
-#include <3rdparty/OpenGL.h>
 namespace GCL
 {
-  struct TGAHeader
-  {
-    GLubyte Header[12];
-  };
+struct TGAHeader
+{
+	uint8_t Header[12];
+};
 
-  struct TGA
-  {
-    GLubyte header[6];
-    GLuint bytesPerPixel;
-    GLuint imageSize;
-    GLuint type;
-    GLuint height;
-    GLuint width;
-    GLuint bpp;
-  };
+struct TGA
+{
+	uint8_t header[6];
+	uint32_t bytesPerPixel;
+	uint32_t imageSize;
+	uint32_t type;
+	uint32_t height;
+	uint32_t width;
+	uint32_t bpp;
+};
 
-  // Uncompressed TGA Header
-  const GLubyte TGAUncompressedHeader[12] = {0,0, 2,0,0,0,0,0,0,0,0,0};
-  // Compressed TGA Header
-  const GLubyte TGACompressedHeader[12] = {0,0,10,0,0,0,0,0,0,0,0,0};
+// Uncompressed TGA Header
+const uint8_t TGAUncompressedHeader[12] = {0,0, 2,0,0,0,0,0,0,0,0,0};
+// Compressed TGA Header
+const uint8_t TGACompressedHeader[12] = {0,0,10,0,0,0,0,0,0,0,0,0};
 }

@@ -23,10 +23,8 @@
 #include <sstream>
 
 #include <gcl/UnitTest.h>
-#include <gcl/Exception.h>
 #include <applayer/GCLApplication.h>
 
-#include <renderer/GLRenderer.h>
 using namespace GCL;
 namespace GCLApplicationTest
 {

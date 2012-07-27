@@ -26,7 +26,6 @@
 #include <applayer/GCLRenderObject.h>
 
 #include <gcl/UnitTest.h>
-#include <renderer/Material.h>
 
 using namespace GCL;
 namespace GCLRenderObjectWithMaterialTest

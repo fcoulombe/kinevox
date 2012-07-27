@@ -34,7 +34,6 @@ class GCLRenderObject;
 class GCLRenderObject2D;
 class Input;
 class WinDriver;
-
 class GCLApplication
 {
 public:
@@ -63,7 +62,6 @@ private:
 
 	static void RegisterRenderObject2D(GCLRenderObject2D* newRenderObject);
 	static void ReleaseRenderObject2D(GCLRenderObject2D* renderObjectToDelete);
-
 
 	static GLRenderer *mRenderer;
     static WinDriver *mWinDriver;

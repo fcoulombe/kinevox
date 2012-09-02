@@ -18,52 +18,24 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */#include <iostream>
+ */
 
-#include "GCLApplicationTest.h"
-#include "GCLApplicationCameraTest.h"
-#include "GCLRenderObjectTest.h"
-#include "GCLRenderObjectWithMaterialTest.h"
-#include "GCLRenderObjectMultipleRenderTest.h"
-#include "GCLRenderTargetTest.h"
-#include "GCLRenderObject2DTest.h"
-#include "GCLText2DTest.h"
+#pragma once
 
-int main(int /*argc*/, char ** /*argv*/)
+#include <windriver/TTFFont.h>
+#include <renderer/Text2D.h>
+
+namespace GCL
 {
-	try
-	{
-		GCLApplicationTest::Test();
-		GCLApplicationCameraTest::Test();
-		GCLRenderObjectTest::Test();
-		GCLRenderTargetTest::Test();
-		GCLRenderObjectWithMaterialTest::Test();
-		GCLRenderObjectMultipleRenderTest::Test();
-		GCLRenderObject2DTest::Test();
-		GCLText2DTest::Test();
-	}
-	catch (GCLException &e)
-	{
-		std::stringstream str;
-		str << "[FAILED] \n";
-		std::string what = e.what();
-		str << what;
+class Texture;
+class GCLText2D : public Text2D
+{
+public:
+	GCLText2D(const char *text);
 
-		str << std::endl;
-		std::string finalOutput;
-		finalOutput = str.str();
-		std::cerr << finalOutput;
-		return -1;
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "[FAILED] " << e.what() << std::endl;
-		return -1;
-	}
-	catch (...)
-	{
-		std::cerr << "[FAILED] not sure what happened" << std::endl;
-	}
+	~GCLText2D();
+private:
+	TTFFont mFont;
+};
 
-	return 0;
 }

@@ -19,65 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#pragma once
+#include <sstream>
 
 #include <applayer/GCLApplication.h>
 #include <applayer/GCLText2D.h>
-#include <gcl/Assert.h>
-#include <gcl/Exception.h>
-#include <gcl/ResourceManagerConfig.h>
-#include <gcl/Time.h>
-#include <input/Input.h>
-#include <renderer/Camera.h>
 
-#include <renderer/GLRenderer.h>
-#include <windriver/WinDriver.h>
-
+#include <gcl/UnitTest.h>
 
 using namespace GCL;
-
-
-int main(int /*argc*/, char ** /*argv*/)
+namespace GCLText2DTest
 {
-	std::cout << "start program" << std::endl;
+void Test()
+{
+    TEST_START
 
-	try
-	{
-		GCLApplication::Initialize();
-		Camera myCamera;
-		GCLApplication::SetViewportCamera(myCamera);
-
-
-		bool isRunning = true;
-		Real x = 100.0;
-		Real y = 100.0;
-		GCLText2D test("Hello World");
-		test.SetPosition(WorldPoint3(x,y,0.0));
-		while (isRunning)
-		{
-			GCLApplication::Update();
-			if (Input::IsKeyUp(SDLK_ESCAPE))
-				isRunning=false;
-
-			if (Input::IsKeyUp(SDLK_UP))
-				y-=0.1;
-			if (Input::IsKeyUp(SDLK_DOWN))
-				y+=0.1;
-
-			if (Input::IsKeyUp(SDLK_LEFT))
-				x-=0.1;
-			if (Input::IsKeyUp(SDLK_RIGHT))
-				x+=0.1;
-			GCLApplication::Render();
-			Time::SleepMs(10);
-			std::cout.flush();
-		}
-	}
-	catch(GCLException &e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-
-	GCLApplication::Terminate();
-	return 0;
+    GCLApplication::Initialize();
+    {
+    GCLText2D obj("Test Text");
+    
+    GCLApplication::Update();
+    GCLApplication::Render();
+    }
+    GCLApplication::Terminate();
 }
-
+}

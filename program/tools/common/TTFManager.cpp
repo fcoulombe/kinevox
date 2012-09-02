@@ -54,7 +54,7 @@ void GenerateAsciiFont(const FT_Face &face)
 							"abcdefghijklmnopqrstuvwxyz{|}~";
 */
 	size_t numChars = 255;//strlen(alphabet);
-	size_t areaSquare = kFontSize * kFontSize*numChars;
+	/*size_t areaSquare = kFontSize * kFontSize*numChars;
 
 	std::cout << "area: " << areaSquare << std::endl;
 	std::cout << "32: " << 32*32 << std::endl;
@@ -62,7 +62,7 @@ void GenerateAsciiFont(const FT_Face &face)
 	std::cout << "128: " << 128*128 << std::endl;
 	std::cout << "256: " << 256*256 << std::endl;
 	std::cout << "512: " << 512*512 << std::endl;
-
+*/
 
 	const size_t imageSize = 256;
 	const size_t numChannel = 4;

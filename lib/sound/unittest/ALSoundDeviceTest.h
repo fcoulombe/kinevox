@@ -32,8 +32,8 @@ namespace ALSoundDeviceTest
 void Test()
 {
 	TEST_START
-
+ 
 	ALSoundDevice device;
-	std::cout << device.GetDeviceSpecifier() << std::endl;
+	std::cout << "Sound Device: " << device.GetDeviceSpecifier() << std::endl;
 }
 }

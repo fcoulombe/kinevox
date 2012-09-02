@@ -19,65 +19,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#pragma once
 
-#include <applayer/GCLApplication.h>
-#include <applayer/GCLText2D.h>
-#include <gcl/Assert.h>
-#include <gcl/Exception.h>
-#include <gcl/ResourceManagerConfig.h>
-#include <gcl/Time.h>
-#include <input/Input.h>
-#include <renderer/Camera.h>
+#include <cstdlib>
+#include <gcl/Point3.h>
+#include "renderer/Texture.h"
 
-#include <renderer/GLRenderer.h>
-#include <windriver/WinDriver.h>
-
-
-using namespace GCL;
-
-
-int main(int /*argc*/, char ** /*argv*/)
+namespace GCL
 {
-	std::cout << "start program" << std::endl;
-
-	try
+class Text2D
+{
+public:
+	Text2D()
+	: mIsVisible(true)
 	{
-		GCLApplication::Initialize();
-		Camera myCamera;
-		GCLApplication::SetViewportCamera(myCamera);
-
-
-		bool isRunning = true;
-		Real x = 100.0;
-		Real y = 100.0;
-		GCLText2D test("Hello World");
-		test.SetPosition(WorldPoint3(x,y,0.0));
-		while (isRunning)
-		{
-			GCLApplication::Update();
-			if (Input::IsKeyUp(SDLK_ESCAPE))
-				isRunning=false;
-
-			if (Input::IsKeyUp(SDLK_UP))
-				y-=0.1;
-			if (Input::IsKeyUp(SDLK_DOWN))
-				y+=0.1;
-
-			if (Input::IsKeyUp(SDLK_LEFT))
-				x-=0.1;
-			if (Input::IsKeyUp(SDLK_RIGHT))
-				x+=0.1;
-			GCLApplication::Render();
-			Time::SleepMs(10);
-			std::cout.flush();
-		}
+		mTexture = NULL;
 	}
-	catch(GCLException &e)
+	virtual ~Text2D()
 	{
-		std::cerr << e.what() << std::endl;
 	}
 
-	GCLApplication::Terminate();
-	return 0;
+	void Update()
+	{
+	}
+
+	void Render();
+
+	void SetVisible(bool isVisible = true) { mIsVisible = isVisible; }
+	bool IsVisible() const { return mIsVisible; }
+
+	size_t GetWidth() const { return mTexture->GetWidth(); }
+	size_t GetHeight() const { return mTexture->GetHeight(); }
+
+	void SetPosition(const WorldPoint3 &position)  	{mPosition = position;	}
+	const WorldPoint3 &GetPosition() const { return mPosition; }
+
+	void SetScale(const WorldPoint2 &scale) { mScale = scale; }
+	const WorldPoint2 &GetScale() const { return mScale; }
+
+protected:
+	Texture *mTexture;
+	WorldPoint3 mPosition;
+	WorldPoint2 mScale;
+	bool mIsVisible;
+};
 }
-

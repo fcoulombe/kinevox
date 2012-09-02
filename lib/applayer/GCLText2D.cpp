@@ -20,64 +20,28 @@
  * THE SOFTWARE.
  */
 
-#include <applayer/GCLApplication.h>
-#include <applayer/GCLText2D.h>
-#include <gcl/Assert.h>
-#include <gcl/Exception.h>
+#include "applayer/GCLText2D.h"
+#include "applayer/GCLApplication.h"
+
+#include <gcl/PixelBuffer.h>
 #include <gcl/ResourceManagerConfig.h>
-#include <gcl/Time.h>
-#include <input/Input.h>
-#include <renderer/Camera.h>
 
-#include <renderer/GLRenderer.h>
-#include <windriver/WinDriver.h>
-
+#include <renderer/Texture.h>
 
 using namespace GCL;
 
-
-int main(int /*argc*/, char ** /*argv*/)
+GCLText2D::GCLText2D(const char *text)
+:mFont(FONT_PATH"FreeMono.ttf", 12)
 {
-	std::cout << "start program" << std::endl;
 
-	try
-	{
-		GCLApplication::Initialize();
-		Camera myCamera;
-		GCLApplication::SetViewportCamera(myCamera);
+	PixelBuffer buffer;
+	mFont.DrawText(buffer, text, 100, 100);
+	mTexture = new Texture(buffer);
 
-
-		bool isRunning = true;
-		Real x = 100.0;
-		Real y = 100.0;
-		GCLText2D test("Hello World");
-		test.SetPosition(WorldPoint3(x,y,0.0));
-		while (isRunning)
-		{
-			GCLApplication::Update();
-			if (Input::IsKeyUp(SDLK_ESCAPE))
-				isRunning=false;
-
-			if (Input::IsKeyUp(SDLK_UP))
-				y-=0.1;
-			if (Input::IsKeyUp(SDLK_DOWN))
-				y+=0.1;
-
-			if (Input::IsKeyUp(SDLK_LEFT))
-				x-=0.1;
-			if (Input::IsKeyUp(SDLK_RIGHT))
-				x+=0.1;
-			GCLApplication::Render();
-			Time::SleepMs(10);
-			std::cout.flush();
-		}
-	}
-	catch(GCLException &e)
-	{
-		std::cerr << e.what() << std::endl;
-	}
-
-	GCLApplication::Terminate();
-	return 0;
+	GCLApplication::RegisterText2D(this);
 }
 
+GCLText2D::~GCLText2D()
+{
+	GCLApplication::ReleaseText2D(this);
+}

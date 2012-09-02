@@ -32,6 +32,8 @@ class Camera;
 class GLRenderer;
 class GCLRenderObject;
 class GCLRenderObject2D;
+class GCLText2D;
+typedef std::vector<GCLText2D*> Text2DList;
 class Input;
 class WinDriver;
 class GCLApplication
@@ -57,17 +59,22 @@ private:
 
 	friend class GCLRenderObject;
 	friend class GCLRenderObject2D;
+	friend class GCLText2D;
 	static void RegisterRenderObject(GCLRenderObject* newRenderObject);
 	static void ReleaseRenderObject(GCLRenderObject* renderObjectToDelete);
 
 	static void RegisterRenderObject2D(GCLRenderObject2D* newRenderObject);
 	static void ReleaseRenderObject2D(GCLRenderObject2D* renderObjectToDelete);
 
+	static void RegisterText2D(GCLText2D* newRenderText2d);
+	static void ReleaseText2D(GCLText2D* renderText2DToDelete);
+
 	static GLRenderer *mRenderer;
     static WinDriver *mWinDriver;
 
 	static RenderObjectList mRenderObjectList;
 	static RenderObject2DList mRenderObject2DList;
+	static Text2DList mText2DList;
 };
 
 }

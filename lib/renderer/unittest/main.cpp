@@ -42,6 +42,7 @@
 #include "TextureResourceTest.h"
 #include "ShaderTest.h"
 #include "SpriteTest.h"
+#include "Text2DTest.h"
 #include "TextureTest.h"
 #include "TextureAndShaderTest.h"
 #include "TgaLoadingTest.h"
@@ -74,6 +75,7 @@ int main(int /*argc*/, char **argv)
       MaterialTest::Test();
       SpriteTest::Test();
       RenderObject2DTest::Test();
+      Text2DTest::Test();
 
       RenderObjectTest::Test();
       RenderObjectWithMaterialTest::Test();
@@ -85,6 +87,7 @@ int main(int /*argc*/, char **argv)
       MeshLoadingTest::Test();
       MeshResourceTest::Test();
       MeshTest::Test();
+
   }
   catch (GCLException & e)
   {

@@ -38,15 +38,12 @@ int main(int /*argc*/, char ** /*argv*/)
 
 	try
 	{
-
 		GCLApplication::Initialize();
 		Camera myCamera;
 		GCLApplication::SetViewportCamera(myCamera);
 
-
-		GCLRenderObject renderObject("Kiinevox");
+		GCLRenderObject renderObject("Kinevox");
 		renderObject.SetPosition(0,0,-10.0);
-
 
 		bool isRunning = true;
 
@@ -84,9 +81,6 @@ int main(int /*argc*/, char ** /*argv*/)
 				}
 			}
 
-
-
-
 			GCLApplication::Render();
 			Time::SleepMs(100);
 			std::cout.flush();
@@ -97,9 +91,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		std::cerr << e.what() << std::endl;
 	}
 
-
 	GCLApplication::Terminate();
-
 	return 0;
 }
 

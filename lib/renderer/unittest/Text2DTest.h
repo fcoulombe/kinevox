@@ -61,11 +61,11 @@ void Test()
 
 		TestText2D obj("HelloWorld!");
 		s.str("");
-		s<< obj.GetWidth()<<" == 79"<<std::endl;
-		AssertMsg_Test(obj.GetWidth() == 79, s.str().c_str());
+		s<< obj.GetWidth()<<" == 118"<<std::endl;
+		AssertMsg_Test(obj.GetWidth() == 118, s.str().c_str());
 		s.str("");
-		s<< obj.GetHeight()<<" == 13"<<std::endl;
-		AssertMsg_Test(obj.GetHeight() == 13, s.str().c_str());
+		s<< obj.GetHeight()<<" == 19"<<std::endl;
+		AssertMsg_Test(obj.GetHeight() == 19, s.str().c_str());
 
 		static const WorldPoint3 kPositionTest(320.0, 240.0, 0.0);
 		obj.SetPosition(kPositionTest);

@@ -31,7 +31,7 @@
 using namespace GCL;
 
 GCLText2D::GCLText2D(const char *text)
-:mFont(FONT_PATH"FreeMono.ttf", 12)
+:mFont(FONT_PATH"FreeMono.ttf", 18)
 {
 
 	PixelBuffer buffer;

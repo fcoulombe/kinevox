@@ -37,7 +37,7 @@ FontResource::FontResource( const char *fontName )
 	msg += path.c_str();
 	msg += "\n";
 
-	mFont = TTF_OpenFont(path.c_str(), 12);
+	mFont = TTF_OpenFont(path.c_str(), 18);
 
 	GCLAssertMsg(mFont,msg.c_str());
 

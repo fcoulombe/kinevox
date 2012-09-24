@@ -48,8 +48,8 @@ public:
 	void SetVisible(bool isVisible = true) { mIsVisible = isVisible; }
 	bool IsVisible() const { return mIsVisible; }
 
-	size_t GetWidth() const { return mTexture->GetWidth(); }
-	size_t GetHeight() const { return mTexture->GetHeight(); }
+	size_t GetWidth() const { GCLAssert(mTexture);return mTexture->GetWidth(); }
+	size_t GetHeight() const { GCLAssert(mTexture);return mTexture->GetHeight(); }
 
 	void SetPosition(const WorldPoint3 &position)  	{mPosition = position;	}
 	const WorldPoint3 &GetPosition() const { return mPosition; }

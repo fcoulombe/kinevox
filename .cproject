@@ -140,21 +140,23 @@
 		<buildTargets>
 			<target name="@build_all @run_all --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
+				<buildArguments/>
 				<buildTarget>@build_all @run_all --verbose</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>false</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
 			</target>
-			<target name="renderer_test_run" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+			<target name="applayer_test_run" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
 				<buildArguments/>
-				<buildTarget>renderer_test_run</buildTarget>
+				<buildTarget>applayer_test_run</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
 			</target>
 			<target name="@Sudoku --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
+				<buildArguments/>
 				<buildTarget>@Sudoku --verbose</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>

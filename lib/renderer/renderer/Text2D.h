@@ -31,7 +31,8 @@ class Text2D
 {
 public:
 	Text2D()
-	: mIsVisible(true)
+	: mScale(1.0,1.0),
+	  mIsVisible(true)
 	{
 		mTexture = NULL;
 	}

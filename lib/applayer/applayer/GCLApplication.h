@@ -32,8 +32,8 @@ class Camera;
 class GLRenderer;
 class GCLRenderObject;
 class GCLRenderObject2D;
+class Text2D;
 class GCLText2D;
-typedef std::vector<GCLText2D*> Text2DList;
 class Input;
 class WinDriver;
 class GCLApplication

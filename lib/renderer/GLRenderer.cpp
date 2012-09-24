@@ -33,6 +33,7 @@
 #include "renderer/Material.h"
 #include "renderer/RenderObject.h"
 #include "renderer/RenderObject2D.h"
+#include "renderer/Text2D.h"
 #include "renderer/Shader.h"
 #include "renderer/VertexBuffer.h"
 
@@ -218,6 +219,43 @@ void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t viewp
 	}
 }
 
+void GLRenderer::Render(const Text2DList &renderObjectList, size_t viewportWidth, size_t viewportHeight)
+{
+#if ENABLE_FIX_PIPELINE
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho (0, viewportHeight, viewportWidth, 0, -1.0f, 1.0f); glErrorCheck();
+#endif
+
+#if ENABLE_FIX_PIPELINE
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+#endif
+
+	for (size_t i=0;  i<renderObjectList.size(); ++i)
+	{
+#if 0
+		glPushMatrix();glErrorCheck();
+		glTranslatef(0.0,0.0,0.0);
+
+		glBegin (GL_TRIANGLE_STRIP);
+		glTexCoord2f (0.0, 0.0);
+		glVertex3f (-5, -5, 0.0);
+		glTexCoord2f (1.0, 0.0);
+		glVertex3f (5, -5, 0.0);
+		glTexCoord2f (0.0, 1.0);
+		glVertex3f (-5, 5, 0.0);
+		glTexCoord2f (1.0, 1.0);
+		glVertex3f (5, 5, 0.0);
+		glEnd ();
+		glPopMatrix();glErrorCheck();
+#else
+		glPushMatrix();glErrorCheck();
+		renderObjectList[i]->Render();
+		glPopMatrix();glErrorCheck();
+#endif
+	}
+}
 
 static bool isRenderingExtra = false;
 void GLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth)

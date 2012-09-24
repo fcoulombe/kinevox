@@ -29,8 +29,10 @@ namespace GCL
 {
   class RenderObject;
   class RenderObject2D;
+  class Text2D;
   typedef std::vector<const RenderObject*> RenderObjectList;
   typedef std::vector<RenderObject2D*> RenderObject2DList;
+  typedef std::vector<Text2D*> Text2DList;
   class Renderer
   {
   public:
@@ -38,6 +40,7 @@ namespace GCL
     virtual bool Update() =0;
     virtual void Render(const RenderObjectList &renderObjectList) =0;
     virtual void Render(const RenderObject2DList &renderObjectList, size_t width, size_t height) =0;
+    virtual void Render(const Text2DList &text2DList, size_t width, size_t height) =0;
     virtual void Render(uint8_t *rgb_front, uint8_t *depth_front) =0;
   protected:
   };

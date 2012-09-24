@@ -46,6 +46,7 @@ public:
 	void PostRender();
 	virtual void Render(const RenderObjectList &renderObjectList);
 	virtual void Render(const RenderObject2DList &spriteList, size_t width, size_t height);
+	virtual void Render(const Text2DList &text2DList, size_t width, size_t height);
 	void Render(uint8_t *rgb_front, uint8_t *depth_front);
 	void RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth);
 

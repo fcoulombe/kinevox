@@ -42,11 +42,8 @@ int main(int /*argc*/, char ** /*argv*/)
 		Camera myCamera;
 		GCLApplication::SetViewportCamera(myCamera);
 
-
 		GCLRenderObject renderObject;
 		renderObject.SetPosition(0,0,-10.0);
-
-
 
 		bool isRunning = true;
 		Real x = 0.0;
@@ -102,7 +99,6 @@ int main(int /*argc*/, char ** /*argv*/)
 	{
 		std::cerr << e.what() << std::endl;
 	}
-
 
 	GCLApplication::Terminate();
 

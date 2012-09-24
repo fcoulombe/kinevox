@@ -38,10 +38,12 @@ TTFFont::TTFFont(const char *fontName, size_t /*point*/)
 	mFontResource = static_cast<const FontResource*>(tempResource);
 
 }
+
 TTFFont::~TTFFont()
 {
 	FontResourceManager::Instance().ReleaseResource(mFontResource);
 }
+
 void TTFFont::DrawText(PixelBuffer &buffer, const char * text, size_t /*x*/, size_t /*y*/)
 {
 	SDL_Surface* fontSurface;
@@ -62,7 +64,6 @@ void TTFFont::DrawText(PixelBuffer &buffer, const char * text, size_t /*x*/, siz
 		uint8_t* ptr = (uint8_t*)(fontSurface->pixels);
 		if (ptr[i])
 			*(SDL_Color*)(&(buffer.mPixels[i*3])) = fColor;
-
 	}
 	buffer.mHeight = fontSurface->h;
 	buffer.mWidth = fontSurface->w;

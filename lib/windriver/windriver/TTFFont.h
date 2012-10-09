@@ -22,6 +22,7 @@
 
 #pragma once
 #include <cstdlib>
+#include <cstring>
 
 namespace GCL
 {

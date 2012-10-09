@@ -33,8 +33,7 @@ const TextureResource TextureResource::EmptyTexture;
 
 void TextureResource::Unload(TextureData &data)
 {
-	if (data.imageData)
-		delete [] data.imageData;
+	PixelBuffer::Unload(data.imageData);
 }
 
 
@@ -55,8 +54,8 @@ TextureResource::TextureResource( const char *textureName )
 		std::fstream fp(path.c_str(), std::fstream::binary|std::fstream::in);
 		GCLAssertMsg(fp.is_open() && fp.good(), msg.c_str());
 
-		LoadTga(fp, data);
-		GCLAssert(data.imageData);
+		PixelBuffer::LoadTga(fp, data.imageData);
+		GCLAssert(data.imageData.mPixels);
 
 		fp.close();
 	}
@@ -66,8 +65,8 @@ TextureResource::TextureResource( const char *textureName )
 		FILE *fp = fopen(path.c_str(), "rb");
 		GCLAssertMsg(fp, path.c_str());
 
-		LoadPng(fp, data);
-		GCLAssert(data.imageData);
+		PixelBuffer::LoadPng(fp, data.imageData);
+		GCLAssert(data.imageData.mPixels);
 		fclose(fp);
 #else
 		GCLAssertMsg(false, "cant load png on iphone yet" );
@@ -89,7 +88,6 @@ TextureResource::TextureResource( const char *textureName )
 TextureResource::~TextureResource()
 {
 	Unload(mTextureData);
-
 }
 
 

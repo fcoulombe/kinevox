@@ -29,6 +29,7 @@ namespace GCL
 {
 class TextureResource;
 class PixelBuffer;
+class PixelBufferHAL;
 
 struct TextureData
 {
@@ -50,6 +51,7 @@ public:
 		//std::cout << "Binding Texture: " <<mTextureId << std::endl;
 		GCLAssert(IsValid());
 		glBindTexture(GL_TEXTURE_2D, mTextureId);  glErrorCheck();
+		//mPBO->Bind();
 	}
 
 	bool IsValid() const { return (int)mTextureId!=-1; }
@@ -59,10 +61,11 @@ public:
 	size_t GetWidth() const { return mTextureData.width; }
 	size_t GetHeight() const { return mTextureData.height; }
 
+
 	static void ResetDefault() { GCLAssert(false); }
 
 private:
-	void Initialize(size_t width, size_t height, size_t bypesPerPixel, const uint8_t *imageData = NULL );
+	void Initialize(const PixelBuffer &imageData);
 	const uint8_t *GetTextureFromVRAM() const;
 
 
@@ -72,6 +75,7 @@ private:
 	GLuint mTextureId;
 	TextureData mTextureData;
 
+	PixelBufferHAL *mPBO;
 	const TextureResource *mTextureResource;
 };
 

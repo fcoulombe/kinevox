@@ -22,42 +22,52 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
-#include <renderer/TextureResource.h>
-#include <renderer/TextureResourceManager.h>
+#include <renderer/PixelBufferHAL.h>
 
 using namespace GCL;
-
-namespace TextureResourceTest
+namespace PixelBufferHALTest
 {
 void Test();
 void Test()
 {
 	TEST_START
+	WinDriver winDriver;
+	GLRenderer renderer;
 
-	TextureResourceManager::Initialize();
+	Shader shader;
+	shader.Bind();
 
 	{
-		TextureResourceManager &textureResourceManager = TextureResourceManager::Instance();
-
-#ifndef OS_IPHONE
-		const TextureResource *pngResource;
-		pngResource = static_cast<const TextureResource *>(textureResourceManager.LoadResource(TEXTURE_PATH"mushroompng.png"));
-		Assert_Test(pngResource);
-#endif
-		const TextureResource *tgaResource;
-		tgaResource = static_cast<const TextureResource *>(textureResourceManager.LoadResource(TEXTURE_PATH"mushroomtga.tga"));
-		Assert_Test(tgaResource);
-
-		//test resource sharing
-		const TextureResource *tgaResource2;
-		tgaResource2 = static_cast<const TextureResource *>(textureResourceManager.LoadResource(TEXTURE_PATH"mushroomtga.tga"));
-		Assert_Test(tgaResource == tgaResource2);
-
-
-		textureResourceManager.ReleaseResource(tgaResource);
-		textureResourceManager.ReleaseResource(tgaResource2);
-		textureResourceManager.ReleaseResource(pngResource);
+	PixelBufferHAL buffer;
+	buffer.IsValid();
+	buffer.Bind();
 	}
-	TextureResourceManager::Terminate();
+	{
+		static const size_t BUFFER_SIZE = 64*64;
+		PixelRGB buffer[BUFFER_SIZE];
+		for (size_t i=0; i<BUFFER_SIZE; ++i)
+		{
+			buffer[i].mColor.x = i;
+			buffer[i].mColor.y =0;
+			buffer[i].mColor.z =0;
+		}
+		PixelBufferHAL pb(buffer, 64, 64);
+		Assert_Test(pb.IsValid());
+		pb.Bind();
+		pb.PushData();
+		pb.UnBind();
+	}
+	{
+		const char *fullFileName = TEXTURE_PATH"mushroomtga.tga";
+		std::fstream fp(fullFileName, std::fstream::binary|std::fstream::in);
+		AssertMsg_Test( fp.good(), fullFileName);
+
+		PixelBufferHAL pb;
+		PixelBuffer::LoadTga(fp, pb);
+		pb.Bind();
+		pb.PushData();
+		pb.PullData();
+		PixelBuffer::SaveTga("PBOTest.tga", pb.mWidth, pb.mHeight, pb.mBytesPerPixel, pb.mPixels);
+	}
 }
 }

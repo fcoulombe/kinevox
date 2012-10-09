@@ -23,12 +23,48 @@
 							<builder buildPath="/home/franky/src/kinevox" command="scons" id="org.eclipse.cdt.build.core.settings.default.builder.72911540" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.libs.1548131389" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.992593794" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.371650680" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/lib/gcc/i486-linux-gnu/"/>
+									<listOptionValue builtIn="false" value="&quot;../ /usr/include/c++/4.6/&quot;"/>
+									<listOptionValue builtIn="false" value="/usr/include"/>
+									<listOptionValue builtIn="false" value="/usr/include/linux"/>
+									<listOptionValue builtIn="false" value="/usr/include/c++/4.6/bits/"/>
+									<listOptionValue builtIn="false" value="/usr/include/c++/4.6/"/>
+									<listOptionValue builtIn="false" value="/usr/include/GL"/>
+								</option>
+								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.47640448" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="OS_LINUX=1"/>
+								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1298091932" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.820120397" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.916705300" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/lib/gcc/i486-linux-gnu/"/>
+									<listOptionValue builtIn="false" value="/usr/include"/>
+									<listOptionValue builtIn="false" value="/usr/include/c++/4.6.3"/>
+									<listOptionValue builtIn="false" value="/usr/include/linux"/>
+									<listOptionValue builtIn="false" value="/usr/include/c++/4.6/bits/"/>
+									<listOptionValue builtIn="false" value="/usr/include/c++/4.6/"/>
+									<listOptionValue builtIn="false" value="/usr/include/GL"/>
+								</option>
+								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.1433917254" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="OS_LINUX=1"/>
+								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1265708581" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
 							<tool id="org.eclipse.cdt.build.core.settings.holder.141308872" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.933150741" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="/usr/lib/gcc/i486-linux-gnu/"/>
+									<listOptionValue builtIn="false" value="&quot;../ /usr/include/c++/4.6/&quot;"/>
+									<listOptionValue builtIn="false" value="/usr/include"/>
+									<listOptionValue builtIn="false" value="/usr/include/linux"/>
+									<listOptionValue builtIn="false" value="/usr/include/c++/4.6/bits/"/>
+									<listOptionValue builtIn="false" value="/usr/include/c++/4.6/"/>
+									<listOptionValue builtIn="false" value="/usr/include/GL"/>
+								</option>
+								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.667833034" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="OS_LINUX=1"/>
+								</option>
 								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1102600576" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
 							</tool>
 						</toolChain>
@@ -146,18 +182,24 @@
 				<useDefaultCommand>false</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
 			</target>
-			<target name="applayer_test_run" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+			<target name="renderer_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
-				<buildArguments/>
-				<buildTarget>applayer_test_run</buildTarget>
+				<buildTarget>renderer_test_run --verbose</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>
 			</target>
-			<target name="@Sudoku --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+			<target name="@renderer --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>scons</buildCommand>
 				<buildArguments/>
-				<buildTarget>@Sudoku --verbose</buildTarget>
+				<buildTarget>@renderer --verbose</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>false</runAllBuilders>
+			</target>
+			<target name="gcl_test_run --verbose" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>scons</buildCommand>
+				<buildTarget>gcl_test_run --verbose</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>false</runAllBuilders>

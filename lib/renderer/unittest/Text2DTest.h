@@ -43,6 +43,7 @@ public:
 		PixelBuffer buffer;
 		mFont.DrawText(buffer, text, 100, 100);
 		mTexture = new Texture(buffer);
+		mTexture->Save("Text2DTest.tga");
 	}
 
 private:

@@ -38,7 +38,8 @@ void Text2D::Render()
 	const Texture &texture = *mTexture;
 	texture.Bind();
 	glBegin (GL_TRIANGLE_STRIP);
-#if 0
+#if 1
+//std::cout << mPosition << std::endl;
 
 	size_t width = texture.GetWidth();
 	size_t height = texture.GetHeight();
@@ -47,6 +48,7 @@ void Text2D::Render()
 	Real halfWidth = (widthRatio/2.0)*mScale.x;
 	Real halfHeight = (heightRatio/2.0)*mScale.y;
 
+	//std::cout << bottomTextureCoord << std::endl << topTextureCoord << std::endl;
 	glTexCoord2f (bottomTextureCoord.x, topTextureCoord.y);
 	glVertex3f (halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
 	glTexCoord2f (topTextureCoord.x, topTextureCoord.y);
@@ -57,13 +59,13 @@ void Text2D::Render()
 	glVertex3f (-halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
 #else
 	glTexCoord2f (0.0, 0.0);
-	glVertex3f (-1, -1, 0.0);
+	glVertex3f (-100, -100, 0.0);
 	glTexCoord2f (1.0, 0.0);
-	glVertex3f (1, -1, 0.0);
+	glVertex3f (100, -100, 0.0);
 	glTexCoord2f (0.0, 1.0);
-	glVertex3f (-1, 1, 0.0);
+	glVertex3f (-100, 100, 0.0);
 	glTexCoord2f (1.0, 1.0);
-	glVertex3f (1, 1, 0.0);
+	glVertex3f (100, 100, 0.0);
 #endif
 	glEnd ();
 }

@@ -24,6 +24,7 @@
 #include <stdint.h>
 #include <3rdparty/OpenGL.h>
 #include <gcl/Resource.h>
+#include <gcl/PixelBuffer.h>
 
 namespace GCL
 {
@@ -47,31 +48,27 @@ namespace GCL
           mWrapModeT(GL_CLAMP_TO_EDGE),
           mTextureFormat(GL_RGB)
       {
-        imageData = NULL;
       }
       ~TextureData()
       {
 
       }
 
-      GLubyte *imageData;
+      PixelBuffer imageData;
       GLuint mTextureHandle;
       GLenum mMinFilter;
       GLenum mMagFilter;
       GLenum mWrapModeS;
       GLenum mWrapModeT;
       GLenum mTextureFormat;
-      GLuint mBytePerPixel;
+ /*     GLuint mBytePerPixel;
       GLuint mBitdepth;
       GLsizei mWidth,
-              mHeight;
+              mHeight;*/
     }mTextureData;
 
     static const TextureResource EmptyTexture;
 
-    static void LoadPng(FILE *is, TextureData &data);
-    static void LoadTga(std::istream &is, TextureData &data);
-    static void LoadRaw(std::istream &is, TextureData &data);
 
     static void Unload(TextureData &data);
   private:

@@ -33,8 +33,7 @@
 #include "MeshTest.h"
 #include "MeshLoadingTest.h"
 #include "MeshResourceTest.h"
-#include "PngLoadingTest.h"
-#include "RawLoadingTest.h"
+#include "PixelBufferHALTest.h"
 #include "RenderBufferTest.h"
 #include "RenderObjectTest.h"
 #include "RenderObject2DTest.h"
@@ -45,7 +44,6 @@
 #include "Text2DTest.h"
 #include "TextureTest.h"
 #include "TextureAndShaderTest.h"
-#include "TgaLoadingTest.h"
 #include "VertexBufferTest.h"
 #include "VertexTest.h"
 
@@ -63,9 +61,7 @@ int main(int /*argc*/, char **argv)
 
       VertexTest::Test();
       VertexBufferTest::Test();
-      RawLoadingTest::Test();
-      TgaLoadingTest::Test();
-      PngLoadingTest::Test();
+      PixelBufferHALTest::Test();
 
       TextureResourceTest::Test();
 	  TextureTest::Test();

@@ -53,7 +53,7 @@ void GLRenderer::Init3DState()
 	glShadeModel(GL_FLAT); glErrorCheck();
 	glEnable(GL_TEXTURE_2D); glErrorCheck();
 #if !defined(ES1) && !defined(ES2)
-	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); glErrorCheck();
+	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); glErrorCheck();
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
 #endif
 }

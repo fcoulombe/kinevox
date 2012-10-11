@@ -34,7 +34,7 @@ void Test()
 {
     TEST_START
 
-    GCLApplication::Initialize();
+    GCLApplication::Initialize("GCLText2DTest");
     {
     GCLText2D obj("Test Text");
     

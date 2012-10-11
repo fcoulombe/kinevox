@@ -35,7 +35,7 @@ void Test()
 {
 	TEST_START
 
-	GCLApplication::Initialize();
+	GCLApplication::Initialize("GCLRenderObjectTest");
 	{
 	GCLRenderObject obj("TestObject");
 	Assert_Test(GCLApplication::IsRegistered(obj));

@@ -44,13 +44,13 @@ RenderObject2DList GCLApplication::mRenderObject2DList;
 Text2DList GCLApplication::mText2DList;
 
 
-/*static */void GCLApplication::Initialize()
+/*static */void GCLApplication::Initialize(const char *windowsTitle)
 {
 	TextureResourceManager::Initialize();
 	FontResourceManager::Initialize();
 	MeshResourceManager::Initialize();
 	GCLAssert(mRenderer == NULL);
-    mWinDriver = new WinDriver();
+    mWinDriver = new WinDriver(windowsTitle);
 	mRenderer = new GLRenderer();
 }
 /*static */void GCLApplication::Terminate()

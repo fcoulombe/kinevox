@@ -81,7 +81,7 @@ void Test()
 	}
 
 	{
-		WinDriver winDriver;
+		WinDriver winDriver("GeomUtilTest");
 		GLRenderer renderer;
 
 		Camera myCamera;

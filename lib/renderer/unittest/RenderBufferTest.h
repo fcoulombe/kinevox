@@ -69,7 +69,7 @@ void Test()
 	TEST_START
 	TextureResourceManager::Initialize();
 	{
-        WinDriver winDriver;
+        WinDriver winDriver("RenderBufferTest");
 		GLRenderer renderer;
 		size_t width = winDriver.GetViewPort().GetWidth();
 		size_t height = winDriver.GetViewPort().GetHeight();
@@ -82,7 +82,7 @@ void Test()
 	}
 
 	{
-        WinDriver winDriver;
+        WinDriver winDriver("RenderBufferTest2");
         GLRenderer renderer;
 		size_t width = winDriver.GetViewPort().GetWidth();
 		size_t height = winDriver.GetViewPort().GetHeight();

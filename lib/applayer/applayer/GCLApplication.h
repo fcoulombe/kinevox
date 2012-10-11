@@ -39,7 +39,7 @@ class WinDriver;
 class GCLApplication
 {
 public:
-	GCLEXPORT static void Initialize();
+	GCLEXPORT static void Initialize(const char *windowsTitle);
 	GCLEXPORT static void Terminate();
 
 	GCLEXPORT static void Update();

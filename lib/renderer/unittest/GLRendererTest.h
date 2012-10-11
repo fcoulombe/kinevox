@@ -33,7 +33,7 @@ namespace GLRendererTest
 void Test()
 {
 	TEST_START
-    WinDriver winDriver;
+    WinDriver winDriver("GLRendererTest");
 	GLRenderer renderer;
 
 

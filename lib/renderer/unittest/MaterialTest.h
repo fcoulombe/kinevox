@@ -35,7 +35,7 @@ void Test()
 	TEST_START
 
 	TextureResourceManager::Initialize();
-    WinDriver windriver;
+    WinDriver windriver("MaterialTest");
 	GLRenderer render;
 
 	{

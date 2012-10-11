@@ -62,7 +62,7 @@ void Test()
 	TEST_START
 	TextureResourceManager::Initialize();
 	{
-		WinDriver winDriver;
+		WinDriver winDriver("RenderObjectTest");
 		GLRenderer renderer;
 		MyRenderObject obj;
 		RenderObjectList objList;

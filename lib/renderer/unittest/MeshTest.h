@@ -60,7 +60,7 @@ void Test()
 	TextureResourceManager::Initialize();
 	MeshResourceManager::Initialize();
 
-    WinDriver windriver;
+    WinDriver windriver("MeshTest");
 	GLRenderer render;
 	std::stringstream s;
 #if 1

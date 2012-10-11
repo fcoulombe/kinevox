@@ -41,7 +41,7 @@ int main(int /*argc*/, char ** /*argv*/)
   /*if (!InitKinect())
 		return -1;*/
 
-	GCLApplication::Initialize();
+	GCLApplication::Initialize("Kinevox");
 	Camera myCamera;
 	GCLApplication::SetViewportCamera(myCamera);
 

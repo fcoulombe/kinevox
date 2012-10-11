@@ -38,7 +38,7 @@ void Test()
 {
 	TEST_START
 
-    WinDriver winDriver;
+    WinDriver winDriver("CameraTest");
 	GLRenderer renderer;
 
 	Camera camera;

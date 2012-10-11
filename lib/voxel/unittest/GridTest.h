@@ -37,7 +37,7 @@ void Test()
 	TEST_START
 	TextureResourceManager::Initialize();
 	{
-        WinDriver winDriver;
+        WinDriver winDriver("GridTest");
 	GLRenderer renderer;
 
 

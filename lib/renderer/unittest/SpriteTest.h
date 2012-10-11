@@ -36,7 +36,7 @@ void Test()
 
 	TextureResourceManager::Initialize();
 	{
-		WinDriver winDriver;
+		WinDriver winDriver("SpriteTest");
 		GLRenderer renderer;
 
 		Sprite obj;

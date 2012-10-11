@@ -36,7 +36,7 @@ void Test()
 {
     TEST_START
 
-    GCLApplication::Initialize();
+    GCLApplication::Initialize("GCLRenderObject2DTest");
     {
     GCLRenderObject2D obj("TestObject");
     

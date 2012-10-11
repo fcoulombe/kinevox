@@ -38,7 +38,7 @@ int main(int /*argc*/, char ** /*argv*/)
 
 	try
 	{
-		GCLApplication::Initialize();
+		GCLApplication::Initialize("Mesh Example");
 		Camera myCamera;
 		GCLApplication::SetViewportCamera(myCamera);
 

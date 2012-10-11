@@ -32,7 +32,7 @@ namespace GCL
 class WinDriver
 {
 public:
-    WinDriver();
+    WinDriver(const char *windowsTitle /*="GCL Window*/);
     ~WinDriver();
     void SwapBuffer();
 

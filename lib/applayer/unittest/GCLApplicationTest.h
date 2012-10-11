@@ -33,7 +33,7 @@ void Test()
 {
 	TEST_START
 
-	GCLApplication::Initialize();
+	GCLApplication::Initialize("GCLApplicationTest");
 	GCLApplication::Update();
 	GCLApplication::Render();
 	GCLApplication::Terminate();

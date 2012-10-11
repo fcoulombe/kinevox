@@ -33,6 +33,6 @@ void Test()
 {
 	TEST_START
 
-	WinDriver windows;
+	WinDriver windows("WinDriverTest");
 }
 }

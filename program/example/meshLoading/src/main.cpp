@@ -62,7 +62,7 @@ int main(int /*argc*/, char ** /*argv*/)
 	try
 	{
 
-		GCLApplication::Initialize();
+		GCLApplication::Initialize("Mesh Loading Example");
 		Camera myCamera;
 		GCLApplication::SetViewportCamera(myCamera);
 

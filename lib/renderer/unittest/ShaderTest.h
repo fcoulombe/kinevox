@@ -60,7 +60,7 @@ void Test()
 #ifndef ENABLE_SHADERS
 	TextureResourceManager::Initialize();
 	{
-		WinDriver winDriver;
+		WinDriver winDriver("ShaderTest");
 		GLRenderer renderer;
 		Shader shader;
 		shader.Bind();
@@ -153,7 +153,7 @@ void Test()
 	}
 
 	{
-		WinDriver winDriver;
+		WinDriver winDriver("ShaderTest");
 		GLRenderer renderer;
 		MyRenderObject obj;
 		const WorldPoint3 position(0.0,0.0, -10.0);

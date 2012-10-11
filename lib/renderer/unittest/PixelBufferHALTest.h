@@ -31,7 +31,7 @@ void Test();
 void Test()
 {
 	TEST_START
-	WinDriver winDriver;
+	WinDriver winDriver("PixelBufferHALTest");
 	GLRenderer renderer;
 
 	Shader shader;

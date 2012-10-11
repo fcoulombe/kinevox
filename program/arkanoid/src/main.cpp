@@ -235,7 +235,7 @@ int main(int /*argc*/, char ** /*argv*/)
 
 	try
 	{
-		GCLApplication::Initialize();
+		GCLApplication::Initialize("Arkanoid");
 		Camera myCamera;
 		GCLApplication::SetViewportCamera(myCamera);
 

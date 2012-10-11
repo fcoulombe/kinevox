@@ -43,7 +43,7 @@ void Test()
 
 	TextureResourceManager::Initialize();
 	FontResourceManager::Initialize();
-	WinDriver winDriver;
+	WinDriver winDriver("TextureTest");
 	GLRenderer renderer;
 	std::stringstream s;
 	//png
@@ -91,9 +91,9 @@ void Test()
 	{
 		TTFFont font(FONT_PATH"FreeMono.ttf", 12);
 		PixelBuffer buffer;
-		font.DrawText(buffer, "HelloWorld", 100, 100);
-		buffer.PadToNextPOT();
-
+		font.DrawText(buffer, "HelloWorld", 18, false);
+		//buffer.PadToNextPOT();
+		//PixelBuffer::SaveTga("PixelBufferTextureTest.tga", buffer.mWidth, buffer.mHeight, buffer.mBytesPerPixel, buffer.mPixels);
 		Texture testTexture(buffer);
 		testTexture.Bind();
 

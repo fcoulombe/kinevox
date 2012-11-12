@@ -47,9 +47,9 @@ TextureResource::TextureResource( const char *textureName )
 	msg += path.c_str();
 	msg += "\n";
 
-	const char *ext = &(path.c_str()[path.length()-3]);
+	const std::string ext = Path::GetFileNameExtension(path);
 	TextureData &data = mTextureData;
-	if (strncmp(ext, "tga", 3) == 0)
+	if (strncmp(ext.c_str(), "tga", 3) == 0)
 	{
 		std::fstream fp(path.c_str(), std::fstream::binary|std::fstream::in);
 		GCLAssertMsg(fp.is_open() && fp.good(), msg.c_str());
@@ -59,7 +59,7 @@ TextureResource::TextureResource( const char *textureName )
 
 		fp.close();
 	}
-	else if (strncmp(ext, "png", 3) == 0)
+	else if (strncmp(ext.c_str(), "png", 3) == 0)
 	{
 #ifndef OS_IPHONE
 		FILE *fp = fopen(path.c_str(), "rb");
@@ -73,7 +73,7 @@ TextureResource::TextureResource( const char *textureName )
 #endif
 
 	}
-	else if (strncmp(ext, "raw", 3) == 0)
+	else if (strncmp(ext.c_str(), "raw", 3) == 0)
 	{
 		GCLAssert(false && "can't load a raw texture like this since we dont have information about dimensions");
 	}

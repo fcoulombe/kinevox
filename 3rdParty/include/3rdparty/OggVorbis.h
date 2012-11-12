@@ -50,7 +50,7 @@ inline void i_ovErrorCheck(int code, const char *file, int line)
 		return;
 
 	std::stringstream s;
-	s<<file << ":" <<  line << ": OggVorbis Error" << std::endl;
+	s<<std::endl<<file << ":" <<  line << ": OggVorbis Error" << std::endl;
 
 	switch(code)
 	{

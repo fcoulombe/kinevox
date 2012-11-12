@@ -23,13 +23,12 @@
 #pragma once
 #include <3rdparty/OpenGL.h>
 #include <gcl/Macro.h>
-
+#include "renderer/PixelBufferHAL.h"
 
 namespace GCL
 {
 class TextureResource;
 class PixelBuffer;
-class PixelBufferHAL;
 
 struct TextureData
 {
@@ -58,8 +57,8 @@ public:
 
 	void Save(const char *filename);
 
-	size_t GetWidth() const { return mTextureData.width; }
-	size_t GetHeight() const { return mTextureData.height; }
+	size_t GetWidth() const { return mPBO->mWidth; }
+	size_t GetHeight() const { return mPBO->mHeight; }
 
 
 	static void ResetDefault() { GCLAssert(false); }
@@ -67,6 +66,7 @@ public:
 private:
 	void Initialize(const PixelBuffer &imageData);
 	const uint8_t *GetTextureFromVRAM() const;
+	const uint8_t *GetPixelBufferFromVRAM() const;
 
 
 	friend class Shader;

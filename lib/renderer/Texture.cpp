@@ -180,6 +180,14 @@ bool Texture::LoadTexture(const char *filename)
 	return mTextureResource != 0;
 }
 
+const uint8_t *Texture::GetPixelBufferFromVRAM() const
+{
+	mPBO->Bind();
+	uint8_t *buffer = mPBO->PullData();
+	mPBO->UnBind();
+	return buffer;
+}
+
 const uint8_t *Texture::GetTextureFromVRAM() const
 {
 #if !defined(ES1) && !defined(ES2)
@@ -215,6 +223,6 @@ void Texture::Save(const char *filename)
 	std::string nameResource(filename);
 	nameResource += "res.tga";
 	const uint8_t *buffer = GetTextureFromVRAM();
-	PixelBuffer::SaveTga(name.c_str(), mTextureData.width, mTextureData.height, mTextureData.bytesPerPixel,buffer);
+	PixelBuffer::SaveTga(name.c_str(), GetWidth(), GetHeight(), mTextureData.bytesPerPixel,buffer);
 	delete [] buffer;
 }

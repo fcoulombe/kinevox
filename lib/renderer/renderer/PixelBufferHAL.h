@@ -87,13 +87,17 @@ public:
 		GLint res = glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_EXT);glErrorCheck();
 		GCLAssertMsg(res == GL_TRUE, "Couldn't unmap pixel buffer. Exiting");
 	}
-	void PullData()
+	uint8_t *PullData()
 	{
 		glBindBufferARB(GL_PIXEL_PACK_BUFFER_EXT, mPixelBufferId);glErrorCheck();
 		const uint8_t *pixels = static_cast<const uint8_t *>(glMapBufferARB(GL_PIXEL_PACK_BUFFER_EXT, GL_READ_ONLY_ARB));glErrorCheck();
-		memcpy(mPixels, pixels, mWidth*mHeight*mBytesPerPixel);
+		size_t bufferSize = mWidth*mHeight*mBytesPerPixel;
+		uint8_t *buffer = new uint8_t[bufferSize];
+		memcpy(buffer, pixels, bufferSize);
+		//memcpy(mPixels, pixels, mWidth*mHeight*mBytesPerPixel);
 		GLuint res = glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_EXT);glErrorCheck();
 		GCLAssertMsg(res == GL_TRUE, "Couldn't unmap pixel buffer. Exiting");
+		return buffer;
 	}
 	bool IsValid() const { return mPixelBufferId!=(GLuint)-1; }
 

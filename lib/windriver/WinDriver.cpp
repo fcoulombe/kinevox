@@ -30,10 +30,11 @@
 
 using namespace GCL;
 
-WinDriver::WinDriver()
+WinDriver::WinDriver(const char *windowsTitle)
 {
     int sdlInitSuccessful = SDL_Init(SDL_INIT_VIDEO);
     GCLAssert(sdlInitSuccessful>= 0);
+    SDL_WM_SetCaption(windowsTitle, NULL);
 
     const SDL_VideoInfo* info = NULL;
     int width = mViewPort.GetWidth();
@@ -88,6 +89,7 @@ WinDriver::WinDriver()
         return;
     }
 #endif
+
 
     glViewport(0,0,width,height); glErrorCheck();
 }

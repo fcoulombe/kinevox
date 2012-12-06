@@ -24,14 +24,15 @@
 
 #include <renderer/Sprite.h>
 #include <gcl/Time.h>
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
+#include <input/Input.h>
 
 using namespace GCL;
 namespace SpriteTest
 {
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 
 
 	TextureResourceManager::Initialize();
@@ -59,7 +60,8 @@ void Test()
 
 		Assert_Test(obj.IsPlaying() == true);
 
-		for (size_t i=0;i<100; ++i)
+		size_t i=0;
+		while(i<2 || gTestConfig.mIsInteractive)
 		{
 			obj.Update();
 			renderer.PreRender();
@@ -69,6 +71,10 @@ void Test()
 			renderer.PostRender();
 			winDriver.SwapBuffer();
 			Time::SleepMs(1);
+			++i;
+			Input::ProcessInput();
+			if (Input::IsKeyUp(SDLK_ESCAPE))
+				gTestConfig.mIsInteractive = false;
 		}
 
 		obj.Pause();

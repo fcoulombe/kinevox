@@ -25,18 +25,20 @@
 #include <algorithm>
 #include <iostream>
 #include <sstream>
-
+#include <map>
 #include <gcl/Assert.h>
 #include <gcl/Point2.h>
 #include <gcl/Rect.h>
 
-namespace GCL
+using namespace GCL;
+namespace
 {
 const size_t KEYS_STATE_ARRAY_SIZE = 350;
-std::map<uint32_t, bool> Input::smKeys;
-bool Input::smIsLMousedown = false;
-size_t Input::smMouseX=0;
-size_t Input::smMouseY=0;
+std::map<uint32_t, bool> smKeys;
+bool smIsLMousedown = false;
+size_t smMouseX=0;
+size_t smMouseY=0;
+}
 
 size_t Input::GetMouseX()
 {
@@ -154,4 +156,4 @@ const Rect<int> &Input::ProcessSelection()
 	}
 	return selection;
 }
-}
+

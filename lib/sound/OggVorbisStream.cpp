@@ -21,6 +21,7 @@
  */
 
 #include "sound/OggVorbisStream.h"
+#include <gcl/File.h>
 
 using namespace GCL;
 
@@ -43,6 +44,7 @@ void OggStream::Open(const char *filename)
 {
 	int result;
 
+	GCLAssert(GCLFile::Exists(filename));
 	result = ov_fopen(filename, &mOggStream); ovErrorCheck(result);
 
 	mVorbisInfo = ov_info(&mOggStream, -1);

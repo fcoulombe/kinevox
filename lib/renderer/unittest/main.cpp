@@ -49,13 +49,13 @@
 
 using namespace GCL;
 
-int main(int /*argc*/, char **argv)
+int main(int argc, char **argv)
 {
   std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
 
-  try
-  {
-	  GLRendererTest::Test();
+
+  SUITE_INIT(argc, argv)
+	/*  GLRendererTest::Test();
       CameraTest::Test();
       ShaderTest::Test();
 
@@ -69,8 +69,8 @@ int main(int /*argc*/, char **argv)
       TextureAndShaderTest::Test();
 
       MaterialTest::Test();
-      SpriteTest::Test();
-      RenderObject2DTest::Test();
+      */SpriteTest::Test();
+     /* RenderObject2DTest::Test();
       Text2DTest::Test();
 
       RenderObjectTest::Test();
@@ -83,23 +83,8 @@ int main(int /*argc*/, char **argv)
       MeshLoadingTest::Test();
       MeshResourceTest::Test();
       MeshTest::Test();
-
-  }
-  catch (GCLException & e)
-  {
-      std::stringstream str;
-      str << "[FAILED] " << argv[0] << std::endl;
-      str << e.what();
-      str << std::endl;
-      std::cerr << str.str();
-      std::cerr.flush();
-      return -1;
-  }
-  catch (...)
-  {
-      std::cerr << "[FAILED] " << argv[0] << std::endl;
-      std::cerr << "something went wrong" << std::endl;
-  }
+*/
+      SUITE_TERMINATE
   std::cout.flush();
   std::cerr.flush();
   return 0;

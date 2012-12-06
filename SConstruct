@@ -41,6 +41,11 @@ AddOption('--use-valgrind', action="store_true",
           default=False,
           help='run the unit tests with valgrind')
 
+AddOption('--interactive-test', action="store_true", 
+          dest="isInteractiveTest",
+          default=False,
+          help='run the unit tests in interactive mode. this is for GL especially, press space to go to the next test')
+
 AddOption('--print-component-dependencies', action="store_true", 
           dest="print-component-dependencies",
           default=False,
@@ -254,6 +259,7 @@ sconsFilesList = [
 "./lib/sound/SConscript",
 "./lib/windriver/SConscript",
 "./lib/input/SConscript",
+"./lib/kinetestlib/SConscript",
 "./lib/kinect/SConscript",
 "./lib/renderer/SConscript",
 "./lib/voxel/SConscript",
@@ -272,8 +278,9 @@ sconsFilesList = [
 "./lib/gcl/gcl/unittest/SConscript",
 "./lib/sound/unittest/SConscript",
 "./lib/windriver/unittest/SConscript",
-"./lib/renderer/unittest/SConscript",
-"./lib/input/unittest/SConscript", #depends on renderer
+"./lib/input/unittest/SConscript",
+"./lib/kinetestlib/unittest/SConscript",
+"./lib/renderer/unittest/SConscript", 
 "./lib/kinect/unittest/SConscript",
 "./lib/voxel/unittest/SConscript",
 "./lib/applayer/unittest/SConscript",

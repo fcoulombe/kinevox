@@ -73,6 +73,7 @@ void Test()
 	//Assert_Test(renderer.IsExtensionSupported("GL_EXT_texture_compression_dxt1"));
 #endif
 
+	//test default viewport values
 	{
 		std::stringstream s;
 		s<<winDriver.GetViewPort().GetHeight()<<"=="<<ViewPort::DEFAULT_SCREEN_HEIGHT;
@@ -85,7 +86,12 @@ void Test()
 	}
 
 	Matrix44 projection = GLRenderer::GetGLProjection();
-
+	//here we simulate creating a modelviewmatrix of identity.
+	//we modulate it with a transform
+	//we perform the same operation in opengl
+	//we make sure that our final modelview is equal to
+	//the one of opengl. this asserts that we match in
+	//matrix model
 	{
 		Matrix44 modelView = Inverse(Matrix44::IDENTITY);
 		Matrix44 transform;

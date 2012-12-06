@@ -32,32 +32,16 @@ using namespace GCL;
 
 
 
-int main(int /*argc*/, char **argv)
+int main(int argc, char **argv)
 {
   std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
-
-  try
-  {
+  SUITE_INIT(argc, argv)
 	  BufferWriterTest::Test();
 	  TTFLoadingTest::Test();
 
 	  FBXLoadingTest::Test();
       MeshSavingTest::Test();
-  }
-  catch (GCLException & e)
-  {
-      std::stringstream str;
-      str << "[FAILED] " << argv[0] << std::endl;
-      str << e.what();
-      str << std::endl;
-      std::cerr << str.str();
-      return -1;
-  }
-  catch (...)
-  {
-      std::cerr << "[FAILED] " << argv[0] << std::endl;
-      std::cerr << "something went wrong" << std::endl;
-  }
+      SUITE_TERMINATE
   std::cout.flush();
   std::cerr.flush();
   return 0;

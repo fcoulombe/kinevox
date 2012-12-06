@@ -76,8 +76,12 @@ public:
 		return res;
 	}
 
-	//the shader is when we want to set the project and modelview*trasnform as uniform
-	static void SetTransform( const Matrix44 &projection, const Matrix44 &modelView, const Matrix44 &transform, Shader *shader=NULL);
+	//the shader is when we want to set the project and
+	//modelview*trasnform as uniform
+	static void SetTransform( const Matrix44 &projection,
+								const Matrix44 &modelView,
+								const Matrix44 &transform,
+								Shader *shader=NULL);
 
 	static Matrix44 GetGLProjection();
 	static Matrix44 GetGLModelView();

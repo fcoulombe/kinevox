@@ -28,10 +28,9 @@
 #include "WAVLoadingTest.h"
 
 
-int main(int /*argc*/, char ** /*argv*/)
+int main(int argc, char ** argv)
 {
-	try
-	{
+	 SUITE_INIT(argc, argv)
 		ALSoundDeviceTest::Test();
 		WAVLoadingTest::Test();
 		SoundResourceTest::Test();
@@ -39,29 +38,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		OggVorbisStreamTest::Test();
 
 		//Music::Test();
-	}
-	catch (GCLException &e)
-	{
-		std::stringstream str;
-		str << "[FAILED] \n";
-		std::string what = e.what();
-		str << what;
-
-		str << std::endl;
-		std::string finalOutput;
-		finalOutput = str.str();
-		std::cerr << finalOutput;
-		return -1;
-	}
-	catch (std::exception &e)
-	{
-		std::cerr << "[FAILED] " << e.what() << std::endl;
-		return -1;
-	}
-	catch (...)
-	{
-		std::cerr << "[FAILED] not sure what happened" << std::endl;
-	}
+		SUITE_TERMINATE
 
 	return 0;
 }

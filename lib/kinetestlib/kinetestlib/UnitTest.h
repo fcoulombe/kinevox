@@ -22,6 +22,7 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
+#include <input/Input.h>
 
 namespace GCL
 {
@@ -47,4 +48,20 @@ public:
 
 
 #define KINEVOX_TEST_START KinevoxTestCounter testCounter(__FILE__);
+#define KINEVOX_TEST_LOOP_START \
+size_t i=0;\
+	bool isLooping = gTestConfig.mIsInteractive;\
+while(i<2 || isLooping)\
+{\
+\
+
+
+#define KINEVOX_TEST_LOOP_END 	\
+	++i;\
+Input::ProcessInput();\
+if (Input::IsKeyUp(SDLK_ESCAPE))\
+	isLooping = false;\
+}\
+\
+
 

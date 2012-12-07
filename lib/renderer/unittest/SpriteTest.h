@@ -34,7 +34,6 @@ void Test()
 {
 	KINEVOX_TEST_START
 
-
 	TextureResourceManager::Initialize();
 	{
 		WinDriver winDriver("SpriteTest");
@@ -59,10 +58,7 @@ void Test()
 		obj.Play();
 
 		Assert_Test(obj.IsPlaying() == true);
-
-		size_t i=0;
-		while(i<2 || gTestConfig.mIsInteractive)
-		{
+		KINEVOX_TEST_LOOP_START
 			obj.Update();
 			renderer.PreRender();
 			glPushMatrix();glErrorCheck();
@@ -71,11 +67,7 @@ void Test()
 			renderer.PostRender();
 			winDriver.SwapBuffer();
 			Time::SleepMs(1);
-			++i;
-			Input::ProcessInput();
-			if (Input::IsKeyUp(SDLK_ESCAPE))
-				gTestConfig.mIsInteractive = false;
-		}
+		KINEVOX_TEST_LOOP_END
 
 		obj.Pause();
 

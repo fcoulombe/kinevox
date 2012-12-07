@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 #include <renderer/RenderObject2D.h>
 #include <renderer/TextureResourceManager.h>
 
@@ -40,7 +40,7 @@ private:
 void Test();
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 	TextureResourceManager::Initialize();
 	{
 		WinDriver winDriver("RenderObject2DTest");
@@ -104,12 +104,14 @@ void Test()
 		{
 			obj.SetName("ChangedTestName");
 		}
+		KINEVOX_TEST_LOOP_START
 		obj.Update();
 		const ViewPort &viewport = winDriver.GetViewPort();
 		renderer.PreRender();
 		renderer.Render(objList, viewport.GetWidth(), viewport.GetHeight());
 		renderer.PostRender();
 		winDriver.SwapBuffer();
+		KINEVOX_TEST_LOOP_END
 	}
 	TextureResourceManager::Terminate();
 }

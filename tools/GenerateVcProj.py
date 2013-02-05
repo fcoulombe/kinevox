@@ -36,10 +36,12 @@ print """  <PropertyGroup Label="Globals">
     <UseDebugLibraries>true</UseDebugLibraries>
     <OutDir>$(SolutionDir)/bin/$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)/build/$(Configuration)\</IntDir>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Makefile</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">

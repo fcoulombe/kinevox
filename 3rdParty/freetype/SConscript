@@ -5,15 +5,18 @@ dependencies = []
 
 def SetCFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-        ienv.Append(CPPPATH=[env.Dir('C:\\Program Files\\GnuWin32\\include\\freetype2')])
-        ienv.Append(CPPPATH=[env.Dir('C:\\Program Files\\GnuWin32\\include')])
+        ienv.Append(CPPPATH=[env.Dir('#3rdParty/freetype/include')])
+
+        #ienv.Append(CPPPATH=[env.Dir('C:\\Program Files\\GnuWin32\\include\\freetype2')])
+        #ienv.Append(CPPPATH=[env.Dir('C:\\Program Files\\GnuWin32\\include')])
         #ienv['ENV']['PATH'] += "C:\Program Files/Microsoft Visual Studio 10.0/VC/bin/"
     else:
         ienv.ParseConfig('pkg-config --cflags freetype2')
 
 def SetLFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-	    ienv.Append(LIBS=[env.File('C:\\Program Files\\GnuWin32\\lib\\freetype.lib')])
+        ienv.Append(LIBS=[env.File('#3rdParty/freetype/lib/freetype2411MT.lib')])
+        #ienv.Append(LIBS=[env.File('C:\\Program Files\\GnuWin32\\lib\\freetype.lib')])
         #ienv.Append(LIBS=[env.File('C:\\Program Files\\GnuWin32\\lib\\libfreetype.dll.a')])
     else:
 	    ienv.ParseConfig('pkg-config --libs freetype2')

@@ -162,7 +162,7 @@ void Texture::Initialize(const PixelBuffer &data )
 
 		mPBO->UnBind();
 	}
-	glGenerateMipmap(GL_TEXTURE_2D);
+	glGenerateMipmap(GL_TEXTURE_2D);glErrorCheck();
 	//glBindTexture(GL_TEXTURE_2D, 0);glErrorCheck();
 #endif
 }
@@ -204,7 +204,17 @@ const uint8_t *Texture::GetTextureFromVRAM() const
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);glErrorCheck();
 
 	if (mTextureResource)
-		glGetTexImage(GL_TEXTURE_2D, 0, mTextureResource->mTextureData.mTextureFormat, GL_UNSIGNED_BYTE, data);
+    {
+        if (mTextureResource->mTextureData.imageData.mBytesPerPixel == 3)
+		    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        else if (mTextureResource->mTextureData.imageData.mBytesPerPixel == 4)
+            glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        else
+        {
+            GCLAssert(false);
+        }
+
+    }
 	else
 		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 	glErrorCheck();

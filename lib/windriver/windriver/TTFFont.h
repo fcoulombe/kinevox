@@ -33,7 +33,7 @@ class TTFFont
 public:
 	TTFFont(const char *fontName, size_t point);
 	~TTFFont();
-	void DrawText(PixelBuffer &buffer, const char * text, size_t x, size_t y) ;
+	void BlitText(PixelBuffer &buffer, const char * text, size_t x, size_t y) ;
 private:
 	const FontResource *mFontResource;
 };

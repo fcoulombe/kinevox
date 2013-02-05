@@ -41,7 +41,7 @@ public:
 	:mFont(FONT_PATH"FreeMono.ttf", 12)
 	{
 		PixelBuffer buffer;
-		mFont.DrawText(buffer, text, 100, 100);
+		mFont.BlitText(buffer, text, 100, 100);
 		mTexture = new Texture(buffer);
 		mTexture->Save("Text2DTest.tga");
 	}
@@ -57,7 +57,7 @@ void Test()
 	FontResourceManager::Initialize();
 	{
 		std::stringstream s;
-		WinDriver winDriver;
+		WinDriver winDriver("Text2dTest");
 		GLRenderer renderer;
 
 		TestText2D obj("HelloWorld!");

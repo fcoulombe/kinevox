@@ -91,7 +91,7 @@ void Test()
 	{
 		TTFFont font(FONT_PATH"FreeMono.ttf", 12);
 		PixelBuffer buffer;
-		font.DrawText(buffer, "HelloWorld", 18, false);
+		font.BlitText(buffer, "HelloWorld", 18, false);
 		//buffer.PadToNextPOT();
 		//PixelBuffer::SaveTga("PixelBufferTextureTest.tga", buffer.mWidth, buffer.mHeight, buffer.mBytesPerPixel, buffer.mPixels);
 		Texture testTexture(buffer);

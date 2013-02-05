@@ -70,6 +70,9 @@
 #   undef glDeleteRenderbuffers
 #   define glDeleteRenderbuffers glDeleteRenderbuffersEXT
 
+#   undef glGenerateMipmap 
+#   define glGenerateMipmap glGenerateMipmapEXT
+
 /*// function pointers for PBO Extension
 // Windows needs to get function pointers from ICD OpenGL drivers,
 // because opengl32.dll does not support extensions higher than v1.1.

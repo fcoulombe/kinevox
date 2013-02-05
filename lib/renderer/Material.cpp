@@ -104,6 +104,9 @@ void Material::LoadMaterial(const char *filename)
 	fp.close();
 
 	mShader = new Shader();
+    s.str("");
+    s<< "Material: "<<filename<< " doesn't have a texture. for now all materials must have a texture"<<std::endl;
+    GCLAssertMsg(strcmp(texture, "null")!=0, s.str().c_str());
 	mTexture = new Texture(texture);
 }
 

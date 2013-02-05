@@ -26,6 +26,7 @@ import sys
 import platform
 import subprocess
 
+default_env = Environment()
 #################################################################
 #
 #   adding custom commandline argument
@@ -57,11 +58,18 @@ AddOption('--gen-valgrind-suppressions', action="store_true",
           default=False,
           help='generate valgrind suppression files')
 
-AddOption('--compiler', action="store",
-          type='string', 
-          dest="compiler",
-          default='gcc',
-          help='specify the compiler')
+if default_env['PLATFORM']=='win32':
+    AddOption('--compiler', action="store",
+              type='string', 
+              dest="compiler",
+              default='vc',
+              help='specify the compiler')
+else:
+    AddOption('--compiler', action="store",
+              type='string', 
+              dest="compiler",
+              default='gcc',
+              help='specify the compiler')
 
 AddOption('--configuration', action="store",
           type='string', 
@@ -91,7 +99,7 @@ def gitClone(repo, dest="."):
     return
 targetList = COMMAND_LINE_TARGETS
 
-default_env = Environment()
+
 default_env.SConsignFile(default_env.File("#build/.sconsign.dblite").abspath) 
 #detect if we have the build script installed (hopefully its gonna be the right one)
 if not os.path.exists(default_env.Dir("#gclbuildscript").abspath):
@@ -239,6 +247,7 @@ else:
 
 sconsFilesList = [
 #third party
+"./3rdParty/collada/SConscript",
 "./3rdParty/fbx/SConscript",
 "./3rdParty/freetype/SConscript",
 "./3rdParty/il/SConscript",

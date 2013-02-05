@@ -8,7 +8,7 @@ dependencies = []
 
 def SetCFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-        ienv.Append(CPPPATH=[env.Dir('C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\2013.2\\include')]) 
+        ienv.Append(CPPPATH=[env.Dir('C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\2013.3\\include')]) 
     else:
         configuration = GetOption('configuration')
         if platform.architecture()[0] == "32bit":
@@ -23,7 +23,7 @@ def SetCFlags(ienv):
 def SetLFlags(ienv):
     platform.machine(),  platform.architecture()[0]
     if ienv['PLATFORM'] == "win32":
-        file = env.File("C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\2013.2\\lib\\vs2010\\x86\\fbxsdk-2013.2.lib")
+        file = env.File("C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\2013.3\\lib\\vs2010\\x86\\fbxsdk-2013.3.lib")
         ienv.Append(LIBS=[file]) 
     else: 
         if platform.architecture()[0] == "32bit":
@@ -36,4 +36,8 @@ def SetLFlags(ienv):
         else:
             print "unsupported architecture: %s" % platform.architecture()[0] 
     
-env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)
+dllDep = []
+if env['PLATFORM'] == "win32":
+    dllDep = [env.File("C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\2013.3\\lib\\vs2010\\x86\\fbxsdk-2013.3.dll")]
+
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags, dllDep)

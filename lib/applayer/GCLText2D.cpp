@@ -35,7 +35,7 @@ GCLText2D::GCLText2D(const char *text)
 {
 
 	PixelBuffer buffer;
-	mFont.DrawText(buffer, text, 100, 100);
+	mFont.BlitText(buffer, text, 100, 100);
 	mTexture = new Texture(buffer);
 
 	GCLApplication::RegisterText2D(this);

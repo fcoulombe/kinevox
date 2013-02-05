@@ -5,17 +5,18 @@ dependencies = []
 
 dllDep = []
 if env['PLATFORM'] == "win32":
-    dllDep = [env.File('#3rdParty/glew/glew/bin/glew32.dll')]
+    dllDep = []#[env.File('#3rdParty/glew/bin/glew32.dll')]
     
 def SetCFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-	    ienv.Append(CPPPATH=[env.Dir('#3rdParty/glew/glew/include')])
+        ienv.Append(CPPPATH=[env.Dir('#3rdParty/glew/include')])
+        ienv.Append(CPPDEFINES=['GLEW_STATIC']) 
     else:
 	    ienv.ParseConfig('pkg-config --cflags glew')
 
 def SetLFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-	    ienv.Append(LIBS=[env.File('#3rdParty/glew/glew/lib/glew32.lib')])
+	    ienv.Append(LIBS=[env.File('#3rdParty/glew/lib/glew32s.lib')])
     else:
 	    ienv.ParseConfig('pkg-config --libs glew')
 	

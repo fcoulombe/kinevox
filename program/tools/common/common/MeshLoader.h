@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2012 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,38 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 #pragma once
 
-#include <gcl/UnitTest.h>
-#include <renderer/Material.h>
+#include "common/ColladaManager.h"
+#include "common/ToolMeshData.h"
 
-using namespace GCL;
-namespace MaterialTest
+namespace GCL
 {
-
-    
-    void Test();
-void Test()
+class MeshLoader
 {
-	TEST_START
-
-	TextureResourceManager::Initialize();
-    WinDriver windriver("MaterialTest");
-	GLRenderer render;
-
-	{
-	Material material("Default");
-	material.Bind();
-	material.LoadMaterial("Mushroom");
-	material.Bind();
-	material.SetTexture(TEXTURE_PATH"HappyFish.tga");
-	material.Bind();
-	}
-	{
-	Material material("mario_mario_fire_png__mario_fire_png");
-	material.Bind();
-	}
-
-	TextureResourceManager::Terminate();
-}
+public:
+    static void Initialize() { ColladaManager::Initialize(); }
+    static void Terminate() { ColladaManager::Terminate(); }
+    static bool LoadScene(const char *filename) { return ColladaManager::LoadScene(filename); }
+    static ToolMeshData &GetMeshData() { return ColladaManager::GetMeshData(); }
+ };
 }

@@ -37,19 +37,21 @@ public:
 	: RenderObject("MyRenderObject", Matrix44(true)), //identity
 	  mMesh(MESH_PATH"ExampleMesh.mesh")
 	{
-		mVertexData.mVertexCount =mMesh.GetVertexCount();
-		mVertexData.mVertexType = mMesh.GetVertexType();
-		mVertexData.mVertexData = mMesh.GetVertexData();
+        VertexData data;
+		data.mVertexCount =mMesh.GetVertexCount(0);
+		data.mVertexType = mMesh.GetVertexType();
+		data.mVertexData = mMesh.GetVertexData(0);
+        mVertexData.push_back(data);
 	}
 
-	const VertexData &GetVertexData() const
+	const VertexDataList &GetVertexData() const
 	{
 		return mVertexData;
 	}
 	const Material &GetMaterial() const { return mMesh.GetMaterial(); }
 private:
 	Mesh mMesh;
-	VertexData mVertexData;
+	VertexDataList mVertexData;
 };
 
 void Test();
@@ -66,11 +68,11 @@ void Test()
 #if 1
 	{
 		Mesh mesh(MESH_PATH"ExampleMesh.mesh");
-		const void * data = mesh.GetVertexData();
+		const void * data = mesh.GetVertexData(0);
 		Assert_Test(data);
 		VertexComponents vertexType = mesh.GetVertexType();
 		Assert_Test(vertexType == (VertexComponents)(ePOSITION|eNORMAL|eTEXTURE_COORD));
-		size_t count = mesh.GetVertexCount();
+		size_t count = mesh.GetVertexCount(0);
 		s<<count << " == " << 21930<<std::endl;
 		AssertMsg_Test(count == 21930, s.str().c_str()); //cube
 

@@ -80,15 +80,19 @@ Grid::Grid(size_t x, size_t y, size_t z)
 
 Grid::~Grid()
 {
-	if (mVertexData.mVertexData)
-		delete [] (WorldPoint3 *)(mVertexData.mVertexData);
+	if (mVertexData[0].mVertexData)
+		delete [] (WorldPoint3 *)(mVertexData[0].mVertexData);
 
 }
 
 void Grid::CreateVertexData()
 {
-	if (mVertexData.mVertexData)
-		delete [] (WorldPoint3 *)(mVertexData.mVertexData);
+	if (mVertexData.size())
+    {
+        VertexData &tempData = mVertexData[0];
+		delete [] (WorldPoint3 *)(tempData.mVertexData);
+        mVertexData.clear();
+    }
 	WorldPoint3 *vertexData = new WorldPoint3[4*6*X_DIMENSION*Y_DIMENSION*Z_DIMENSION];
 	WorldPoint3 *currentCube=vertexData;
 	for (size_t i=0; i<Z_DIMENSION; ++i)
@@ -105,14 +109,16 @@ void Grid::CreateVertexData()
 			}
 		}
 	}
-	mVertexData.mVertexData = (const void *)vertexData;
-	mVertexData.mVertexCount = 4*6*X_DIMENSION*Y_DIMENSION*Z_DIMENSION;
-	mVertexData.mVertexType = VertexP::GetComponentType();
+    VertexData data;
+	data.mVertexData = (const void *)vertexData;
+	data.mVertexCount = 4*6*X_DIMENSION*Y_DIMENSION*Z_DIMENSION;
+	data.mVertexType = VertexP::GetComponentType();
+    mVertexData.push_back(data);
 }
 
-const VertexData &Grid::GetVertexData() const
+const VertexDataList &Grid::GetVertexData() const
 {
-	GCLAssert(mVertexData.mVertexData);
+	GCLAssert(mVertexData.size());
 	return mVertexData;
 }
 

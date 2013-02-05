@@ -25,10 +25,25 @@ Import('env')
 name = "common"
 #incPath = [env.Dir(".")]
 incPath = [env.Dir("#/program/tools/"+name)]
-dependencies = ['fbx', 'freetype', 'renderer']
+
+useFBX = False
+useCollada = True
+extraDefines = []
+extraDep = []
+if useFBX:
+    extraDep = ['fbx']
+    extraDefines = ['-DUSE_FBX=1']
+
+if useCollada:
+    extraDep = ['collada']
+    extraDefines = ['-DUSE_COLLADA=1']
+
+dependencies = ['freetype', 'renderer']
+dependencies.extend(extraDep)
+env.Append(CPPFLAGS=extraDefines)
 src_files = env.Glob("*.cpp")
 
 env.Append(CPPPATH=incPath)
 lib = env.KStaticLibrary(name, src_files, dependencies)
-env.AddComponent(name, None, incPath, lib, dependencies)
+env.AddComponent(name, extraDefines, incPath, lib, dependencies)
 

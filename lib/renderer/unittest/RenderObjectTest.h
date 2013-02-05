@@ -31,30 +31,30 @@
 using namespace GCL;
 namespace RenderObjectTest
 {
+    static const   VertexPNT square[4] = {
+        {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
+        {WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+        {WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+        {WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
 class MyRenderObject : public RenderObject
 {
 public:
 	MyRenderObject()
 	: RenderObject("MyRenderObject", Matrix44(true)) //identity
-	{}
+	{
+    data.push_back(VertexData(&square, 4, VertexPNT::GetComponentType()));
+    }
 
-	const VertexData &GetVertexData() const
+	const VertexDataList &GetVertexData() const
 	{
 		return data;
 	}
 	const Material &GetMaterial() const { return mMaterial; }
 private:
 	Material mMaterial;
-	static const VertexData data;
+	VertexDataList data;
 };
 
-static const   VertexPNT square[4] = {
-		{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-		{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-		{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-		{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
-
-const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
 
 void Test();
 void Test()

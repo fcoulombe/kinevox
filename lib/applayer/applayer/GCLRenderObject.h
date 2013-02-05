@@ -34,7 +34,7 @@ public:
 	GCLRenderObject(const char *name);
 
 	~GCLRenderObject();
-	const VertexData &GetVertexData() const
+	const VertexDataList &GetVertexData() const
 	{
 		return data;
 	}
@@ -46,7 +46,7 @@ private:
 	//default vertex data
 	static const size_t NUM_VERTICES = 24;
 	static const VertexPNT cube[NUM_VERTICES];
-	static const VertexData data;
+	VertexDataList data;
 
 
 };

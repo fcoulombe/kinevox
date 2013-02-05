@@ -27,17 +27,22 @@
 using namespace GCL;
 namespace RenderObjectWithMaterialTest
 {
-
+    static const   VertexPNT square[4] = {
+        {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
+        {WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+        {WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
+        {WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
 class MyRenderObject : public RenderObject
 {
 public:
 	MyRenderObject()
 	: RenderObject("MyRenderObject", Matrix44(true)) //identity
-	{}
-
-	const VertexData &GetVertexData() const
 	{
+        data.push_back(VertexData(&square, 4, VertexPNT::GetComponentType()));
+    }
 
+	const VertexDataList &GetVertexData() const
+	{
 		return data;
 	}
 	void SetOrientation(Real x,Real y,Real z)
@@ -52,16 +57,10 @@ public:
 	}
 	const Material &GetMaterial() const { return mMaterial; }
 private:
-	static const VertexData data;
+	VertexDataList data;
 	Material mMaterial;
 };
-static const   VertexPNT square[4] = {
-		{WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-		{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-		{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-		{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
 
-const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
 void Test();
 void Test()
 {

@@ -28,12 +28,10 @@
 using namespace GCL;
 namespace FBXLoadingTest
 {
-
-
 void Test()
 {
 	TEST_START
-
+#ifdef USE_FBX
 	FBXManager::Initialize();
 
     FBXManager::LoadScene("datamisc/ExampleMesh.fbx");
@@ -41,5 +39,6 @@ void Test()
     ToolMeshData data = FBXManager::GetMeshData();
 //std::cout << data << std::endl;
     FBXManager::Terminate();
+#endif
 }
 }

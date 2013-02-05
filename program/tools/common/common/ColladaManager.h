@@ -19,38 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 #pragma once
 
-#include <gcl/UnitTest.h>
-#include <renderer/Material.h>
+#include <3rdparty/Collada.h>
+#include "common/ToolMeshData.h"
 
-using namespace GCL;
-namespace MaterialTest
+
+
+namespace GCL
 {
+
+
+class ColladaManager
+{
+public:
+	static void Initialize();
+	static void Terminate();
+	static bool LoadScene(const char *filename);
+	//static KFbxScene *GetScene() { return pScene; }
+	//static KFbxNode *GetRootNode() { return pScene->GetRootNode(); }
+	static ToolMeshData &GetMeshData();
 
     
-    void Test();
-void Test()
-{
-	TEST_START
-
-	TextureResourceManager::Initialize();
-    WinDriver windriver("MaterialTest");
-	GLRenderer render;
-
-	{
-	Material material("Default");
-	material.Bind();
-	material.LoadMaterial("Mushroom");
-	material.Bind();
-	material.SetTexture(TEXTURE_PATH"HappyFish.tga");
-	material.Bind();
-	}
-	{
-	Material material("mario_mario_fire_png__mario_fire_png");
-	material.Bind();
-	}
-
-	TextureResourceManager::Terminate();
-}
+ };
 }

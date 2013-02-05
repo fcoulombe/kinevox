@@ -60,7 +60,7 @@ namespace GCL
     ~Grid();
 
     void CreateVertexData();
-    const VertexData &GetVertexData() const; // this function can't be const because it might need to create vertex data on demand
+    const VertexDataList &GetVertexData() const; // this function can't be const because it might need to create vertex data on demand
 
     const Material &GetMaterial() const { return mMaterial; }
   private:
@@ -70,7 +70,7 @@ namespace GCL
     const size_t Y_DIMENSION;
     const size_t Z_DIMENSION;
 
-    VertexData mVertexData;
+    VertexDataList mVertexData;
     typedef std::vector<Slice> SliceList;
     SliceList mSlices;
   };

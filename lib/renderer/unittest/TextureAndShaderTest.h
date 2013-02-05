@@ -28,7 +28,12 @@
 using namespace GCL;
 namespace TextureAndShaderTest
 {
-
+    static const   VertexPNT square[4] = {
+        {WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
+        {WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
+        {WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
+        {WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
+    };
 class MyRenderObject : public RenderObject
 {
 public:
@@ -37,9 +42,9 @@ public:
 	{}
 	~MyRenderObject()
 	{
-
+        data.push_back(VertexData(&square, 4, VertexPNT::GetComponentType()));
 	}
-	const VertexData &GetVertexData() const
+	const VertexDataList &GetVertexData() const
 	{
 		return data;
 	}
@@ -47,17 +52,9 @@ public:
 	Material &GetMaterial() { return mMaterial; }
 private:
 	Material mMaterial;
-	static const VertexData data;
+	VertexDataList data;
 };
 
-static const   VertexPNT square[4] = {
-		{WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
-		{WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
-		{WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
-		{WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
-};
-
-const VertexData MyRenderObject::data(&square, 4, VertexPNT::GetComponentType());
 
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)

@@ -21,7 +21,7 @@
  */
 
 #pragma once
-
+#ifdef USE_FBX
 #include <3rdparty/FBX.h>
 #include "common/ToolMeshData.h"
 
@@ -44,7 +44,11 @@ public:
 	static KFbxScene *GetScene() { return pScene; }
 	static KFbxNode *GetRootNode() { return pScene->GetRootNode(); }
 	static ToolMeshData GetMeshData();
-	static KFbxSdkManager* pSdkManager;
+
+    static ToolMeshData GetMeshData3();
+
+    static KFbxSdkManager* pSdkManager;
 	static KFbxScene* pScene;
 };
 }
+#endif

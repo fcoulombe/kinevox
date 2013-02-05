@@ -22,6 +22,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <vector>
 #include <gcl/Matrix44.h>
 #include "renderer/Vertex.h"
 
@@ -48,6 +49,7 @@ struct VertexData
 	size_t mVertexCount;
 	uint32_t mVertexType;
 };
+typedef std::vector<VertexData> VertexDataList;
 GCLINLINE std::ostream& operator<<( std::ostream& output, const VertexData &P)
 {
 	const uint8_t *currentVertex = reinterpret_cast<const uint8_t *>(P.mVertexData);
@@ -83,14 +85,13 @@ public:
 		mTransform = (transform);
 	}
 	virtual ~RenderObject() {}
-	virtual const VertexData &GetVertexData() const=0;
+	virtual const VertexDataList &GetVertexData() const=0;
 	virtual const Material &GetMaterial() const=0;
 	const Matrix44 &GetTransform() const {return mTransform; }
 	void SetTransform(const Matrix44 &transform) {mTransform = transform; }
 
 	void SetOrientation(Real x,Real y,Real z)
 	{
-
 		const WorldPoint4 backupPosition = mTransform[3];
 		Matrix44 xRot;
 		xRot.SetRotationX(x);

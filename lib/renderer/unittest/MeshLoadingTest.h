@@ -36,34 +36,55 @@ void Test()
 
 	GCLFile fp(MESH_PATH"ExampleMesh.mesh");
 	const MeshResource::MeshData *testData2 = MeshResource::LoadMesh(fp);
+    const MeshResource::SubMeshData *testSubMeshData2 = testData2->GetSubMeshData(0);
 	Assert_Test(testData2);
 
 	MeshResource::MeshData testData;
-	testData.mVertexCount = 3677;
-	testData.mIndicesCount = 21930;
-	testData.mNormalCount = 3677;
-	testData.mVertexColorCount = 0;
-	testData.mMaterialCount = 1;
-	testData.mUvCount = 21930;
+	testData.mSubMeshCount = 1;
+    testData.mMaterialCount = 1;
+    testData.mMaterialNameLen = 40;
+
+    MeshResource::SubMeshData testSubMeshData;
+    testSubMeshData.mSubMeshSize =  789492;
+    testSubMeshData.mVertexCount = 21930;
+	testSubMeshData.mIndicesCount = 21930;
+	
 
 	std::stringstream s;
-	s<< testData.mVertexCount << " == " << testData2->mVertexCount << std::endl;
-	AssertMsg_Test(testData.mVertexCount  == testData2->mVertexCount, s.str().c_str());
+    s.str("");
+    s<< testData.mSubMeshCount<< " == " << testData2->mSubMeshCount << std::endl;
+    AssertMsg_Test(testData.mSubMeshCount == testData2->mSubMeshCount, s.str().c_str());
+
+    s.str("");
+    s<< testData.mMaterialCount << " == " << testData2->mMaterialCount << std::endl;
+    AssertMsg_Test(testData.mMaterialCount  == testData2->mMaterialCount, s.str().c_str());
+
+    s.str("");
+    s<< testData.mMaterialNameLen << " == " << testData2->mMaterialNameLen << " for mat: " << testData2->GetMaterialName() << std::endl;
+    AssertMsg_Test(testData.mMaterialNameLen  == testData2->mMaterialNameLen, s.str().c_str());
+
+    s.str("");
+    s<< testSubMeshData.mSubMeshSize << " == " << testSubMeshData2->mSubMeshSize << std::endl;
+    AssertMsg_Test(testSubMeshData.mSubMeshSize== testSubMeshData2->mSubMeshSize, s.str().c_str());
 	s.str("");
-	s<< testData.mIndicesCount << " == " << testData2->mIndicesCount << std::endl;
-	AssertMsg_Test(testData.mIndicesCount  == testData2->mIndicesCount, s.str().c_str());
+    s<< testSubMeshData.mVertexCount << " == " << testSubMeshData2->mVertexCount << std::endl;
+	AssertMsg_Test(testSubMeshData.mVertexCount  == testSubMeshData2->mVertexCount, s.str().c_str());
 	s.str("");
+	s<< testSubMeshData.mIndicesCount << " == " << testSubMeshData2->mIndicesCount << std::endl;
+	AssertMsg_Test(testSubMeshData.mIndicesCount  == testSubMeshData2->mIndicesCount, s.str().c_str());
+/*	s.str("");
 	s<< testData.mNormalCount << " == " << testData2->mNormalCount << std::endl;
 	AssertMsg_Test(testData.mNormalCount  == testData2->mNormalCount, s.str().c_str());
 	s.str("");
 	s<< testData.mVertexColorCount << " == " << testData2->mVertexColorCount << std::endl;
 	//AssertMsg_Test(testData.mVertexColorCount  == testData2->mVertexColorCount, s.str().c_str());
-	s.str("");
-	s<< testData.mMaterialCount << " == " << testData2->mMaterialCount << std::endl;
-	AssertMsg_Test(testData.mMaterialCount  == testData2->mMaterialCount, s.str().c_str());
-	s.str("");
-	s<< testData.mUvCount << " == " << testData2->mUvCount << std::endl;
-	AssertMsg_Test(testData.mUvCount  == testData2->mUvCount, s.str().c_str());
+
+    s.str("");
+    s<< testData.mUvCount << " == " << testData2->mUvCount << std::endl;
+    AssertMsg_Test(testData.mUvCount  == testData2->mUvCount, s.str().c_str());
+    */
+
+
 
 	MeshResource::Unload(testData2);
 }

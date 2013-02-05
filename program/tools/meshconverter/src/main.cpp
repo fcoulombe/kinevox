@@ -28,7 +28,7 @@
 #include <gcl/Point3.h>
 #include <gcl/Point4.h>
 
-#include <common/FBXManager.h>
+#include <common/MeshLoader.h>
 
 using namespace GCL;
 
@@ -39,14 +39,11 @@ int main(int /*argc*/, char ** argv)
 	//std::cout << "Mesh Convert from: " << argv[1] << " to: " << argv[2] << std::endl;
 	try
 	{
-		FBXManager::Initialize();
+		MeshLoader::Initialize();
 
-	    FBXManager::LoadScene(argv[1]);
+	    MeshLoader::LoadScene(argv[1]);
 
-	    KFbxScene* pScene = FBXManager::GetScene();
-	    (void)pScene;
-
-	    ToolMeshData data = FBXManager::GetMeshData();
+	    ToolMeshData data = MeshLoader::GetMeshData();
 	  //  std::cout << data << std::endl;
 
 	    BufferWriter buffer(1024*1500);
@@ -62,7 +59,7 @@ int main(int /*argc*/, char ** argv)
         GCLAssert(pos != std::string::npos);
 	    const std::string outputMatFileName = outputMeshFileName.substr(0, pos)+"data/Material/" + data.mMaterialData.matName+".mat";
 		data.mMaterialData.WriteToFile(outputMatFileName);
-		FBXManager::Terminate();
+		MeshLoader::Terminate();
 
 	}
 	catch(GCLException &e)

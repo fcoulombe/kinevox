@@ -63,13 +63,14 @@ const   VertexPNT GCLRenderObject::cube[GCLRenderObject::NUM_VERTICES] = {
 		{WorldPoint3(-0.5, -0.5, 0.5), 	WorldPoint3(0.0, 1.0, 0.0), WorldPoint2(1.0, 1.0)}
 
 };
-const VertexData GCLRenderObject::data(&cube, GCLRenderObject::NUM_VERTICES, VertexPNT::GetComponentType());
+
 
 
 GCLRenderObject::GCLRenderObject(const char *name)
 : RenderObject(name, Matrix44::IDENTITY),
   mMaterial("Default")
 {
+    data.push_back(VertexData(&cube, GCLRenderObject::NUM_VERTICES, VertexPNT::GetComponentType()));
 	GCLApplication::RegisterRenderObject(this);
 }
 

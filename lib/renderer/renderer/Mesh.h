@@ -34,9 +34,9 @@ class Mesh
 public:
 	Mesh(const char *filename="DefaultMesh");
 	~Mesh();
-	const void * GetVertexData() const { return mMeshResource->mMeshData->GetVertexData(); }
+	const void * GetVertexData(size_t subMeshIndex) const { return mMeshResource->mMeshData->GetSubMeshData(subMeshIndex)->GetVertexData(); }
 	VertexComponents GetVertexType() const { return (VertexComponents)(ePOSITION|eNORMAL|eTEXTURE_COORD); }
-	size_t GetVertexCount() const { return mMeshResource->mMeshData->mIndicesCount; }
+	size_t GetVertexCount(size_t subMeshIndex) const { return mMeshResource->mMeshData->GetSubMeshData(subMeshIndex)->mIndicesCount; }
 	const Material &GetMaterial() const { return *mMaterial; }
 private:
 	Material *mMaterial;

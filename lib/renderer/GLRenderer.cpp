@@ -142,34 +142,38 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		SetTransform(projection, modelView, transform);
 
 		//FC: can sort by component type
-		const VertexData &data = renderObjectList[i]->GetVertexData();
-		switch (data.mVertexType)
-		{
-		case ePOSITION:
-		{
-			VertexBuffer<VertexP> buffer((const VertexP *)data.mVertexData, data.mVertexCount);
-			buffer.Render();
-		}
-		break;
-		case ePOSITION|eNORMAL:
-		{
-			VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.mVertexCount);
-			buffer.Render();
-		}
-		break;
-		case ePOSITION|eTEXTURE_COORD:
-		{
-			VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.mVertexCount);
-			buffer.Render();
-		}
-		break;
-		case ePOSITION|eNORMAL|eTEXTURE_COORD:
-		{
-			VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.mVertexCount);
-			buffer.Render();
-		}
-		break;
-		}
+		const VertexDataList &dataList = renderObjectList[i]->GetVertexData();
+        for (size_t j=0; j<dataList.size(); ++j)
+        {
+            const VertexData &data = dataList[j]; 
+            switch (data.mVertexType)
+            {
+            case ePOSITION:
+                {
+                    VertexBuffer<VertexP> buffer((const VertexP *)data.mVertexData, data.mVertexCount);
+                    buffer.Render();
+                }
+                break;
+            case ePOSITION|eNORMAL:
+                {
+                    VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.mVertexCount);
+                    buffer.Render();
+                }
+                break;
+            case ePOSITION|eTEXTURE_COORD:
+                {
+                    VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.mVertexCount);
+                    buffer.Render();
+                }
+                break;
+            case ePOSITION|eNORMAL|eTEXTURE_COORD:
+                {
+                    VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.mVertexCount);
+                    buffer.Render();
+                }
+                break;
+            }
+        }
 #endif
 	}
 

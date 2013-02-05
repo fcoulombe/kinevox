@@ -20,37 +20,24 @@
  * THE SOFTWARE.
  */
 #pragma once
+#include <sstream>
 
+#include <common/ColladaManager.h>
 #include <gcl/UnitTest.h>
-#include <renderer/Material.h>
 
 using namespace GCL;
-namespace MaterialTest
+namespace ColladaLoadingTest
 {
-
-    
-    void Test();
 void Test()
 {
 	TEST_START
 
-	TextureResourceManager::Initialize();
-    WinDriver windriver("MaterialTest");
-	GLRenderer render;
+	ColladaManager::Initialize();
 
-	{
-	Material material("Default");
-	material.Bind();
-	material.LoadMaterial("Mushroom");
-	material.Bind();
-	material.SetTexture(TEXTURE_PATH"HappyFish.tga");
-	material.Bind();
-	}
-	{
-	Material material("mario_mario_fire_png__mario_fire_png");
-	material.Bind();
-	}
+    ColladaManager::LoadScene("datamisc/ExampleMesh.dae");
 
-	TextureResourceManager::Terminate();
+    ToolMeshData &data = ColladaManager::GetMeshData();
+//std::cout << data << std::endl;
+    ColladaManager::Terminate();
 }
 }

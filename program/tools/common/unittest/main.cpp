@@ -23,6 +23,7 @@
 #include "BufferWriterTest.h"
 #include "TTFLoadingTest.h"
 
+#include "ColladaLoadingTest.h"
 #include "FBXLoadingTest.h"
 #include "MeshSavingTest.h"
 
@@ -39,7 +40,8 @@ int main(int argc, char **argv)
 	  BufferWriterTest::Test();
 	  TTFLoadingTest::Test();
 
-	  FBXLoadingTest::Test();
+	  ColladaLoadingTest::Test();
+      FBXLoadingTest::Test();
       MeshSavingTest::Test();
       SUITE_TERMINATE
   std::cout.flush();

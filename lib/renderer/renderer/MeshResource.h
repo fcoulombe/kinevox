@@ -22,6 +22,8 @@
 
 #pragma once
 
+#include <stdint.h>
+#include <gcl/Assert.h>
 #include <gcl/Resource.h>
 #include <gcl/WorldUnit.h>
 
@@ -42,31 +44,52 @@ public:
 		//WorldPoint4 mEmissive;
 		Real mShininess;
 	};
+    struct SubMeshData
+    {
+        SubMeshData()
+            : mSubMeshSize(0),
+            mVertexCount(0),
+            mIndicesCount(0)
+        {}
+
+        uint32_t mSubMeshSize;
+        uint32_t mVertexCount;
+        uint32_t mIndicesCount;
+
+        const void *GetIndiceData() const { return (uint8_t*)(this)+sizeof(SubMeshData); }
+        const void *GetVertexData() const { return (uint8_t*)(this)+sizeof(SubMeshData)+(mIndicesCount*sizeof(uint32_t)); }
+
+        
+    };
 	struct MeshData
 	{
 		MeshData()
-		: mVertexCount(0),
-		  mIndicesCount(0),
-		  mNormalCount(0),
-		  mVertexColorCount(0),
-		  mMaterialCount(0),
-		  mUvCount(0)
+		: mSubMeshCount(0),
+          mMaterialCount(0),
+          mMaterialNameLen(0)
 		{}
 		~MeshData(){}
 
-		uint32_t mVertexCount;
-		uint32_t mIndicesCount;
-
-		uint32_t mNormalCount;
-		uint32_t mVertexColorCount;
-
+        uint32_t mSubMeshCount;
 		uint32_t mMaterialCount;
-		uint32_t mUvCount;
-		uint8_t pad[4];
 		uint32_t mMaterialNameLen; //the name len is part of the string write up
 
 		const char *GetMaterialName() const { return (const char*)(this)+sizeof(MeshData); }
-		const void *GetVertexData() const { return (uint8_t*)(this)+sizeof(MeshData)+mMaterialNameLen; }
+        const SubMeshData *GetSubMeshData(size_t index) const 
+        { 
+            GCLAssert(index <mSubMeshCount); 
+            SubMeshData *curSubMesh = (SubMeshData *)((uint8_t*)(this)+sizeof(MeshData)+mMaterialNameLen);
+            
+            size_t iteration = 0;
+            while (iteration != index)
+            {
+                uint32_t subMeshSize = curSubMesh->mSubMeshSize;
+                curSubMesh = (SubMeshData *)((uint8_t*)(curSubMesh)+subMeshSize);
+            }
+
+            return curSubMesh;  
+        }
+		//const void *GetVertexData() const { return (uint8_t*)(this)+sizeof(MeshData)+mMaterialNameLen; }
 
 	};
 	const MeshData *mMeshData;

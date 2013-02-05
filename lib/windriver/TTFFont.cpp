@@ -44,7 +44,7 @@ TTFFont::~TTFFont()
 	FontResourceManager::Instance().ReleaseResource(mFontResource);
 }
 
-void TTFFont::DrawText(PixelBuffer &buffer, const char * text, size_t /*x*/, size_t /*y*/)
+void TTFFont::BlitText(PixelBuffer &buffer, const char * text, size_t /*x*/, size_t /*y*/)
 {
 	SDL_Surface* fontSurface;
 	SDL_Color fColor;

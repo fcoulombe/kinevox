@@ -48,14 +48,13 @@
 #include "VertexTest.h"
 
 using namespace GCL;
-
 int main(int argc, char **argv)
 {
   std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
 
 
   SUITE_INIT(argc, argv)
-	/*  GLRendererTest::Test();
+	  GLRendererTest::Test();
       CameraTest::Test();
       ShaderTest::Test();
 
@@ -69,8 +68,8 @@ int main(int argc, char **argv)
       TextureAndShaderTest::Test();
 
       MaterialTest::Test();
-      */SpriteTest::Test();
-     /* RenderObject2DTest::Test();
+      SpriteTest::Test();
+      RenderObject2DTest::Test();
       Text2DTest::Test();
 
       RenderObjectTest::Test();
@@ -83,9 +82,7 @@ int main(int argc, char **argv)
       MeshLoadingTest::Test();
       MeshResourceTest::Test();
       MeshTest::Test();
-*/
+
       SUITE_TERMINATE
-  std::cout.flush();
-  std::cerr.flush();
   return 0;
 }

@@ -34,6 +34,7 @@ public:
 	: PixelBuffer(),
 	  mBufferType(GL_STATIC_DRAW)
 	{
+        glGenBuffersARB(1, &mPixelBufferId);glErrorCheck();
 	}
 	PixelBufferHAL(const PixelBuffer &buffer)
 	: mBufferType(GL_STATIC_DRAW)

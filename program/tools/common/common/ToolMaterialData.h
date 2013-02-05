@@ -59,10 +59,17 @@ struct ToolMaterialData
 	void WriteToFile(const std::string &filename)
 	{
 		std::ofstream fp(filename.c_str());
-		//std::cout << filename << std::endl;
+		std::cout <<"writing out: " << filename << std::endl;
 		GCLAssertMsg(fp.good(), filename);
 		fp << "shader: default" << std::endl;
-		fp << "texture: data/Texture/" << texName<<std::endl;
+        if (texName.length())
+        {
+		    fp << "texture: data/Texture/" << texName<<std::endl;
+        }
+        else
+        {
+            fp << "texture: null"<<std::endl;
+        }
 		fp << "ambient: " << mAmbient.x << " " << mAmbient.y << " " << mAmbient.z << " " << mAmbient.w << std::endl;
 		fp << "diffuse: " << mDiffuse.x << " " << mDiffuse.y << " " << mDiffuse.z << " " << mDiffuse.w << std::endl;
 		fp << "specular: " << mSpecular.x << " " << mSpecular.y << " " << mSpecular.z << " " << mSpecular.w << std::endl;

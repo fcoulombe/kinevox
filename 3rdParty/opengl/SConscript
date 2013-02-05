@@ -6,7 +6,7 @@ dependencies = []
 
 def SetCFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-	    void = "" #ienv.Append(CPPPATH=[env.Dir('#3rdParty/vorbis/include')])
+	    ienv.Append(CPPPATH=[env.Dir('#3rdParty/opengl/include')])
     elif ienv['PLATFORM']=='darwin':
 		ienv['FRAMEWORKS'] = ['OpenGL']
 		ienv.Append(CPPFLAGS=['-FOpenGL']) #adding the opengl framework

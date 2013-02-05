@@ -5,10 +5,15 @@ name = "zlib"
 dependencies = []
 
 def SetCFlags(ienv):
-	ienv.Append(CPPPATH=[env.Dir('#3rdParty/zlib/zlib')])
+	ienv.Append(CPPPATH=[env.Dir('#3rdParty/zlib/include')])
 		
  
 def SetLFlags(ienv):
-	void = ""
-	
-env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)
+    if ienv['PLATFORM'] == "win32":
+        ienv.Append(LIBS=[env.File('#3rdParty/zlib/lib/zlib.lib')])
+    else:
+        ienv.ParseConfig('pkg-config --libs libpng')
+
+if env['PLATFORM'] == "win32":
+    dllDep = [env.File('#3rdParty/zlib/bin/zlibwapi.dll')]	
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags, dllDep)

@@ -15,8 +15,9 @@ def SetCFlags(ienv):
 
 def SetLFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-        ienv.Append(LIBS=[env.File('#3rdParty/sdl/lib/x86/SDL.lib')])
-        ienv.Append(LIBS=[env.File('#3rdParty/sdl/lib/x86/SDLmain.lib')])
+        ienv.Append(LIBS=[env.File('#3rdParty/sdl/lib/SDL.lib'), 
+                    env.File('#3rdParty/sdl/lib/SDLmain.lib'), 
+                    env.File('#3rdParty/sdl/lib/SDL_ttf.lib')])
         ienv.AppendUnique(LINKFLAGS=["/SUBSYSTEM:WINDOWS"])
     elif ienv['PLATFORM']=='darwin':
         ienv.ParseConfig('sdl-config --libs')
@@ -26,5 +27,8 @@ def SetLFlags(ienv):
 	
 dllDep = []
 if env['PLATFORM'] == "win32":
-    dllDep = [env.File('#3rdParty/sdl/lib/x86/SDL.dll')]
+    dllDep = [env.File('#3rdParty/sdl/bin/SDL.dll'), 
+                env.File('#3rdParty/sdl/bin/SDL_ttf.dll'), 
+                env.File('#3rdParty/sdl/bin/zlib1.dll'), 
+                env.File('#3rdParty/sdl/bin/libfreetype-6.dll')]
 env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags, dllDep)

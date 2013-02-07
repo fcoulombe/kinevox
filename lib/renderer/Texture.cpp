@@ -216,7 +216,7 @@ const uint8_t *Texture::GetTextureFromVRAM() const
 
     }
 	else
-		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glGetTexImage(GL_TEXTURE_2D, 0, BytesPerPixel[mTextureData.bytesPerPixel-1], GL_UNSIGNED_BYTE, data);
 	glErrorCheck();
 	return data;
 #else

@@ -51,7 +51,7 @@ int main(int /*argc*/, char ** argv)
 
 	    const std::string outputMeshFileName(argv[2]);
 	    buffer.WriteToFile(outputMeshFileName);
-#if OS_WIN32
+#if defined(OS_WIN32)
         size_t pos = outputMeshFileName.find("data\\Mesh");
 #else
 	    size_t pos = outputMeshFileName.find("data/Mesh");

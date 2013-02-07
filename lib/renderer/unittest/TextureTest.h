@@ -87,6 +87,16 @@ void Test()
 #endif
 	}
 
+    //rgb
+    {
+        Texture texture(TEXTURE_PATH"nonsquare.tga");
+        texture.Bind();
+
+#ifndef OS_IPHONE
+        texture.Save("NonSquareTextureTest.tga");
+#endif
+    }
+
 	//Pixel Buffer Texture
 	{
 		TTFFont font(FONT_PATH"FreeMono.ttf", 12);

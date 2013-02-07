@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 
 #include <renderer/FrameBuffer.h>
 #include <renderer/Material.h>
@@ -103,15 +103,12 @@ void Test()
         WinDriver winDriver("FrameBufferTest2");
 		GLRenderer renderer;
 
-		Camera myCamera;
-
 		MyRenderObject obj;
 		obj.SetPosition(0,0,-10.0);
 		RenderObjectList renderObjectList;
 		renderObjectList.push_back(&obj);
 
-		renderer.SetCamera(myCamera);
-		size_t width = winDriver.GetViewPort().GetWidth();
+        size_t width = winDriver.GetViewPort().GetWidth();
 		size_t height = winDriver.GetViewPort().GetHeight();
 
 		RenderBuffer depthRenderBuffer(width, height);
@@ -122,12 +119,16 @@ void Test()
 		try
 		{
 			FrameBuffer frameBuffer(texture, depthRenderBuffer);
-			frameBuffer.Bind();
+
+			
+            KINEVOX_TEST_LOOP_START
+                frameBuffer.Bind();
 			renderer.PreRender();
 			renderer.Render(renderObjectList);
 			renderer.PostRender();
             winDriver.SwapBuffer();
 			FrameBuffer::ResetDefault();
+            KINEVOX_TEST_LOOP_END
 		}
 		catch (GCLException &e)
 		{

@@ -30,8 +30,8 @@ class Camera
 {
 public:
 	Camera();
-	void MoveForward();
-	void MoveBackward();
+	void MoveForward(Real speed = 1.0);
+	void MoveBackward(Real speed = 1.0);
 	void TurnLeft(Real degree = -1.0);
 	void TurnRight(Real degree = 1.0);
 	void TiltUp();

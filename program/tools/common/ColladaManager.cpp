@@ -435,8 +435,8 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
         const COLLADAFW::MeshPrimitive* subMesh = subMeshes[i];
         const COLLADAFW::UIntValuesArray& posi = subMesh->getPositionIndices();
         const COLLADAFW::UIntValuesArray& normi = subMesh->getNormalIndices();
-        const COLLADAFW::IndexList* uvi = subMesh->getUVCoordIndices(0);
-        const COLLADAFW::IndexList* coli = subMesh->getColorIndices(0);
+        const COLLADAFW::UIntValuesArray& uvi = subMesh->getUVCoordIndices(0)->getIndices();
+        const COLLADAFW::UIntValuesArray& coli = subMesh->getColorIndices(0)->getIndices();
         std::cout << "indice count: " << posi.getCount()<<std::endl;
         switch (subMesh->getPrimitiveType())
         {
@@ -449,8 +449,8 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                     const double *rawPos = positions.getDoubleValues()->getData();
                     int positionIndex = posi[j]*3;           
                     newPosition.x = rawPos[positionIndex];
-                    newPosition.y = rawPos[positionIndex+1];
-                    newPosition.z = rawPos[positionIndex+2];
+                    newPosition.y = rawPos[positionIndex+2];
+                    newPosition.z = rawPos[positionIndex+1];
                     subMeshData.mVertexList.push_back(newPosition);
                 }
                 else
@@ -458,8 +458,8 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                     const float *rawPos = positions.getFloatValues()->getData();
                     int positionIndex = posi[j]*3;           
                     newPosition.x = rawPos[positionIndex];
-                    newPosition.y = rawPos[positionIndex+1];
-                    newPosition.z = rawPos[positionIndex+2];
+                    newPosition.y = rawPos[positionIndex+2];
+                    newPosition.z = rawPos[positionIndex+1];
                     subMeshData.mVertexList.push_back(newPosition);
                 }
                 //std::cout << "v" << j << ": " << newPosition << std::endl;
@@ -467,19 +467,19 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                 if (normals.getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE )
                 {
                     const double *rawNorm = normals.getDoubleValues()->getData();
-                    int normalIndex = posi[j]*3;           
+                    int normalIndex = normi[j]*3;           
                     newNormal.x = rawNorm[normalIndex];
-                    newNormal.y = rawNorm[normalIndex+1];
-                    newNormal.z = rawNorm[normalIndex+2];
+                    newNormal.y = rawNorm[normalIndex+2];
+                    newNormal.z = rawNorm[normalIndex+1];
                     subMeshData.mNormalList.push_back(newNormal);
                 }
                 else
                 {
                     const float *rawNorm = positions.getFloatValues()->getData();
-                    int normalIndex = posi[j]*3;           
+                    int normalIndex = normi[j]*3;           
                     newNormal.x = rawNorm[normalIndex];
-                    newNormal.y = rawNorm[normalIndex+1];
-                    newNormal.z = rawNorm[normalIndex+2];
+                    newNormal.y = rawNorm[normalIndex+2];
+                    newNormal.z = rawNorm[normalIndex+1];
                     subMeshData.mNormalList.push_back(newNormal);
                 }
 
@@ -487,17 +487,17 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                 if (uvs.getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE )
                 {
                     const double *rawUv = uvs.getDoubleValues()->getData();
-                    int uvIndex = posi[j]*2;           
+                    int uvIndex = uvi[j]*uvs.getStride(0);           
                     newUv.x = rawUv[uvIndex];
                     newUv.y = rawUv[uvIndex+1];
                     subMeshData.mUvList.push_back(newUv);
                 }
                 else
                 {
-                    const float *rawNorm = positions.getFloatValues()->getData();
-                    int uvIndex = posi[j]*3;           
-                    newUv.x = rawNorm[uvIndex];
-                    newUv.y = rawNorm[uvIndex+1];
+                    const float *rawUv = uvs.getFloatValues()->getData();
+                    int uvIndex = uvi[j]*uvs.getStride(0);     
+                    newUv.x = rawUv[uvIndex];
+                    newUv.y = rawUv[uvIndex+1];
                     subMeshData.mUvList.push_back(newUv);
                 }
                 subMeshData.mIndiceList.push_back(j);

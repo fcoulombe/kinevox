@@ -85,12 +85,18 @@ void Test()
 #endif
 	{
 		MeshRenderObject myMesh;
+        myMesh.SetPosition(0.0,0.0,-10.0);
 		RenderObjectList renderList;
 		renderList.push_back(&myMesh);
+        Real rot = 0.0;
+        KINEVOX_TEST_LOOP_START
+            rot+=0.001;
+        myMesh.SetOrientation(0.0,rot,0.0);
 		render.PreRender();
 		render.Render(renderList);
 		render.PostRender();
         windriver.SwapBuffer();
+        KINEVOX_TEST_LOOP_END
 	}
 
 

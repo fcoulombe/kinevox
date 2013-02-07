@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 #include <renderer/Material.h>
 #include <renderer/RenderObject.h>
 #include <renderer/Shader.h>
@@ -32,10 +32,10 @@ using namespace GCL;
 namespace RenderObjectTest
 {
     static const   VertexPNT square[4] = {
-        {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)} ,
-        {WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-        {WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-        {WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
+        {WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
+        {WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
+        {WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
+        {WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}};
 class MyRenderObject : public RenderObject
 {
 public:
@@ -134,11 +134,16 @@ void Test()
 			obj.SetTransform(Matrix44::IDENTITY);
 
 		}
-
+        obj.SetPosition(0.0,0.0,-10.0);
+        Real rot = 0.0;
+        KINEVOX_TEST_LOOP_START
+        rot+=0.001;
+        obj.SetOrientation(0.0,rot,0.0);
 		renderer.PreRender();
 		renderer.Render(objList);
 		renderer.PostRender();
 		winDriver.SwapBuffer();
+        KINEVOX_TEST_LOOP_END
 	}
 	TextureResourceManager::Terminate();
 

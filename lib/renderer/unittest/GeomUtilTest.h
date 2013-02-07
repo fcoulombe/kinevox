@@ -54,6 +54,111 @@ private:
 };
 
 
+class SphereRenderObject : public RenderObject
+{
+public:
+    SphereRenderObject()
+        : RenderObject("MyRenderObject", Matrix44(true)) //identity
+    {
+        
+        GeomUtil::MakeMeshSphere(vertex, 1.0);
+        data.push_back(VertexData(vertex.data(), vertex.size(), VertexP::GetComponentType()));
+    }
+    const VertexDataList &GetVertexData() const
+    {
+        return data;
+    }
+    const Material &GetMaterial() const { return mMaterial; }
+private:
+    std::vector<WorldPoint3> vertex;
+    VertexDataList data;
+
+    Material mMaterial;
+};
+
+
+class CircleRenderObject : public RenderObject
+{
+public:
+    CircleRenderObject()
+        : RenderObject("MyRenderObject", Matrix44(true)) //identity
+    {
+        GeomUtil::MakeMeshSphere(vertex, 1.0);
+        data.push_back(VertexData(vertex.data(), vertex.size(), VertexP::GetComponentType()));
+    }
+    const VertexDataList &GetVertexData() const
+    {
+        return data;
+    }
+    const Material &GetMaterial() const { return mMaterial; }
+private:
+    std::vector<WorldPoint3> vertex;
+    VertexDataList data;
+
+    Material mMaterial;
+};
+
+class PlaneRenderObject : public RenderObject
+{
+public:
+    PlaneRenderObject()
+        : RenderObject("MyRenderObject", Matrix44(true)) //identity
+    {
+        std::vector<WorldPoint3> points;
+        std::vector<WorldPoint2> uvs;
+        GeomUtil::MakeMeshPlane(points, uvs, 1.0);
+        for (size_t i=0; i<points.size(); ++i)
+        {
+            VertexPT v; 
+            v.position = points[i];
+            v.textureCoordinate = uvs[i];
+            vertex.push_back(v);
+        }
+        data.push_back(VertexData(vertex.data(), points.size(), VertexPT::GetComponentType()));
+    }
+    const VertexDataList &GetVertexData() const
+    {
+        return data;
+    }
+    const Material &GetMaterial() const { return mMaterial; }
+private:
+    std::vector<VertexPT> vertex;
+    VertexDataList data;
+
+    Material mMaterial;
+};
+
+class CubeRenderObject : public RenderObject
+{
+public:
+    CubeRenderObject()
+        : RenderObject("MyRenderObject", Matrix44(true)) //identity
+    {
+        std::vector<WorldPoint3> points;
+        std::vector<WorldPoint2> uvs;
+        GeomUtil::MakeMeshCube(points, uvs, 1.0);
+        
+        for (size_t i=0; i<points.size(); ++i)
+        {
+            VertexPT v; 
+            v.position = points[i];
+            v.textureCoordinate = uvs[i];
+            vertex.push_back(v);
+        }
+        VertexPT *positions =  (VertexPT *)(vertex.data());
+        data.push_back(VertexData(positions, vertex.size(), VertexPT::GetComponentType()));
+    }
+    const VertexDataList &GetVertexData() const
+    {
+        return data;
+    }
+    const Material &GetMaterial() const { return mMaterial; }
+private:
+    std::vector<VertexPT> vertex;
+    VertexDataList data;
+
+    Material mMaterial;
+};
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 {
@@ -72,7 +177,8 @@ void Test()
 		GeomUtil::MakeMeshSphere(dst, radius);
 		GeomUtil::MakeMeshCircle(dst, radius);
 
-		std::vector<WorldPoint3> vertexData,tcoordData;
+		std::vector<WorldPoint3> vertexData;
+        std::vector<WorldPoint2> tcoordData;
 		Real size = 1.0;
 		GeomUtil::MakeMeshPlane(vertexData,tcoordData,size);
 		GeomUtil::MakeMeshCube(vertexData,tcoordData,size);
@@ -83,40 +189,40 @@ void Test()
 		WinDriver winDriver("GeomUtilTest");
 		GLRenderer renderer;
 
-		Camera myCamera;
+        RenderObjectList objList;
+		CubeRenderObject cube;
+        cube.SetPosition(3.0,0.0,-8.0);
+		objList.push_back(&cube);
+        SphereRenderObject sphere;
+        sphere.SetPosition(1,0.0,-8.0);
+        objList.push_back(&sphere);
+        PlaneRenderObject plane;
+        plane.SetPosition(-1,0.0,-8.0);
+        objList.push_back(&plane);
+        CircleRenderObject circle;
+        circle.SetPosition(-3.0,0.0,-8.0);
+        objList.push_back(&circle);
 
-		MyRenderObject obj;
-		obj.SetPosition(0,0,-10.0);
-		RenderObjectList renderObjectList;
-		renderObjectList.push_back(&obj);
-
-		renderer.SetCamera(myCamera);
-		size_t width = winDriver.GetViewPort().GetWidth();
-		size_t height = winDriver.GetViewPort().GetHeight();
-
-		RenderBuffer depthRenderBuffer(width, height);
-		depthRenderBuffer.Bind();
-
-		Texture texture(width, height, 4);
 
 		try
 		{
-			FrameBuffer frameBuffer(texture, depthRenderBuffer);
-			frameBuffer.Bind();
-			renderer.PreRender();
-			renderer.Render(renderObjectList);
-			renderer.PostRender();
-			winDriver.SwapBuffer();
-			FrameBuffer::ResetDefault();
+            Real rot = 0.0;
+            KINEVOX_TEST_LOOP_START
+                rot+=0.001;
+            cube.SetOrientation(0.0,rot,0.0);
+            circle.SetOrientation(0.0,rot,0.0);
+            sphere.SetOrientation(0.0,rot,0.0);
+            plane.SetOrientation(0.0,rot,0.0);
+            renderer.PreRender();
+            renderer.Render(objList);
+            renderer.PostRender();
+            winDriver.SwapBuffer();
+            KINEVOX_TEST_LOOP_END
 		}
 		catch (GCLException &e)
 		{
 			AssertMsg_Test(false, e.what());
 		}
-#ifndef OS_IPHONE
-		texture.Save("FrameBufferTest.tga");
-		//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
-#endif
 	}
 
 	TextureResourceManager::Terminate();

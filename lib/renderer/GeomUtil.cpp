@@ -97,7 +97,7 @@ void GeomUtil::MakeMeshCircle(std::vector<WorldPoint3>& dst, Real /*radius*/)
 }
 
 void GeomUtil::MakeMeshPlane(std::vector<WorldPoint3>& vertexData,
-		std::vector<WorldPoint3>& tcoordData,
+		std::vector<WorldPoint2>& tcoordData,
 		Real size)
 {
 	const WorldPoint3 v0( 1.0 * size,  1.0 * size,  0.0);
@@ -105,10 +105,10 @@ void GeomUtil::MakeMeshPlane(std::vector<WorldPoint3>& vertexData,
 	const WorldPoint3 v2( 1.0 * size, -1.0 * size,  0.0);
 	const WorldPoint3 v3(-1.0 * size, -1.0 * size,  0.0);
 
-	const WorldPoint3 t0( 1.0,  1.0,  0.0);
-	const WorldPoint3 t1( 0.0,  1.0,  0.0);
-	const WorldPoint3 t2( 1.0,  0.0,  0.0);
-	const WorldPoint3 t3( 0.0,  0.0,  0.0);
+	const WorldPoint2 t0( 1.0,  1.0);
+	const WorldPoint2 t1( 0.0,  1.0);
+	const WorldPoint2 t2( 1.0,  0.0);
+	const WorldPoint2 t3( 0.0,  0.0);
 
 
 	vertexData.push_back(v0);
@@ -127,7 +127,7 @@ void GeomUtil::MakeMeshPlane(std::vector<WorldPoint3>& vertexData,
 }
 
 void GeomUtil::MakeMeshCube(std::vector<WorldPoint3>& vertexData,
-		std::vector<WorldPoint3>& tcoordData,
+		std::vector<WorldPoint2>& tcoordData,
 		Real size)
 {
 	size *= 0.5;
@@ -141,10 +141,10 @@ void GeomUtil::MakeMeshCube(std::vector<WorldPoint3>& vertexData,
 	const WorldPoint3 v6( 1.0 * size, -1.0 * size,  1.0 * size);
 	const WorldPoint3 v7(-1.0 * size, -1.0 * size,  1.0 * size);
 
-	const WorldPoint3 t0( 1.0,  1.0,  0.0);
-	const WorldPoint3 t1( 0.0,  1.0,  0.0);
-	const WorldPoint3 t2( 1.0,  0.0,  0.0);
-	const WorldPoint3 t3( 0.0,  0.0,  0.0);
+	const WorldPoint2 t0( 1.0,  1.0);
+	const WorldPoint2 t1( 0.0,  1.0);
+	const WorldPoint2 t2( 1.0,  0.0);
+	const WorldPoint2 t3( 0.0,  0.0);
 
 	/* Top */
 	vertexData.push_back(v0);

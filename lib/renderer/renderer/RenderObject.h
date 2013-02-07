@@ -38,6 +38,7 @@ struct VertexData
 		mVertexCount = 0;
 		mVertexType = 0;
 	}
+    //can probably redo this with templates
 	VertexData(	const void *vertexData,size_t vertexCount,	uint32_t vertexType)
 	{
 		mVertexData = vertexData;

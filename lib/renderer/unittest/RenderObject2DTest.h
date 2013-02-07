@@ -52,8 +52,9 @@ void Test()
 		std::stringstream s;
 
 		//test setposition
+        const WorldPoint3 position(256.0,256.0, 0.0);
 		{
-			const WorldPoint3 position(1.0,0.0, 0.0);
+			
 			obj.SetPosition(position);
 
 			s.str("");
@@ -81,10 +82,15 @@ void Test()
 		}
 
 
+        const WorldPoint2 scale(2.0,2.0);
 		//test setscale
 		{
-			const WorldPoint2 scale(2.0,2.0);
+			
 			obj.SetScale(scale);
+
+            s.str("");
+            s<<scale << "\n==\n" << obj.GetScale() << std::endl;
+            AssertMsg_Test(scale == obj.GetScale(), s.str().c_str());
 		}
 
 		//test visible
@@ -98,6 +104,13 @@ void Test()
 		//set sprite test
 		{
 			obj.SetSprite("DefaultSprite");
+            //make sure that the position and the scale remains even though we change the sprite
+            s.str("");
+            s<<position << "\n==\n" << obj.GetPosition() << std::endl;
+            AssertMsg_Test(position == obj.GetPosition(), s.str().c_str());
+            s.str("");
+            s<<scale << "\n==\n" << obj.GetScale() << std::endl;
+            AssertMsg_Test(scale == obj.GetScale(), s.str().c_str());
 		}
 
 		//setname test

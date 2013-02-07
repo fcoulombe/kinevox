@@ -67,12 +67,17 @@ public:
 	const WorldPoint3 &GetPosition() const { return mSprite->GetPosition(); }
 
 	void SetScale(const WorldPoint2 &scale) { mSprite->SetScale(scale); }
+    const WorldPoint2 &GetScale() const { return mSprite->GetScale(); }
 
 	void SetSprite(const char *filename)
 	{
+        const WorldPoint3 position = mSprite->GetPosition();
+        const WorldPoint2 scale = mSprite->GetScale();
 		if (mSprite)
 			delete mSprite;
 		mSprite = new Sprite(filename);
+        mSprite->SetPosition(position);
+        mSprite->SetScale(scale);
 	}
 
 	void SetName(const char *name) { mObjName = name; }

@@ -59,16 +59,41 @@ void TTFFont::BlitText(PixelBuffer &buffer, const char * text, size_t /*x*/, siz
 	buffer.mPixels = new uint8_t[bufferSize];
 	memset(buffer.mPixels, 0, bufferSize);
 	//memcpy(buffer.mPixels, fontSurface->pixels, bufferSize);
-	for (int i=0; i<fontSurface->format->BytesPerPixel*fontSurface->w*fontSurface->h; ++i)
+    GCLAssertMsg(fontSurface->format->BytesPerPixel == 1, "we only support bit field or now");
+    uint8_t* ptr = (uint8_t*)(fontSurface->pixels);
+    for (size_t i=0; i<fontSurface->w; ++i)
+    {
+        for (size_t j=0; j<fontSurface->h; ++j)
+        {
+            size_t invHeight = fontSurface->h-j-1;
+            size_t currPixelFt = invHeight*fontSurface->w+i;
+            size_t currPixel = j*fontSurface->w+i;
+            if (ptr[currPixelFt])
+            {
+                buffer.mPixels[currPixel*3] = fColor.r;
+                buffer.mPixels[currPixel*3+1] = fColor.g;
+                buffer.mPixels[currPixel*3+2] = fColor.b;
+                //*(SDL_Color*)(&(buffer.mPixels[i*3])) = fColor;
+            }
+        }
+    }
+    
+   /* size_t ftypeSize =  fontSurface->format->BytesPerPixel*fontSurface->w*fontSurface->h;
+	for (int i=0; i<ftypeSize; ++i)
 	{
 		uint8_t* ptr = (uint8_t*)(fontSurface->pixels);
-		if (ptr[i])
-			*(SDL_Color*)(&(buffer.mPixels[i*3])) = fColor;
-	}
+		if (ptr[ftypeSize - i])
+        {
+            buffer.mPixels[i*3] = fColor.r;
+            buffer.mPixels[i*3+1] = fColor.g;
+            buffer.mPixels[i*3+2] = fColor.b;
+			//*(SDL_Color*)(&(buffer.mPixels[i*3])) = fColor;
+        }
+	}*/
 	buffer.mHeight = fontSurface->h;
 	buffer.mWidth = fontSurface->w;
 	buffer.mBitsPerPixel = 3*8;//fontSurface->format->BytesPerPixel*8;
 	buffer.mBytesPerPixel = 3;//fontSurface->format->BytesPerPixel;
-
+    buffer.mBitDepth = 8;
 	SDL_FreeSurface(fontSurface);
 }

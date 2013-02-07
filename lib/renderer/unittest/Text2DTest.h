@@ -42,6 +42,8 @@ public:
 	{
 		PixelBuffer buffer;
 		mFont.BlitText(buffer, text, 100, 100);
+        //buffer.PadToNextPOT();
+        //buffer.SaveTga("Text2DTest.tga", buffer.mWidth, buffer.mHeight, buffer.mBytesPerPixel, buffer.mPixels);
 		mTexture = new Texture(buffer);
 		mTexture->Save("Text2DTest.tga");
 	}
@@ -60,15 +62,15 @@ void Test()
 		WinDriver winDriver("Text2dTest");
 		GLRenderer renderer;
 
-		TestText2D obj("HelloWorld!");
+		TestText2D obj("HelloWorld");
 		s.str("");
 		s<< obj.GetWidth()<<" == 118"<<std::endl;
-		AssertMsg_Test(obj.GetWidth() == 118, s.str().c_str());
+		AssertMsg_Test(obj.GetWidth() == 108, s.str().c_str());
 		s.str("");
 		s<< obj.GetHeight()<<" == 19"<<std::endl;
 		AssertMsg_Test(obj.GetHeight() == 19, s.str().c_str());
 
-		static const WorldPoint3 kPositionTest(320.0, 240.0, 0.0);
+		static const WorldPoint3 kPositionTest(256.0, 256.0, 0.0);
 		obj.SetPosition(kPositionTest);
 		Assert_Test(obj.GetPosition() == kPositionTest);
 
@@ -77,17 +79,27 @@ void Test()
 		Assert_Test(obj.GetScale() == kScaleTest);
 
 
-		for (size_t i=0;i<100; ++i)
-		{
-			obj.Update();
-			renderer.PreRender();
-			glPushMatrix();glErrorCheck();
-			obj.Render();
-			glPopMatrix();glErrorCheck();
-			renderer.PostRender();
-			winDriver.SwapBuffer();
-			Time::SleepMs(1);
-		}
+        KINEVOX_TEST_LOOP_START
+            const ViewPort &viewport = winDriver.GetViewPort();
+#if ENABLE_FIX_PIPELINE
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho (0, viewport.GetHeight(), viewport.GetHeight(), 0, -1.0f, 1.0f); glErrorCheck();
+#endif
+
+#if ENABLE_FIX_PIPELINE
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+#endif
+        obj.Update();
+        renderer.PreRender();
+        glPushMatrix();glErrorCheck();
+        obj.Render();
+        glPopMatrix();glErrorCheck();
+        renderer.PostRender();
+        winDriver.SwapBuffer();
+        KINEVOX_TEST_LOOP_END
+
 	}
 	FontResourceManager::Terminate();
 	TextureResourceManager::Terminate();

@@ -26,12 +26,12 @@
 
 #if defined(OS_IPHONE)
 #elif defined(OS_MACOSX)
-#elif OS_LINUX
+#elif defined(OS_LINUX)
 #	include <ogg/ogg.h>
 #	include <vorbis/codec.h>
 #	include <vorbis/vorbisenc.h>
 #	include <vorbis/vorbisfile.h>
-#elif OS_WIN32
+#elif defined(OS_WIN32)
 #	include <ogg/ogg.h>
 #	include <vorbis/codec.h>
 #	include <vorbis/vorbisenc.h>

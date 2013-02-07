@@ -53,13 +53,13 @@ void Camera::Update()
 }
 
 
-void Camera::MoveForward()
+void Camera::MoveForward(Real speed)
 {
-	mCameraMatrix[3] -= mCameraMatrix[2]/10;
+	mCameraMatrix[3] += mCameraMatrix[2]/10*-speed;
 }
-void Camera::MoveBackward()
+void Camera::MoveBackward(Real speed)
 {
-	mCameraMatrix[3] += mCameraMatrix[2]/10;
+	mCameraMatrix[3] += mCameraMatrix[2]/10*speed;
 }
 void Camera::TurnLeft(Real degree )
 {

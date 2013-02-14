@@ -16,9 +16,9 @@ def SetCFlags(ienv):
         
 def SetLFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-	    print "bleh"
+        void = ""
         #ienv.Append(LIBS=[env.Dir('#3rdParty/vorbis/lib/win32')])
     else:
-	    ienv.ParseConfig('pkg-config --libs opencv')
+        ienv.ParseConfig('pkg-config --libs opencv')
 	
 env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

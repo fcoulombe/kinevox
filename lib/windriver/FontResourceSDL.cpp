@@ -19,29 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#pragma once
+#ifdef USE_SDL
+#include "windriver/FontResource.h"
+#include <3rdparty/Sdl.h>
+#include "gcl/Assert.h"
 
-#include <gcl/UnitTest.h>
-
-#include <input/Input.h>
 
 using namespace GCL;
-namespace InputTest
-{
 
-void Test()
+
+FontResource::FontResource( const char *fontName )
+: Resource()
 {
-	TEST_START
-#if 0
-	//const Rect<int> &ProcessSelection();
-	Input::ProcessInput();
-	Input::IsKeyUp(SDLK_UP);
-	Input::IsKeyUp(SDLK_DOWN);
-	Input::IsKeyUp(SDLK_LEFT);
-	Input::IsKeyUp(SDLK_RIGHT);
-	Input::IsLMouseDown();
-	Input::GetMouseX();
-	Input::GetMouseY();
+	std::string path = Resource::GetResourcePath();
+	path += fontName;
+
+	std::string msg("trying to loads " );
+	msg += path.c_str();
+	msg += "\n";
+
+	mFont = TTF_OpenFont(path.c_str(), 18);
+
+	GCLAssertMsg(mFont,msg.c_str());
+
+}
+
+FontResource::~FontResource()
+{
+	TTF_CloseFont(mFont);
+}
+
+
 #endif
-}
-}

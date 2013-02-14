@@ -19,8 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+#if 0
 #include "windriver/FontResourceManager.h"
+
+#include <3rdparty/Sdl.h>
 #include "windriver/FontResource.h"
 
 using namespace GCL;
@@ -36,3 +38,14 @@ void FontResourceManager::Free( Resource * resource )
 {
 	delete resource;
 }
+
+GCL::FontResourceManager::~FontResourceManager()
+{
+    TTF_Quit();
+}
+
+GCL::FontResourceManager::FontResourceManager()
+{
+    TTF_Init();
+}
+#endif

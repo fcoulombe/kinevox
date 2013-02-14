@@ -26,11 +26,18 @@
 #include <cstdio>
 
 //we put this in the header since people use SDL enum for keys and we don't want them to have to include sdl manually. include input and its all there by default
-#include <3rdparty/Sdl.h>
+//#include <3rdparty/Sdl.h>
 #include <gcl/Rect.h>
 
 namespace GCL
 {
+    enum KeyNames
+    {
+        GCL_ESCAPE,
+        GCL_UP,
+        GCL_DOWN,
+        GCL_LEFT
+    };
 class Input
 {
 public:

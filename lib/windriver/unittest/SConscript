@@ -22,7 +22,7 @@
 Import('env')
 
 name = "windriver_test"
-dependencies = ["windriver"]
+dependencies = ["windriver", "kinetestlib"]
 data = [env.Dir('data')]
 
 src_files = env.Glob("*.cpp")

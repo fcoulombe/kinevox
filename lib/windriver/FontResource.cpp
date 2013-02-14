@@ -19,10 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+#if 0
 #include "windriver/FontResource.h"
-
+#include <3rdparty/Sdl.h>
 #include "gcl/Assert.h"
+
 
 using namespace GCL;
 
@@ -49,3 +50,4 @@ FontResource::~FontResource()
 }
 
 
+#endif

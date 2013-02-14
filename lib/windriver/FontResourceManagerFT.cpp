@@ -19,29 +19,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#pragma once
-
-#include <gcl/UnitTest.h>
-
-#include <input/Input.h>
+#ifndef USE_SDL
+#include "windriver/FontResourceManager.h"
+#include "windriver/FontResource.h"
+#include <3rdparty/FreeType.h>
 
 using namespace GCL;
-namespace InputTest
-{
 
-void Test()
+FontResourceManager *FontResourceManager::smpInstance = NULL;
+namespace GCL
 {
-	TEST_START
-#if 0
-	//const Rect<int> &ProcessSelection();
-	Input::ProcessInput();
-	Input::IsKeyUp(SDLK_UP);
-	Input::IsKeyUp(SDLK_DOWN);
-	Input::IsKeyUp(SDLK_LEFT);
-	Input::IsKeyUp(SDLK_RIGHT);
-	Input::IsLMouseDown();
-	Input::GetMouseX();
-	Input::GetMouseY();
+FT_Library  library;
+}
+Resource * FontResourceManager::Allocate( const char *filename )
+{
+  return new FontResource(filename);
+}
+
+void FontResourceManager::Free( Resource * resource )
+{
+	delete resource;
+}
+
+GCL::FontResourceManager::~FontResourceManager()
+{
+    FT_Error err = FT_Done_FreeType(library);
+    FTErrorCheck(err);
+}
+
+GCL::FontResourceManager::FontResourceManager()
+{
+    FT_Error err = FT_Init_FreeType( &library );
+    FTErrorCheck(err);
+}
 #endif
-}
-}

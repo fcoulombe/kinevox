@@ -31,6 +31,16 @@
 #include <gcl/Rect.h>
 
 using namespace GCL;
+#if 1
+void Input::ProcessInput()
+{
+}
+
+bool Input::IsKeyUp(uint32_t key)
+{
+    return false;
+}
+#else
 namespace
 {
 const size_t KEYS_STATE_ARRAY_SIZE = 350;
@@ -126,7 +136,7 @@ const Rect<int> &Input::ProcessSelection()
 			selection.width = origin.x;
 			selection.height = origin.y;
 
-			printf("staret picking\n");
+			std::cout << "staret picking\n";
 		}
 		isSelectionStarted = true;
 		selection.x = std::min(currentPos.x,origin.x);
@@ -146,7 +156,7 @@ const Rect<int> &Input::ProcessSelection()
 	{
 		if (isSelectionStarted)
 		{
-			printf("end picking\n");
+			std::cout << "end picking\n";
 			//end picking
 			isSelectionStarted = false;
 			hasSelection = true;
@@ -156,4 +166,4 @@ const Rect<int> &Input::ProcessSelection()
 	}
 	return selection;
 }
-
+#endif

@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 
 #include <windriver/WinDriver.h>
 
@@ -34,5 +34,9 @@ void Test()
 	TEST_START
 
 	WinDriver windows("WinDriverTest");
+    KINEVOX_TEST_LOOP_START
+
+    windows.SwapBuffer();
+    KINEVOX_TEST_LOOP_END
 }
 }

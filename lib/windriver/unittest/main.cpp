@@ -26,15 +26,17 @@
 #include <gcl/Exception.h>
 
 #include "FontResourceTest.h"
+#include "SocketUDPTest.h"
 #include "TTFFontTest.h"
 #include "WinDriverTest.h"
 
 int main(int argc, char ** argv)
 {
 	SUITE_INIT(argc, argv)
+       // SocketUDPTest::Test();
 		FontResourceTest::Test();
 		TTFFontTest::Test();
-		WinDriverTest::Test();
+		//WinDriverTest::Test();
 		SUITE_TERMINATE
 
 	return 0;

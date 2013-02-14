@@ -51,6 +51,8 @@ public:
 #define KINEVOX_TEST_LOOP_START \
 size_t i=0;\
 	bool isLooping = gTestConfig.mIsInteractive;\
+    if (isLooping) std::cout << "looping!"<<std::endl; \
+    else std::cout << "not looping!"<<std::endl; \
 while(i<2 || isLooping)\
 {\
 \
@@ -59,7 +61,7 @@ while(i<2 || isLooping)\
 #define KINEVOX_TEST_LOOP_END 	\
 	++i;\
 Input::ProcessInput();\
-if (Input::IsKeyUp(SDLK_ESCAPE))\
+if (Input::IsKeyUp(GCL_ESCAPE))\
 	isLooping = false;\
 }\
 \

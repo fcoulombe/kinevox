@@ -35,18 +35,39 @@ void Test()
 	TEST_START
 	FontResourceManager::Initialize();
 	{
-		TTFFont font(FONT_PATH"FreeMono.ttf", 12);
+		TTFFont font(FONT_PATH"verdana.ttf");
+#if 0
+        for (size_t i=65; i<90; ++i)
+        {
+        const Glyph &aGlyph = font.GetGlyph((char)i, 18);
+        
+    /*    char filename[512];
+        sprintf(filename, "char/TestTTFontCap%cGlyph.tga", i);
+        PixelBuffer::SaveTga(filename, 
+                            aGlyph->mWidth, aGlyph->mHeight, 
+                            aGlyph->mBytesPerPixel, 
+                            aGlyph->mPixels);
+        delete aGlyph;*/
+        }
+        PixelBuffer &buff = font.m_pages[18].texture;
+        PixelBuffer::SaveTga("TestTTFFontPageSave.tga", 
+            buff.mWidth, buff.mHeight, 
+            buff.mBytesPerPixel, 
+            buff.mPixels);
+
+#endif
 		PixelBuffer buffer;
-		font.BlitText(buffer, "HelloWorld", 100, 100);
+		font.BlitText(buffer, "Hello World!", 18, 100, 100);
+        //font.BlitText(buffer, "ABCD", 18, 100, 100);
 		PixelBuffer::SaveTga("TestTTFFont.tga",
 							buffer.mWidth, buffer.mHeight,
 							buffer.mBytesPerPixel,
 							buffer.mPixels);
-		buffer.PadToNextPOT();
+	/*	buffer.PadToNextPOT();
 		PixelBuffer::SaveTga("TestTTFFont2.tga",
 									buffer.mWidth, buffer.mHeight,
 									buffer.mBytesPerPixel,
-									buffer.mPixels);
+									buffer.mPixels);*/
 
 	}
 	FontResourceManager::Terminate();

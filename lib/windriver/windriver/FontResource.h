@@ -23,9 +23,10 @@
 #pragma once
 #include <stdint.h>
 #include <gcl/Resource.h>
-#include <3rdparty/Sdl.h>
+
 namespace GCL
 {
+   class pFontResource;
   //this is a resource class that can be shared between difference texture instance
   class FontResource : public Resource
   {
@@ -33,8 +34,10 @@ namespace GCL
 	  FontResource(const char *fontName);
     ~FontResource();
 
-    TTF_Font* mFont;
+    const void *GetFace() const;
+    
   private:
+      pFontResource *mpImpl;
     FontResource() {}
 
   };

@@ -25,7 +25,6 @@
 #include <gcl/Assert.h>
 #include <gcl/ResourceManager.h>
 
-#include <3rdparty/Sdl.h>
 
 namespace GCL
 {
@@ -56,14 +55,8 @@ namespace GCL
   private:
     static FontResourceManager *smpInstance;
 
-    FontResourceManager()
-    {
-    	TTF_Init();
-    }
-    ~FontResourceManager()
-    {
-    	TTF_Quit();
-    }
+    FontResourceManager();
+    ~FontResourceManager();
   };
 
 }

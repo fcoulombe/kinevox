@@ -23,10 +23,29 @@ Import('env')
 
 name = "windriver"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['gcl', 'opengl', 'sdl']
+cflags = []
+dependencies = ['gcl', 'opengl', 'freetype']
+
+useSDL = False
+useGLFW = True
+useSFML = False
+
+if useSDL:
+    dependencies.append("sdl")
+    cflags.append("-DUSE_SDL")
+elif useGLFW:
+    dependencies.append("glfw")
+    cflags.append("-DUSE_GLFW")
+elif useSFML:
+    dependencies.append("sfml")
+    cflags.append("-DUSE_SFML")
+
+env.AppendUnique(CPPFLAGS=cflags)
+env.AppendUnique(CXXFLAGS=cflags)
+env.AppendUnique(CFLAGS=cflags)
 
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")
 lib = env.KStaticLibrary(name, src_files, dependencies)
-env.AddComponent(name, None, incPath, lib, dependencies)
+env.AddComponent(name, cflags, incPath, lib, dependencies)
 

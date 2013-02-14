@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#if 0
+#ifdef USE_SDL
 #include "windriver/TTFFont.h"
 
 #include <sstream>

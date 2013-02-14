@@ -26,10 +26,10 @@
 
 #if defined(OS_IPHONE)
 #elif defined(OS_MACOSX)
-#elif OS_LINUX
+#elif defined(OS_LINUX)
 #   include <AL/al.h>
 #   include <AL/alc.h>
-#elif OS_WIN32
+#elif defined(OS_WIN32)
 #   include <al.h>
 #   include <alc.h>
 #else

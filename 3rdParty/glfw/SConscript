@@ -1,0 +1,20 @@
+Import('env')
+
+name = "glfw"
+dependencies = []
+
+def SetCFlags(ienv):
+    if ienv['PLATFORM'] == "win32":
+        ienv.Append(CPPPATH=[env.Dir('#3rdParty/glfw/include')])
+    else:
+        ienv.ParseConfig('pkg-config --cflags glfw')
+
+def SetLFlags(ienv):
+    if ienv['PLATFORM'] == "win32":
+        ienv.Append(LIBS=[env.File('#3rdParty/glfw/lib/GLFWDLL.lib')])
+        ienv.AppendUnique(LINKFLAGS=["/SUBSYSTEM:WINDOWS"])
+    else:
+        ienv.ParseConfig('pkg-config --libs sdl')
+	
+dllDep = [env.File("#3rdParty/glfw/bin/GLFW.dll")]
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags, dllDep)

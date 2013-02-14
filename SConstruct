@@ -261,6 +261,8 @@ sconsFilesList = [
 "./3rdParty/vorbis/SConscript",
 "./3rdParty/glew/SConscript",
 "./3rdParty/sdl/SConscript",
+"./3rdParty/sfml/SConscript",
+"./3rdParty/glfw/SConscript",
 "./3rdParty/pthread/SConscript",
 
 #libs

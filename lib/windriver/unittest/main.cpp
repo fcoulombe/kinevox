@@ -33,10 +33,10 @@
 int main(int argc, char ** argv)
 {
 	SUITE_INIT(argc, argv)
-       // SocketUDPTest::Test();
+        SocketUDPTest::Test();
 		FontResourceTest::Test();
 		TTFFontTest::Test();
-		//WinDriverTest::Test();
+		WinDriverTest::Test();
 		SUITE_TERMINATE
 
 	return 0;

@@ -56,17 +56,17 @@ int main(int /*argc*/, char ** /*argv*/)
 		while (isRunning)
 		{
 			GCLApplication::Update();
-			if (Input::IsKeyUp(SDLK_ESCAPE))
+			if (Input::IsKeyUp(GCL_ESCAPE))
 				isRunning=false;
 
-			if (Input::IsKeyUp(SDLK_UP))
+			if (Input::IsKeyUp(GCL_UP))
 				y-=0.1;
-			if (Input::IsKeyUp(SDLK_DOWN))
+			if (Input::IsKeyUp(GCL_DOWN))
 				y+=0.1;
 
-			if (Input::IsKeyUp(SDLK_LEFT))
+			if (Input::IsKeyUp(GCL_LEFT))
 				x-=0.1;
-			if (Input::IsKeyUp(SDLK_RIGHT))
+			if (Input::IsKeyUp(GCL_RIGHT))
 				x+=0.1;
 
 

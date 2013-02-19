@@ -23,6 +23,7 @@
 #pragma once
 
 #include <stdint.h>
+#include "windriver/ViewPort.h"
 
 namespace GCL
 {

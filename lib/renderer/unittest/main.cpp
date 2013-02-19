@@ -80,7 +80,6 @@ int main(int argc, char **argv)
     FrameBufferTest::Test();
     MeshLoadingTest::Test();
     MeshResourceTest::Test();
-
     MeshTest::Test();
 
     SUITE_TERMINATE

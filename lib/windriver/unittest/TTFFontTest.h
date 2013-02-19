@@ -63,11 +63,11 @@ void Test()
 							buffer.mWidth, buffer.mHeight,
 							buffer.mBytesPerPixel,
 							buffer.mPixels);
-	/*	buffer.PadToNextPOT();
+		buffer.PadToNextPOT();
 		PixelBuffer::SaveTga("TestTTFFont2.tga",
 									buffer.mWidth, buffer.mHeight,
 									buffer.mBytesPerPixel,
-									buffer.mPixels);*/
+									buffer.mPixels);
 
 	}
 	FontResourceManager::Terminate();

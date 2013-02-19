@@ -38,10 +38,10 @@ class TestText2D : public Text2D
 {
 public:
 	TestText2D(const char *text)
-	:mFont(FONT_PATH"FreeMono.ttf", 12)
+	:mFont(FONT_PATH"FreeMono.ttf")
 	{
 		PixelBuffer buffer;
-		mFont.BlitText(buffer, text, 100, 100);
+		mFont.BlitText(buffer, text, 12, 100, 100);
         //buffer.PadToNextPOT();
         //buffer.SaveTga("Text2DTest.tga", buffer.mWidth, buffer.mHeight, buffer.mBytesPerPixel, buffer.mPixels);
 		mTexture = new Texture(buffer);
@@ -64,11 +64,11 @@ void Test()
 
 		TestText2D obj("HelloWorld");
 		s.str("");
-		s<< obj.GetWidth()<<" == 118"<<std::endl;
-		AssertMsg_Test(obj.GetWidth() == 108, s.str().c_str());
+		s<< obj.GetWidth()<<" == 72"<<std::endl;
+		AssertMsg_Test(obj.GetWidth() == 72, s.str().c_str());
 		s.str("");
-		s<< obj.GetHeight()<<" == 19"<<std::endl;
-		AssertMsg_Test(obj.GetHeight() == 19, s.str().c_str());
+		s<< obj.GetHeight()<<" == 12"<<std::endl;
+		AssertMsg_Test(obj.GetHeight() == 12, s.str().c_str());
 
 		static const WorldPoint3 kPositionTest(256.0, 256.0, 0.0);
 		obj.SetPosition(kPositionTest);

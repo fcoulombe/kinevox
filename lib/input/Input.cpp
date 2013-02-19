@@ -40,6 +40,17 @@ bool Input::IsKeyUp(uint32_t key)
 {
     return false;
 }
+
+
+size_t Input::GetMouseX()
+{
+
+    return 0;
+}
+size_t Input::GetMouseY()
+{
+    return 0;
+}
 #else
 namespace
 {

@@ -36,7 +36,10 @@ namespace GCL
         GCL_ESCAPE,
         GCL_UP,
         GCL_DOWN,
-        GCL_LEFT
+        GCL_LEFT,
+        GCL_RIGHT,
+        GCL_PAGEUP,
+        GCL_PAGEDOWN,
     };
 class Input
 {

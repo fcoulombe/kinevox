@@ -52,22 +52,22 @@ int main(int /*argc*/, char ** /*argv*/)
 		while (isRunning)
 		{
 			GCLApplication::Update();
-			if (Input::IsKeyUp(SDLK_ESCAPE))
+			if (Input::IsKeyUp(GCL_ESCAPE))
 				isRunning=false;
 
-			if (Input::IsKeyUp(SDLK_UP))
+			if (Input::IsKeyUp(GCL_UP))
 				x+=0.01;
-			if (Input::IsKeyUp(SDLK_DOWN))
+			if (Input::IsKeyUp(GCL_DOWN))
 				x-=0.01;
 
-			if (Input::IsKeyUp(SDLK_LEFT))
+			if (Input::IsKeyUp(GCL_LEFT))
 				y+=0.01;
-			if (Input::IsKeyUp(SDLK_RIGHT))
+			if (Input::IsKeyUp(GCL_RIGHT))
 				y-=0.01;
 
-			if (Input::IsKeyUp(SDLK_PAGEUP))
+			if (Input::IsKeyUp(GCL_PAGEUP))
 				myCamera.TiltUp();
-			if (Input::IsKeyUp(SDLK_PAGEDOWN))
+			if (Input::IsKeyUp(GCL_PAGEDOWN))
 				//myCamera.TiltDown();
 			{
 				static bool isTextureOn = false;

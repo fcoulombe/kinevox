@@ -103,6 +103,8 @@ public:
         glfwSwapBuffers();glErrorCheck();
     }
 
+    const ViewPort &GetViewPort() const { return mViewPort; }
+
 private:
     ViewPort mViewPort;
 };
@@ -117,6 +119,10 @@ WinDriver::~WinDriver()
 void WinDriver::SwapBuffer()
 {
     mpWinDriver->SwapBuffer();
+}
+const ViewPort &WinDriver::GetViewPort() const
+{
+    return mpWinDriver->GetViewPort();
 }
 }
 #endif

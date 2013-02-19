@@ -114,10 +114,10 @@ public:
 		const ViewPort &viewPort = GCLApplication::GetWinDriver()->GetViewPort();
 
 		WorldPoint3 tempPosition = GetPosition();
-		if (Input::IsKeyUp(SDLK_LEFT))
+		if (Input::IsKeyUp(GCL_LEFT))
 			tempPosition.x -=5;
 
-		if (Input::IsKeyUp(SDLK_RIGHT))
+		if (Input::IsKeyUp(GCL_RIGHT))
 			tempPosition.x+=5.;
 
 		Real paddleHalfWidth = (mRenderObject.GetScaledWidth()/2.0);
@@ -259,7 +259,7 @@ int main(int /*argc*/, char ** /*argv*/)
 			paddle.Update();
 			GCLApplication::Update();
 
-			if (Input::IsKeyUp(SDLK_ESCAPE))
+			if (Input::IsKeyUp(GCL_ESCAPE))
 				isRunning=false;
 
 			GCLApplication::Render();

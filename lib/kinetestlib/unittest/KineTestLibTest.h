@@ -35,7 +35,7 @@ void Test()
 
 	const Rect<int> &ProcessSelection();
 	Input::ProcessInput();
-	Input::IsKeyUp(SDLK_ESCAPE);
+	Input::IsKeyUp(GCL_ESCAPE);
 
 }
 }

@@ -285,7 +285,7 @@ Glyph TTFFont::LoadGlyph(char codepoint, size_t characterSize, bool bold)
         else
         {
             // Pixels are 8 bits gray levels
-            for (int y = 0; y < height; ++y)
+            for (int y = height-1; y >= 0; --y)
             {
                 for (int x = 0; x < width; ++x)
                 {
@@ -374,6 +374,10 @@ void TTFFont::BlitText(PixelBuffer &buffer, const char * text, size_t fontSize, 
 {
     Point2<size_t> bufferSize = GetBufferSize(text, fontSize);
     buffer = PixelBuffer(bufferSize.x, bufferSize.y, 4);
+    for (int x = 0; x < bufferSize.x; ++x)
+        for (int y = 0; y < bufferSize.y; ++y)
+            buffer.SetPixel(x, y, Point4<uint8_t>(0, 0, 0, 255));
+   
     bool bold = false;
     bool underlined = false;
    // Real italic             = (m_style & Italic) ? 0.208f : 0.f; // 12 degrees

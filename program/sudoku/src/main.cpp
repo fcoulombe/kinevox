@@ -181,7 +181,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		{
 			GCLApplication::Update();
 
-			if (Input::IsKeyUp(SDLK_ESCAPE))
+			if (Input::IsKeyUp(GCL_ESCAPE))
 				isRunning=false;
 			size_t x = Input::GetMouseX() ;
 			size_t y = Input::GetMouseY() ;

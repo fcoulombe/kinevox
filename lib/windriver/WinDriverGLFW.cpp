@@ -28,28 +28,21 @@
 #include <3rdparty/OpenGL.h>
 
 #include <gcl/Assert.h>
-#include <windriver/ViewPort.h>
+#include "windriver/EventHandler.h"
+#include "windriver/ViewPort.h"
 
 namespace GCL
 {
 
-namespace
-{
-    const size_t KEYS_STATE_ARRAY_SIZE = 350;
-    std::map<uint32_t, bool> smKeys;
-    bool smIsLMousedown = false;
-    size_t smMouseX=0;
-    size_t smMouseY=0;
-}
 void GLFWCALL KeyCallBack(int key,int state)
 {
     if (state == GLFW_PRESS)
     {
-        smKeys[key] = true;
+        EventManager::Instance().KeyDown(key);
     }
     else if (state == GLFW_RELEASE)
     {
-        smKeys[key] = false;
+        EventManager::Instance().KeyUp(key);
     }
     else
     {
@@ -110,11 +103,13 @@ private:
 };
 WinDriver::WinDriver(const char *windowsTitle)
 {
+    EventManager::Initialize();
     mpWinDriver = new pWinDriver(windowsTitle);
 }
 WinDriver::~WinDriver()
 {
     delete mpWinDriver;
+    EventManager::Terminate();
 }
 void WinDriver::SwapBuffer()
 {

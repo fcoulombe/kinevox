@@ -22,7 +22,7 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
-#include <input/Input.h>
+#include <windriver/EventHandler.h>
 
 namespace GCL
 {
@@ -44,25 +44,38 @@ public:
 	bool mIsInteractive;
 };
 
+class KineTestKeyListener : public KeyListener
+{
+public:
+    KineTestKeyListener() : mIsLooping(false) {}
+    virtual void KeyDown(uint32_t key)
+    {
+    }
+    virtual void KeyUp(uint32_t key)
+    {
+        if (key == GCL_ESCAPE) 
+            mIsLooping = false;
+    }
+    bool mIsLooping;
+};
+
 }
 
 
 #define KINEVOX_TEST_START KinevoxTestCounter testCounter(__FILE__);
 #define KINEVOX_TEST_LOOP_START \
-size_t i=0;\
-	bool isLooping = gTestConfig.mIsInteractive;\
-    if (isLooping) std::cout << "looping!"<<std::endl; \
+    KineTestKeyListener kineTestKeyListener;\
+    size_t i=0;\
+	kineTestKeyListener.mIsLooping = gTestConfig.mIsInteractive;\
+    if (kineTestKeyListener.mIsLooping) std::cout << "looping!"<<std::endl; \
     else std::cout << "not looping!"<<std::endl; \
-while(i<2 || isLooping)\
+while(i<2 || kineTestKeyListener.mIsLooping)\
 {\
 \
 
 
 #define KINEVOX_TEST_LOOP_END 	\
 	++i;\
-Input::ProcessInput();\
-if (Input::IsKeyUp(GCL_ESCAPE))\
-	isLooping = false;\
 }\
 \
 

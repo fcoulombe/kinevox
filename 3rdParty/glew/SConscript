@@ -1,3 +1,4 @@
+import platform
 Import('env')
 
 name = "glew"
@@ -16,7 +17,7 @@ def SetCFlags(ienv):
 
 def SetLFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-	    ienv.Append(LIBS=[env.File('#3rdParty/glew/lib/glew32s.lib')])
+	    ienv.Append(LIBS=[env.File('#3rdParty/glew/lib/'+platform.architecture()[0]+'/glew32s.lib')])
     else:
 	    ienv.ParseConfig('pkg-config --libs glew')
 	

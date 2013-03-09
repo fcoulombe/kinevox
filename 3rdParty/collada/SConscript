@@ -18,13 +18,14 @@ def SetCFlags(ienv):
 def SetLFlags(ienv):
     platform.machine(),  platform.architecture()[0]
     if ienv['PLATFORM'] == "win32":
-        file = [env.File("#3rdParty/collada/lib/COLLADABaseUtils_d.lib"),
-                env.File("#3rdParty/collada/lib/COLLADAFramework_d.lib"), 
-                env.File("#3rdParty/collada/lib/COLLADASaxFrameworkLoader_d.lib"),
-                env.File("#3rdParty/collada/lib/GeneratedSaxParser_d.lib"),
-                env.File("#3rdParty/collada/lib/LibXML_d.lib"),
-                env.File("#3rdParty/collada/lib/MathMLSolver_d.lib"),
-                env.File("#3rdParty/collada/lib/pcre_d.lib")]
+        libPath = "#3rdParty/collada/lib/" + platform.architecture()[0] + "/"
+        file = [env.File(libPath+"COLLADABaseUtils_d.lib"),
+                env.File(libPath+"COLLADAFramework_d.lib"), 
+                env.File(libPath+"COLLADASaxFrameworkLoader_d.lib"),
+                env.File(libPath+"GeneratedSaxParser_d.lib"),
+                env.File(libPath+"LibXML_d.lib"),
+                env.File(libPath+"MathMLSolver_d.lib"),
+                env.File(libPath+"pcre_d.lib")]
         ienv.Append(LIBS=[file]) 
     else: 
         if platform.architecture()[0] == "32bit":
@@ -38,7 +39,5 @@ def SetLFlags(ienv):
             print "unsupported architecture: %s" % platform.architecture()[0] 
     
 dllDep = []
-if env['PLATFORM'] == "win32":
-    dllDep = [env.File("C:\\Program Files\\Autodesk\\FBX\\FBX SDK\\2013.3\\lib\\vs2010\\x86\\fbxsdk-2013.3.dll")]
 
 env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags, dllDep)

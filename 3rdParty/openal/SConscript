@@ -1,18 +1,26 @@
-Import('env')
 
+import platform
+Import('env')
 
 name = "openal"
 dependencies = []
 
 def SetCFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-	    ienv.Append(CPPPATH=[env.Dir('C:\Program Files\OpenAL 1.1 SDK\include')])
+        if platform.architecture()[0] == "32bit":
+            ienv.Append(CPPPATH=[env.Dir('C:\Program Files\OpenAL 1.1 SDK\include')])
+        elif platform.architecture()[0] == "64bit":
+            ienv.Append(CPPPATH=[env.Dir('C:\Program Files (x86)\OpenAL 1.1 SDK\include')])
     else:
 	    ienv.ParseConfig('pkg-config --cflags openal')
 		
 def SetLFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-	    ienv.Append(LIBS=[env.File('C:\\Program Files\\OpenAL 1.1 SDK\\libs\\Win32\\OpenAL32.lib')])
+        if platform.architecture()[0] == "32bit":
+            ienv.Append(LIBS=[env.File('C:\\Program Files\\OpenAL 1.1 SDK\\libs\\Win32\\OpenAL32.lib')])
+        if platform.architecture()[0] == "64bit":
+            ienv.Append(LIBS=[env.File('C:\\Program Files (x86)\\OpenAL 1.1 SDK\\libs\\Win64\\OpenAL32.lib')])
+
     else:
 	    ienv.ParseConfig('pkg-config --libs openal')
 	

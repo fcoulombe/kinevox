@@ -1,3 +1,4 @@
+import platform
 Import('env')
 
 name = "vorbis"
@@ -12,8 +13,9 @@ def SetCFlags(ienv):
 	
 def SetLFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-        ienv.Append(LIBS=[env.File('#3rdParty/vorbis/lib/libvorbis_static.lib')])
-        ienv.Append(LIBS=[env.File('#3rdParty/vorbis/lib/libvorbisfile_static.lib')])
+        libPath = '#3rdParty/vorbis/lib/' + platform.architecture()[0] + '/'
+        ienv.Append(LIBS=[env.File(libPath + 'libvorbis_static.lib')])
+        ienv.Append(LIBS=[env.File(libPath + 'libvorbisfile_static.lib')])
     else:
 	    ienv.ParseConfig('pkg-config --libs '+name)
 	    ienv.ParseConfig('pkg-config --libs vorbisfile')

@@ -1,3 +1,4 @@
+import platform
 Import('env')
 
 name = "ogg"
@@ -11,7 +12,8 @@ def SetCFlags(ienv):
 
 def SetLFlags(ienv):
     if ienv['PLATFORM'] == "win32":
-	    ienv.Append(LIBS=[env.File('#3rdParty/ogg/lib/libogg_static.lib')])
+        libPath = '#3rdParty/ogg/lib/' + platform.architecture()[0] + '/'
+        ienv.Append(LIBS=[env.File(libPath + 'libogg_static.lib')])
     else:
 	    ienv.ParseConfig('pkg-config --libs '+name)
 	

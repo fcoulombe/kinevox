@@ -25,7 +25,6 @@
 #include <renderer/Sprite.h>
 #include <gcl/Time.h>
 #include <kinetestlib/UnitTest.h>
-#include <input/Input.h>
 
 using namespace GCL;
 namespace SpriteTest

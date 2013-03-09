@@ -30,26 +30,68 @@
 #include <gcl/Point2.h>
 #include <gcl/Rect.h>
 
+#include <windriver/EventHandler.h>
+
 using namespace GCL;
 #if 1
+
+
+class InputKeyListener : public KeyListener
+{
+public:
+    InputKeyListener()
+        :     smIsLMousedown(false),
+        smMouseX(0),
+        smMouseY(0)
+    {
+
+    }
+    virtual void KeyDown(uint32_t key)
+    {
+         smKeys[key] = true;
+    }
+
+    virtual void KeyUp(uint32_t key)
+    {
+         smKeys[key] = false;
+    }
+
+    static const size_t KEYS_STATE_ARRAY_SIZE = 350;
+    std::map<uint32_t, bool> smKeys;
+    bool smIsLMousedown;
+    size_t smMouseX;
+    size_t smMouseY;
+};
+
+InputKeyListener *keyListener;
+
 void Input::ProcessInput()
 {
 }
 
-bool Input::IsKeyUp(uint32_t key)
-{
-    return false;
-}
-
-
 size_t Input::GetMouseX()
 {
-
-    return 0;
+    if (!keyListener)
+        keyListener = new InputKeyListener();
+    return keyListener->smMouseX;
 }
 size_t Input::GetMouseY()
 {
-    return 0;
+    if (!keyListener)
+        keyListener = new InputKeyListener();
+    return keyListener->smMouseY;
+}
+bool Input::IsLMouseDown()
+{
+    if (!keyListener)
+        keyListener = new InputKeyListener();
+    return keyListener->smIsLMousedown;
+}
+bool Input::IsKeyUp(uint32_t key)
+{
+    if (!keyListener)
+        keyListener = new InputKeyListener();
+    return keyListener->smKeys[key];
 }
 #else
 namespace

@@ -188,7 +188,7 @@ elif compiler == 'vc':
     default_env['CC'] = 'cl.exe'
     cflags.append("/WX")
     cflags.append("/EHsc")
-    cflags.append("/ZI")
+    cflags.append("/Zi")
     if configuration == 'debug':
         cflags.append("-Od")
     elif configuration == 'opt':

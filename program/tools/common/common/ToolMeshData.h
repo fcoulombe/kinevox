@@ -71,14 +71,20 @@ namespace GCL
     GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const ToolSubMeshData &meshData)
     {
         size_t startOffset = buffer.GetCurrentOffset();
-        uint32_t toWrite;
-        toWrite = 0xbaadf00d;
+
         uint32_t *meshSize = (uint32_t *)(buffer.GetBuffer()+startOffset);
-        buffer.Write(toWrite);
+        uint32_t toWrite = 0xbaadf00d;
+        buffer.Write(toWrite); //mesh size 32
+
         toWrite = meshData.mVertexList.size();
-        buffer.Write(toWrite);
+        buffer.Write(toWrite); //vertex size 64
+
         toWrite = meshData.mIndiceList.size();
-        buffer.Write(toWrite);
+        buffer.Write(toWrite); //indice size 96
+
+        toWrite = 0xfefefefe;
+        buffer.Write(toWrite); //pad128
+
         for (size_t i=0; i<meshData.mIndiceList.size(); ++i)
         {
             uint32_t indice = meshData.mIndiceList[i];
@@ -119,9 +125,11 @@ namespace GCL
     };
     GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const ToolMeshData &meshData)
     {
-        uint32_t toWrite = meshData.mSubMeshList.size();
-        buffer.Write(toWrite);
-        buffer.Write(meshData.mMaterialCount);
+        uint32_t subMeshCount = meshData.mSubMeshList.size();
+        buffer.Write(subMeshCount);  //32
+        buffer.Write(meshData.mMaterialCount); //64
+        uint32_t pad = 0xfefefefe;
+        buffer.Write(pad);
         buffer << meshData.mMaterialData.matName;
         for (size_t i=0; i<meshData.mSubMeshList.size(); ++i)
         {

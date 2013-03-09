@@ -30,6 +30,7 @@
 #include <gcl/Point2.h>
 #include <gcl/Point3.h>
 #include <gcl/Point4.h>
+#include <gcl/Matrix44.h>
 
 namespace GCL
 {
@@ -120,6 +121,14 @@ GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const WorldPoint4 &data
 	buffer.Write(data.z);
 	buffer.Write(data.w);
 	return buffer;
+}
+GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const Matrix44 &data)
+{
+    buffer << data[0];
+    buffer << data[1];
+    buffer << data[2];
+    buffer << data[3];
+    return buffer;
 }
 GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const std::string &stringData)
 {

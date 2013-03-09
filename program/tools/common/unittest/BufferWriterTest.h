@@ -142,13 +142,19 @@ void Test()
 		uint8_t *rawBuffer = buffer.GetBuffer();
 		std::string testStr(kTestStringValue);
 		buffer << testStr;
+
 		const std::string testStr2((const char*)&(rawBuffer[curOffset+sizeof(uint32_t)]));
 		Assert_Test(kTestStringValue == testStr2);
-		size_t newOffset = buffer.GetCurrentOffset();
-
+		
+        size_t newOffset = buffer.GetCurrentOffset();
 		s.str("");
 		s<<newOffset-curOffset-sizeof(uint32_t) << " == " << kTestStringValue.length() <<std::endl;
 		AssertMsg_Test(newOffset-curOffset-sizeof(uint32_t) == Memory::Align32(kTestStringValue.length()+1), s.str().c_str());
-	}
+	
+        s.str("");
+        uint32_t paddedLen = *(uint32_t *)&(rawBuffer[curOffset]);
+        s<< paddedLen << " == " << newOffset-curOffset<<std::endl;
+        AssertMsg_Test(paddedLen == newOffset-curOffset, s.str().c_str());
+    }
 }
 }

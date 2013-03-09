@@ -42,10 +42,10 @@ void Test()
 	MeshResource::MeshData testData;
 	testData.mSubMeshCount = 1;
     testData.mMaterialCount = 1;
-    testData.mMaterialNameLen = 40;
+    testData.mMaterialNameLen = 44;
 
     MeshResource::SubMeshData testSubMeshData;
-    testSubMeshData.mSubMeshSize =  789492;
+    testSubMeshData.mSubMeshSize =  1491256;
     testSubMeshData.mVertexCount = 21930;
 	testSubMeshData.mIndicesCount = 21930;
 	

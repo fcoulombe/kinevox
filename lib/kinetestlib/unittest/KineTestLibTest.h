@@ -23,8 +23,6 @@
 
 #include <kinetestlib/UnitTest.h>
 
-#include <input/Input.h>
-
 using namespace GCL;
 namespace KineTestLibTest
 {
@@ -33,9 +31,9 @@ void Test()
 {
 	KINEVOX_TEST_START
 
-	const Rect<int> &ProcessSelection();
-	Input::ProcessInput();
-	Input::IsKeyUp(GCL_ESCAPE);
-
+    EventManager::Initialize();
+	KINEVOX_TEST_LOOP_START
+    KINEVOX_TEST_LOOP_END
+    EventManager::Terminate();
 }
 }

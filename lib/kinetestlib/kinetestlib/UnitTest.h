@@ -64,6 +64,7 @@ public:
 
 #define KINEVOX_TEST_START KinevoxTestCounter testCounter(__FILE__);
 #define KINEVOX_TEST_LOOP_START \
+    {\
     KineTestKeyListener kineTestKeyListener;\
     size_t i=0;\
 	kineTestKeyListener.mIsLooping = gTestConfig.mIsInteractive;\
@@ -76,6 +77,7 @@ while(i<2 || kineTestKeyListener.mIsLooping)\
 
 #define KINEVOX_TEST_LOOP_END 	\
 	++i;\
+}\
 }\
 \
 

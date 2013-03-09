@@ -23,7 +23,7 @@ Import('env')
 
 name = "kinetestlib"
 incPath = [env.Dir("#/lib/"+name)]
-dependencies = ['input']
+dependencies = ['windriver']
 
 env.Append(CPPPATH=incPath)
 src_files = env.Glob("*.cpp")

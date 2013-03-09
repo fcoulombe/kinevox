@@ -29,18 +29,10 @@
 //#include <3rdparty/Sdl.h>
 #include <gcl/Rect.h>
 
+#include <windriver/EventHandler.h>
+
 namespace GCL
 {
-    enum KeyNames
-    {
-        GCL_ESCAPE,
-        GCL_UP,
-        GCL_DOWN,
-        GCL_LEFT,
-        GCL_RIGHT,
-        GCL_PAGEUP,
-        GCL_PAGEDOWN,
-    };
 class Input
 {
 public:

@@ -23,10 +23,7 @@
 #pragma once
 
 
-#include "3rdparty/ExternalHeader_Start.h"
-#if ENABLE_FREENECT
-#include <libfreenect.h>
-#endif
-
-#include "3rdparty/ExternalHeader_End.h"
+#include <SDL.h>
+#include <SDL_video.h>
+#include <SDL_ttf.h>
 

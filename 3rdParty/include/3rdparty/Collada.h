@@ -22,14 +22,7 @@
 
 #pragma once
 
-#	if defined(__GNUC__)
-#		define COMP_VERSION __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__
-#		if __llvm__ && __clang__
-#			pragma clang system_header
-#		else
-#			pragma GCC system_header
-#		endif
-#	endif
+#include "3rdparty/ExternalHeader_Start.h"
 
 #include <COLLADABUURI.h>
 #include <COLLADAFWArrayPrimitiveType.h>
@@ -46,3 +39,5 @@
 #include <COLLADAFWUniqueId.h>
 #include <COLLADASaxFWLLoader.h>
 
+
+#include "3rdparty/ExternalHeader_Start.h"

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,13 +20,14 @@
  * THE SOFTWARE.
  */
 
-#pragma once
 
-
-#include "3rdparty/ExternalHeader_Start.h"
-#if ENABLE_FREENECT
-#include <libfreenect.h>
+#if defined(__GNUC__)
+#	define COMP_VERSION __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__
+#	if __llvm__ && __clang__
+#		pragma clang system_header
+#	else
+#		pragma GCC system_header
+#	endif
+# elif defined(OS_WIN32)
+#   pragma warning(push, 0)  
 #endif
-
-#include "3rdparty/ExternalHeader_End.h"
-

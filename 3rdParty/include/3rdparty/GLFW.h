@@ -22,11 +22,8 @@
 
 #pragma once
 
-
-#include "3rdparty/ExternalHeader_Start.h"
-#if ENABLE_FREENECT
-#include <libfreenect.h>
-#endif
-
-#include "3rdparty/ExternalHeader_End.h"
+#include <Windows.h>
+#include <3rdparty/OpenGL.h> //needed so that glew doesn't get included before gl.h
+#define GLFW_DLL
+#include <GL/glfw.h>
 

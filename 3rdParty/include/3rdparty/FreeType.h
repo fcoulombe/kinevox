@@ -22,14 +22,8 @@
 
 #pragma once
 
-#	if defined(__GNUC__)
-#		define COMP_VERSION __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__
-#		if __llvm__ && __clang__
-#			pragma clang system_header
-#		else
-#			pragma GCC system_header
-#		endif
-#	endif
+
+#include "3rdparty/ExternalHeader_Start.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -37,6 +31,7 @@
 #include FT_OUTLINE_H
 #include FT_BITMAP_H
 
+#include "3rdparty/ExternalHeader_End.h"
 
 #undef __FTERRORS_H__
 #define FT_ERRORDEF( e, v, s )  { e, s },

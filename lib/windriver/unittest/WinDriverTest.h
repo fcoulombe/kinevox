@@ -31,7 +31,7 @@ namespace WinDriverTest
 
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 
 	WinDriver windows("WinDriverTest");
     const ViewPort &viewport = windows.GetViewPort();

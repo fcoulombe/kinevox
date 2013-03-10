@@ -23,7 +23,7 @@
 #include <iomanip>
 
 #include <3rdparty/OpenGL.h>
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 
 #include <renderer/Camera.h>
 #include <renderer/GLRenderer.h>
@@ -36,7 +36,7 @@ namespace CameraTest
     void Test();
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 
     WinDriver winDriver("CameraTest");
 	GLRenderer renderer;

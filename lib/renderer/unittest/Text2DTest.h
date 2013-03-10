@@ -25,7 +25,7 @@
 #include <renderer/Text2D.h>
 #include <gcl/PixelBuffer.h>
 #include <gcl/Time.h>
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 #include <windriver/FontResourceManager.h>
 #include <windriver/TTFFont.h>
 
@@ -53,7 +53,7 @@ private:
 };
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 
 	TextureResourceManager::Initialize();
 	FontResourceManager::Initialize();

@@ -59,7 +59,7 @@ private:
 void Test();
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 	TextureResourceManager::Initialize();
 	{
 		WinDriver winDriver("RenderObjectTest");

@@ -20,8 +20,9 @@
  * THE SOFTWARE.
  */
 #pragma once
-
-#include <gcl/UnitTest.h>
+//#include <3rdparty/OpenGL.h>
+#include <gcl/Time.h>
+#include <kinetestlib/UnitTest.h>
 #include <renderer/Shader.h>
 #include <renderer/ShaderAttributeDefaultLocations.h>
 
@@ -57,8 +58,8 @@ private:
 void Test();
 void Test()
 {
-	TEST_START
-#ifndef ENABLE_SHADERS
+	KINEVOX_TEST_START
+#if ENABLE_SHADERS
 	TextureResourceManager::Initialize();
 	{
 		WinDriver winDriver("ShaderTest");

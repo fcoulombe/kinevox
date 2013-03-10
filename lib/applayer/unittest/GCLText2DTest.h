@@ -25,21 +25,22 @@
 #include <applayer/GCLApplication.h>
 #include <applayer/GCLText2D.h>
 
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 
 using namespace GCL;
 namespace GCLText2DTest
 {
 void Test()
 {
-    TEST_START
+    KINEVOX_TEST_START
 
     GCLApplication::Initialize("GCLText2DTest");
     {
     GCLText2D obj("Test Text");
-    
+    KINEVOX_TEST_LOOP_START
     GCLApplication::Update();
     GCLApplication::Render();
+    KINEVOX_TEST_LOOP_END
     }
     GCLApplication::Terminate();
 }

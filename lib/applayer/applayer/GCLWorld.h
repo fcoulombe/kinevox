@@ -29,7 +29,7 @@ namespace GCL
 class GCLWorld 
 {
 public:
-    GCLWorld(const char *name) {}
+    GCLWorld(const char * /*name*/) {}
 
     ~GCLWorld() {}
 

@@ -64,7 +64,7 @@ GCL::SocketUDP::~SocketUDP()
 
 void GCL::SocketUDP::Open( uint16_t port )
 {
-    mHandle = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
+    mHandle = (int)socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
     GCLAssertMsg( mHandle > 0 , "failed to create socket\n" );
 
     sockaddr_in address;
@@ -121,9 +121,7 @@ bool GCL::SocketUDP::Send( const Address & destination, const void * data, int s
 
 int GCL::SocketUDP::Receive( Address & sender, void * data, int size )
 {
-        uint8_t packet_data[256];
-        size_t maximum_packet_size = sizeof( packet_data );
-
+      
 #ifdef OS_WIN32
         typedef int socklen_t;
 #endif

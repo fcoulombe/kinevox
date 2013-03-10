@@ -214,6 +214,9 @@ void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t viewp
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+#else
+    (void)viewportWidth;
+    (void)viewportHeight;
 #endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
@@ -250,6 +253,9 @@ void GLRenderer::Render(const Text2DList &renderObjectList, size_t viewportWidth
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+#else
+    (void)viewportWidth;
+    (void)viewportHeight;
 #endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
@@ -283,10 +289,10 @@ void GLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height, si
 #if !defined(ES1) && !defined(ES2)
 	glBindTexture(GL_TEXTURE_2D, gl_depth_tex);glErrorCheck();
 	if (depth == 1) {
-		glTexImage2D(GL_TEXTURE_2D, 0, depth, width, height, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, rgb_front); glErrorCheck();
+		glTexImage2D(GL_TEXTURE_2D, 0, (GLint)depth, (GLsizei)width, (GLsizei)height, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, rgb_front); glErrorCheck();
 	}
 	else if (depth == 3) {
-		glTexImage2D(GL_TEXTURE_2D, 0, depth, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, rgb_front); glErrorCheck();
+		glTexImage2D(GL_TEXTURE_2D, 0, (GLint)depth, (GLsizei)width, (GLsizei)height, 0, GL_RGB, GL_UNSIGNED_BYTE, rgb_front); glErrorCheck();
 	}
 	glBegin(GL_TRIANGLE_FAN);
 	glColor4f(255.0f, 255.0f, 255.0f, 255.0f);

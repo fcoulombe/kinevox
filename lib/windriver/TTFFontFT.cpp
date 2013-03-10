@@ -117,7 +117,7 @@ void TTFFont::SetFontSize(size_t fontSize)
 
     if (currentSize != fontSize)
     {
-        FT_Error err = FT_Set_Pixel_Sizes(face, 0, fontSize);
+        FT_Error err = FT_Set_Pixel_Sizes(face, 0, (FT_UInt)fontSize);
         FTErrorCheck(err);
     }
 }
@@ -171,7 +171,7 @@ const Glyph& TTFFont::GetGlyph(uint32_t codePoint, size_t characterSize, bool bo
         return glyphs.insert(std::make_pair(key, glyph)).first->second;
     }
 }
-Glyph TTFFont::LoadGlyph(char codepoint, size_t characterSize, bool bold)
+Glyph TTFFont::LoadGlyph(uint32_t codepoint, size_t characterSize, bool bold)
 {
 #if 0
     const FT_Face &face = *(const FT_Face *)(mFontResource->GetFace());
@@ -303,8 +303,8 @@ Glyph TTFFont::LoadGlyph(char codepoint, size_t characterSize, bool bold)
         // Write the pixels to the texture
         unsigned int x = glyph.textureRect.x + padding;
         unsigned int y = glyph.textureRect.y + padding;
-        unsigned int w = glyph.textureRect.width - 2 * padding;
-        unsigned int h = glyph.textureRect.height - 2 * padding;
+        //unsigned int w = glyph.textureRect.width - 2 * padding;
+        //unsigned int h = glyph.textureRect.height - 2 * padding;
         page.texture.Blit(b, x, y);
     }
 
@@ -334,21 +334,21 @@ int TTFFont::GetLineSpacing() const
 Point2<size_t> TTFFont::GetBufferSize(const char *text, size_t fontSize) 
 {
     bool bold = false;
-    bool underlined = false;
+    //bool underlined = false;
     // Real italic             = (m_style & Italic) ? 0.208f : 0.f; // 12 degrees
-    Real underlineOffset    = fontSize * 0.1f;
-    Real underlineThickness = fontSize * (bold ? 0.1f : 0.07f);
+    //Real underlineOffset    = fontSize * 0.1f;
+    //Real underlineThickness = fontSize * (bold ? 0.1f : 0.07f);
     int hspace = GetGlyph(L' ', fontSize, bold).advance;
     int vspace = GetLineSpacing();
     int x      = 0;
-    int y      = fontSize;
+    int y      = (int)fontSize;
     uint32_t prev = 0;
     for (size_t i = 0; i < strlen(text); ++i)
     {
         uint32_t curChar = text[i];
 
         // Apply the kerning offset
-        x += static_cast<float>(GetKerning(prev, curChar));
+        x += GetKerning(prev, curChar);
         prev = curChar;
         // Handle special characters
         switch (curChar)
@@ -361,10 +361,10 @@ Point2<size_t> TTFFont::GetBufferSize(const char *text, size_t fontSize)
         // Extract the current glyph's description
         const Glyph& glyph = GetGlyph(curChar, fontSize, bold);
 
-        int left   = glyph.bounds.x;
-        int top    = glyph.bounds.y;
-        int right  = glyph.bounds.x + glyph.bounds.width;
-        int bottom = glyph.bounds.y  + glyph.bounds.height;
+        //int left   = glyph.bounds.x;
+        //int top    = glyph.bounds.y;
+        //int right  = glyph.bounds.x + glyph.bounds.width;
+        //int bottom = glyph.bounds.y  + glyph.bounds.height;
         // Advance to the next character
         x += glyph.advance;
     }
@@ -379,10 +379,10 @@ void TTFFont::BlitText(PixelBuffer &buffer, const char * text, size_t fontSize, 
             buffer.SetPixel(x, y, Point4<uint8_t>(0, 0, 0, 255));
    
     bool bold = false;
-    bool underlined = false;
+    //bool underlined = false;
    // Real italic             = (m_style & Italic) ? 0.208f : 0.f; // 12 degrees
-    Real underlineOffset    = fontSize * 0.1f;
-    Real underlineThickness = fontSize * (bold ? 0.1f : 0.07f);
+    //Real underlineOffset    = fontSize * 0.1f;
+    //Real underlineThickness = fontSize * (bold ? 0.1f : 0.07f);
     int hspace = GetGlyph(L' ', fontSize, bold).advance;
     int vspace = GetLineSpacing();
     int x      = 0;
@@ -394,7 +394,7 @@ void TTFFont::BlitText(PixelBuffer &buffer, const char * text, size_t fontSize, 
         uint32_t curChar = text[i];
 
         // Apply the kerning offset
-        x += static_cast<float>(GetKerning(prev, curChar));
+        x += GetKerning(prev, curChar);
         prev = curChar;
 
         // If we're using the underlined style and there's a new line, draw a line
@@ -422,12 +422,12 @@ void TTFFont::BlitText(PixelBuffer &buffer, const char * text, size_t fontSize, 
 
         // Extract the current glyph's description
         const Glyph& glyph = GetGlyph(curChar, fontSize, bold);
-
+#if 0
         int left   = glyph.bounds.x;
         int top    = glyph.bounds.y;
         int right  = glyph.bounds.x + glyph.bounds.width;
         int bottom = glyph.bounds.y  + glyph.bounds.height;
-#if 0
+
         float u1 = static_cast<float>(glyph.textureRect.left);
         float v1 = static_cast<float>(glyph.textureRect.top);
         float u2 = static_cast<float>(glyph.textureRect.left + glyph.textureRect.width);

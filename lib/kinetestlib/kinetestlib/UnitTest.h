@@ -49,7 +49,7 @@ class KineTestKeyListener : public KeyListener
 {
 public:
     KineTestKeyListener() : mIsLooping(false) {}
-    virtual void KeyDown(uint32_t key)
+    virtual void KeyDown(uint32_t /*key*/)
     {
     }
     virtual void KeyUp(uint32_t key)

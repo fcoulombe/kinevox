@@ -72,7 +72,7 @@ public:
 	TTFFont(const char *fontName);
 	~TTFFont();
 	void BlitText(PixelBuffer &buffer, const char * text, size_t fontSize, size_t x, size_t y) ;
-    Glyph LoadGlyph(char glyph, size_t characterSize, bool bold) ;
+    Glyph LoadGlyph(uint32_t glyph, size_t characterSize, bool bold) ;
     const Glyph& GetGlyph(uint32_t codePoint, size_t characterSize, bool bold=false) ;
     int GetKerning(uint32_t first, uint32_t second) const;
     Rect<int> FindGlyphRect(Page& page, unsigned int width, unsigned int height) const;

@@ -32,12 +32,12 @@ struct TGAHeader
 struct TGA
 {
 	uint8_t header[6];
-	uint32_t bytesPerPixel;
+	uint8_t bytesPerPixel;
+    uint8_t bpp;
 	uint32_t imageSize;
 	uint32_t type;
 	uint32_t height;
 	uint32_t width;
-	uint32_t bpp;
 };
 
 // Uncompressed TGA Header

@@ -154,7 +154,7 @@ public:
 		if (newPosition.x > viewPort.GetWidth())
 		{
 			mVelocity.x *= -1.0;
-			newPosition.x = viewPort.GetWidth();
+			newPosition.x = (Real)viewPort.GetWidth();
 		}
 		else if (newPosition.x < 0.0)
 		{

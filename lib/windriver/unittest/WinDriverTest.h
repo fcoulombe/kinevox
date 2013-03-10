@@ -35,6 +35,7 @@ void Test()
 
 	WinDriver windows("WinDriverTest");
     const ViewPort &viewport = windows.GetViewPort();
+    (void)viewport;
     KINEVOX_TEST_LOOP_START
 
     windows.SwapBuffer();

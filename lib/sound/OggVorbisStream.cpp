@@ -151,9 +151,9 @@ void OggStream::Update()
 void OggStream::Stream(ALuint buffer)
 {
 	char data[BUFFER_SIZE];
-	size_t  size = 0;
+	ALsizei  size = 0;
 	int  section;
-	int  result;
+	long  result;
 
 	while(size < BUFFER_SIZE)
 	{

@@ -40,12 +40,12 @@ namespace EventHandlerTest
             : hasReceivedKeyDown(false),
             hasReceivedKeyUp(false)
         {}
-        virtual void KeyDown(uint32_t key)
+        virtual void KeyDown(uint32_t /*key*/)
         {
             hasReceivedKeyDown = true;
         }
 
-        virtual void KeyUp(uint32_t key)
+        virtual void KeyUp(uint32_t /*key*/)
         {
             hasReceivedKeyUp = true;
         }

@@ -66,8 +66,8 @@ Texture::~Texture()
 }
 
 Texture::Texture(const PixelBuffer &buffer)
-: mTextureId(-1),
-mTextureUnit(0)
+: mTextureId((GLuint)-1),
+mTextureUnit((GLuint)0)
 {
 	mTextureResource = NULL;
 	mTextureData.width = buffer.mWidth;;
@@ -79,8 +79,8 @@ mTextureUnit(0)
 }
 
 Texture::Texture(const char *filename)
-    : mTextureId(-1),
-    mTextureUnit(0)
+    : mTextureId((GLuint)-1),
+    mTextureUnit((GLuint)0)
 {
 	mTextureResource = NULL;
 	bool ret = LoadTexture(filename);
@@ -92,8 +92,8 @@ Texture::Texture(const char *filename)
 }
 
 Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
-    : mTextureId(-1),
-    mTextureUnit(0)
+    : mTextureId((GLuint)-1),
+    mTextureUnit((GLuint)0)
 {
 	mTextureData.width = width;
 	mTextureData.height= height;
@@ -151,7 +151,7 @@ void Texture::Initialize(const PixelBuffer &data )
 	glGenerateMipmap(GL_TEXTURE_2D);  //Generate mipmaps now!!!
 #else
 	glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[data.mBytesPerPixel-1],
-			data.mWidth, data.mHeight, 0,BytesPerPixel[data.mBytesPerPixel-1],
+			(GLsizei)data.mWidth, (GLsizei)data.mHeight, 0,BytesPerPixel[data.mBytesPerPixel-1],
 			GL_UNSIGNED_BYTE, NULL);glErrorCheck();
 
 	mPBO = new PixelBufferHAL(data);
@@ -160,8 +160,8 @@ void Texture::Initialize(const PixelBuffer &data )
 		mPBO->Bind();
 		mPBO->PushData();
 		//push from pbo to texture
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, data.mWidth,
-				data.mHeight, BytesPerPixel[data.mBytesPerPixel-1],
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)data.mWidth,
+				(GLsizei)data.mHeight, BytesPerPixel[data.mBytesPerPixel-1],
 				GL_UNSIGNED_BYTE, 0);glErrorCheck();
 
 		mPBO->UnBind();
@@ -200,7 +200,7 @@ const uint8_t *Texture::GetTextureFromVRAM() const
 	GLint width, height;
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-	long imageSize = width*height*mTextureData.bytesPerPixel;
+	size_t imageSize = width*height*mTextureData.bytesPerPixel;
 	//GCLAssert(width == (GLint)mTextureData.width);
 	//GCLAssert(height == (GLint)mTextureData.height);
 	uint8_t *data = new uint8_t[imageSize];

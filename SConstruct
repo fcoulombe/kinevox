@@ -191,11 +191,22 @@ elif compiler == 'vc':
     cflags.append("/Zi")
     if configuration == 'debug':
         cflags.append("-Od")
+        cflags.append("/RTC1") #enable runtime checks
+        cflags.append("/MDd")
     elif configuration == 'opt':
         cflags.append("-O3")
+        cflags.append("/MD")
     #lflags.append("/NODEFAULTLIB:library")
     lflags.append("/DEBUG")
-    cflags.append("/MDd")
+    
+    cflags.append("/fp:strict") #might want to change for fast in opt
+    cflags.append("/GF") #string pooling
+    #cflags.append("/GR-") #disable rtti
+    cflags.append("/GS") #buffer security check
+    cflags.append("/W4")
+    cflags.append("/WX")
+    cflags.append("/wd 4127") #disable warning about constant condition
+    cflags.append("/D_CRT_SECURE_NO_WARNINGS")
 else:
     print "this isn't good"
 default_env.Append(CPPPATH=[default_env.Dir("#3rdParty/include")])

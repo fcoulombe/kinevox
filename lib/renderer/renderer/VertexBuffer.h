@@ -88,7 +88,7 @@ public:
 	void Render(GLenum mode = GL_TRIANGLES)
 	{
 		PreRender();
-		glDrawArrays(mode, 0, mVertexCount);glErrorCheck();
+		glDrawArrays(mode, 0, (GLsizei)mVertexCount);glErrorCheck();
 		PostRender();
 	}
 

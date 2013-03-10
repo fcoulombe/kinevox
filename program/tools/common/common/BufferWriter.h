@@ -145,7 +145,7 @@ GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const std::string &st
     buffer.Write(paddedLen);
 	buffer.Write(stringData.c_str(), stringData.length());
 	buffer.Pad();
-    *patchLen = buffer.GetCurrentOffset()-currOffset;
+    *patchLen = (uint32_t)(buffer.GetCurrentOffset()-currOffset);
 	return buffer;
 }
 }

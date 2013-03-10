@@ -35,8 +35,12 @@ void Test()
 	ColladaManager::Initialize();
 
     ColladaManager::LoadScene("datamisc/ExampleMesh.dae");
-
     ToolMeshData &data = ColladaManager::GetMeshData();
+    ColladaManager::LoadScene("datamisc/World1.dae");
+    ToolNodeData &nodeData = ColladaManager::GetNodeData();
+    Assert_Test(nodeData.mName == "World1");
+    Assert_Test(nodeData.mNodeList.front().mName == "Area1");
+    Assert_Test(nodeData.mNodeList.front().mNodeList.front().mName == "tile1");
 //std::cout << data << std::endl;
     ColladaManager::Terminate();
 }

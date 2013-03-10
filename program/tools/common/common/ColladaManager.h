@@ -23,13 +23,13 @@
 #pragma once
 
 #include <3rdparty/Collada.h>
+#include "common/ToolNodeData.h"
 #include "common/ToolMeshData.h"
 
 
-
+#include <list>
 namespace GCL
 {
-
 
 class ColladaManager
 {
@@ -40,6 +40,7 @@ public:
 	//static KFbxScene *GetScene() { return pScene; }
 	//static KFbxNode *GetRootNode() { return pScene->GetRootNode(); }
 	static ToolMeshData &GetMeshData();
+    static ToolNodeData &GetNodeData();
 
     
  };

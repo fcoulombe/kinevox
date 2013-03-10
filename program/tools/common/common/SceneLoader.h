@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,12 +27,13 @@
 
 namespace GCL
 {
-class MeshLoader
+class SceneLoader
 {
 public:
     static void Initialize() { ColladaManager::Initialize(); }
     static void Terminate() { ColladaManager::Terminate(); }
     static bool LoadScene(const char *filename) { return ColladaManager::LoadScene(filename); }
     static ToolMeshData &GetMeshData() { return ColladaManager::GetMeshData(); }
+    static ToolNodeData &GetNodeData() { return ColladaManager::GetNodeData(); }
  };
 }

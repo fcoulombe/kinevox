@@ -137,7 +137,7 @@ PFNGLUNMAPBUFFERARBPROC pglUnmapBufferARB = NULL;                   // unmap VBO
 #endif
 
 #if !defined(ES1 ) 
-#define ENABLE_SHADERS 0
+#define ENABLE_SHADERS 1
 #else
 #define ENABLE_SHADERS 0
 #endif

@@ -69,18 +69,18 @@ public:
 #else
 		if (VertexType::GetComponentType() & ePOSITION)
 		{
+            glEnableVertexAttribArray(ATTRIB_POSITION);glErrorCheck();
 			glVertexAttribPointer(ATTRIB_POSITION, 3, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToPosition());glErrorCheck();
-			glEnableVertexAttribArray(ATTRIB_POSITION);glErrorCheck();
 		}
 		if (VertexType::GetComponentType() & eNORMAL)
 		{
-			glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_UNIT, GL_TRUE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal());glErrorCheck();
-			glEnableVertexAttribArray(ATTRIB_NORMAL);glErrorCheck();
+            glEnableVertexAttribArray(ATTRIB_NORMAL);glErrorCheck();
+            glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_UNIT, GL_TRUE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal());glErrorCheck();
 		}
 		if (VertexType::GetComponentType() & eTEXTURE_COORD)
 		{
-			glVertexAttribPointer(ATTRIB_TEXTURE_COORD, 2, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
 			glEnableVertexAttribArray(ATTRIB_TEXTURE_COORD);glErrorCheck();
+			glVertexAttribPointer(ATTRIB_TEXTURE_COORD, 2, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
 		}
 #endif
 	}

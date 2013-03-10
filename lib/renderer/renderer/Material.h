@@ -37,9 +37,11 @@ public:
 	void LoadMaterial(const char *filename);
 
 	void SetTexture(const char *texture);
+
+    Shader *GetShader() const { return mShader; }
 private:
 	Texture *mTexture;
-	Shader *mShader;
+	mutable Shader *mShader; //mutable because we need to set uniforms before rendering
 
 	WorldPoint4 mAmbient;
 	WorldPoint4 mDiffuset;

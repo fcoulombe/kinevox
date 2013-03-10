@@ -155,7 +155,7 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		tempMaterial.Bind();
 
 		const Matrix44 &transform = tempRenderObject->GetTransform();
-		SetTransform(projection, modelView, transform);
+		SetTransform(projection, modelView, transform, tempMaterial.GetShader());
 
 		//FC: can sort by component type
 		const VertexDataList &dataList = tempRenderObject->GetVertexData();

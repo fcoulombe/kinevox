@@ -24,6 +24,8 @@
 #include <gcl/Exception.h>
 #include <gcl/Point4.h>
 #include <gcl/Matrix44.h>
+
+#include "renderer/ShaderAttributeDefaultLocations.h"
 #include "renderer/Texture.h"
 
 using namespace GCL;
@@ -50,7 +52,7 @@ const char *TextureVShaderStr =
 		"uniform mat4 ModelViewMatrix;\n"
 		"attribute vec4 InPosition;   \n"
 		"attribute vec4 InNormal;   \n"
-		"attribute vec4 InTexCoord;   \n"
+		"attribute vec2 InTexCoord;   \n"
 		"varying vec2 texcoord;  \n"
 		"varying vec4 color;  \n"
 		"void main()                 \n"
@@ -62,7 +64,7 @@ const char *TextureVShaderStr =
 		"   gl_Position = ProjectionMatrix * ModelViewMatrix * InPosition; \n"
 		"	texcoord = InTexCoord.xy;\n"
 		"#endif \n"
-		"	color = InNormal; \n"
+        "	color = vec4(InTexCoord.x,InTexCoord.y, 0.0,1.0); \n"
 		"}                           \n";
 
 const char *TextureFShaderStr =
@@ -75,9 +77,9 @@ const char *TextureFShaderStr =
 		"#ifdef ENABLE_FIX_PIPELINE \n"
 		"	gl_FragColor = texture2D( texture, gl_TexCoord[0].st ); \n"
 		"#else \n"
-		"	gl_FragColor = texture2D(texture, texcoord)+color;\n"
+		"	gl_FragColor = texture2D(texture, texcoord);\n"
 		"#endif \n"
-		"//gl_FragColor = vec4(1.0,0.0,0.0,1.0);\n"
+		"//gl_FragColor = color;\n"
 		"}\n";
 
 const char *DefaultVShaderStr = TextureVShaderStr;
@@ -87,7 +89,7 @@ const char *SHADER_HEADER =
 		"#version 110	\n"
 		"#pragma optimize(off) \n"
 		"#pragma debug(on) \n"
-#if ENABLE_FIX_PIPELINE
+#ifdef ENABLE_FIX_PIPELINE
 		"#define ENABLE_FIX_PIPELINE \n"
 #endif
 		"\n";
@@ -100,7 +102,6 @@ Shader::Shader()
 	std::string fbuffer(SHADER_HEADER);
 	fbuffer += DefaultFShaderStr;
 #if ENABLE_SHADERS
-
 	GLuint vertexShader = CompileShader(vbuffer.c_str(), GL_VERTEX_SHADER);
 	GLuint fragmentShader = CompileShader(fbuffer.c_str(), GL_FRAGMENT_SHADER);
 
@@ -110,7 +111,9 @@ Shader::Shader()
 	glAttachShader(mProgramObject, vertexShader);glErrorCheck();
 	glAttachShader(mProgramObject, fragmentShader);glErrorCheck();
 
-	glBindAttribLocation(mProgramObject, 0, "vPosition");glErrorCheck();
+    glBindAttribLocation(mProgramObject, ATTRIB_POSITION, "InPosition");glErrorCheck();
+    glBindAttribLocation(mProgramObject, ATTRIB_NORMAL, "InNormal");glErrorCheck();
+    glBindAttribLocation(mProgramObject, ATTRIB_TEXTURE_COORD, "InTexCoord");glErrorCheck();
 
 	glLinkProgram(mProgramObject);glErrorCheck();
 
@@ -118,9 +121,7 @@ Shader::Shader()
 	glGetProgramiv(mProgramObject, GL_LINK_STATUS, &linked);glErrorCheck();
 	if(linked)
 	{
-		glBindAttribLocation(mProgramObject, 0, "InPosition");
-		glBindAttribLocation(mProgramObject, 1, "InNormal");
-		glBindAttribLocation(mProgramObject, 2, "InTexCoord");
+
 		mIsValid = true;
 	}
 	else
@@ -247,7 +248,7 @@ void Shader::SetTextureSampler(const Texture &sampler)
 {
     #if ENABLE_SHADERS
 	GLint textureLoc = glGetUniformLocation(mProgramObject,"texture");glErrorCheck();
-	glUniform1i(textureLoc, sampler.GetTextureId());glErrorCheck();
+	glUniform1i(textureLoc, sampler.GetTextureUnit());glErrorCheck();
 #else
 	(void)sampler;
 #endif

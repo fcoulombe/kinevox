@@ -68,7 +68,7 @@ bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 void Test();
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 	TextureResourceManager::Initialize();
 
 	{

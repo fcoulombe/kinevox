@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 #include <renderer/Texture.h>
 #include <renderer/Vertex.h>
 
@@ -64,7 +64,7 @@ bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 void Test();
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 
 	TextureResourceManager::Initialize();
 	{
@@ -88,10 +88,12 @@ void Test()
 		renderObjectList.push_back(&obj1);
 
 		renderObjectList.push_back(&obj2);
+        KINEVOX_TEST_LOOP_START
 		renderer.PreRender();
 		renderer.Render(renderObjectList);
 		renderer.PostRender();
         winDriver.SwapBuffer();
+        KINEVOX_TEST_LOOP_END
 
 		/*target.Save("TextureAndShaderTest.tga");
 	        Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));

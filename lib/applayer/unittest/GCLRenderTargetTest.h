@@ -25,7 +25,7 @@
 #include <applayer/GCLApplication.h>
 #include <applayer/GCLRenderTarget.h>
 
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 
 using namespace GCL;
 namespace GCLRenderTargetTest
@@ -34,7 +34,7 @@ namespace GCLRenderTargetTest
 
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 
 	GCLApplication::Initialize("GCLRenderTargetTest");
 	{
@@ -45,12 +45,11 @@ void Test()
 	const WorldPoint3 position(0.0,0.0, -10.0);
 	obj.SetPosition(position);
 
-
 	GCLRenderTarget target(512,512);
-
+    KINEVOX_TEST_LOOP_START
 	GCLApplication::Update();
 	GCLApplication::Render();
-
+    KINEVOX_TEST_LOOP_END
 	target.Save("GCLRenderTargetTest.tga");
 	}
 	GCLApplication::Terminate();

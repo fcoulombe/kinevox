@@ -56,7 +56,7 @@ namespace EventHandlerTest
 
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 
 	WinDriver windows("EventHandlerTest");
     MyEventHandler handler;

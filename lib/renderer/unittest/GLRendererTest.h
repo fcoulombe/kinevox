@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 #include <renderer/GLRenderer.h>
 #include <windriver/WinDriver.h>
 

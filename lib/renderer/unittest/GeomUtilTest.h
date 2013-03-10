@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 #include <renderer/GeomUtil.h>
 
 
@@ -168,7 +168,7 @@ void Test();
 
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 	TextureResourceManager::Initialize();
 
 	{

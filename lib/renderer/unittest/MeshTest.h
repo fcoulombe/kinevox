@@ -22,7 +22,7 @@
 #pragma once
 
 #include <sstream>
-#include <gcl/UnitTest.h>
+#include <kinetestlib/UnitTest.h>
 #include <renderer/Mesh.h>
 #include <renderer/MeshResourceManager.h>
 
@@ -57,7 +57,7 @@ private:
 void Test();
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 
 	TextureResourceManager::Initialize();
 	MeshResourceManager::Initialize();

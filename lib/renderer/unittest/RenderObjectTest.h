@@ -22,6 +22,7 @@
 #pragma once
 
 #include <kinetestlib/UnitTest.h>
+#include <renderer/GeomUtilHelper.h>
 #include <renderer/Material.h>
 #include <renderer/RenderObject.h>
 #include <renderer/Shader.h>
@@ -31,28 +32,18 @@
 using namespace GCL;
 namespace RenderObjectTest
 {
-    static const   VertexPNT square[4] = {
-        {WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
-        {WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
-        {WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
-        {WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}};
-class MyRenderObject : public RenderObject
+
+class MyRenderObject : public SquareRenderObject
 {
 public:
 	MyRenderObject()
-	: RenderObject("MyRenderObject", Matrix44(true)) //identity
+	: SquareRenderObject("MyRenderObject", Matrix44(true)) //identity
 	{
-    data.push_back(VertexData(&square, 4, VertexPNT::GetComponentType()));
     }
 
-	const VertexDataList &GetVertexData() const
-	{
-		return data;
-	}
 	const Material &GetMaterial() const { return mMaterial; }
 private:
 	Material mMaterial;
-	VertexDataList data;
 };
 
 

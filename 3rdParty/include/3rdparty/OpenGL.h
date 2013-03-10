@@ -98,7 +98,7 @@ PFNGLUNMAPBUFFERARBPROC pglUnmapBufferARB = NULL;                   // unmap VBO
 #endif
 
 #if USE_64BIT_PLATFORM
-#	define GL_UNIT GL_DOUBLE
+#	define GL_UNIT GL_FLOAT //our mesh data are passed in float for portability/performance reason
 #	define GLreal GLdouble
 #	define glLoadMatrix glLoadMatrixd
 #	define glMultMatrix glMultMatrixd

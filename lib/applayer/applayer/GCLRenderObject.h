@@ -22,33 +22,23 @@
 
 #pragma once
 
+#include <renderer/GeomUtilHelper.h>
 #include <renderer/Material.h>
 #include <renderer/RenderObject.h>
 #include <renderer/Vertex.h>
 
 namespace GCL
 {
-class GCLRenderObject : public RenderObject
+class GCLRenderObject : public CubeRenderObject
 {
 public:
 	GCLRenderObject(const char *name);
 
 	~GCLRenderObject();
-	const VertexDataList &GetVertexData() const
-	{
-		return data;
-	}
 
 	 const Material &GetMaterial() const { return mMaterial; }
 private:
 	Material mMaterial;
-
-	//default vertex data
-	static const size_t NUM_VERTICES = 24;
-	static const VertexPNT cube[NUM_VERTICES];
-	VertexDataList data;
-
-
 };
 
 }

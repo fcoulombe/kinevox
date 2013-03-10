@@ -101,20 +101,25 @@ private:
 	size_t mBufferSize;
 };
 
-GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const WorldPoint2 &data)
+template<typename T>
+GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const Point2<T> &data)
 {
 	buffer.Write(data.x);
 	buffer.Write(data.y);
 	return buffer;
 }
-GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const WorldPoint3 &data)
+
+template<typename T>
+GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const Point3<T> &data)
 {
 	buffer.Write(data.x);
 	buffer.Write(data.y);
 	buffer.Write(data.z);
 	return buffer;
 }
-GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const WorldPoint4 &data)
+
+template<typename T>
+GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const Point4<T> &data)
 {
 	buffer.Write(data.x);
 	buffer.Write(data.y);

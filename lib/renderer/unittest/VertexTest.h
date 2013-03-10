@@ -81,8 +81,8 @@ void Test()
 		AssertMsg_Test(pt.OffsetToPosition() == 0,s.str().c_str());
 
 		s.str("");
-		s<< pt.OffsetToTextureCoordinate() <<"==sizeof(WorldPoint3)";
-		AssertMsg_Test(pt.OffsetToTextureCoordinate() == sizeof(WorldPoint3),s.str().c_str());
+		s<< pt.OffsetToTextureCoordinate() <<"==sizeof(Point3<MeshReal>)";
+		AssertMsg_Test(pt.OffsetToTextureCoordinate() == sizeof(Point3<MeshReal>),s.str().c_str());
 	}
 	{
 		VertexPNT pnt;
@@ -92,16 +92,16 @@ void Test()
 
 
 		s.str("");
-		s<< pnt.OffsetToNormal() <<"==sizeof(WorldPoint3)";
-		AssertMsg_Test(pnt.OffsetToNormal() == sizeof(WorldPoint3),s.str().c_str());
+		s<< pnt.OffsetToNormal() <<"==sizeof(Point3<MeshReal>)";
+		AssertMsg_Test(pnt.OffsetToNormal() == sizeof(Point3<MeshReal>),s.str().c_str());
 
 		s.str("");
 		s<< pnt.OffsetToPosition() <<"==0";
 		AssertMsg_Test(pnt.OffsetToPosition() == 0,s.str().c_str());
 
 		s.str("");
-		s<< pnt.OffsetToTextureCoordinate() <<"==sizeof(WorldPoint3)+sizeof(WorldPoint3)";
-		AssertMsg_Test(pnt.OffsetToTextureCoordinate() == sizeof(WorldPoint3)+sizeof(WorldPoint3),s.str().c_str());
+		s<< pnt.OffsetToTextureCoordinate() <<"==sizeof(Point3<MeshReal>)+sizeof(Point3<MeshReal>)";
+		AssertMsg_Test(pnt.OffsetToTextureCoordinate() == sizeof(Point3<MeshReal>)+sizeof(Point3<MeshReal>),s.str().c_str());
 
 	}
 	{
@@ -124,8 +124,8 @@ void Test()
 		AssertMsg_Test(pn.OffsetToPosition() == 0,s.str().c_str());
 
 		s.str("");
-		s<< pn.OffsetToNormal() <<"==sizeof(WorldPoint3)";
-		AssertMsg_Test(pn.OffsetToNormal() == sizeof(WorldPoint3),s.str().c_str());
+		s<< pn.OffsetToNormal() <<"==sizeof(Point3<MeshReal>)";
+		AssertMsg_Test(pn.OffsetToNormal() == sizeof(Point3<MeshReal>),s.str().c_str());
 
 	}
 }

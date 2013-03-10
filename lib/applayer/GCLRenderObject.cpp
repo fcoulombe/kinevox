@@ -25,52 +25,10 @@
 
 using namespace GCL;
 
-const   VertexPNT GCLRenderObject::cube[GCLRenderObject::NUM_VERTICES] = {
-		//front
-		{WorldPoint3(-0.5, -0.5, 0.5), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
-		{WorldPoint3(0.5, -0.5, 0.5), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
-		{WorldPoint3(-0.5, 0.5, 0.5), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
-		{WorldPoint3(0.5, 0.5, 0.5), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)},
-
-		//back
-		{WorldPoint3(-0.5, -0.5, -0.5), WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
-		{WorldPoint3(0.5, -0.5, -0.5), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
-		{WorldPoint3(-0.5, 0.5, -0.5), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
-		{WorldPoint3(0.5, 0.5, -0.5), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)},
-
-		//left
-		{WorldPoint3(-0.5, -0.5, -0.5), WorldPoint3(-1.0, 0.0, 0.0) ,WorldPoint2(0.0, 0.0)},
-		{WorldPoint3(-0.5, -0.5, 0.5), 	WorldPoint3(-1.0, 0.0, 0.0), WorldPoint2(1.0, 0.0)},
-		{WorldPoint3(-0.5, 0.5, -0.5), 	WorldPoint3(-1.0, 0.0, 0.0), WorldPoint2(0.0, 1.0)},
-		{WorldPoint3(-0.5, 0.5, 0.5), 	WorldPoint3(-1.0, 0.0, 0.0), WorldPoint2(1.0, 1.0)},
-
-		//right
-		{WorldPoint3(0.5, -0.5, -0.5), WorldPoint3(-1.0, 0.0, 0.0) ,WorldPoint2(0.0, 0.0)},
-		{WorldPoint3(0.5, -0.5, 0.5), 	WorldPoint3(-1.0, 0.0, 0.0), WorldPoint2(1.0, 0.0)},
-		{WorldPoint3(0.5, 0.5, -0.5), 	WorldPoint3(-1.0, 0.0, 0.0), WorldPoint2(0.0, 1.0)},
-		{WorldPoint3(0.5, 0.5, 0.5), 	WorldPoint3(-1.0, 0.0, 0.0), WorldPoint2(1.0, 1.0)},
-
-		//top
-		{WorldPoint3(0.5, 0.5, 0.5), WorldPoint3(0.0, 1.0, 0.0) ,WorldPoint2(1.0, 0.0)},
-		{WorldPoint3(0.5, 0.5, -0.5), 	WorldPoint3(0.0, 1.0, 0.0), WorldPoint2(0.0, 0.0)},
-		{WorldPoint3(-0.5, 0.5, -0.5), 	WorldPoint3(0.0, 1.0, 0.0), WorldPoint2(0.0, 1.0)},
-		{WorldPoint3(-0.5, 0.5, 0.5), 	WorldPoint3(0.0, 1.0, 0.0), WorldPoint2(1.0, 1.0)},
-
-		//bottom
-		{WorldPoint3(0.5, -0.5, 0.5), WorldPoint3(0.0, 1.0, 0.0) ,WorldPoint2(1.0, 0.0)},
-		{WorldPoint3(0.5, -0.5, -0.5), 	WorldPoint3(0.0, 1.0, 0.0), WorldPoint2(0.0, 0.0)},
-		{WorldPoint3(-0.5,-0.5, -0.5), 	WorldPoint3(0.0, 1.0, 0.0), WorldPoint2(0.0, 1.0)},
-		{WorldPoint3(-0.5, -0.5, 0.5), 	WorldPoint3(0.0, 1.0, 0.0), WorldPoint2(1.0, 1.0)}
-
-};
-
-
-
 GCLRenderObject::GCLRenderObject(const char *name)
-: RenderObject(name, Matrix44::IDENTITY),
+: CubeRenderObject(name, Matrix44::IDENTITY),
   mMaterial("Default")
 {
-    data.push_back(VertexData(&cube, GCLRenderObject::NUM_VERTICES, VertexPNT::GetComponentType()));
 	GCLApplication::RegisterRenderObject(this);
 }
 

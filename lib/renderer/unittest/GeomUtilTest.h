@@ -23,142 +23,74 @@
 
 #include <kinetestlib/UnitTest.h>
 #include <renderer/GeomUtil.h>
-
+#include <renderer/GeomUtilHelper.h>
 
 using namespace GCL;
 namespace GeomUtilTest
 {
-static const   VertexPNT square[4] = {
-        {WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
-        {WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
-        {WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
-        {WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
-    };
-class MyRenderObject : public RenderObject
+
+class MyRenderObject : public SquareRenderObject
 {
 public:
 	MyRenderObject()
-	: RenderObject("MyRenderObject", Matrix44(true)) //identity
+	: SquareRenderObject("MyRenderObject", Matrix44(true)) //identity
 	{
-        data.push_back(VertexData(&square, 4, VertexPNT::GetComponentType()));
     }
-	const VertexDataList &GetVertexData() const
-	{
-		return data;
-	}
+
 	const Material &GetMaterial() const { return mMaterial; }
 private:
-	VertexDataList data;
-
 	Material mMaterial;
 };
 
 
-class SphereRenderObject : public RenderObject
+class MySphereRenderObject : public SphereRenderObject
 {
 public:
-    SphereRenderObject()
-        : RenderObject("MyRenderObject", Matrix44(true)) //identity
+    MySphereRenderObject()
+        : SphereRenderObject("MyRenderObject", Matrix44(true)) //identity
     {
-        
-        GeomUtil::MakeMeshSphere(vertex, 1.0);
-        data.push_back(VertexData(vertex.data(), vertex.size(), VertexP::GetComponentType()));
     }
-    const VertexDataList &GetVertexData() const
-    {
-        return data;
-    }
+
     const Material &GetMaterial() const { return mMaterial; }
 private:
-    std::vector<WorldPoint3> vertex;
-    VertexDataList data;
-
     Material mMaterial;
 };
 
 
-class CircleRenderObject : public RenderObject
+class MyCircleRenderObject : public CircleRenderObject 
 {
 public:
-    CircleRenderObject()
-        : RenderObject("MyRenderObject", Matrix44(true)) //identity
+    MyCircleRenderObject()
+        : CircleRenderObject("MyRenderObject", Matrix44(true)) //identity
     {
-        GeomUtil::MakeMeshSphere(vertex, 1.0);
-        data.push_back(VertexData(vertex.data(), vertex.size(), VertexP::GetComponentType()));
     }
-    const VertexDataList &GetVertexData() const
-    {
-        return data;
-    }
+
     const Material &GetMaterial() const { return mMaterial; }
 private:
-    std::vector<WorldPoint3> vertex;
-    VertexDataList data;
-
     Material mMaterial;
 };
 
-class PlaneRenderObject : public RenderObject
+class MyPlaneRenderObject : public PlaneRenderObject 
 {
 public:
-    PlaneRenderObject()
-        : RenderObject("MyRenderObject", Matrix44(true)) //identity
+    MyPlaneRenderObject()
+        : PlaneRenderObject("MyRenderObject", Matrix44(true)) //identity
     {
-        std::vector<WorldPoint3> points;
-        std::vector<WorldPoint2> uvs;
-        GeomUtil::MakeMeshPlane(points, uvs, 1.0);
-        for (size_t i=0; i<points.size(); ++i)
-        {
-            VertexPT v; 
-            v.position = points[i];
-            v.textureCoordinate = uvs[i];
-            vertex.push_back(v);
-        }
-        data.push_back(VertexData(vertex.data(), points.size(), VertexPT::GetComponentType()));
-    }
-    const VertexDataList &GetVertexData() const
-    {
-        return data;
     }
     const Material &GetMaterial() const { return mMaterial; }
 private:
-    std::vector<VertexPT> vertex;
-    VertexDataList data;
-
     Material mMaterial;
 };
 
-class CubeRenderObject : public RenderObject
+class MyCubeRenderObject : public CubeRenderObject
 {
 public:
-    CubeRenderObject()
-        : RenderObject("MyRenderObject", Matrix44(true)) //identity
+    MyCubeRenderObject()
+        : CubeRenderObject("MyRenderObject", Matrix44(true)) //identity
     {
-        std::vector<WorldPoint3> points;
-        std::vector<WorldPoint3> normals;
-        std::vector<WorldPoint2> uvs;
-        GeomUtil::MakeMeshCube(points, normals, uvs, 1.0);
-        
-        for (size_t i=0; i<points.size(); ++i)
-        {
-            VertexPNT v; 
-            v.position = points[i];
-            v.normal = normals[i];
-            v.textureCoordinate = uvs[i];
-            vertex.push_back(v);
-        }
-        VertexPNT *positions =  (VertexPNT *)(vertex.data());
-        data.push_back(VertexData(positions, vertex.size(), VertexPNT::GetComponentType()));
-    }
-    const VertexDataList &GetVertexData() const
-    {
-        return data;
     }
     const Material &GetMaterial() const { return mMaterial; }
 private:
-    std::vector<VertexPNT> vertex;
-    VertexDataList data;
-
     Material mMaterial;
 };
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
@@ -193,17 +125,17 @@ void Test()
 		GLRenderer renderer;
 
         RenderObjectList objList;
-		CubeRenderObject cube;
+		MyCubeRenderObject cube;
         cube.SetPosition(3.0,0.0,-8.0);
         cube.SetEnableDrawNormals();
 		objList.push_back(&cube);
-        SphereRenderObject sphere;
+        MySphereRenderObject sphere;
         sphere.SetPosition(1,0.0,-8.0);
         objList.push_back(&sphere);
-        PlaneRenderObject plane;
+        MyPlaneRenderObject plane;
         plane.SetPosition(-1,0.0,-8.0);
         objList.push_back(&plane);
-        CircleRenderObject circle;
+        MyCircleRenderObject circle;
         circle.SetPosition(-3.0,0.0,-8.0);
         objList.push_back(&circle);
 

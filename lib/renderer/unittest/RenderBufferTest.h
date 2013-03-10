@@ -22,36 +22,27 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
+#include <renderer/GeomUtilHelper.h>
 #include <renderer/RenderObject.h>
 #include <renderer/RenderBuffer.h>
 #include <renderer/Shader.h>
 #include <renderer/Vertex.h>
 
+
 using namespace GCL;
 namespace RenderBufferTest
 {
-    static const   VertexPNT square[4] = {
-        {WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
-        {WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
-        {WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
-        {WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
-    };
-class MyRenderObject : public RenderObject
+
+class MyRenderObject : public SquareRenderObject
 {
 public:
 	MyRenderObject()
-	: RenderObject("MyRenderObject", Matrix44(true)) //identity
+	: SquareRenderObject("MyRenderObject", Matrix44(true)) //identity
 	{
-        data.push_back(VertexData(&square, 4, VertexPNT::GetComponentType()));
     }
-	const VertexDataList &GetVertexData() const
-	{
-		return data;
-	}
+
 	const Material &GetMaterial() const { return mMaterial; }
 	private:
-
-	VertexDataList data;
 		Material mMaterial;
 };
 

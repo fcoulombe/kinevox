@@ -45,7 +45,7 @@ void Test()
     testData.mMaterialNameLen = 44;
 
     MeshResource::SubMeshData testSubMeshData;
-    testSubMeshData.mSubMeshSize =  1491256;
+    testSubMeshData.mSubMeshSize =  789496;
     testSubMeshData.mVertexCount = 21930;
 	testSubMeshData.mIndicesCount = 21930;
 	

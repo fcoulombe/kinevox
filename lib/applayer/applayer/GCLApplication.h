@@ -36,6 +36,7 @@ class Text2D;
 class GCLText2D;
 class Input;
 class WinDriver;
+class GCLWorld;
 class GCLApplication
 {
 public:
@@ -60,6 +61,7 @@ private:
 	friend class GCLRenderObject;
 	friend class GCLRenderObject2D;
 	friend class GCLText2D;
+    friend class GCLWorld;
 	static void RegisterRenderObject(GCLRenderObject* newRenderObject);
 	static void ReleaseRenderObject(GCLRenderObject* renderObjectToDelete);
 
@@ -69,9 +71,13 @@ private:
 	static void RegisterText2D(GCLText2D* newRenderText2d);
 	static void ReleaseText2D(GCLText2D* renderText2DToDelete);
 
+    static void RegisterWorld(GCLWorld* currentWorld);
+    static void ReleaseWorld(GCLWorld* shouldBeTheSameWorldAsTheCurrent);
+
 	static GLRenderer *mRenderer;
     static WinDriver *mWinDriver;
 
+    static GCLWorld *mCurrentWorld;
 	static RenderObjectList mRenderObjectList;
 	static RenderObject2DList mRenderObject2DList;
 	static Text2DList mText2DList;

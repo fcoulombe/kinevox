@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,27 +18,32 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */#include <iostream>
+ */
+#pragma once
+#include <sstream>
 
-#include "GCLApplicationTest.h"
-#include "GCLApplicationCameraTest.h"
-#include "GCLRenderObjectTest.h"
-#include "GCLRenderTargetTest.h"
-#include "GCLRenderObject2DTest.h"
-#include "GCLText2DTest.h"
-#include "GCLWorldTest.h"
+#include <applayer/GCLApplication.h>
+#include <applayer/GCLWorld.h>
 
-int main(int argc, char ** argv)
+#include <kinetestlib/UnitTest.h>
+
+using namespace GCL;
+namespace GCLWorldTest
 {
-	 SUITE_INIT(argc, argv)
-		GCLApplicationTest::Test();
-		GCLApplicationCameraTest::Test();
-		GCLRenderObjectTest::Test();
-		GCLRenderTargetTest::Test();
-		GCLRenderObject2DTest::Test();
-		GCLText2DTest::Test();
-        GCLWorldTest::Test();
-		SUITE_TERMINATE
 
-	return 0;
+void Test()
+{
+	KINEVOX_TEST_START
+
+	GCLApplication::Initialize("GCLWorldTest");
+	{
+
+        GCLWorld world("World1");
+    KINEVOX_TEST_LOOP_START
+	GCLApplication::Update();
+	GCLApplication::Render();
+    KINEVOX_TEST_LOOP_END
+	}
+	GCLApplication::Terminate();
+}
 }

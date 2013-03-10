@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author>takis</author>
+      <authoring_tool>OpenCOLLADA2013</authoring_tool>
+      <comments>
+			ColladaMaya export options: 
+			bakeTransforms=0;relativePaths=0;copyTextures=1;exportTriangles=1;exportCgfxFileReferences=1;
+			isSampling=0;curveConstrainSampling=0;removeStaticCurves=1;exportPolygonMeshes=1;exportLights=1;
+			exportCameras=1;exportJointsAndSkin=1;exportAnimations=1;exportInvisibleNodes=0;exportDefaultCameras=0;
+			exportTexCoords=1;exportNormals=1;exportNormalsPerVertex=1;exportVertexColors=1;exportVertexColorsPerVertex=1;
+			exportTexTangents=0;exportTangents=0;exportReferencedMaterials=0;exportMaterialsOnly=0;
+			exportXRefs=0;dereferenceXRefs=1;exportCameraAsLookat=0;cameraXFov=0;cameraYFov=1;doublePrecision=1
+		</comments>
+      <source_data>file:///C:/Users/takis/Documents/maya/projects/default/untitled</source_data>
+    </contributor>
+    <created>2013-02-25T11:42:32</created>
+    <modified>2013-02-25T11:42:32</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  <library_materials>
+    <material id="lambert1" name="lambert1">
+      <instance_effect url="#lambert1-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="lambert1-fx">
+      <profile_COMMON>
+        <technique sid="common">
+          <lambert>
+            <emission>
+              <color>0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color>0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.4000000059604644 0.4000000059604644 0.4000000059604644 1</color>
+            </diffuse>
+            <transparent opaque="RGB_ZERO">
+              <color>0 0 0 1</color>
+            </transparent>
+            <transparency>
+              <float>1</float>
+            </transparency>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_visual_scenes>
+    <visual_scene id="VisualSceneNode" name="untitled">
+      <node id="World1" name="World1" type="NODE">
+        <translate sid="translate">0 0 0</translate>
+        <rotate sid="rotateZ">0 0 1 0</rotate>
+        <rotate sid="rotateY">0 1 0 0</rotate>
+        <rotate sid="rotateX">1 0 0 0</rotate>
+        <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
+        <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
+        <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
+        <scale sid="scale">1 1 1</scale>
+        <node id="Area1" name="Area1" type="NODE">
+          <translate sid="translate">0 0 0</translate>
+          <rotate sid="rotateZ">0 0 1 0</rotate>
+          <rotate sid="rotateY">0 1 0 0</rotate>
+          <rotate sid="rotateX">1 0 0 0</rotate>
+          <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
+          <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
+          <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
+          <scale sid="scale">1 1 1</scale>
+          <node id="tile1" name="tile1" type="NODE">
+            <translate sid="translate">0 0 0</translate>
+            <rotate sid="rotateZ">0 0 1 0</rotate>
+            <rotate sid="rotateY">0 1 0 0</rotate>
+            <rotate sid="rotateX">1 0 0 0</rotate>
+            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
+            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
+            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
+            <scale sid="scale">1 1 1</scale>
+            <extra>
+              <technique profile="OpenCOLLADAMaya">
+                <originalMayaNodeId>tile1</originalMayaNodeId>
+              </technique>
+            </extra>
+          </node>
+          <node id="house11" name="house11" type="NODE">
+            <translate sid="translate">-0.356152443837678 1.436413330776265 0</translate>
+            <rotate sid="rotateZ">0 0 1 0</rotate>
+            <rotate sid="rotateY">0 1 0 0</rotate>
+            <rotate sid="rotateX">1 0 0 0</rotate>
+            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
+            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
+            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
+            <scale sid="scale">1 1 1</scale>
+            <extra>
+              <technique profile="OpenCOLLADAMaya">
+                <originalMayaNodeId>house11</originalMayaNodeId>
+              </technique>
+            </extra>
+          </node>
+          <node id="house12" name="house12" type="NODE">
+            <translate sid="translate">0.2530824173031255 1.393501553516308 0</translate>
+            <rotate sid="rotateZ">0 0 1 0</rotate>
+            <rotate sid="rotateY">0 1 0 0</rotate>
+            <rotate sid="rotateX">1 0 0 0</rotate>
+            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
+            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
+            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
+            <scale sid="scale">1 1 1</scale>
+            <extra>
+              <technique profile="OpenCOLLADAMaya">
+                <originalMayaNodeId>house12</originalMayaNodeId>
+              </technique>
+            </extra>
+          </node>
+          <node id="house13" name="house13" type="NODE">
+            <translate sid="translate">0 1.359692219733111 -0.2124354519686599</translate>
+            <rotate sid="rotateZ">0 0 1 0</rotate>
+            <rotate sid="rotateY">0 1 0 0</rotate>
+            <rotate sid="rotateX">1 0 0 0</rotate>
+            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
+            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
+            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
+            <scale sid="scale">1 1 1</scale>
+            <extra>
+              <technique profile="OpenCOLLADAMaya">
+                <originalMayaNodeId>house13</originalMayaNodeId>
+              </technique>
+            </extra>
+          </node>
+          <node id="house14" name="house14" type="NODE">
+            <translate sid="translate">0 1.433836296585639 0.2815946274400016</translate>
+            <rotate sid="rotateZ">0 0 1 0</rotate>
+            <rotate sid="rotateY">0 1 0 0</rotate>
+            <rotate sid="rotateX">1 0 0 0</rotate>
+            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
+            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
+            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
+            <scale sid="scale">1 1 1</scale>
+            <extra>
+              <technique profile="OpenCOLLADAMaya">
+                <originalMayaNodeId>house14</originalMayaNodeId>
+              </technique>
+            </extra>
+          </node>
+          <node id="mushroom1" name="mushroom1" type="NODE">
+            <translate sid="translate">0 1.399448545180128 0</translate>
+            <rotate sid="rotateZ">0 0 1 0</rotate>
+            <rotate sid="rotateY">0 1 0 0</rotate>
+            <rotate sid="rotateX">1 0 0 0</rotate>
+            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
+            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
+            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
+            <scale sid="scale">1 1 1</scale>
+            <extra>
+              <technique profile="OpenCOLLADAMaya">
+                <originalMayaNodeId>mushroom1</originalMayaNodeId>
+              </technique>
+            </extra>
+          </node>
+          <extra>
+            <technique profile="OpenCOLLADAMaya">
+              <originalMayaNodeId>Area1</originalMayaNodeId>
+            </technique>
+          </extra>
+        </node>
+        <extra>
+          <technique profile="OpenCOLLADAMaya">
+            <originalMayaNodeId>World1</originalMayaNodeId>
+          </technique>
+        </extra>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#VisualSceneNode"/>
+  </scene>
+</COLLADA>

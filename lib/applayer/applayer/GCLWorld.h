@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -18,27 +18,23 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */#include <iostream>
+ */
 
-#include "GCLApplicationTest.h"
-#include "GCLApplicationCameraTest.h"
-#include "GCLRenderObjectTest.h"
-#include "GCLRenderTargetTest.h"
-#include "GCLRenderObject2DTest.h"
-#include "GCLText2DTest.h"
-#include "GCLWorldTest.h"
+#pragma once
 
-int main(int argc, char ** argv)
+
+
+namespace GCL
 {
-	 SUITE_INIT(argc, argv)
-		GCLApplicationTest::Test();
-		GCLApplicationCameraTest::Test();
-		GCLRenderObjectTest::Test();
-		GCLRenderTargetTest::Test();
-		GCLRenderObject2DTest::Test();
-		GCLText2DTest::Test();
-        GCLWorldTest::Test();
-		SUITE_TERMINATE
+class GCLWorld 
+{
+public:
+    GCLWorld(const char *name) {}
 
-	return 0;
+    ~GCLWorld() {}
+
+private:
+
+};
+
 }

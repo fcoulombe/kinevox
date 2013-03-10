@@ -97,8 +97,6 @@ void Test()
         winDriver.SwapBuffer();
 	}
 
-	Shader shader;
-    shader.Bind();
 	TextureResourceManager::Terminate();
 }
 }

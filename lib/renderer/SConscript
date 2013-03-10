@@ -40,7 +40,7 @@ else:
 cflags = []
 cflags.extend(glewPreProc)
 
-cflags.extend(['-DENABLE_FIX_PIPELINE=1'])
+#cflags.extend(['-DENABLE_FIX_PIPELINE=1'])
 
 
 env.AppendUnique(CPPFLAGS=cflags)

@@ -127,11 +127,13 @@ void GeomUtil::MakeMeshPlane(std::vector<WorldPoint3>& vertexData,
 }
 
 void GeomUtil::MakeMeshCube(std::vector<WorldPoint3>& vertexData,
+                            std::vector<WorldPoint3>& normalData,
 		std::vector<WorldPoint2>& tcoordData,
 		Real size)
 {
 	size *= 0.5;
-
+    
+    //vertex
 	const WorldPoint3 v0( 1.0 * size,  1.0 * size, -1.0 * size);
 	const WorldPoint3 v1(-1.0 * size,  1.0 * size, -1.0 * size);
 	const WorldPoint3 v2( 1.0 * size,  1.0 * size,  1.0 * size);
@@ -141,6 +143,16 @@ void GeomUtil::MakeMeshCube(std::vector<WorldPoint3>& vertexData,
 	const WorldPoint3 v6( 1.0 * size, -1.0 * size,  1.0 * size);
 	const WorldPoint3 v7(-1.0 * size, -1.0 * size,  1.0 * size);
 
+    //normals
+    const WorldPoint3 top(0.0,1.0,0.0);
+    const WorldPoint3 botom(0.0, -1.0, 0.0);
+    const WorldPoint3 left(-1.0, 0.0, 0.0);
+    const WorldPoint3 right(1.0, 0.0, 0.0);
+    const WorldPoint3 front(0.0, 0.0, 1.0);
+    const WorldPoint3 back(0.0, 0.0, -1.0);
+
+
+    //uv
 	const WorldPoint2 t0( 1.0,  1.0);
 	const WorldPoint2 t1( 0.0,  1.0);
 	const WorldPoint2 t2( 1.0,  0.0);
@@ -153,6 +165,8 @@ void GeomUtil::MakeMeshCube(std::vector<WorldPoint3>& vertexData,
 	vertexData.push_back(v2);
 	vertexData.push_back(v1);
 	vertexData.push_back(v3);
+    for (size_t i=0; i<6; ++i) normalData.push_back(top);
+
 	/* Bottom */
 	vertexData.push_back(v5);
 	vertexData.push_back(v4);
@@ -160,6 +174,7 @@ void GeomUtil::MakeMeshCube(std::vector<WorldPoint3>& vertexData,
 	vertexData.push_back(v7);
 	vertexData.push_back(v4);
 	vertexData.push_back(v6);
+    for (size_t i=0; i<6; ++i) normalData.push_back(botom);
 
 	/* Right */
 	vertexData.push_back(v0);
@@ -168,6 +183,7 @@ void GeomUtil::MakeMeshCube(std::vector<WorldPoint3>& vertexData,
 	vertexData.push_back(v4);
 	vertexData.push_back(v2);
 	vertexData.push_back(v6);
+    for (size_t i=0; i<6; ++i) normalData.push_back(right);
 
 	/* Left */
 	vertexData.push_back(v3);
@@ -176,6 +192,8 @@ void GeomUtil::MakeMeshCube(std::vector<WorldPoint3>& vertexData,
 	vertexData.push_back(v7);
 	vertexData.push_back(v1);
 	vertexData.push_back(v5);
+    for (size_t i=0; i<6; ++i) normalData.push_back(left);
+
 	/* Back */
 	vertexData.push_back(v0);
 	vertexData.push_back(v1);
@@ -183,6 +201,8 @@ void GeomUtil::MakeMeshCube(std::vector<WorldPoint3>& vertexData,
 	vertexData.push_back(v4);
 	vertexData.push_back(v1);
 	vertexData.push_back(v5);
+    for (size_t i=0; i<6; ++i) normalData.push_back(back);
+
 	/* Front */
 	vertexData.push_back(v2);
 	vertexData.push_back(v3);
@@ -190,6 +210,7 @@ void GeomUtil::MakeMeshCube(std::vector<WorldPoint3>& vertexData,
 	vertexData.push_back(v6);
 	vertexData.push_back(v3);
 	vertexData.push_back(v7);
+    for (size_t i=0; i<6; ++i) normalData.push_back(front);
 
 	for(size_t i=0; i<6; ++i)
 	{

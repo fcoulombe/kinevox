@@ -101,18 +101,33 @@ void GLRenderer::PostRender()
 {
 }
 
+template<typename VertexType>
+void DrawNormals(const VertexData &data)
+{
+    std::vector<WorldPoint3> normalLines;
+    const VertexType *vertexData = (const VertexType *)(data.mVertexData); 
+    for (size_t i=0; i<data.mVertexCount; ++i)
+    {
+        const VertexType &vertex = vertexData[i];
+        normalLines.push_back(vertex.position);
+        normalLines.push_back(vertex.position + (vertex.normal*0.5));
+    }
+    const VertexP *pos = (const VertexP *)(normalLines.data());
+    VertexData lineData(pos, normalLines.size(), VertexP::GetComponentType());
+    VertexBuffer<VertexP> buffer((const VertexP *)lineData.mVertexData, lineData.mVertexCount);
+    buffer.Render(GL_LINES);
+
+}
 void GLRenderer::Render(const RenderObjectList &renderObjectList)
 {
 	mCamera->Update();
 
 	const Matrix44 &projection = mCamera->GetProjection();
-#if ENABLE_FIX_PIPELINE
+    const Matrix44 &modelView = mCamera->GetModelView();
+#ifdef ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrix(reinterpret_cast<const GLreal*>(&projection)); glErrorCheck();
-#endif
 
-	const Matrix44 &modelView = mCamera->GetModelView();
-#if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrix(reinterpret_cast<const GLreal*>(&modelView));
 #endif
@@ -135,14 +150,15 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		glEnd ();
 		glPopMatrix();glErrorCheck();
 #else
-		const Material &tempMaterial = renderObjectList[i]->GetMaterial();
+        const RenderObject *tempRenderObject = renderObjectList[i];
+		const Material &tempMaterial = tempRenderObject->GetMaterial();
 		tempMaterial.Bind();
 
-		const Matrix44 &transform = renderObjectList[i]->GetTransform();
+		const Matrix44 &transform = tempRenderObject->GetTransform();
 		SetTransform(projection, modelView, transform);
 
 		//FC: can sort by component type
-		const VertexDataList &dataList = renderObjectList[i]->GetVertexData();
+		const VertexDataList &dataList = tempRenderObject->GetVertexData();
         for (size_t j=0; j<dataList.size(); ++j)
         {
             const VertexData &data = dataList[j]; 
@@ -158,6 +174,8 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
                 {
                     VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.mVertexCount);
                     buffer.Render();
+                    if (tempRenderObject->IsDrawingNormals())
+                        DrawNormals<VertexPN>(data);
                 }
                 break;
             case ePOSITION|eTEXTURE_COORD:
@@ -170,6 +188,8 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
                 {
                     VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.mVertexCount);
                     buffer.Render();
+                    if (tempRenderObject->IsDrawingNormals())
+                        DrawNormals<VertexPNT>(data);
                 }
                 break;
             }
@@ -187,13 +207,11 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 
 void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t viewportWidth, size_t viewportHeight)
 {
-#if ENABLE_FIX_PIPELINE
+#ifdef ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho (0, viewportHeight, viewportWidth, 0, -1.0f, 1.0f); glErrorCheck();
-#endif
 
-#if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 #endif
@@ -225,13 +243,11 @@ void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t viewp
 
 void GLRenderer::Render(const Text2DList &renderObjectList, size_t viewportWidth, size_t viewportHeight)
 {
-#if ENABLE_FIX_PIPELINE
+#ifdef ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho (0, viewportHeight, viewportWidth, 0, -1.0f, 1.0f); glErrorCheck();
-#endif
 
-#if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 #endif
@@ -388,7 +404,7 @@ void GLRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &model
 {
 	Matrix44 f = modelView*transform;
 
-#if ENABLE_FIX_PIPELINE
+#ifdef ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrix(reinterpret_cast<const GLreal*>(&projection));
 

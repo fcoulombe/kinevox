@@ -81,7 +81,7 @@ class RenderObject
 {
 public:
 	RenderObject(const char *name, const Matrix44 &transform)
-	: mObjName(name)
+	: mObjName(name), mIsDrawNormals(false)
 	{
 		mTransform = (transform);
 	}
@@ -111,8 +111,11 @@ public:
 		mTransform.SetPosition(position);
 	}
 
+    void SetEnableDrawNormals(bool isDrawingNormals = true) { mIsDrawNormals = isDrawingNormals; }
+    bool IsDrawingNormals() const { return mIsDrawNormals; }
 protected:
 	Matrix44 mTransform;
 	std::string mObjName;
+    bool mIsDrawNormals;
 };
 }

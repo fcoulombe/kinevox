@@ -71,8 +71,10 @@ private:
 
 	friend class Shader;
 	friend class FrameBuffer;
+    GLuint GetTextureUnit() const { return mTextureUnit; }
 	GLuint GetTextureId() const { return mTextureId; }
 	GLuint mTextureId;
+    GLuint mTextureUnit;
 	TextureData mTextureData;
 
 	PixelBufferHAL *mPBO;

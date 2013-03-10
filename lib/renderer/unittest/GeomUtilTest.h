@@ -135,18 +135,20 @@ public:
         : RenderObject("MyRenderObject", Matrix44(true)) //identity
     {
         std::vector<WorldPoint3> points;
+        std::vector<WorldPoint3> normals;
         std::vector<WorldPoint2> uvs;
-        GeomUtil::MakeMeshCube(points, uvs, 1.0);
+        GeomUtil::MakeMeshCube(points, normals, uvs, 1.0);
         
         for (size_t i=0; i<points.size(); ++i)
         {
-            VertexPT v; 
+            VertexPNT v; 
             v.position = points[i];
+            v.normal = normals[i];
             v.textureCoordinate = uvs[i];
             vertex.push_back(v);
         }
-        VertexPT *positions =  (VertexPT *)(vertex.data());
-        data.push_back(VertexData(positions, vertex.size(), VertexPT::GetComponentType()));
+        VertexPNT *positions =  (VertexPNT *)(vertex.data());
+        data.push_back(VertexData(positions, vertex.size(), VertexPNT::GetComponentType()));
     }
     const VertexDataList &GetVertexData() const
     {
@@ -154,7 +156,7 @@ public:
     }
     const Material &GetMaterial() const { return mMaterial; }
 private:
-    std::vector<VertexPT> vertex;
+    std::vector<VertexPNT> vertex;
     VertexDataList data;
 
     Material mMaterial;
@@ -178,10 +180,11 @@ void Test()
 		GeomUtil::MakeMeshCircle(dst, radius);
 
 		std::vector<WorldPoint3> vertexData;
+        std::vector<WorldPoint3> normalData;
         std::vector<WorldPoint2> tcoordData;
 		Real size = 1.0;
 		GeomUtil::MakeMeshPlane(vertexData,tcoordData,size);
-		GeomUtil::MakeMeshCube(vertexData,tcoordData,size);
+		GeomUtil::MakeMeshCube(vertexData,normalData,tcoordData,size);
 
 	}
 
@@ -192,6 +195,7 @@ void Test()
         RenderObjectList objList;
 		CubeRenderObject cube;
         cube.SetPosition(3.0,0.0,-8.0);
+        cube.SetEnableDrawNormals();
 		objList.push_back(&cube);
         SphereRenderObject sphere;
         sphere.SetPosition(1,0.0,-8.0);

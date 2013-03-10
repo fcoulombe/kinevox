@@ -49,7 +49,7 @@ public:
 	}
 	void PreRender()
 	{
-#if ENABLE_FIX_PIPELINE
+#ifdef ENABLE_FIX_PIPELINE
 		if (VertexType::GetComponentType() & ePOSITION)
 		{
 			glEnableClientState(GL_VERTEX_ARRAY);
@@ -85,16 +85,16 @@ public:
 #endif
 	}
 
-	void Render()
+	void Render(GLenum mode = GL_TRIANGLES)
 	{
 		PreRender();
-		glDrawArrays(GL_TRIANGLES, 0, mVertexCount);glErrorCheck();
+		glDrawArrays(mode, 0, mVertexCount);glErrorCheck();
 		PostRender();
 	}
 
 	void PostRender()
 	{
-#if ENABLE_FIX_PIPELINE
+#ifdef ENABLE_FIX_PIPELINE
 		if (VertexType::GetComponentType() & ePOSITION)
 		{
 			glDisableClientState(GL_VERTEX_ARRAY);

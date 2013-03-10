@@ -35,6 +35,7 @@ namespace GCL
 	  		  std::vector<WorldPoint2>& tcoordData,
 	  		  Real size);
 	  static void MakeMeshCube(std::vector<WorldPoint3>& vertexData,
+          std::vector<WorldPoint3>& normalData,
 	  		  std::vector<WorldPoint2>& tcoordData,
 	  		  Real size);
 

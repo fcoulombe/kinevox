@@ -34,7 +34,7 @@
 #   elif defined(ES1)
 #       include <OpenGLES/ES1/gl.h>
 #       include <OpenGLES/ES1/glext.h>
-#       define ENABLE_FIX_PIPELINE 1
+#       define ENABLE_FIX_PIPELINE
 #   endif
 #elif defined(OS_MACOSX) 
 #   include <OpenGL/gl.h>
@@ -136,10 +136,10 @@ PFNGLUNMAPBUFFERARBPROC pglUnmapBufferARB = NULL;                   // unmap VBO
 
 #endif
 
-#if defined(ES1 ) || 1
+#if !defined(ES1 ) 
 #define ENABLE_SHADERS 0
 #else
-#define ENABLE_SHADERS 1
+#define ENABLE_SHADERS 0
 #endif
 
 #include <gcl/Assert.h>

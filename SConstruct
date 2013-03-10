@@ -281,6 +281,7 @@ sconsFilesList = [
 "./program/tools/common/unittest/SConscript",
 
 "./program/tools/meshconverter/SConscript",
+"./program/tools/worldconverter/SConscript",
 
 #tools unittest
 

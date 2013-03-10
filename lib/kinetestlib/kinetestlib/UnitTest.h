@@ -31,7 +31,8 @@ class KinevoxTestCounter : public TestCounter
 {
 public:
 	KinevoxTestCounter(const char *file)
-	: TestCounter(file)
+	: TestCounter(file),
+    mIsInteractive(gTestConfig.mIsInteractive)
 	{
 
 	}
@@ -67,7 +68,7 @@ public:
     {\
     KineTestKeyListener kineTestKeyListener;\
     size_t i=0;\
-	kineTestKeyListener.mIsLooping = gTestConfig.mIsInteractive;\
+	kineTestKeyListener.mIsLooping = testCounter.mIsInteractive;\
     if (kineTestKeyListener.mIsLooping) std::cout << "looping!"<<std::endl; \
     else std::cout << "not looping!"<<std::endl; \
 while(i<2 || kineTestKeyListener.mIsLooping)\

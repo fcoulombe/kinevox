@@ -37,6 +37,7 @@
 
 using namespace GCL;
 
+GCLWorld *GCLApplication::mCurrentWorld=NULL;
 GLRenderer *GCLApplication::mRenderer = NULL;
 WinDriver *GCLApplication::mWinDriver = NULL;
 RenderObjectList GCLApplication::mRenderObjectList;
@@ -55,6 +56,9 @@ Text2DList GCLApplication::mText2DList;
 }
 /*static */void GCLApplication::Terminate()
 {
+    GCLAssert(mRenderObjectList.size() == 0);
+    GCLAssert(mRenderObject2DList.size() == 0);
+    GCLAssert(mText2DList.size() == 0);
 	GCLAssert(mRenderer);
 	delete mRenderer;
 	mRenderer = NULL;
@@ -137,12 +141,12 @@ void GCLApplication::RegisterText2D(GCLText2D* newText2D)
 
 void GCLApplication::ReleaseText2D(GCLText2D* textToDelete)
 {
-	GCLAssert(textToDelete);
-/*	Text2DList::iterator it = std::find(mText2DList.begin(),
+    GCLAssert(textToDelete);
+	Text2DList::iterator it = std::find(mText2DList.begin(),
 			mText2DList.end(),
-			mText2DList);
+			textToDelete);
 	GCLAssert(it != mText2DList.end());
-	mText2DList.erase(it);*/
+	mText2DList.erase(it);
 }
 
 
@@ -155,4 +159,14 @@ bool GCLApplication::IsRegistered(const GCLRenderObject &obj)
 			return true;
 	}
 	return false;
+}
+
+void GCL::GCLApplication::RegisterWorld( GCLWorld* currentWorld )
+{
+    GCLAssert(mCurrentWorld == NULL); mCurrentWorld = currentWorld;
+}
+
+void GCL::GCLApplication::ReleaseWorld( GCLWorld* shouldBeTheSameWorldAsTheCurrent )
+{
+    GCLAssert(shouldBeTheSameWorldAsTheCurrent == mCurrentWorld); mCurrentWorld = NULL;
 }

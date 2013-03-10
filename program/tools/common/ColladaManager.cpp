@@ -224,6 +224,13 @@ ToolMeshData &ColladaManager::GetMeshData()
     return meshData;
 }
 
+static ToolNodeData nodeData;
+
+ToolNodeData &ColladaManager::GetNodeData()
+{
+    return nodeData;
+}
+
 
 //--------------------------------------------------------------------
 KinevoxWriter::KinevoxWriter( )
@@ -259,6 +266,40 @@ void KinevoxWriter::reportError( const std::string& method, const std::string& m
     std::cout << message << std::endl;
 }
 
+
+void ParseNodeHierarchy(const COLLADAFW::Node * node, ToolNodeData &parent)
+{
+    parent.mName = node->getName().c_str();
+    COLLADABU::Math::Matrix4 transform = node->getTransformationMatrix();
+    parent.mTransform[0].x = transform[0][0];
+    parent.mTransform[0].y = transform[0][1];
+    parent.mTransform[0].z = transform[0][2];
+    parent.mTransform[0].w = transform[0][3];
+
+    parent.mTransform[1].x = transform[1][0];
+    parent.mTransform[1].y = transform[1][1];
+    parent.mTransform[1].z = transform[1][2];
+    parent.mTransform[1].w = transform[1][3];
+
+    parent.mTransform[2].x = transform[2][0];
+    parent.mTransform[2].y = transform[2][1];
+    parent.mTransform[2].z = transform[2][2];
+    parent.mTransform[2].w = transform[2][3];
+
+    parent.mTransform[3].x = transform[3][0];
+    parent.mTransform[3].y = transform[3][1];
+    parent.mTransform[3].z = transform[3][2];
+    parent.mTransform[3].w = transform[3][3];
+
+    const COLLADAFW::NodePointerArray& childs = node->getChildNodes();
+    for (size_t i=0; i<childs.getCount(); ++i)
+    {
+        parent.mNodeList.push_back(ToolNodeData());
+        ToolNodeData &newNode = parent.mNodeList.back();
+        const COLLADAFW::Node *tempNode = childs[i];
+        ParseNodeHierarchy(tempNode, newNode);
+    }
+}
 //--------------------------------------------------------------------
 bool KinevoxWriter::write(const COLLADABU::URI& inputFile)
 {
@@ -274,7 +315,7 @@ bool KinevoxWriter::write(const COLLADABU::URI& inputFile)
     {
         meshData.mMaterialCount++;
         COLLADAFW::Material &mat = it->second;
-        std::cout << "mat name: " << mat.getName().c_str() << std::endl;
+       // std::cout << "mat name: " << mat.getName().c_str() << std::endl;
         UniqueIdFWEffectMap::iterator res = mUniqueIdFWEffectMap.find(mat.getInstantiatedEffect());
         GCLAssertMsg(res != mUniqueIdFWEffectMap.end(), mat.getInstantiatedEffect().toAscii().c_str());
         
@@ -296,13 +337,14 @@ bool KinevoxWriter::write(const COLLADABU::URI& inputFile)
             matData.mAmbient.w = a.getAlpha();
 
             const COLLADAFW::ColorOrTexture &diffuse = tempCommonFx->getDiffuse();
-            GCLAssert(diffuse.getType() == COLLADAFW::ColorOrTexture::TEXTURE);
+            if (diffuse.getType() != COLLADAFW::ColorOrTexture::TEXTURE)
+                continue;
             const COLLADAFW::Texture &tex = diffuse.getTexture();
-           std::cout << tempCommonFx->getSamplerPointerArray()[tex.getSamplerId()]->getSourceImage().toAscii().c_str() << std::endl;
+           //std::cout << tempCommonFx->getSamplerPointerArray()[tex.getSamplerId()]->getSourceImage().toAscii().c_str() << std::endl;
              UniqueIdFWImageMap::iterator texIt = mUniqueIdFWImageMap.find(tempCommonFx->getSamplerPointerArray()[tex.getSamplerId()]->getSourceImage());
             GCLAssert(texIt != mUniqueIdFWImageMap.end());
             COLLADAFW::Image &img = texIt->second;
-            std::cout << img.getImageURI().getPathFile().c_str() << std::endl;
+            //std::cout << img.getImageURI().getPathFile().c_str() << std::endl;
             matData.texName = img.getImageURI().getPathFile().c_str() ;
             
             const COLLADAFW::ColorOrTexture &emission = tempCommonFx->getEmission();
@@ -327,8 +369,9 @@ bool KinevoxWriter::write(const COLLADABU::URI& inputFile)
     // if there is no visual scene in the COLLADA file, nothing to export here
     if ( mVisualScene )
     {
-        //SceneGraphWriter sceneGraphWriter(this, *mVisualScene, mLibrayNodesList);
-        //sceneGraphWriter.write();
+        const COLLADAFW::NodePointerArray& nodesToWrite = mVisualScene->getRootNodes();
+        GCLAssert(nodesToWrite.getCount() == 1);
+        ParseNodeHierarchy(nodesToWrite[0], nodeData);
     }
 
     // load and write geometries
@@ -403,8 +446,10 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
 
    
     meshData.mSubMeshList.clear();
+     COLLADAFW::Mesh *mesh = (COLLADAFW::Mesh *)(geometry); //const cast because collada doesnt respect const correctness
+#if 0
     std::cout << geometry->getName().c_str() << std::endl;
-    COLLADAFW::Mesh *mesh = (COLLADAFW::Mesh *)(geometry); //const cast because collada doesnt respect const correctness
+   
     std::cout << "polycnt: " << mesh->getPolygonsCount()<<std::endl;
     std::cout << "polygonpolycnt: " << mesh->getPolygonsPolygonCount()<<std::endl;
 
@@ -415,6 +460,7 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
 
     std::cout << "primi: " << mesh->getPrimitiveCount(COLLADAFW::MeshPrimitive::TRIANGLES)<<std::endl;
     std::cout << "meshprimi: " << mesh->getMeshPrimitiveCount(COLLADAFW::MeshPrimitive::TRIANGLES)<<std::endl;
+#endif
     const COLLADAFW::MeshPrimitiveArray& subMeshes = mesh->getMeshPrimitives();
     size_t subMeshCount = subMeshes.getCount();
     meshData.mSubMeshList.resize(subMeshCount);

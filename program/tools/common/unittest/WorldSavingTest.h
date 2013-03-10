@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 by Francois Coulombe
+ * Copyright (C) 2011 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@
 #include <gcl/UnitTest.h>
 
 using namespace GCL;
-namespace MeshSavingTest
+namespace WorldSavingTest
 {
 
 
@@ -36,9 +36,9 @@ void Test()
 
 	SceneLoader::Initialize();
 
-	SceneLoader::LoadScene("datamisc/ExampleMesh.dae");
+	SceneLoader::LoadScene("datamisc/World1.dae");
 
-	ToolMeshData &data = SceneLoader::GetMeshData();
+	ToolNodeData &data = SceneLoader::GetNodeData();
 	//std::cout << data << std::endl;
 
 	BufferWriter buffer(1024*500);
@@ -89,8 +89,8 @@ ToolSubMeshData
 		buffer.WriteToFile("ExampleMesh.mesh");
 	}
 
-	const std::string matFilename = data.mMaterialData.matName+".mat";
-	data.mMaterialData.WriteToFile(matFilename);
+//	const std::string matFilename = data.mMaterialData.matName+".mat";
+	//data.mMaterialData.WriteToFile(matFilename);
 
 
 	SceneLoader::Terminate();

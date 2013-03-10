@@ -28,7 +28,7 @@
 #include <gcl/Point3.h>
 #include <gcl/Point4.h>
 
-#include <common/MeshLoader.h>
+#include <common/SceneLoader.h>
 
 using namespace GCL;
 
@@ -39,11 +39,11 @@ int main(int /*argc*/, char ** argv)
 	//std::cout << "Mesh Convert from: " << argv[1] << " to: " << argv[2] << std::endl;
 	try
 	{
-		MeshLoader::Initialize();
+		SceneLoader::Initialize();
 
-	    MeshLoader::LoadScene(argv[1]);
+	    SceneLoader::LoadScene(argv[1]);
 
-	    ToolMeshData data = MeshLoader::GetMeshData();
+	    ToolMeshData data = SceneLoader::GetMeshData();
 	  //  std::cout << data << std::endl;
 
 	    BufferWriter buffer(1024*1500);
@@ -59,7 +59,7 @@ int main(int /*argc*/, char ** argv)
         GCLAssert(pos != std::string::npos);
 	    const std::string outputMatFileName = outputMeshFileName.substr(0, pos)+"data/Material/" + data.mMaterialData.matName+".mat";
 		data.mMaterialData.WriteToFile(outputMatFileName);
-		MeshLoader::Terminate();
+		SceneLoader::Terminate();
 
 	}
 	catch(GCLException &e)

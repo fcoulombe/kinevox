@@ -26,6 +26,7 @@
 #include "ColladaLoadingTest.h"
 #include "FBXLoadingTest.h"
 #include "MeshSavingTest.h"
+#include "WorldSavingTest.h"
 
 
 using namespace GCL;
@@ -42,6 +43,7 @@ int main(int argc, char **argv)
 
 	  ColladaLoadingTest::Test();
       FBXLoadingTest::Test();
+      WorldSavingTest::Test();
       MeshSavingTest::Test();
       SUITE_TERMINATE
   std::cout.flush();

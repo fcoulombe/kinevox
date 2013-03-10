@@ -66,7 +66,8 @@ Texture::~Texture()
 }
 
 Texture::Texture(const PixelBuffer &buffer)
-: mTextureId(-1)
+: mTextureId(-1),
+mTextureUnit(0)
 {
 	mTextureResource = NULL;
 	mTextureData.width = buffer.mWidth;;
@@ -78,7 +79,8 @@ Texture::Texture(const PixelBuffer &buffer)
 }
 
 Texture::Texture(const char *filename)
-: mTextureId(-1)
+    : mTextureId(-1),
+    mTextureUnit(0)
 {
 	mTextureResource = NULL;
 	bool ret = LoadTexture(filename);
@@ -90,6 +92,8 @@ Texture::Texture(const char *filename)
 }
 
 Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
+    : mTextureId(-1),
+    mTextureUnit(0)
 {
 	mTextureData.width = width;
 	mTextureData.height= height;

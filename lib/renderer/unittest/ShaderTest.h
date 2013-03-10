@@ -20,7 +20,6 @@
  * THE SOFTWARE.
  */
 #pragma once
-//#include <3rdparty/OpenGL.h>
 #include <gcl/Time.h>
 #include <kinetestlib/UnitTest.h>
 #include <renderer/Shader.h>
@@ -59,6 +58,7 @@ void Test();
 void Test()
 {
 	KINEVOX_TEST_START
+
 #if ENABLE_SHADERS
 	TextureResourceManager::Initialize();
 	{
@@ -88,7 +88,7 @@ void Test()
 		}
 
 		std::stringstream s;
-#if !ENABLE_FIX_PIPELINE
+#ifndef ENABLE_FIX_PIPELINE
 
 		//query pro0jection matrix test
 		Matrix44 proj2;
@@ -127,7 +127,7 @@ void Test()
 		catch (GCLException & /*e*/)
 		{}
 
-#if !ENABLE_FIX_PIPELINE
+#ifndef ENABLE_FIX_PIPELINE
 		//attribute position query test
 		int loc = shader.GetAttributeLocation("InPosition");
 		s.str("");

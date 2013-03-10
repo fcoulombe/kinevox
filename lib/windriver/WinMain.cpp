@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+#ifdef OS_WIN32
 #include <windows.h>
 #include <iostream>
 extern int main(int argc, char **argv);
@@ -120,13 +120,12 @@ static int ParseCommandLine(char *cmdline, char **argv)
     }
     return(argc);
 }
-int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
+int WINAPI WinMain(HINSTANCE /*hInst*/, HINSTANCE /*hPrev*/, LPSTR /*szCmdLine*/, int /*sw*/)
 {
     std::cout << "start"<< std::endl;
     char **argv=NULL;
     int argc;
     char *cmdline;
-    char *bufp;
     size_t nLen;
     std::cout << "parse";
     cmdline = GetCommandLine();
@@ -141,3 +140,4 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrev, LPSTR szCmdLine, int sw)
     return ret;
 
 }
+#endif

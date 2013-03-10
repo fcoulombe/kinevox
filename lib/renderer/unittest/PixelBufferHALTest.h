@@ -47,8 +47,8 @@ void Test()
 		PixelRGB buffer[BUFFER_SIZE];
 		for (size_t i=0; i<BUFFER_SIZE; ++i)
 		{
-			buffer[i].mColor.x = i;
-			buffer[i].mColor.y =0;
+			buffer[i].mColor.x = uint8_t(0xffffff00^i);
+			buffer[i].mColor.y =uint8_t((0xffff00ff^i)>>8);
 			buffer[i].mColor.z =0;
 		}
 		PixelBufferHAL pb(buffer, 64, 64);

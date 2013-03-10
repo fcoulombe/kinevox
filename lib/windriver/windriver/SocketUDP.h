@@ -42,10 +42,10 @@ namespace GCL
         Address( uint32_t address, uint16_t port ) 
             : mAddress(address), mPort(port) {}
         uint32_t GetAddress() const { return mAddress; }
-        uint8_t GetA() const{ return (mAddress^0x00ffffff)>>24; }
-        uint8_t GetB() const{ return (mAddress^0xff00ffff)>>16; }
-        uint8_t GetC() const { return (mAddress^0xffff00ff)>>8; }
-        uint8_t GetD() const { return mAddress^0xffffff00; }
+        uint8_t GetA() const{ return (uint8_t)((mAddress^0x00ffffff)>>24); }
+        uint8_t GetB() const{ return (uint8_t)((mAddress^0xff00ffff)>>16); }
+        uint8_t GetC() const { return (uint8_t)((mAddress^0xffff00ff)>>8); }
+        uint8_t GetD() const { return (uint8_t)(mAddress^0xffffff00); }
         uint16_t GetPort() const { return mPort; }
         bool operator == ( const Address & other ) const { return mAddress == other.GetAddress() && mPort == other.GetPort(); }
         bool operator != ( const Address & other ) const { return mAddress != other.GetAddress() && mPort != other.GetPort(); }

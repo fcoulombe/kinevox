@@ -73,5 +73,7 @@ namespace GCL
     VertexDataList mVertexData;
     typedef std::vector<Slice> SliceList;
     SliceList mSlices;
+
+    Grid &operator=(const Grid & /*rhs*/){}
   };
 }

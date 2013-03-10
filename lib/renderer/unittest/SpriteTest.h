@@ -58,8 +58,9 @@ void Test()
 
 		Assert_Test(obj.IsPlaying() == true);
 		KINEVOX_TEST_LOOP_START
-            const ViewPort &viewport = winDriver.GetViewPort();
+
 #ifdef ENABLE_FIX_PIPELINE
+            const ViewPort &viewport = winDriver.GetViewPort();
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrtho (0, viewport.GetHeight(), viewport.GetHeight(), 0, -1.0f, 1.0f); glErrorCheck();

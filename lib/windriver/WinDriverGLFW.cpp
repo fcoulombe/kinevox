@@ -50,15 +50,15 @@ void GLFWCALL KeyCallBack(int key,int state)
     }
 }
 
-void GLFWCALL MouseMoveCallback(int i ,int j)
+void GLFWCALL MouseMoveCallback(int /*i*/ ,int /*j*/)
 {
 
 }
-void GLFWCALL MouseButtonCallback(int i ,int j)
+void GLFWCALL MouseButtonCallback(int /*i*/ ,int /*j*/)
 {
 
 }
-void GLFWCALL MouseWheelCallback(int i )
+void GLFWCALL MouseWheelCallback(int /*i*/ )
 {
 
 }
@@ -71,11 +71,11 @@ public:
         mFPS(0),
         mAccumulatedTime(0.0)
     {
-        bool ret = glfwInit(); 
+        int ret = glfwInit(); 
         GCLAssert(ret);
 
-        int width = mViewPort.GetWidth();
-        int height = mViewPort.GetHeight();
+        int width = (int)mViewPort.GetWidth();
+        int height = (int)mViewPort.GetHeight();
 
         ret = glfwOpenWindow( width,height, 0,0,0,0,24,8, GLFW_WINDOW );
         GCLAssert(ret);

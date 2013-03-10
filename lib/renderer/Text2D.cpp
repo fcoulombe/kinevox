@@ -49,14 +49,14 @@ void Text2D::Render()
 	Real halfHeight = (heightRatio/2.0)*mScale.y;
 
 	//std::cout << bottomTextureCoord << std::endl << topTextureCoord << std::endl;
-	glTexCoord2f (bottomTextureCoord.x, topTextureCoord.y);
-	glVertex3f (halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
-	glTexCoord2f (topTextureCoord.x, topTextureCoord.y);
-	glVertex3f (-halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
-	glTexCoord2f (bottomTextureCoord.x, bottomTextureCoord.y);
-	glVertex3f (halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
-	glTexCoord2f (topTextureCoord.x, bottomTextureCoord.y);
-	glVertex3f (-halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
+	glTexCoord2f (GLfloat(bottomTextureCoord.x), GLfloat(topTextureCoord.y));
+	glVertex3f (GLfloat(halfWidth+mPosition.x), GLfloat(-halfHeight+mPosition.y), 0.0);
+	glTexCoord2f (GLfloat(topTextureCoord.x), GLfloat(topTextureCoord.y));
+	glVertex3f (GLfloat(-halfWidth+mPosition.x), GLfloat(-halfHeight+mPosition.y), 0.0);
+	glTexCoord2f (GLfloat(bottomTextureCoord.x), GLfloat(bottomTextureCoord.y));
+	glVertex3f (GLfloat(halfWidth+mPosition.x), GLfloat(halfHeight+mPosition.y), 0.0);
+	glTexCoord2f (GLfloat(topTextureCoord.x), GLfloat(bottomTextureCoord.y));
+	glVertex3f (GLfloat(-halfWidth+mPosition.x), GLfloat(halfHeight+mPosition.y), 0.0);
 #else
 	glTexCoord2f (0.0, 0.0);
 	glVertex3f (-100, -100, 0.0);

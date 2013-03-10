@@ -77,7 +77,7 @@ void checkFrameBufferStatus(GLenum stat)
 }
 
 FrameBuffer::FrameBuffer(const Texture & texture, const RenderBuffer & depthBuffer)
-: mFrameBufferId(-1)
+: mFrameBufferId((GLuint)-1)
 {
 	GCLAssert(texture.IsValid());
 

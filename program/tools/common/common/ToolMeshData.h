@@ -77,10 +77,10 @@ namespace GCL
         uint32_t toWrite = 0xbaadf00d;
         buffer.Write(toWrite); //mesh size 32
 
-        toWrite = meshData.mVertexList.size();
+        toWrite = (uint32_t)meshData.mVertexList.size();
         buffer.Write(toWrite); //vertex size 64
 
-        toWrite = meshData.mIndiceList.size();
+        toWrite = (uint32_t)meshData.mIndiceList.size();
         buffer.Write(toWrite); //indice size 96
 
         toWrite = 0xfefefefe;
@@ -103,7 +103,7 @@ namespace GCL
             buffer << tempUv;
         }
         size_t endOffset = buffer.GetCurrentOffset();
-        *meshSize = endOffset-startOffset;
+        *meshSize = uint32_t(endOffset-startOffset);
         return buffer;
     }
     struct ToolMeshData
@@ -119,7 +119,7 @@ namespace GCL
     };
     GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const ToolMeshData &meshData)
     {
-        uint32_t subMeshCount = meshData.mSubMeshList.size();
+        uint32_t subMeshCount = (uint32_t)meshData.mSubMeshList.size();
         buffer.Write(subMeshCount);  //32
         buffer.Write(meshData.mMaterialCount); //64
         uint32_t pad = 0xfefefefe;

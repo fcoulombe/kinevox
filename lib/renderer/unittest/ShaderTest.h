@@ -73,7 +73,7 @@ void Test()
 			shader.GetUniform("NonExistingUniform", m2);
 			Assert_Test(true);
 		}
-		catch (GCLException &e)
+		catch (GCLException & /*e*/)
 		{
 		}
 

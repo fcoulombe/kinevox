@@ -45,7 +45,7 @@ namespace GCL
 
     GCLINLINE void WriteNode(BufferWriter& buffer, ToolNodeData &node, ToolNodeData *parent, std::vector<uint32_t> &nodeOffset)
     {
-        node.mId = nodeOffset.size();
+        node.mId = (uint32_t)nodeOffset.size();
         buffer.Write(node.mId); //node ID
         nodeOffset.push_back(buffer.GetCurrentOffset());
         buffer << node.mName;
@@ -53,7 +53,7 @@ namespace GCL
         uint32_t parentOffset;
         if (parent == NULL)
         {
-            parentOffset = -1; //root node doesn't have a parent
+            parentOffset = (uint32_t)-1; //root node doesn't have a parent
         }
         else
         {
@@ -61,7 +61,7 @@ namespace GCL
             parentOffset = nodeOffset[parent->mId];
         }
         buffer.Write(parentOffset);
-        uint32_t numberOfChilds = node.mNodeList.size(); 
+        uint32_t numberOfChilds = (uint32_t)node.mNodeList.size(); 
         buffer.Write(numberOfChilds); // write the number of childs
         uint32_t *childList = (uint32_t *)&(buffer.GetBuffer()[buffer.GetCurrentOffset()]);
         const uint32_t emptyOffset = 0xbaadf00d;
@@ -71,7 +71,7 @@ namespace GCL
         }
         for (size_t i=0; i<node.mNodeList.size(); ++i)
         {
-            childList[i] = buffer.GetCurrentOffset(); //store the offset of the direct childs;
+            childList[i] = (uint32_t)buffer.GetCurrentOffset(); //store the offset of the direct childs;
             WriteNode(buffer, node.mNodeList[i], &node, nodeOffset); //write the child hierarchy
         }
     }

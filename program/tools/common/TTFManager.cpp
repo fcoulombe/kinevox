@@ -70,7 +70,7 @@ void GenerateAsciiFont(const FT_Face &face)
 	std::vector<uint8_t*> charArray;
 	for (size_t c =0; c<numChars; ++c)
 	{
-		FT_UInt glyph_index = FT_Get_Char_Index( face, c);//alphabet[c]);
+		FT_UInt glyph_index = FT_Get_Char_Index( face, (FT_ULong)c);//alphabet[c]);
 
 		FT_Error error = FT_Load_Glyph(
 				face,

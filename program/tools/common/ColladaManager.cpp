@@ -165,11 +165,11 @@ public:
     /** When this method is called, the writer must write the formulas. All the formulas of the entire
     COLLADA file are contained in @a formulas.
     @return The writer should return true, if writing succeeded, false otherwise.*/
-    virtual bool writeFormulas( const COLLADAFW::Formulas* formulas ){return true;}
+    virtual bool writeFormulas( const COLLADAFW::Formulas* /*formulas*/ ){return true;}
 
     /** When this method is called, the writer must write the kinematics scene. 
     @return The writer should return true, if writing succeeded, false otherwise.*/
-    virtual bool writeKinematicsScene( const COLLADAFW::KinematicsScene* kinematicsScene ){return true;};
+    virtual bool writeKinematicsScene( const COLLADAFW::KinematicsScene* /*kinematicsScene*/ ){return true;};
 
 
 
@@ -358,7 +358,7 @@ bool KinevoxWriter::write(const COLLADABU::URI& inputFile)
             GCLAssert(shininess.getType() == COLLADAFW::FloatOrParam::FLOAT);
             matData.mShininess = shininess.getFloatValue();
 
-            const COLLADAFW::ColorOrTexture &spec = tempCommonFx->getSpecular();
+            //const COLLADAFW::ColorOrTexture &spec = tempCommonFx->getSpecular();
             //GCLAssert(spec.getType() == COLLADAFW::ColorOrTexture::COLOR);
              
         }
@@ -383,7 +383,7 @@ bool KinevoxWriter::write(const COLLADABU::URI& inputFile)
 }
 
 //--------------------------------------------------------------------
-void KinevoxWriter::cancel( const std::string& errorMessage )
+void KinevoxWriter::cancel( const std::string& /*errorMessage*/ )
 {
 }
 
@@ -398,7 +398,7 @@ void KinevoxWriter::finish()
 }
 
 //--------------------------------------------------------------------
-bool KinevoxWriter::writeGlobalAsset( const COLLADAFW::FileInfo* asset )
+bool KinevoxWriter::writeGlobalAsset( const COLLADAFW::FileInfo* /*asset*/ )
 {
     if ( mCurrentRun != SCENEGRAPH_RUN )
         return true;
@@ -422,7 +422,7 @@ bool KinevoxWriter::writeVisualScene( const COLLADAFW::VisualScene* visualScene 
 }
 
 //--------------------------------------------------------------------
-bool KinevoxWriter::writeScene( const COLLADAFW::Scene* scene )
+bool KinevoxWriter::writeScene( const COLLADAFW::Scene* /*scene*/ )
 {
     return true;
 }
@@ -465,15 +465,10 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
     size_t subMeshCount = subMeshes.getCount();
     meshData.mSubMeshList.resize(subMeshCount);
 
-   /* GCLAssert( mesh->getNormals().getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE );
-    GCLAssert( mesh->getPositions().getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE );
-    GCLAssert( mesh->getUVCoords().getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE );
-    GCLAssert( mesh->getColors().getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE );
-    */
     const COLLADAFW::MeshVertexData& normals = mesh->getNormals();
     const COLLADAFW::MeshVertexData& positions = mesh->getPositions();
     const COLLADAFW::MeshVertexData& uvs = mesh->getUVCoords();
-    const COLLADAFW::MeshVertexData& colors = mesh->getColors();
+    //const COLLADAFW::MeshVertexData& colors = mesh->getColors();
 
     for (size_t i=0; i<subMeshes.getCount(); ++i)
     {
@@ -482,7 +477,7 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
         const COLLADAFW::UIntValuesArray& posi = subMesh->getPositionIndices();
         const COLLADAFW::UIntValuesArray& normi = subMesh->getNormalIndices();
         const COLLADAFW::UIntValuesArray& uvi = subMesh->getUVCoordIndices(0)->getIndices();
-        const COLLADAFW::UIntValuesArray& coli = subMesh->getColorIndices(0)->getIndices();
+        //const COLLADAFW::UIntValuesArray& coli = subMesh->getColorIndices(0)->getIndices();
         std::cout << "indice count: " << posi.getCount()<<std::endl;
         switch (subMesh->getPrimitiveType())
         {
@@ -494,9 +489,9 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                 {
                     const double *rawPos = positions.getDoubleValues()->getData();
                     int positionIndex = posi[j]*3;           
-                    newPosition.x = rawPos[positionIndex];
-                    newPosition.y = rawPos[positionIndex+2];
-                    newPosition.z = rawPos[positionIndex+1];
+                    newPosition.x = (MeshReal)(rawPos[positionIndex]);
+                    newPosition.y = (MeshReal)(rawPos[positionIndex+2]);
+                    newPosition.z = (MeshReal)(rawPos[positionIndex+1]);
                     subMeshData.mVertexList.push_back(newPosition);
                 }
                 else
@@ -514,9 +509,9 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                 {
                     const double *rawNorm = normals.getDoubleValues()->getData();
                     int normalIndex = normi[j]*3;           
-                    newNormal.x = rawNorm[normalIndex];
-                    newNormal.y = rawNorm[normalIndex+2];
-                    newNormal.z = rawNorm[normalIndex+1];
+                    newNormal.x = (MeshReal)(rawNorm[normalIndex]);
+                    newNormal.y = (MeshReal)(rawNorm[normalIndex+2]);
+                    newNormal.z = (MeshReal)(rawNorm[normalIndex+1]);
                     newNormal.Normalize();
                     subMeshData.mNormalList.push_back(newNormal);
                 }
@@ -536,8 +531,8 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                 {
                     const double *rawUv = uvs.getDoubleValues()->getData();
                     int uvIndex = uvi[j]*uvs.getStride(0);           
-                    newUv.x = rawUv[uvIndex];
-                    newUv.y = rawUv[uvIndex+1];
+                    newUv.x = (MeshReal)(rawUv[uvIndex]);
+                    newUv.y = (MeshReal)(rawUv[uvIndex+1]);
                     subMeshData.mUvList.push_back(newUv);
                 }
                 else
@@ -548,7 +543,7 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                     newUv.y = rawUv[uvIndex+1];
                     subMeshData.mUvList.push_back(newUv);
                 }
-                subMeshData.mIndiceList.push_back(j);
+                subMeshData.mIndiceList.push_back((int)j);
 
             }
             break;
@@ -580,7 +575,7 @@ bool KinevoxWriter::writeEffect( const COLLADAFW::Effect* effect )
 }
 
 //--------------------------------------------------------------------
-bool KinevoxWriter::writeCamera( const COLLADAFW::Camera* camera )
+bool KinevoxWriter::writeCamera( const COLLADAFW::Camera* /*camera*/ )
 {
     if ( mCurrentRun != SCENEGRAPH_RUN )
         return true;
@@ -597,7 +592,7 @@ bool KinevoxWriter::writeImage( const COLLADAFW::Image* image )
 }
 
 //--------------------------------------------------------------------
-bool KinevoxWriter::writeLight( const COLLADAFW::Light* light )
+bool KinevoxWriter::writeLight( const COLLADAFW::Light* /*light*/ )
 {
     if ( mCurrentRun != SCENEGRAPH_RUN )
         return true;
@@ -605,25 +600,25 @@ bool KinevoxWriter::writeLight( const COLLADAFW::Light* light )
 }
 
 //--------------------------------------------------------------------
-bool KinevoxWriter::writeAnimation( const COLLADAFW::Animation* animation )
+bool KinevoxWriter::writeAnimation( const COLLADAFW::Animation* /*animation*/ )
 {
     return true;
 }
 
 //--------------------------------------------------------------------
-bool KinevoxWriter::writeAnimationList( const COLLADAFW::AnimationList* animationList )
+bool KinevoxWriter::writeAnimationList( const COLLADAFW::AnimationList* /*animationList*/ )
 {
     return true;
 }
 
 //--------------------------------------------------------------------
-bool KinevoxWriter::writeSkinControllerData( const COLLADAFW::SkinControllerData* skinControllerData )
+bool KinevoxWriter::writeSkinControllerData( const COLLADAFW::SkinControllerData* /*skinControllerData*/ )
 {
     return true;
 }
 
 //--------------------------------------------------------------------
-bool KinevoxWriter::writeController( const COLLADAFW::Controller* Controller )
+bool KinevoxWriter::writeController( const COLLADAFW::Controller* /*Controller*/ )
 {
     return true;
 }

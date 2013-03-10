@@ -30,11 +30,11 @@ class RenderBuffer
 {
 public:
 	RenderBuffer(size_t width, size_t height)
-	: mRenderBufferId(-1)
+	: mRenderBufferId((GLuint)-1)
 	{
 		glGenRenderbuffers(1, &mRenderBufferId); glErrorCheck();
 		glBindRenderbuffer(GL_RENDERBUFFER, mRenderBufferId);glErrorCheck();
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);glErrorCheck();
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, (GLsizei)width, (GLsizei)height);glErrorCheck();
 		glBindRenderbuffer(GL_RENDERBUFFER, 0); glErrorCheck();
 	}
 	~RenderBuffer()

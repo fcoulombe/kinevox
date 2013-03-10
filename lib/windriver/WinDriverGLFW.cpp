@@ -74,7 +74,7 @@ public:
         int width = mViewPort.GetWidth();
         int height = mViewPort.GetHeight();
 
-        ret = glfwOpenWindow( width,height, 0,0,0,0,0,0, GLFW_WINDOW );
+        ret = glfwOpenWindow( width,height, 0,0,0,0,24,8, GLFW_WINDOW );
         GCLAssert(ret);
 
         glfwSetWindowTitle( windowsTitle ); 

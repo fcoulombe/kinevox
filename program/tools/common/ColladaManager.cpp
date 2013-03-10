@@ -517,6 +517,7 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                     newNormal.x = rawNorm[normalIndex];
                     newNormal.y = rawNorm[normalIndex+2];
                     newNormal.z = rawNorm[normalIndex+1];
+                    newNormal.Normalize();
                     subMeshData.mNormalList.push_back(newNormal);
                 }
                 else
@@ -526,6 +527,7 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                     newNormal.x = rawNorm[normalIndex];
                     newNormal.y = rawNorm[normalIndex+2];
                     newNormal.z = rawNorm[normalIndex+1];
+                    newNormal.Normalize();
                     subMeshData.mNormalList.push_back(newNormal);
                 }
 

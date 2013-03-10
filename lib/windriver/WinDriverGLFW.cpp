@@ -67,6 +67,9 @@ class pWinDriver
 {
 public:
     pWinDriver(const char *windowsTitle)
+        : mPreviousFrameTime(0.0),
+        mFPS(0),
+        mAccumulatedTime(0.0)
     {
         bool ret = glfwInit(); 
         GCLAssert(ret);
@@ -77,6 +80,7 @@ public:
         ret = glfwOpenWindow( width,height, 0,0,0,0,24,8, GLFW_WINDOW );
         GCLAssert(ret);
 
+        mWindowsTitle = windowsTitle;
         glfwSetWindowTitle( windowsTitle ); 
         glfwSetKeyCallback( KeyCallBack );
         glfwSetMousePosCallback( MouseMoveCallback);
@@ -94,12 +98,33 @@ public:
     void SwapBuffer()
     {
         glfwSwapBuffers();glErrorCheck();
+        //calculate fps
+        double currentTime = glfwGetTime();
+        double dt = currentTime - mPreviousFrameTime;
+        mAccumulatedTime += dt;
+        mFPS++;
+        if (mAccumulatedTime>1.0)
+        {
+            mAccumulatedTime = 0.0;
+            std::stringstream fps;
+            fps << mWindowsTitle;
+            fps<< " - FPS: ";
+            fps<< mFPS; 
+            glfwSetWindowTitle( fps.str().c_str());
+            mFPS=0;
+        }
+        mPreviousFrameTime = currentTime;
+        
     }
 
     const ViewPort &GetViewPort() const { return mViewPort; }
 
 private:
     ViewPort mViewPort;
+    std::string mWindowsTitle;
+    double mPreviousFrameTime;
+    size_t mFPS;
+    double mAccumulatedTime;
 };
 WinDriver::WinDriver(const char *windowsTitle)
 {

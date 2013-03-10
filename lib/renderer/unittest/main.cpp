@@ -52,7 +52,7 @@ int main(int argc, char **argv)
 {
     std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
     SUITE_INIT(argc, argv)
-        GLRendererTest::Test();
+    GLRendererTest::Test();
     CameraTest::Test();
     ShaderTest::Test();
 
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     RenderObjectTest::Test();
     RenderObjectWithMaterialTest::Test();
     GeomUtilTest::Test();
-
+    
     RenderBufferTest::Test();
     FrameBufferTest::Test();
     MeshLoadingTest::Test();

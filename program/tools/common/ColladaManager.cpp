@@ -489,7 +489,7 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
         case COLLADAFW::MeshPrimitive::TRIANGLES:
             for (size_t j=0; j<posi.getCount(); ++j)
             {
-                WorldPoint3 newPosition;
+                Point3<MeshReal> newPosition;
                 if (positions.getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE )
                 {
                     const double *rawPos = positions.getDoubleValues()->getData();
@@ -509,7 +509,7 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                     subMeshData.mVertexList.push_back(newPosition);
                 }
                 //std::cout << "v" << j << ": " << newPosition << std::endl;
-                WorldPoint3 newNormal;
+                Point3<MeshReal> newNormal;
                 if (normals.getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE )
                 {
                     const double *rawNorm = normals.getDoubleValues()->getData();
@@ -531,7 +531,7 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                     subMeshData.mNormalList.push_back(newNormal);
                 }
 
-                WorldPoint2 newUv;
+                Point2<MeshReal> newUv;
                 if (uvs.getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE )
                 {
                     const double *rawUv = uvs.getDoubleValues()->getData();

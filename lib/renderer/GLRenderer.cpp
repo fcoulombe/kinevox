@@ -104,7 +104,7 @@ void GLRenderer::PostRender()
 template<typename VertexType>
 void DrawNormals(const VertexData &data)
 {
-    std::vector<WorldPoint3> normalLines;
+    std::vector<Point3<MeshReal> > normalLines;
     const VertexType *vertexData = (const VertexType *)(data.mVertexData); 
     for (size_t i=0; i<data.mVertexCount; ++i)
     {

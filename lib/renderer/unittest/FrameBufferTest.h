@@ -24,6 +24,7 @@
 #include <kinetestlib/UnitTest.h>
 
 #include <renderer/FrameBuffer.h>
+#include <renderer/GeomUtilHelper.h>
 #include <renderer/Material.h>
 #include <renderer/RenderBuffer.h>
 #include <renderer/RenderObject.h>
@@ -32,30 +33,22 @@
 #include <renderer/TextureResourceManager.h>
 #include <renderer/Vertex.h>
 
+
+
 using namespace GCL;
 namespace FrameBufferTest
 {
-static const   VertexPNT square[4] = {
-		{WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
-		{WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
-		{WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
-        {WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}};
 
-class MyRenderObject : public RenderObject
+
+class MyRenderObject : public CubeRenderObject
 {
 public:
 	MyRenderObject()
-	: RenderObject("MyRenderObject", Matrix44(true)) //identity
+	: CubeRenderObject("MyRenderObject", Matrix44(true)) //identity
 	{
-        data.push_back(VertexData(&square, 4, VertexPNT::GetComponentType()));
     }
-	const VertexDataList &GetVertexData() const
-	{
-		return data;
-	}
-	const Material &GetMaterial() const { return mMaterial; }
+    const GCL::Material &GetMaterial() const { return mMaterial; }
 private:
-	VertexDataList data;
 	Material mMaterial;
 };
 

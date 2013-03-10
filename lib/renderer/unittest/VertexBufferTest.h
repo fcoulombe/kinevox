@@ -37,18 +37,18 @@ void Test()
 	Shader shader;
 	shader.Bind();
 
-	VertexPNT square[4] = { {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-			{WorldPoint3(0.5, -0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-			{WorldPoint3(0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } ,
-			{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 0.0) } };
+	VertexPNT square[4] = { {Point3<MeshReal>(-0.5, -0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } ,
+			{Point3<MeshReal>(0.5, -0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } ,
+			{Point3<MeshReal>(0.5, 0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } ,
+			{Point3<MeshReal>(-0.5, 0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } };
 	VertexBuffer<VertexPNT> vb(square, 4);
 	Assert_Test(vb.IsValid());
 
 
-	VertexPT square2[4] = { {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0)} ,
-			{WorldPoint3(0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0) } ,
-			{WorldPoint3(0.5, 0.5, 0.0), WorldPoint2(0.0, 0.0)} ,
-			{WorldPoint3(-0.5, 0.5, 0.0), WorldPoint2(0.0, 0.0)} };
+	VertexPT square2[4] = { {Point3<MeshReal>(-0.5, -0.5, 0.0), Point2<MeshReal>(0.0, 0.0)} ,
+			{Point3<MeshReal>(0.5, -0.5, 0.0), Point2<MeshReal>(0.0, 0.0) } ,
+			{Point3<MeshReal>(0.5, 0.5, 0.0), Point2<MeshReal>(0.0, 0.0)} ,
+			{Point3<MeshReal>(-0.5, 0.5, 0.0), Point2<MeshReal>(0.0, 0.0)} };
 	VertexBuffer<VertexPT> vb2(square2, 4);
 	Assert_Test(vb2.IsValid());
 }

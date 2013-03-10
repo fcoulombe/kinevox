@@ -23,6 +23,7 @@
 #pragma once
 
 #include <vector>
+#include <gcl/Point2.h>
 #include <gcl/Point3.h>
 namespace GCL
 {

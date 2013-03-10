@@ -27,8 +27,6 @@
 using namespace GCL;
 namespace MaterialTest
 {
-
-    
     void Test();
 void Test()
 {

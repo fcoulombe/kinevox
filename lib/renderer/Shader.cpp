@@ -64,7 +64,7 @@ const char *TextureVShaderStr =
 		"   gl_Position = ProjectionMatrix * ModelViewMatrix * InPosition; \n"
 		"	texcoord = InTexCoord.xy;\n"
 		"#endif \n"
-        "	color = vec4(InTexCoord.x,InTexCoord.y, 0.0,1.0); \n"
+        "	color = InNormal; \n" //vec4(InTexCoord.x,InTexCoord.y, 0.0,1.0); \n"
 		"}                           \n";
 
 const char *TextureFShaderStr =

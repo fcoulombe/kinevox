@@ -22,6 +22,7 @@
 #pragma once
 #include <gcl/Time.h>
 #include <kinetestlib/UnitTest.h>
+#include <renderer/GeomUtilHelper.h>
 #include <renderer/Shader.h>
 #include <renderer/ShaderAttributeDefaultLocations.h>
 
@@ -29,27 +30,16 @@
 using namespace GCL;
 namespace ShaderTest
 {
-    static const   VertexPNT square[4] = {
-        {WorldPoint3(-0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0) ,WorldPoint2(0.0, 0.0)},
-        {WorldPoint3(0.5, -0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 0.0)},
-        {WorldPoint3(-0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(0.0, 1.0)},
-        {WorldPoint3(0.5, 0.5, 0.0), 	WorldPoint3(0.0, 0.0, 1.0), WorldPoint2(1.0, 1.0)}
-    };
-class MyRenderObject : public RenderObject
+
+class MyRenderObject : public SquareRenderObject
 {
 public:
 	MyRenderObject()
-	: RenderObject("MyRenderObject", Matrix44(true)) //identity
+	: SquareRenderObject("MyRenderObject", Matrix44(true)) //identity
 	{
-        data.push_back(VertexData(&square, 4, VertexPNT::GetComponentType()));
     }
-	const VertexDataList &GetVertexData() const
-	{
-		return data;
-	}
 	const Material &GetMaterial() const { return mMaterial; }
 private:
-	VertexDataList data;
 	Material mMaterial;
 };
 
@@ -134,17 +124,19 @@ void Test()
 		s<<loc<<" == ATTRIB_POSITION";
 		AssertMsg_Test(loc == ATTRIB_POSITION, s.str().c_str());
 
+        //attribute normal query test
+        loc = shader.GetAttributeLocation("InNormal");
+        s.str("");
+        s<<loc<<" == ATTRIB_NORMAL";
+        AssertMsg_Test(loc == ATTRIB_NORMAL, s.str().c_str());
+
 		//attribute texcoord query test
 		loc = shader.GetAttributeLocation("InTexCoord");
 		s.str("");
 		s<<loc<<" == ATTRIB_TEXTURE_COORD";
 		AssertMsg_Test(loc == ATTRIB_TEXTURE_COORD, s.str().c_str());
 
-		//attribute normal query test
-		loc = shader.GetAttributeLocation("InNormal");
-		s.str("");
-		s<<loc<<" == ATTRIB_NORMAL";
-		AssertMsg_Test(loc == ATTRIB_NORMAL, s.str().c_str());
+
 #endif
 
 		renderer.PreRender();
@@ -164,14 +156,13 @@ void Test()
 		RenderObjectList renderList;
 		renderList.push_back(&obj);
 
-		for (size_t i=0; i<100; ++i)
-		{
+		KINEVOX_TEST_LOOP_START
 			renderer.PreRender();
 			renderer.Render(renderList);
 			renderer.PostRender();
 			winDriver.SwapBuffer();
 			Time::SleepMs(10);
-		}
+		KINEVOX_TEST_LOOP_END
 
 		Shader::ResetDefault();
 	}

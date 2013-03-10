@@ -27,6 +27,7 @@
 #include "common/BufferWriter.h"
 #include "common/ToolMaterialData.h"
 
+#define MeshReal float
 namespace GCL
 {
 
@@ -61,11 +62,11 @@ namespace GCL
     {
         ToolSubMeshData()
         {}
-        std::vector<WorldPoint3> mVertexList;
+        std::vector<Point3<MeshReal> > mVertexList;
         std::vector<int> mIndiceList;
-        std::vector<WorldPoint3> mNormalList;
-        std::vector<WorldPoint4> mVertexColor;
-        std::vector<WorldPoint2> mUvList;
+        std::vector<Point3<MeshReal> > mNormalList;
+        std::vector<Point4<MeshReal> > mVertexColor;
+        std::vector<Point2<MeshReal> > mUvList;
     };
 
     GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const ToolSubMeshData &meshData)
@@ -94,19 +95,12 @@ namespace GCL
         {
             int indice = meshData.mIndiceList[i];
 
-            const WorldPoint3 &tempVert = meshData.mVertexList[indice];
-            buffer.Write(tempVert.x);
-            buffer.Write(tempVert.y);
-            buffer.Write(tempVert.z);
-
-            const WorldPoint3 &tempNormal = meshData.mNormalList[indice];
-            buffer.Write(tempNormal.x);
-            buffer.Write(tempNormal.y);
-            buffer.Write(tempNormal.z);
-
-            const WorldPoint2 &tempUv = meshData.mUvList[i];
-            buffer.Write(tempUv.x);
-            buffer.Write(tempUv.y);
+            const Point3<MeshReal> &tempVert = meshData.mVertexList[indice];
+            buffer << tempVert;
+            const Point3<MeshReal> &tempNormal = meshData.mNormalList[indice];
+            buffer << tempNormal;
+            const Point2<MeshReal> &tempUv = meshData.mUvList[i];
+            buffer << tempUv;
         }
         size_t endOffset = buffer.GetCurrentOffset();
         *meshSize = endOffset-startOffset;

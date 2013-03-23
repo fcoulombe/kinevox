@@ -18,4 +18,6 @@ def SetLFlags(ienv):
 
 if env['PLATFORM'] == "win32":
     dllDep = [env.File('#3rdParty/zlib/bin/zlibwapi.dll')]	
+else:
+    dllDep = []
 env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags, dllDep)

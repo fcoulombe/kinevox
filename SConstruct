@@ -199,7 +199,7 @@ elif compiler == 'vc':
     #lflags.append("/NODEFAULTLIB:library")
     lflags.append("/DEBUG")
     
-    cflags.append("/fp:strict") #might want to change for fast in opt
+    #cflags.append("/fp:strict") #might want to change for fast in opt
     cflags.append("/GF") #string pooling
     #cflags.append("/GR-") #disable rtti
     cflags.append("/GS") #buffer security check
@@ -207,6 +207,8 @@ elif compiler == 'vc':
     cflags.append("/WX")
     cflags.append("/wd 4127") #disable warning about constant condition
     cflags.append("/D_CRT_SECURE_NO_WARNINGS")
+    cflags.append("/DWIN32")
+    cflags.append("/D_WIN32")
 else:
     print "this isn't good"
 default_env.Append(CPPPATH=[default_env.Dir("#3rdParty/include")])
@@ -236,13 +238,13 @@ default_env['BUILD_VARIANT'] = variant
 ##############################################
 
 
-default_env.Tool('Profiler', toolpath=['site_scons/site_tools'])
-default_env.Tool('Catalog', toolpath=['site_scons/site_tools'])
-default_env.Tool('SConsWalk', toolpath=['site_scons/site_tools'])
-default_env.Tool('Wrappers', toolpath=['site_scons/site_tools'])
-default_env.Tool('RSync', toolpath=['site_scons/site_tools'])
-default_env.Tool('Data', toolpath=['site_scons/site_tools'])
-default_env.Tool('UnitTest', toolpath=['site_scons/site_tools'])
+default_env.Tool('Profiler', toolpath=['gclbuildscript/site_scons/site_tools'])
+default_env.Tool('Catalog', toolpath=['gclbuildscript/site_scons/site_tools'])
+default_env.Tool('SConsWalk', toolpath=['gclbuildscript/site_scons/site_tools'])
+default_env.Tool('Wrappers', toolpath=['gclbuildscript/site_scons/site_tools'])
+default_env.Tool('RSync', toolpath=['gclbuildscript/site_scons/site_tools'])
+default_env.Tool('Data', toolpath=['gclbuildscript/site_scons/site_tools'])
+default_env.Tool('UnitTest', toolpath=['gclbuildscript/site_scons/site_tools'])
 
 if default_env['PLATFORM']=='win32':
     #default_env['ENV']['PATH'] += "C:\Program Files/Microsoft Visual Studio 10.0/VC/bin/"
@@ -281,10 +283,12 @@ sconsFilesList = [
 "./lib/sound/SConscript",
 "./lib/windriver/SConscript",
 "./lib/input/SConscript",
+#"./lib/script/SConscript",
 "./lib/kinetestlib/SConscript",
 "./lib/kinect/SConscript",
 "./lib/renderer/SConscript",
 "./lib/voxel/SConscript",
+#"./lib/world/SConscript",
 "./lib/applayer/SConscript",
 
 #tools
@@ -302,10 +306,12 @@ sconsFilesList = [
 "./lib/sound/unittest/SConscript",
 "./lib/windriver/unittest/SConscript",
 "./lib/input/unittest/SConscript",
+#"./lib/script/unittest/SConscript",
 "./lib/kinetestlib/unittest/SConscript",
 "./lib/renderer/unittest/SConscript", 
 "./lib/kinect/unittest/SConscript",
 "./lib/voxel/unittest/SConscript",
+#"./lib/world/unittest/SConscript",
 "./lib/applayer/unittest/SConscript",
 
 #programs

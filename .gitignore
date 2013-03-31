@@ -13,3 +13,7 @@ _UpgradeReport_Files
 UpgradeLog.XML
 UpgradeLog.htm
 *~
+*.opensdf
+*.sdf
+*.vcxproj
+*.vcxproj.filters

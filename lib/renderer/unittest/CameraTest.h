@@ -68,6 +68,22 @@ void Test()
 		s<<std::setprecision(16)<< std::endl<<GLRenderer::GetGLProjection() << std::endl <<"==" << std::endl << camera.GetProjection();
 		AssertMsg_Test(GLRenderer::GetGLProjection() == camera.GetProjection(), s.str().c_str());
 	}
+
+    //camera projection equal gluPerspective projection
+    {
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho (0, 600, 800, 0, -1.0f, 1.0f); glErrorCheck();
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        Matrix44 o;
+        o.SetOrtho (0, 600, 800, 0, -1.0f, 1.0f); 
+
+        s.str("");
+        s<<std::setprecision(16)<< std::endl<<GLRenderer::GetGLProjection() << std::endl <<"==" << std::endl << o;
+        AssertMsg_Test(GLRenderer::GetGLProjection() == o, s.str().c_str());
+    }
 #endif
 
 	renderer.SetCamera(camera);

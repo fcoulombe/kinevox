@@ -58,15 +58,15 @@ void Test()
 
 		Assert_Test(obj.IsPlaying() == true);
 		KINEVOX_TEST_LOOP_START
-
-#ifdef ENABLE_FIX_PIPELINE
             const ViewPort &viewport = winDriver.GetViewPort();
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho (0, viewport.GetHeight(), viewport.GetHeight(), 0, -1.0f, 1.0f); glErrorCheck();
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
+        Matrix44 ortho;
+        ortho.SetOrtho(0.0, (Real)viewport.GetHeight(), (Real)viewport.GetWidth(), 0.0, -1.0, 1.0);
+#ifdef ENABLE_FIX_PIPELINE
+        renderer.SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
+#else
+        Shader shader;
+        shader.Bind();
+        renderer.SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
 #endif
 			obj.Update();
 			renderer.PreRender();

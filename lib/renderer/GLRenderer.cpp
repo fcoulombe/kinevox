@@ -207,16 +207,14 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 
 void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t viewportWidth, size_t viewportHeight)
 {
+    Matrix44 ortho;
+    ortho.SetOrtho(0.0, (Real)viewportHeight, (Real)viewportWidth, 0.0, -1.0, 1.0);
 #ifdef ENABLE_FIX_PIPELINE
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho (0, viewportHeight, viewportWidth, 0, -1.0f, 1.0f); glErrorCheck();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
 #else
-    (void)viewportWidth;
-    (void)viewportHeight;
+    Shader shader;
+    shader.Bind();
+    SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
 #endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
@@ -246,16 +244,14 @@ void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t viewp
 
 void GLRenderer::Render(const Text2DList &renderObjectList, size_t viewportWidth, size_t viewportHeight)
 {
+    Matrix44 ortho;
+    ortho.SetOrtho(0.0, (Real)viewportHeight, (Real)viewportWidth, 0.0, -1.0, 1.0);
 #ifdef ENABLE_FIX_PIPELINE
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho (0, viewportHeight, viewportWidth, 0, -1.0f, 1.0f); glErrorCheck();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
 #else
-    (void)viewportWidth;
-    (void)viewportHeight;
+    Shader shader;
+    shader.Bind();
+    SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
 #endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)

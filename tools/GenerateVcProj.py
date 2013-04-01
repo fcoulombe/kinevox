@@ -56,12 +56,12 @@ print """  <PropertyGroup Label="Globals">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <NMakeBuildCommandLine>c:\Python27\scons.bat  @build_all --verbose --site-dir=gclbuildscript/site_scons</NMakeBuildCommandLine>
     <NMakeOutput>kinevox.exe</NMakeOutput>
-    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakePreprocessorDefinitions>USE_GLFW;USE_64BIT_PLATFORM=1;OS_WIN32;ENABLE_GLEW=1;WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <NMakeBuildCommandLine>c:\Python27\scons.bat  @build_all --verbose --site-dir=gclbuildscript/site_scons</NMakeBuildCommandLine>
     <NMakeOutput>kinevox.exe</NMakeOutput>
-    <NMakePreprocessorDefinitions>OS_WIN32;WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakePreprocessorDefinitions>USE_GLFW;USE_64BIT_PLATFORM=1;OS_WIN32;ENABLE_GLEW=1;WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>

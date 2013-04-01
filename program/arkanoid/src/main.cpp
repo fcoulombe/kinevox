@@ -263,7 +263,7 @@ int main(int /*argc*/, char ** /*argv*/)
 				isRunning=false;
 
 			GCLApplication::Render();
-			Time::SleepMs(100);
+			Time::SleepMs(1);
 			std::cout.flush();
 		}
 	}

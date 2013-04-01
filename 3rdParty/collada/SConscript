@@ -19,13 +19,17 @@ def SetLFlags(ienv):
     platform.machine(),  platform.architecture()[0]
     if ienv['PLATFORM'] == "win32":
         libPath = "#3rdParty/collada/lib/" + platform.architecture()[0] + "/"
-        file = [env.File(libPath+"COLLADABaseUtils_d.lib"),
-                env.File(libPath+"COLLADAFramework_d.lib"), 
-                env.File(libPath+"COLLADASaxFrameworkLoader_d.lib"),
-                env.File(libPath+"GeneratedSaxParser_d.lib"),
-                env.File(libPath+"LibXML_d.lib"),
-                env.File(libPath+"MathMLSolver_d.lib"),
-                env.File(libPath+"pcre_d.lib")]
+        configuration = GetOption('configuration')
+        suffix = ""
+        if configuration == "debug":
+            suffix = "_d"
+        file = [env.File(libPath+"COLLADABaseUtils"+suffix+".lib"),
+                env.File(libPath+"COLLADAFramework"+suffix+".lib"), 
+                env.File(libPath+"COLLADASaxFrameworkLoader"+suffix+".lib"),
+                env.File(libPath+"GeneratedSaxParser"+suffix+".lib"),
+                env.File(libPath+"LibXML"+suffix+".lib"),
+                env.File(libPath+"MathMLSolver"+suffix+".lib"),
+                env.File(libPath+"pcre"+suffix+".lib")]
         ienv.Append(LIBS=[file]) 
     else: 
         if platform.architecture()[0] == "32bit":

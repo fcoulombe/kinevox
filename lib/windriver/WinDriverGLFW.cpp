@@ -69,7 +69,8 @@ public:
     pWinDriver(const char *windowsTitle)
         : mPreviousFrameTime(0.0),
         mFPS(0),
-        mAccumulatedTime(0.0)
+        mAccumulatedTime(0.0),
+        mDt(0.0)
     {
         int ret = glfwInit(); 
         GCLAssert(ret);
@@ -103,6 +104,7 @@ public:
         double dt = currentTime - mPreviousFrameTime;
         mAccumulatedTime += dt;
         mFPS++;
+        mDt = dt;
         if (mAccumulatedTime>1.0)
         {
             mAccumulatedTime = 0.0;
@@ -117,6 +119,7 @@ public:
         
     }
 
+    Real GetDt() const { return mDt; }
     const ViewPort &GetViewPort() const { return mViewPort; }
 
 private:
@@ -125,6 +128,7 @@ private:
     double mPreviousFrameTime;
     size_t mFPS;
     double mAccumulatedTime;
+    Real mDt;
 };
 WinDriver::WinDriver(const char *windowsTitle)
 {
@@ -143,6 +147,10 @@ void WinDriver::SwapBuffer()
 const ViewPort &WinDriver::GetViewPort() const
 {
     return mpWinDriver->GetViewPort();
+}
+Real WinDriver::GetDt() const
+{
+    return mpWinDriver->GetDt();
 }
 }
 #endif

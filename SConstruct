@@ -194,7 +194,7 @@ elif compiler == 'vc':
         cflags.append("/RTC1") #enable runtime checks
         cflags.append("/MDd")
     elif configuration == 'opt':
-        cflags.append("-O3")
+        cflags.append("/Ot")
         cflags.append("/MD")
     #lflags.append("/NODEFAULTLIB:library")
     lflags.append("/DEBUG")

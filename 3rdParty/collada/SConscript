@@ -12,7 +12,7 @@ def SetCFlags(ienv):
         ienv.Append(CPPPATH=[env.Dir('#3rdParty/collada/include/COLLADAFramework')]) 
         ienv.Append(CPPPATH=[env.Dir('#3rdParty/collada/include/COLLADASaxFrameworkLoader')]) 
     else:  
-        print "unsupported architecture: %s" % platform.architecture()[0] 
+        ienv.ParseConfig('pkg-config --cflags collada') 
 	
 		
 def SetLFlags(ienv):
@@ -32,16 +32,7 @@ def SetLFlags(ienv):
                 env.File(libPath+"pcre"+suffix+".lib")]
         ienv.Append(LIBS=[file]) 
     else: 
-        if platform.architecture()[0] == "32bit":
-            file = env.File("#3rdParty/fbx/lib/gcc4/x86/libfbxsdk-2013.1-static.a")
-            ienv.Append(LIBS=[file, 'pthread', 'dl']) 
-        
-        elif platform.architecture()[0] == "64bit":
-            file = env.File("#3rdParty/fbx/lib/gcc4/x64/libfbxsdk-2013.1-static.a")
-            ienv.Append(LIBS=[file, 'pthread', 'dl'])  
-        else:
-            print "unsupported architecture: %s" % platform.architecture()[0] 
-    
+        ienv.ParseConfig('pkg-config --cflags collada')
 dllDep = []
 
 env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags, dllDep)

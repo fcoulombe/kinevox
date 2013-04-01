@@ -16,7 +16,7 @@ def CreateRepo(root):
 		RemoveDir(root+"tmp")
 	os.mkdir(root+"tmp")
 	#os.system("git clone -l C:\\src\\3rdparty "+root+"tmp")
-	os.system("git clone -lhttps://github.com/fcoulombe/kinevox_3rdparty.git "+root+"tmp")
+	os.system("git clone https://github.com/fcoulombe/kinevox_3rdparty.git "+root+"tmp")
 
 
 def OverwriteIfExists(src, dst, component):

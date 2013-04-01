@@ -267,7 +267,7 @@ sconsFilesList = [
 "./3rdParty/libfreenect/SConscript",
 "./3rdParty/zlib/SConscript",
 "./3rdParty/libpng/SConscript",
-"./3rdParty/opencv/SConscript",
+#"./3rdParty/opencv/SConscript",
 "./3rdParty/opengl/SConscript",
 "./3rdParty/openal/SConscript",
 "./3rdParty/ogg/SConscript",

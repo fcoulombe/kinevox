@@ -251,7 +251,7 @@ if default_env['PLATFORM']=='win32':
     print "2"
 else:
     default_env['ENV']['PATH'] = '/usr/local/bin:/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/Developer/usr/bin' 
-    default_env['ENV']['PKG_CONFIG_PATH'] = '/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig'
+    default_env['ENV']['PKG_CONFIG_PATH'] = '/usr/local/lib/pkgconfig:/usr/local/lib64/pkgconfig:/home/silentgit/local/lib64/pkgconfig:/home/silentgit/local/lib/pkgconfig'
     print default_env['ENV']['PATH']
 
 
@@ -265,7 +265,7 @@ sconsFilesList = [
 "./3rdParty/libfreenect/SConscript",
 "./3rdParty/zlib/SConscript",
 "./3rdParty/libpng/SConscript",
-"./3rdParty/opencv/SConscript",
+#"./3rdParty/opencv/SConscript",
 "./3rdParty/opengl/SConscript",
 "./3rdParty/openal/SConscript",
 "./3rdParty/ogg/SConscript",

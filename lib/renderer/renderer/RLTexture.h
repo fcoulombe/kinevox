@@ -70,7 +70,7 @@ private:
 
 
 	friend class Shader;
-	friend class FrameBuffer;
+	friend class RLFrameBuffer;
     RLuint GetTextureUnit() const { GCLAssert(false); return (RLuint)-1; }
 	RLtexture  GetTextureId() const { return mTextureId; }
 	RLtexture mTextureId;

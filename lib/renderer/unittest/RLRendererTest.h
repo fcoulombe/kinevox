@@ -66,7 +66,7 @@ void Test()
 	}
 
     RLTexture colorBuffer(winDriver.GetViewPort().GetWidth(),winDriver.GetViewPort().GetHeight());
-    //RLFrameBuffer frameBuffer(colorBuffer);
+    RLFrameBuffer frameBuffer(colorBuffer);
 
 
 }

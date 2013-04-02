@@ -85,9 +85,8 @@ void GCLApplication::Render()
 	GCLAssert(mRenderer);
 	mRenderer->PreRender();
 	mRenderer->Render(mRenderObjectList);
-    const ViewPort &tempViewPort = mWinDriver->GetViewPort();
-	mRenderer->Render(mRenderObject2DList, tempViewPort.GetWidth(), tempViewPort.GetHeight());
-	mRenderer->Render(mText2DList, tempViewPort.GetWidth(), tempViewPort.GetHeight());
+	mRenderer->Render(mRenderObject2DList);
+	mRenderer->Render(mText2DList);
 	mRenderer->PostRender();
     mWinDriver->SwapBuffer();
 }

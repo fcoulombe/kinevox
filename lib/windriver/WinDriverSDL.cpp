@@ -109,7 +109,6 @@ namespace GCL
 #endif
 
 
-            glViewport(0,0,width,height); glErrorCheck();
         }
 
         ~pWinDriver()
@@ -160,9 +159,7 @@ namespace GCL
 		}
 	}
         }
-        const ViewPort &GetViewPort() const { return mViewPort; }
     private: 
-        ViewPort mViewPort;
         SDL_Surface *mScreen;
     };
 
@@ -179,10 +176,6 @@ namespace GCL
         mpWinDriver->SwapBuffer();
     }
 
-    const ViewPort &WinDriver::GetViewPort() const
-    {
-        return mpWinDriver->GetViewPort();
-    }
 }
 
 

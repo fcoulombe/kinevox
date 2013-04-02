@@ -20,16 +20,31 @@
  * THE SOFTWARE.
  */
 
-#include "windriver/ViewPort.h"
+#pragma once
+
+#include <cstdlib>
+#include <gcl/Rect.h>
 
 
-using namespace GCL;
+namespace GCL
+{
+class ViewPort : private Rect<size_t>
+{
+public:
 
-#ifdef OS_IPHONE
-    const size_t ViewPort::DEFAULT_SCREEN_WIDTH = 320;
-    const size_t ViewPort::DEFAULT_SCREEN_HEIGHT = 480;
-#else
-    const size_t ViewPort::DEFAULT_SCREEN_WIDTH = 640;
-    const size_t ViewPort::DEFAULT_SCREEN_HEIGHT = 480;
-#endif
+    ViewPort(){}
 
+    void Set(size_t ix, size_t iy, size_t iwidth, size_t iheight)
+    {
+        x  = ix;
+        y = iy;
+        width = iwidth;
+        height = iheight;
+    }
+	size_t GetWidth() const { return width; }
+	size_t GetHeight() const { return height; }
+
+private:
+};
+
+}

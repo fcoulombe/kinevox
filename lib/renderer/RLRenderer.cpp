@@ -27,6 +27,7 @@
 
 
 #include <gcl/Assert.h>
+#include <gcl/Config.h>
 #include <gcl/StringUtil.h>
 
 #include "renderer/GLRenderUtils.h"
@@ -42,6 +43,7 @@ using namespace GCL;
 
 void RLRenderer::Init3DState()
 {
+    rlViewport(0,0,(RLint)mViewPort.GetWidth(),(RLint)mViewPort.GetHeight()); 
 #if 0
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); glErrorCheck();
 	glClearDepth(1.0); glErrorCheck();
@@ -212,7 +214,7 @@ void RLRenderer::Render(const RenderObjectList &renderObjectList)
 #endif
 }
 
-void RLRenderer::Render(const RenderObject2DList &renderObjectList, size_t viewportWidth, size_t viewportHeight)
+void RLRenderer::Render(const RenderObject2DList &renderObjectList)
 {
 #if 0
     Matrix44 ortho;
@@ -251,7 +253,7 @@ void RLRenderer::Render(const RenderObject2DList &renderObjectList, size_t viewp
 #endif
 }
 
-void RLRenderer::Render(const Text2DList &renderObjectList, size_t viewportWidth, size_t viewportHeight)
+void RLRenderer::Render(const Text2DList &renderObjectList)
 {
 #if 0
     Matrix44 ortho;

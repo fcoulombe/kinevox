@@ -67,8 +67,8 @@ void Test()
 	{
         WinDriver winDriver("FrameBufferTest");
 		GLRenderer renderer;
-		size_t width = winDriver.GetViewPort().GetWidth();
-		size_t height = winDriver.GetViewPort().GetHeight();
+		size_t width = renderer.GetViewPort().GetWidth();
+		size_t height = renderer.GetViewPort().GetHeight();
 
 		RenderBuffer depthRenderBuffer(width, height);
 		depthRenderBuffer.Bind();
@@ -101,8 +101,8 @@ void Test()
 		RenderObjectList renderObjectList;
 		renderObjectList.push_back(&obj);
 
-        size_t width = winDriver.GetViewPort().GetWidth();
-		size_t height = winDriver.GetViewPort().GetHeight();
+        size_t width = renderer.GetViewPort().GetWidth();
+		size_t height = renderer.GetViewPort().GetHeight();
 
 		RenderBuffer depthRenderBuffer(width, height);
 		depthRenderBuffer.Bind();

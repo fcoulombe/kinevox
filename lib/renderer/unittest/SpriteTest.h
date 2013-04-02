@@ -58,7 +58,7 @@ void Test()
 
 		Assert_Test(obj.IsPlaying() == true);
 		KINEVOX_TEST_LOOP_START
-            const ViewPort &viewport = winDriver.GetViewPort();
+            const ViewPort &viewport = renderer.GetViewPort();
         Matrix44 ortho;
         ortho.SetOrtho(0.0, (Real)viewport.GetHeight(), (Real)viewport.GetWidth(), 0.0, -1.0, 1.0);
 #ifdef ENABLE_FIX_PIPELINE

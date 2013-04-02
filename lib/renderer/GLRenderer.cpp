@@ -42,6 +42,8 @@ using namespace GCL;
 
 void GLRenderer::Init3DState()
 {
+
+    glViewport(0,0,(GLsizei)mViewPort.GetWidth(),(GLsizei)mViewPort.GetHeight()); glErrorCheck();
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); glErrorCheck();
 	glClearDepth(1.0); glErrorCheck();
 	glDepthMask(GL_TRUE); glErrorCheck();
@@ -205,10 +207,10 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 
 }
 
-void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t viewportWidth, size_t viewportHeight)
+void GLRenderer::Render(const RenderObject2DList &renderObjectList)
 {
     Matrix44 ortho;
-    ortho.SetOrtho(0.0, (Real)viewportHeight, (Real)viewportWidth, 0.0, -1.0, 1.0);
+    ortho.SetOrtho(0.0, (Real)mViewPort.GetHeight(), (Real)mViewPort.GetWidth(), 0.0, -1.0, 1.0);
 #ifdef ENABLE_FIX_PIPELINE
     SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
 #else
@@ -242,10 +244,10 @@ void GLRenderer::Render(const RenderObject2DList &renderObjectList, size_t viewp
 	}
 }
 
-void GLRenderer::Render(const Text2DList &renderObjectList, size_t viewportWidth, size_t viewportHeight)
+void GLRenderer::Render(const Text2DList &renderObjectList)
 {
     Matrix44 ortho;
-    ortho.SetOrtho(0.0, (Real)viewportHeight, (Real)viewportWidth, 0.0, -1.0, 1.0);
+    ortho.SetOrtho(0.0, (Real)mViewPort.GetHeight(), (Real)mViewPort.GetWidth(), 0.0, -1.0, 1.0);
 #ifdef ENABLE_FIX_PIPELINE
     SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
 #else

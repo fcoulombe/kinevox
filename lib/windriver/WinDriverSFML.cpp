@@ -91,7 +91,6 @@ WinDriver::WinDriver(const char *windowsTitle)
 #endif
 
 
-    glViewport(0,0,width,height); glErrorCheck();
 }
 WinDriver::~WinDriver()
 {

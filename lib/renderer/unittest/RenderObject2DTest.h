@@ -119,9 +119,8 @@ void Test()
 		}
 		KINEVOX_TEST_LOOP_START
 		obj.Update();
-		const ViewPort &viewport = winDriver.GetViewPort();
 		renderer.PreRender();
-		renderer.Render(objList, viewport.GetWidth(), viewport.GetHeight());
+		renderer.Render(objList);
 		renderer.PostRender();
 		winDriver.SwapBuffer();
 		KINEVOX_TEST_LOOP_END

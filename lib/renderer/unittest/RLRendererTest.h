@@ -26,6 +26,7 @@
 #include <renderer/RLTexture.h>
 #include <renderer/RLFrameBuffer.h>
 #include <windriver/WinDriver.h>
+#include <renderer/TextureResourceManager.h>
 
 using namespace GCL;
 namespace RLRendererTest
@@ -35,6 +36,8 @@ namespace RLRendererTest
 void Test()
 {
 	TEST_START
+        	TextureResourceManager::Initialize();
+    {
     WinDriver winDriver("GLRendererTest");
 	RLRenderer renderer;
 
@@ -65,9 +68,15 @@ void Test()
 		AssertMsg_Test(winDriver.GetViewPort().GetWidth()==ViewPort::DEFAULT_SCREEN_WIDTH, s.str().c_str());
 	}
 
+    RLTexture mush(TEXTURE_PATH"mushroomtga.tga");
+    mush.Save("RLMushroom.tga");
+
     RLTexture colorBuffer(winDriver.GetViewPort().GetWidth(),winDriver.GetViewPort().GetHeight());
     RLFrameBuffer frameBuffer(colorBuffer);
 
+    colorBuffer.Save("RLColorBuffer.tga");
+    }
+    	TextureResourceManager::Terminate();
 
 }
 }

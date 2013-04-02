@@ -1,0 +1,24 @@
+
+import platform
+Import('env')
+
+name = "openrl"
+dependencies = []
+
+def SetCFlags(ienv):
+    if ienv['PLATFORM'] == "win32":
+        ienv.Append(CPPPATH=[env.Dir('C:\Program Files\Imagination Technologies\OpenRL SDK 1.2 R2\include')])
+    else:
+        ienv.ParseConfig('pkg-config --cflags openrl')
+		
+def SetLFlags(ienv):
+    if ienv['PLATFORM'] == "win32":
+        if platform.architecture()[0] == "32bit":
+            libPath = "C:\\Program Files\\Imagination Technologies\\OpenRL SDK 1.2 R2\\VisualStudio10\\Win32\\"
+        elif platform.architecture()[0] == "64bit":
+            libPath = "C:\\Program Files\\Imagination Technologies\\OpenRL SDK 1.2 R2\\VisualStudio10\\x64\\"
+        ienv.Append(LIBS=[env.File(libPath+'OpenRL.lib')])
+    else:
+        ienv.ParseConfig('pkg-config --libs openrl')
+	
+env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags)

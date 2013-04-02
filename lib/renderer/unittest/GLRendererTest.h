@@ -79,13 +79,13 @@ void Test()
 	//test default viewport values
 	{
 		std::stringstream s;
-		s<<renderer.GetViewPort().GetHeight()<<"=="<<Config::Instance().GetInt("DEFAULT_SCREEN_HEIGHT");
-		AssertMsg_Test(renderer.GetViewPort().GetHeight()==Config::Instance().GetInt("DEFAULT_SCREEN_HEIGHT"), s.str().c_str());
+		s<<renderer.GetViewPort().GetHeight()<<"=="<<Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT");
+		AssertMsg_Test(renderer.GetViewPort().GetHeight()==Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"), s.str().c_str());
 	}
 	{
 		std::stringstream s;
-		s<<renderer.GetViewPort().GetWidth()<<"=="<<Config::Instance().GetInt("DEFAULT_SCREEN_WIDTH");
-		AssertMsg_Test(renderer.GetViewPort().GetWidth()==Config::Instance().GetInt("DEFAULT_SCREEN_WIDTH"), s.str().c_str());
+		s<<renderer.GetViewPort().GetWidth()<<"=="<<Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
+		AssertMsg_Test(renderer.GetViewPort().GetWidth()==Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), s.str().c_str());
 	}
 
 	Matrix44 projection = GLRenderer::GetGLProjection();

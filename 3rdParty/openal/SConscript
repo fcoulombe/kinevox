@@ -18,7 +18,7 @@ def SetLFlags(ienv):
     if ienv['PLATFORM'] == "win32":
         if platform.architecture()[0] == "32bit":
             ienv.Append(LIBS=[env.File('C:\\Program Files\\OpenAL 1.1 SDK\\libs\\Win32\\OpenAL32.lib')])
-        if platform.architecture()[0] == "64bit":
+        elif platform.architecture()[0] == "64bit":
             ienv.Append(LIBS=[env.File('C:\\Program Files (x86)\\OpenAL 1.1 SDK\\libs\\Win64\\OpenAL32.lib')])
 
     else:

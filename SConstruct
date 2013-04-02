@@ -193,6 +193,7 @@ elif compiler == 'vc':
         cflags.append("-Od")
         cflags.append("/RTC1") #enable runtime checks
         cflags.append("/MDd")
+        cflags.append("/wd 4100") #disable unused arguments warning in debug
     elif configuration == 'opt':
         cflags.append("/Ot")
         cflags.append("/MD")
@@ -269,6 +270,7 @@ sconsFilesList = [
 "./3rdParty/libpng/SConscript",
 #"./3rdParty/opencv/SConscript",
 "./3rdParty/opengl/SConscript",
+"./3rdParty/openrl/SConscript",
 "./3rdParty/openal/SConscript",
 "./3rdParty/ogg/SConscript",
 "./3rdParty/vorbis/SConscript",

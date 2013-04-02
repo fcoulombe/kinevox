@@ -1,0 +1,18 @@
+
+void setup()
+{
+   rl_OutputRayCount = 1;
+}
+
+void main()
+{
+        vec3 origin = vec3(0.0);
+        float frameScale = 3.0;
+        vec2 frameSize = rl_FrameSize.xy;
+        vec2 normalFramePosition = rl_FrameCoord.xy/frameSize;
+        vec3 viewportPosition = vec3(frameScale*(normalFramePosition - 0.5), -3.0);
+        createRay();
+        rl_OutRay.origin = origin;
+        rl_OutRay.direction = viewportPosition - origin;
+        emitRay();
+}

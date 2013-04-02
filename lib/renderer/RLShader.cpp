@@ -23,11 +23,9 @@
 #include "renderer/RLShader.h"
 #include <gcl/Exception.h>
 #include <gcl/File.h>
-#include <gcl/Matrix44.h>
 #include <gcl/ResourceManagerConfig.h>
 
-#include "renderer/ShaderAttributeDefaultLocations.h"
-#include "renderer/RLTexture.h"
+
 
 using namespace GCL;
 
@@ -45,55 +43,16 @@ namespace
         return fileContent;
     }
 }
-RLShader::RLShader(const char *frameShader , const char *vertexShader , const char *rayShader )
+RLShader::RLShader(const char *shaderFileName , RLenum type)
 :mIsValid (false)
 {
-
-    RLshader  frameShaderId = CompileShader(frameShader, RL_FRAME_SHADER);
-	RLshader  vertexShaderId = CompileShader(vertexShader, RL_VERTEX_SHADER);
-	RLshader  rayShaderId = CompileShader(rayShader, RL_RAY_SHADER);
-
-	mProgramObject = rlCreateProgram();
-	GCLAssertMsg(mProgramObject != 0, "Can't create program");
-
-    rlAttachShader(mProgramObject, frameShaderId);
-	rlAttachShader(mProgramObject, vertexShaderId);
-	rlAttachShader(mProgramObject, rayShaderId);
-
-    //rlBindAttribLocation(mProgramObject, ATTRIB_POSITION, "InPosition");
-    //rlBindAttribLocation(mProgramObject, ATTRIB_NORMAL, "InNormal");
-    //rlBindAttribLocation(mProgramObject, ATTRIB_TEXTURE_COORD, "InTexCoord");
-
-	rlLinkProgram(mProgramObject);
-
-	RLint linked;
-	rlGetProgramiv(mProgramObject, RL_LINK_STATUS, &linked);
-	if(linked != RL_FALSE)
-	{
-		mIsValid = true;
-	}
-	else
-	{
-		PrintInfoLog(mProgramObject);
-		rlDeleteProgram(mProgramObject);
-		mIsValid = false;
-	}
-
-	return;
+    mShader = CompileShader(shaderFileName, type);
 }
 
 RLShader::~RLShader()
 {
-    if (mIsValid)
-        rlDeleteProgram(mProgramObject);
+    rlDeleteShader(mShader);
 }
-
-void RLShader::Bind()
-{
-	GCLAssert(mIsValid);
-	rlUseProgram(mProgramObject);
-}
-
 
 RLshader RLShader::CompileShader(const char *shaderSrc, RLenum type)
 {
@@ -109,7 +68,7 @@ RLshader RLShader::CompileShader(const char *shaderSrc, RLenum type)
 	GCLAssert(shader != 0 && "glCreateShader(type);");
 
 	// Load the shader source
-	rlShaderSource(shader, 1, &shaderSrc, NULL);
+	rlShaderSource(shader, 1, &fileContent, NULL);
 
 	// Compile the shader
 	rlCompileShader(shader); 
@@ -129,75 +88,10 @@ RLshader RLShader::CompileShader(const char *shaderSrc, RLenum type)
 		GCLAssertMsg(false, log);
 
 	}
+    else
+    {
+        mIsValid = true;
+    }
 
 	return shader;
-}
-
-void RLShader::PrintInfoLog(RLprogram p)
-{
-	RLint infoLen = 0;
-	rlGetProgramiv(p, GL_INFO_LOG_LENGTH, &infoLen);glErrorCheck();
-	if(infoLen > 1)
-	{
-		const char* infoLog;
-		rlGetProgramString(p, RL_LINK_LOG, &infoLog);
-		std::string linkLog =  std::string("Error linking program:\n") + infoLog ;
-        delete [] infoLog;
-        throw GCLException(linkLog);
-		
-	}
-}
-
-
-void RLShader::SetProjectionMatrix(const Matrix44 &m)
-{
-	GCLAssert(mIsValid);
-	RLint projectionMatrixLoc = rlGetUniformLocation(mProgramObject,"ProjectionMatrix");
-	Matrix44f mf(m);
-	rlUniformMatrix4fv(projectionMatrixLoc,1,false,(const RLfloat*)&mf);
-}
-void RLShader::SetModelViewMatrix(const Matrix44 &m)
-{
-	GCLAssert(mIsValid);
-	RLint modelviewMatrixLoc = rlGetUniformLocation(mProgramObject,"ModelViewMatrix");
-	Matrix44f mm(m);
-	rlUniformMatrix4fv(modelviewMatrixLoc,1,false,(const GLfloat*)&mm);
-}
-
-
-
-void RLShader::SetTextureSampler(const RLTexture &sampler)
-{
-	RLint textureLoc = rlGetUniformLocation(mProgramObject,"texture");
-	rlUniform1i(textureLoc, sampler.GetTextureUnit());
-}
-
-void RLShader::GetUniform(const char *uniformName, Matrix44 &m44) const
-{
-	RLfloat mf[16];
-	GCLAssert(mIsValid);
-	RLint uniformLoc = rlGetUniformLocation(mProgramObject,uniformName);
-	GCLAssert(uniformLoc!=-1);
-	rlGetUniformfv(	mProgramObject,uniformLoc,mf);
-	m44 = Matrix44((const float *)mf);
-}
-void RLShader::GetUniform(const char *uniformName, int &sampler) const
-{
-	GCLAssert(mIsValid);
-	RLint uniformLoc = rlGetUniformLocation(mProgramObject,uniformName);
-	GCLAssert(uniformLoc!=-1);
-	rlGetUniformiv(mProgramObject,uniformLoc,&sampler);
-}
-int RLShader::GetAttributeLocation(const char *attributeName) const
-{
-    int ret=-1;
-
-	ret =  (int)rlGetAttribLocation(mProgramObject,attributeName);
-	GCLAssertMsg(ret!=-1, attributeName);
-
-	return ret;
-}
-void RLShader::ResetDefault()
-{
-	rlUseProgram(0);
 }

@@ -1,5 +1,5 @@
 attribute vec3 InPosition;
 void main()
 {
-        rl_Position = vec4(positionAttribute, 0.0);
+        rl_Position = vec4(InPosition, 0.0);
 }

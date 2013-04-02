@@ -59,19 +59,19 @@ void Test()
 	//test default viewport values
 	{
 		std::stringstream s;
-		s<<winDriver.GetViewPort().GetHeight()<<"=="<<ViewPort::DEFAULT_SCREEN_HEIGHT;
-		AssertMsg_Test(winDriver.GetViewPort().GetHeight()==ViewPort::DEFAULT_SCREEN_HEIGHT, s.str().c_str());
+		s<<renderer.GetViewPort().GetHeight()<<"=="<<Config::Instance().GetInt("DEFAULT_SCREEN_HEIGHT");
+		AssertMsg_Test(renderer.GetViewPort().GetHeight()==Config::Instance().GetInt("DEFAULT_SCREEN_HEIGHT"), s.str().c_str());
 	}
 	{
 		std::stringstream s;
-		s<<winDriver.GetViewPort().GetWidth()<<"=="<<ViewPort::DEFAULT_SCREEN_WIDTH;
-		AssertMsg_Test(winDriver.GetViewPort().GetWidth()==ViewPort::DEFAULT_SCREEN_WIDTH, s.str().c_str());
+		s<<renderer.GetViewPort().GetWidth()<<"=="<<Config::Instance().GetInt("DEFAULT_SCREEN_WIDTH");
+		AssertMsg_Test(renderer.GetViewPort().GetWidth()==Config::Instance().GetInt("DEFAULT_SCREEN_WIDTH"), s.str().c_str());
 	}
 
     RLTexture mush(TEXTURE_PATH"mushroomtga.tga");
     mush.Save("RLMushroom.tga");
 
-    RLTexture colorBuffer(winDriver.GetViewPort().GetWidth(),winDriver.GetViewPort().GetHeight());
+    RLTexture colorBuffer(renderer.GetViewPort().GetWidth(),renderer.GetViewPort().GetHeight());
     RLFrameBuffer frameBuffer(colorBuffer);
 
     colorBuffer.Save("RLColorBuffer.tga");

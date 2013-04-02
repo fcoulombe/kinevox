@@ -24,7 +24,6 @@
 
 #include <stdint.h>
 #include <gcl/WorldUnit.h>
-#include "windriver/ViewPort.h"
 
 namespace GCL
 {
@@ -39,7 +38,6 @@ namespace GCL
         void SwapBuffer();
 
         Real GetDt() const;
-        const ViewPort &GetViewPort() const;
         bool IsKeyUp(uint32_t key);
     private:
 

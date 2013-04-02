@@ -61,8 +61,8 @@ void Test()
 	{
         WinDriver winDriver("RenderBufferTest");
 		GLRenderer renderer;
-		size_t width = winDriver.GetViewPort().GetWidth();
-		size_t height = winDriver.GetViewPort().GetHeight();
+		size_t width = renderer.GetViewPort().GetWidth();
+		size_t height = renderer.GetViewPort().GetHeight();
 		RenderBuffer target(width, height);;
 		target.Bind();
 		renderer.PreRender();
@@ -74,8 +74,8 @@ void Test()
 	{
         WinDriver winDriver("RenderBufferTest2");
         GLRenderer renderer;
-		size_t width = winDriver.GetViewPort().GetWidth();
-		size_t height = winDriver.GetViewPort().GetHeight();
+		size_t width = renderer.GetViewPort().GetWidth();
+		size_t height = renderer.GetViewPort().GetHeight();
 		RenderBuffer target(width, height);;
 		target.Bind();
 

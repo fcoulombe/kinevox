@@ -69,7 +69,7 @@ private:
 	const uint8_t *GetPixelBufferFromVRAM() const;
 
 
-	friend class Shader;
+	friend class RLShader;
 	friend class RLFrameBuffer;
     RLuint GetTextureUnit() const { GCLAssert(false); return (RLuint)-1; }
 	RLtexture  GetTextureId() const { return mTextureId; }

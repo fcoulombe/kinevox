@@ -25,9 +25,11 @@
 #include <renderer/RLRenderer.h>
 #include <renderer/RLTexture.h>
 #include <renderer/RLFrameBuffer.h>
+#include <renderer/RLShader.h>
+#include <renderer/RLVertexBuffer.h>
 #include <windriver/WinDriver.h>
 #include <renderer/TextureResourceManager.h>
-
+#include <renderer/GeomUtil.h>
 using namespace GCL;
 namespace RLRendererTest
 {
@@ -59,13 +61,13 @@ void Test()
 	//test default viewport values
 	{
 		std::stringstream s;
-		s<<renderer.GetViewPort().GetHeight()<<"=="<<Config::Instance().GetInt("DEFAULT_SCREEN_HEIGHT");
-		AssertMsg_Test(renderer.GetViewPort().GetHeight()==Config::Instance().GetInt("DEFAULT_SCREEN_HEIGHT"), s.str().c_str());
+		s<<renderer.GetViewPort().GetHeight()<<"=="<<Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT");
+		AssertMsg_Test(renderer.GetViewPort().GetHeight()==Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"), s.str().c_str());
 	}
 	{
 		std::stringstream s;
-		s<<renderer.GetViewPort().GetWidth()<<"=="<<Config::Instance().GetInt("DEFAULT_SCREEN_WIDTH");
-		AssertMsg_Test(renderer.GetViewPort().GetWidth()==Config::Instance().GetInt("DEFAULT_SCREEN_WIDTH"), s.str().c_str());
+		s<<renderer.GetViewPort().GetWidth()<<"=="<<Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
+		AssertMsg_Test(renderer.GetViewPort().GetWidth()==Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), s.str().c_str());
 	}
 
     RLTexture mush(TEXTURE_PATH"mushroomtga.tga");
@@ -73,6 +75,27 @@ void Test()
 
     RLTexture colorBuffer(renderer.GetViewPort().GetWidth(),renderer.GetViewPort().GetHeight());
     RLFrameBuffer frameBuffer(colorBuffer);
+    RLShader shader;
+    AttribLocations loc;
+    loc.position = shader.GetAttributeLocation("InPosition");
+
+    std::vector<WorldPoint3> vertexData;
+    std::vector<WorldPoint3> normalData;
+    std::vector<WorldPoint2> tcoordData;
+    GeomUtil::MakeMeshCube(vertexData,normalData,tcoordData,1.0);
+ 
+    RLVertexBuffer<VertexP> buffer((const VertexP*)vertexData.data(), vertexData.size());
+    buffer.BindShaderLoc(loc);
+    buffer.Render();
+    
+    float transformMatrix[16] = {
+        1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, -3.0f, 1.0f,
+    };
+    rlPrimitiveParameterMatrixf(RL_PRIMITIVE, RL_PRIMITIVE_TRANSFORM_MATRIX, transformMatrix);
+    rlRenderFrame();
 
     colorBuffer.Save("RLColorBuffer.tga");
     }

@@ -25,6 +25,7 @@
 #include <renderer/RLRenderer.h>
 #include <renderer/RLTexture.h>
 #include <renderer/RLFrameBuffer.h>
+#include <renderer/RLProgram.h>
 #include <renderer/RLShader.h>
 #include <renderer/RLVertexBuffer.h>
 #include <windriver/WinDriver.h>
@@ -75,9 +76,17 @@ void Test()
 
     RLTexture colorBuffer(renderer.GetViewPort().GetWidth(),renderer.GetViewPort().GetHeight());
     RLFrameBuffer frameBuffer(colorBuffer);
-    RLShader shader;
+    RLProgram program;
+    RLShader frameShader("DefaultFrameShader.txt", RL_FRAME_SHADER);
+    RLShader vertexShader("DefaultVertexShader.txt", RL_VERTEX_SHADER);
+    RLShader rayShader("DefaultRayShader.txt", RL_RAY_SHADER);
+    program.AttachShader(frameShader);
+    //program.AttachShader(vertexShader);
+    //program.AttachShader(rayShader);
+    program.Link();
+    program.Bind();
     AttribLocations loc;
-    loc.position = shader.GetAttributeLocation("InPosition");
+    loc.position = program.GetAttributeLocation("InPosition");
 
     std::vector<WorldPoint3> vertexData;
     std::vector<WorldPoint3> normalData;

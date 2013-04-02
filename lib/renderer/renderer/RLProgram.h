@@ -21,20 +21,37 @@
  */
 
 #pragma once
+#include <vector>
 #include <3rdparty/OpenRL.h>
 
 namespace GCL
 {
-  class RLShader
+class Matrix44;
+class RLTexture;
+class RLShader;
+  class RLProgram
   {
   public:
-    RLShader(const char *frameShaderPath, RLenum type);
-    ~RLShader();
+    RLProgram();
+    ~RLProgram();
+    void Bind();
     bool IsValid() const { return mIsValid; }
+    void AttachShader(RLShader &shader);
+    void Link();
+
+    void SetTextureSampler(const RLTexture &sampler);
+    void SetProjectionMatrix(const Matrix44 &m);
+    void SetModelViewMatrix(const Matrix44 &m);
+    void GetUniform(const char *unformName, Matrix44 &m44) const;
+    void GetUniform(const char *unformName, int &ret) const;
+    int GetAttributeLocation(const char *attributeName) const;
+
+    static void ResetDefault();
   private:
-    RLshader CompileShader(const char *shaderSrc, RLenum type);
-    friend class RLProgram;
-    RLshader mShader;
+    void PrintInfoLog(RLprogram );
+ 
+    std::vector<RLShader *> mShaderList;
+    RLprogram mProgramObject;
     bool mIsValid;
   };
 }

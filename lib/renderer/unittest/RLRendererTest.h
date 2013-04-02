@@ -23,6 +23,8 @@
 
 #include <kinetestlib/UnitTest.h>
 #include <renderer/RLRenderer.h>
+#include <renderer/RLTexture.h>
+#include <renderer/RLFrameBuffer.h>
 #include <windriver/WinDriver.h>
 
 using namespace GCL;
@@ -62,6 +64,10 @@ void Test()
 		s<<winDriver.GetViewPort().GetWidth()<<"=="<<ViewPort::DEFAULT_SCREEN_WIDTH;
 		AssertMsg_Test(winDriver.GetViewPort().GetWidth()==ViewPort::DEFAULT_SCREEN_WIDTH, s.str().c_str());
 	}
+
+    RLTexture colorBuffer(winDriver.GetViewPort().GetWidth(),winDriver.GetViewPort().GetHeight());
+    //RLFrameBuffer frameBuffer(colorBuffer);
+
 
 }
 }

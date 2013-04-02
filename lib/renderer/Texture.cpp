@@ -27,7 +27,6 @@
 
 #include "renderer/PixelBufferHAL.h"
 #include <gcl/SafeCast.h>
-#include "renderer/PixelBufferHAL.h"
 #include "renderer/TextureResource.h"
 #include "renderer/TextureResourceManager.h"
 

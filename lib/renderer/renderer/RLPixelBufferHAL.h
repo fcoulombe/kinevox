@@ -65,24 +65,36 @@ public:
 		rlDeleteBuffers(1, &mPixelBufferId);
 	}
 
-	void UnBind()
+	void UnBindPack()
 	{
-		rlBindBuffer(RL_PIXEL_UNPACK_BUFFER, 0);
+		rlBindBuffer(RL_PIXEL_PACK_BUFFER, 0);
 	}
-	void Bind()
+    void UnBindUnPack()
+    {
+        rlBindBuffer(RL_PIXEL_UNPACK_BUFFER, 0);
+    }
+	void BindPack()
 	{
-		rlBindBuffer(RL_PIXEL_UNPACK_BUFFER, mPixelBufferId);
+		rlBindBuffer(RL_PIXEL_PACK_BUFFER, mPixelBufferId);
 	}
+    void BindUnPack()
+    {
+        rlBindBuffer(RL_PIXEL_UNPACK_BUFFER, mPixelBufferId);
+    }
 
 	void PushData()
 	{
+        //create at least create the buffer in case we need to use it to pull right away
 		rlBufferData(RL_PIXEL_UNPACK_BUFFER, mBytesPerPixel*mWidth*mHeight, NULL, RL_STREAM_DRAW);
-		uint8_t * pPixelsPBO = static_cast<uint8_t *>(rlMapBuffer(RL_PIXEL_UNPACK_BUFFER, RL_WRITE_ONLY));
-		// copy image data into the buffer
-		memcpy(pPixelsPBO, mPixels, mBytesPerPixel*mWidth*mHeight);
+        if (mPixels)
+        {
+            uint8_t * pPixelsPBO = static_cast<uint8_t *>(rlMapBuffer(RL_PIXEL_UNPACK_BUFFER, RL_WRITE_ONLY));
+            // copy image data into the buffer
+            memcpy(pPixelsPBO, mPixels, mBytesPerPixel*mWidth*mHeight);
 
-		GLint res = rlUnmapBuffer(RL_PIXEL_UNPACK_BUFFER);
-		GCLAssertMsg(res == RL_TRUE, "Couldn't unmap pixel buffer. Exiting");
+            RLint res = rlUnmapBuffer(RL_PIXEL_UNPACK_BUFFER);
+            GCLAssertMsg(res == RL_TRUE, "Couldn't unmap pixel buffer. Exiting");
+        }
 	}
 	uint8_t *PullData()
 	{

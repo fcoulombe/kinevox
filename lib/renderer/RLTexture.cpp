@@ -124,17 +124,16 @@ void RLTexture::Initialize(const PixelBuffer &data )
 			RL_UNSIGNED_BYTE, NULL);
 
 	mPBO = new RLPixelBufferHAL(data);
-	if (data.mPixels)
-	{
-		mPBO->Bind();
-		mPBO->PushData();
-		//push from pbo to texture
-		rlTexImage2D(RL_TEXTURE_2D, 0, BytesPerPixel[data.mBytesPerPixel-1], 
-            (RLint)data.mWidth,	(RLint)data.mHeight, 0, BytesPerPixel[data.mBytesPerPixel-1],
-				RL_UNSIGNED_BYTE, NULL);
 
-		mPBO->UnBind();
-	}
+    mPBO->BindUnPack();
+    mPBO->PushData();
+    //push from pbo to texture
+    rlTexImage2D(RL_TEXTURE_2D, 0, BytesPerPixel[data.mBytesPerPixel-1], 
+        (RLint)data.mWidth,	(RLint)data.mHeight, 0, BytesPerPixel[data.mBytesPerPixel-1],
+        RL_UNSIGNED_BYTE, NULL);
+
+    mPBO->UnBindUnPack();
+
 	rlGenerateMipmap(RL_TEXTURE_2D);
 
 }
@@ -144,7 +143,7 @@ bool RLTexture::LoadTexture(const char *filename)
 	const Resource *tempResource = TextureResourceManager::Instance().LoadResource(filename);
 	mTextureResource = static_cast<const TextureResource*>(tempResource);
 
-	const RLPixelBufferHAL &imageData = mTextureResource->mTextureData.imageData;
+	const PixelBuffer &imageData = mTextureResource->mTextureData.imageData;
 	mTextureData.width = imageData.mWidth;
 	mTextureData.height= imageData.mHeight;
 	mTextureData.bytesPerPixel = imageData.mBytesPerPixel;
@@ -154,45 +153,21 @@ bool RLTexture::LoadTexture(const char *filename)
 
 const uint8_t *RLTexture::GetPixelBufferFromVRAM() const
 {
-	mPBO->Bind();
+    mPBO->BindPack();
+    Bind();
+    if (mTextureData.bytesPerPixel == 3)
+	    rlGetTexImage(RL_TEXTURE_2D, 0, RL_RGB, RL_UNSIGNED_BYTE, NULL);
+    else
+        rlGetTexImage(RL_TEXTURE_2D, 0, RL_RGBA, RL_UNSIGNED_BYTE, NULL);
 	uint8_t *buffer = mPBO->PullData();
-	mPBO->UnBind();
+	mPBO->UnBindPack();
 	return buffer;
 }
 
 const uint8_t *RLTexture::GetTextureFromVRAM() const
 {
-#if !defined(ES1) && !defined(ES2)
-	Bind();
-	//long imageSize = mTextureData.GetImageSizeInBytes();
-	RLint width, height;
-	rlGetTexLevelParameteriv(RL_TEXTURE_2D, 0, RL_TEXTURE_WIDTH, &width);
-	rlGetTexLevelParameteriv(RL_TEXTURE_2D, 0, RL_TEXTURE_HEIGHT, &height);
-	size_t imageSize = width*height*mTextureData.bytesPerPixel;
-	//GCLAssert(width == (GLint)mTextureData.width);
-	//GCLAssert(height == (GLint)mTextureData.height);
-	uint8_t *data = new uint8_t[imageSize];
-	memset(data, 0, imageSize);
-	
-	if (mTextureResource)
-    {
-        if (mTextureResource->mTextureData.imageData.mBytesPerPixel == 3)
-		    rlGetTexImage(RL_TEXTURE_2D, 0, RL_RGB, RL_UNSIGNED_BYTE, data);
-        else if (mTextureResource->mTextureData.imageData.mBytesPerPixel == 4)
-            rlGetTexImage(RL_TEXTURE_2D, 0, RL_RGBA, RL_UNSIGNED_BYTE, data);
-        else
-        {
-            GCLAssert(false);
-        }
-
-    }
-	else
-		rlGetTexImage(RL_TEXTURE_2D, 0, BytesPerPixel[mTextureData.bytesPerPixel-1], RL_UNSIGNED_BYTE, data);
-	return data;
-#else
 	GCLAssert(false && "unsupported");
 	return NULL;
-#endif
 }
 
 
@@ -202,7 +177,7 @@ void RLTexture::Save(const char *filename)
 	std::string name(filename);
 	std::string nameResource(filename);
 	nameResource += "res.tga";
-	const uint8_t *buffer = GetTextureFromVRAM();
+	const uint8_t *buffer = GetPixelBufferFromVRAM();
 	PixelBuffer::SaveTga(name.c_str(), GetWidth(), GetHeight(), mTextureData.bytesPerPixel,buffer);
 	delete [] buffer;
 }

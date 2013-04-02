@@ -27,3 +27,10 @@
 #include <OpenRL/OpenRL.h>
 #include <gcl/Assert.h>
 
+#if USE_64BIT_PLATFORM
+#	define RL_UNIT RL_FLOAT //our mesh data are passed in float for portability/performance reason
+#	define RLreal RLdouble
+#else
+#	define RL_UNIT RL_FLOAT
+#	define RLreal RLfloat
+#endif

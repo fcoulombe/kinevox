@@ -75,8 +75,8 @@ public:
         int ret = glfwInit(); 
         GCLAssert(ret);
 
-        int width = Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT");
-        int height = Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
+        int width = Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
+        int height = Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT");
 
         ret = glfwOpenWindow( width,height, 0,0,0,0,24,8, GLFW_WINDOW );
         GCLAssert(ret);

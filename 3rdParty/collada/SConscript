@@ -32,7 +32,7 @@ def SetLFlags(ienv):
                 env.File(libPath+"pcre"+suffix+".lib")]
         ienv.Append(LIBS=[file]) 
     else: 
-        ienv.ParseConfig('pkg-config --cflags collada')
+        ienv.ParseConfig('pkg-config --libs collada')
 dllDep = []
 
 env.AddComponent(name, None, None,None,dependencies, SetCFlags, SetLFlags, dllDep)

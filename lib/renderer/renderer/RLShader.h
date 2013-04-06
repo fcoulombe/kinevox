@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,16 +20,37 @@
  * THE SOFTWARE.
  */
 
-#include "windriver/ViewPort.h"
+#pragma once
+#include <3rdparty/OpenRL.h>
 
+namespace GCL
+{
+class Matrix44;
+class RLTexture;
+  class RLShader
+  {
+  public:
+    RLShader(const char *frameShader = "DefaultFrameShader.txt", 
+        const char *vertexShader = "DefaultVertexShader.txt", 
+        const char *rayShader = "DefaultRayShader.txt" );
 
-using namespace GCL;
+    ~RLShader();
+    void Bind();
+    bool IsValid() const { return mIsValid; }
 
-#ifdef OS_IPHONE
-    const size_t ViewPort::DEFAULT_SCREEN_WIDTH = 320;
-    const size_t ViewPort::DEFAULT_SCREEN_HEIGHT = 480;
-#else
-    const size_t ViewPort::DEFAULT_SCREEN_WIDTH = 640;
-    const size_t ViewPort::DEFAULT_SCREEN_HEIGHT = 480;
-#endif
+    void SetTextureSampler(const RLTexture &sampler);
+    void SetProjectionMatrix(const Matrix44 &m);
+    void SetModelViewMatrix(const Matrix44 &m);
+    void GetUniform(const char *unformName, Matrix44 &m44) const;
+    void GetUniform(const char *unformName, int &ret) const;
+    int GetAttributeLocation(const char *attributeName) const;
 
+    static void ResetDefault();
+  private:
+    void PrintInfoLog(RLprogram );
+    RLshader CompileShader(const char *shaderSrc, RLenum type);
+
+    RLprogram mProgramObject;
+    bool mIsValid;
+  };
+}

@@ -22,7 +22,6 @@
 
 #include "renderer/Shader.h"
 #include <gcl/Exception.h>
-#include <gcl/Point4.h>
 #include <gcl/Matrix44.h>
 
 #include "renderer/ShaderAttributeDefaultLocations.h"

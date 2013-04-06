@@ -14,9 +14,9 @@ def SetCFlags(ienv):
 def SetLFlags(ienv):
     if ienv['PLATFORM'] == "win32":
         if platform.architecture()[0] == "32bit":
-            libPath = "C:\\Program Files\\Imagination Technologies\\OpenRL SDK 1.2 R2\\VisualStudio10\\Win32\\"
+            libPath = "C:\\Program Files\\Imagination Technologies\\OpenRL SDK 1.2 R2\\Lib\\VisualStudio10\\Win32\\"
         elif platform.architecture()[0] == "64bit":
-            libPath = "C:\\Program Files\\Imagination Technologies\\OpenRL SDK 1.2 R2\\VisualStudio10\\x64\\"
+            libPath = "C:\\Program Files\\Imagination Technologies\\OpenRL SDK 1.2 R2\\Lib\\VisualStudio10\\x64\\"
         ienv.Append(LIBS=[env.File(libPath+'OpenRL.lib')])
     else:
         ienv.ParseConfig('pkg-config --libs openrl')

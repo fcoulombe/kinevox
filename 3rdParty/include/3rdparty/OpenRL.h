@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,15 @@
 
 #pragma once
 
-#include <cstdlib>
 
 
-namespace GCL
-{
-class ViewPort
-{
-public:
-	static const size_t DEFAULT_SCREEN_WIDTH;
-	static const size_t DEFAULT_SCREEN_HEIGHT ;
+#include <OpenRL/OpenRL.h>
+#include <gcl/Assert.h>
 
-	ViewPort()
-	: mWidth(DEFAULT_SCREEN_WIDTH), mHeight(DEFAULT_SCREEN_HEIGHT) {}
-
-	size_t GetWidth() const { return mWidth; }
-	size_t GetHeight() const { return mHeight; }
-
-private:
-	size_t mWidth;
-	size_t mHeight;
-};
-
-}
+#if USE_64BIT_PLATFORM
+#	define RL_UNIT RL_FLOAT //our mesh data are passed in float for portability/performance reason
+#	define RLreal RLdouble
+#else
+#	define RL_UNIT RL_FLOAT
+#	define RLreal RLfloat
+#endif

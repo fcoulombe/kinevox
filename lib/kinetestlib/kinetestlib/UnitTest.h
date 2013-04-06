@@ -69,8 +69,6 @@ public:
     KineTestKeyListener kineTestKeyListener;\
     size_t i=0;\
 	kineTestKeyListener.mIsLooping = testCounter.mIsInteractive;\
-    if (kineTestKeyListener.mIsLooping) std::cout << "looping!"<<std::endl; \
-    else std::cout << "not looping!"<<std::endl; \
 while(i<2 || kineTestKeyListener.mIsLooping)\
 {\
 \

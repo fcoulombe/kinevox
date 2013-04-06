@@ -18,19 +18,44 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */#include <iostream>
+ */
 
-#include "LuaTest.h"
-#include "ScriptTest.h"
-#include "ScriptResourceTest.h"
+#pragma once
 
-int main(int argc, char ** argv)
+#include <gcl/Assert.h>
+#include <gcl/ResourceManager.h>
+#include "script/ScriptResource.h"
+
+namespace GCL
 {
-	 SUITE_INIT(argc, argv)
-        LuaTest::Test();
-		ScriptTest::Test();
-        ScriptResourceTest::Test();
-		
-	SUITE_TERMINATE
-	return 0;
+  class LuaState;
+  class ScriptResourceManager : public ResourceManager
+  {
+  public:
+    static void Initialize()
+    {
+      GCLAssert(smpInstance == NULL);
+      smpInstance = new ScriptResourceManager();
+    }
+    static void Terminate()
+    {
+      GCLAssert(smpInstance != NULL);
+      delete smpInstance;
+      smpInstance = NULL;
+    }
+    static ScriptResourceManager &Instance() { GCLAssert(smpInstance != NULL);return *smpInstance;}
+
+    Resource *Allocate(const char *filename);
+    void Free(Resource * /*resource*/);
+
+  private:
+    static ScriptResourceManager *smpInstance;
+    LuaState *mLuaState;
+    LuaState &GetLuaState() { return *mLuaState; }
+    ScriptResourceManager();
+    ~ScriptResourceManager();
+    friend class ScriptResource;
+  };
+
 }
+

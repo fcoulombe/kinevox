@@ -18,19 +18,33 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */#include <iostream>
+ */
 
-#include "LuaTest.h"
-#include "ScriptTest.h"
-#include "ScriptResourceTest.h"
+#include "script/ScriptResourceManager.h"
+#include "script/Lua.h"
+#include "script/ScriptResource.h"
 
-int main(int argc, char ** argv)
+using namespace GCL;
+
+ScriptResourceManager *ScriptResourceManager::smpInstance = NULL;
+
+ScriptResourceManager::ScriptResourceManager()
 {
-	 SUITE_INIT(argc, argv)
-        LuaTest::Test();
-		ScriptTest::Test();
-        ScriptResourceTest::Test();
-		
-	SUITE_TERMINATE
-	return 0;
+    mLuaState = new LuaState();
+}
+
+ScriptResourceManager::~ScriptResourceManager()
+{
+    delete mLuaState;
+}
+
+
+Resource * ScriptResourceManager::Allocate( const char *filename )
+{
+  return new ScriptResource(filename);
+}
+
+void ScriptResourceManager::Free( Resource * resource )
+{
+	delete resource;
 }

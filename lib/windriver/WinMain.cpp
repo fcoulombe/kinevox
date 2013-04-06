@@ -122,22 +122,18 @@ static int ParseCommandLine(char *cmdline, char **argv)
 }
 int WINAPI WinMain(HINSTANCE /*hInst*/, HINSTANCE /*hPrev*/, LPSTR /*szCmdLine*/, int /*sw*/)
 {
-    std::cout << "start"<< std::endl;
     char **argv=NULL;
     int argc;
     char *cmdline;
     size_t nLen;
-    std::cout << "parse";
     cmdline = GetCommandLine();
     nLen = strlen(cmdline);
     argc = ParseCommandLine(cmdline, NULL);
 
     argv = new char*[argc+1];
     ParseCommandLine(cmdline, argv);
-    std::cout <<"end parse";
     int ret = main(argc, argv); 
     delete [] argv;
     return ret;
-
 }
 #endif

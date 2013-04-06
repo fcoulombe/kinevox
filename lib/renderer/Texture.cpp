@@ -27,7 +27,6 @@
 
 #include "renderer/PixelBufferHAL.h"
 #include <gcl/SafeCast.h>
-#include "renderer/PixelBufferHAL.h"
 #include "renderer/TextureResource.h"
 #include "renderer/TextureResourceManager.h"
 
@@ -176,7 +175,7 @@ bool Texture::LoadTexture(const char *filename)
 	const Resource *tempResource = TextureResourceManager::Instance().LoadResource(filename);
 	mTextureResource = static_cast<const TextureResource*>(tempResource);
 
-	const PixelBufferHAL &imageData = mTextureResource->mTextureData.imageData;
+	const PixelBuffer &imageData = mTextureResource->mTextureData.imageData;
 	mTextureData.width = imageData.mWidth;
 	mTextureData.height= imageData.mHeight;
 	mTextureData.bytesPerPixel = imageData.mBytesPerPixel;

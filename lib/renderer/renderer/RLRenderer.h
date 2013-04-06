@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,17 +30,17 @@
 #include "renderer/Camera.h"
 #include "renderer/Renderer.h"
 
-
+#include <3rdparty/OpenRL.h>
 namespace GCL
 {
 
-typedef std::vector<std::string> GLExtensionList;
+typedef std::vector<std::string> RLExtensionList;
 class Shader;
-class GLRenderer : public Renderer
+class RLRenderer : public Renderer
 {
 public:
-	GLRenderer();
-	~GLRenderer();
+	RLRenderer();
+	~RLRenderer();
 	bool Update();
 	void PreRender();
 	void PostRender();
@@ -63,14 +63,13 @@ public:
 	const std::string &GetVersion() const { return mVersion; }
 	const std::string &GetRenderer() const { return mRenderer; }
 	const std::string &GetShadingLanguageVersion() const { return mShadingLanguageVersion; }
-	const std::string &GetGlewVersion() const { return mGlewVersion; }
-	const GLExtensionList &GetExtensions() const { return mExtensions; }
+	const RLExtensionList &GetExtensions() const { return mExtensions; }
 
 	bool IsExtensionSupported(const std::string &ext) const
 	{
-		GLExtensionList::const_iterator b = mExtensions.begin();
-		GLExtensionList::const_iterator e = mExtensions.end();
-		GLExtensionList::const_iterator r =  std::find(b, e, ext);
+		RLExtensionList::const_iterator b = mExtensions.begin();
+		RLExtensionList::const_iterator e = mExtensions.end();
+		RLExtensionList::const_iterator r =  std::find(b, e, ext);
 
 		bool res = r != mExtensions.end();
 		return res;
@@ -83,24 +82,30 @@ public:
 								const Matrix44 &transform,
 								Shader *shader=NULL);
 
-	static Matrix44 GetGLProjection();
-	static Matrix44 GetGLModelView();
+	static Matrix44 GetRLProjection();
+	static Matrix44 GetRLModelView();
 
 private:
 	void Init3DState();
 
+    OpenRLContext context;
 	Camera *mCamera;
 
 	std::string mVendor,
 				mVersion,
 				mRenderer,
-				mShadingLanguageVersion,
-				mGlewVersion;
+				mShadingLanguageVersion;
 
-	GLExtensionList mExtensions;
+	RLExtensionList mExtensions;
 
 
 	uint32_t gl_depth_tex;
 	uint32_t gl_rgb_tex;
+
+    static void errorCatcher(RLenum /*error*/, const void* /*privateData*/,
+        size_t /*privateSize*/, const char* message, void* /*userData*/)
+    {
+        GCLAssertMsg(false, message);
+    }
 };
 }

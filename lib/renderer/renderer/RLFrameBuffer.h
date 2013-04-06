@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,27 +21,36 @@
  */
 
 #pragma once
-
-#include <cstdlib>
-
+#include <3rdparty/OpenRL.h>
 
 namespace GCL
 {
-class ViewPort
+class RLTexture;
+class RenderBuffer;
+class RLFrameBuffer
 {
 public:
-	static const size_t DEFAULT_SCREEN_WIDTH;
-	static const size_t DEFAULT_SCREEN_HEIGHT ;
+	RLFrameBuffer(const RLTexture &texture/*, const RenderBuffer &depthBuffer*/);
+	~RLFrameBuffer()
+	{
+		rlDeleteFramebuffers(1, &mFrameBufferId); 
+	}
+	void Bind()
+	{
+		GCLAssert(IsValid()); rlBindFramebuffer(RL_FRAMEBUFFER, mFrameBufferId);  
+	}
 
-	ViewPort()
-	: mWidth(DEFAULT_SCREEN_WIDTH), mHeight(DEFAULT_SCREEN_HEIGHT) {}
+	bool IsValid() const { return (int)mFrameBufferId!=-1; }
 
-	size_t GetWidth() const { return mWidth; }
-	size_t GetHeight() const { return mHeight; }
+	void Save(const char * /*filename*/) { GCLAssert(false && "TBD"); }
+
+	static void ResetDefault()
+	{
+		rlBindFramebuffer(RL_FRAMEBUFFER, 0);  
+	}
 
 private:
-	size_t mWidth;
-	size_t mHeight;
+	RLframebuffer mFrameBufferId;
 };
 
 }

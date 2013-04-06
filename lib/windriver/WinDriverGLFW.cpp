@@ -28,8 +28,8 @@
 #include <3rdparty/OpenGL.h>
 
 #include <gcl/Assert.h>
+#include <gcl/Config.h>
 #include "windriver/EventHandler.h"
-#include "windriver/ViewPort.h"
 
 namespace GCL
 {
@@ -75,8 +75,8 @@ public:
         int ret = glfwInit(); 
         GCLAssert(ret);
 
-        int width = (int)mViewPort.GetWidth();
-        int height = (int)mViewPort.GetHeight();
+        int width = Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
+        int height = Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT");
 
         ret = glfwOpenWindow( width,height, 0,0,0,0,24,8, GLFW_WINDOW );
         GCLAssert(ret);
@@ -87,8 +87,6 @@ public:
         glfwSetMousePosCallback( MouseMoveCallback);
         glfwSetMouseButtonCallback( MouseButtonCallback);
         glfwSetMouseWheelCallback( MouseWheelCallback );
-
-        glViewport(0,0,width,height); glErrorCheck();
     }
 
     ~pWinDriver()
@@ -120,10 +118,8 @@ public:
     }
 
     Real GetDt() const { return mDt; }
-    const ViewPort &GetViewPort() const { return mViewPort; }
 
 private:
-    ViewPort mViewPort;
     std::string mWindowsTitle;
     double mPreviousFrameTime;
     size_t mFPS;
@@ -143,10 +139,6 @@ WinDriver::~WinDriver()
 void WinDriver::SwapBuffer()
 {
     mpWinDriver->SwapBuffer();
-}
-const ViewPort &WinDriver::GetViewPort() const
-{
-    return mpWinDriver->GetViewPort();
 }
 Real WinDriver::GetDt() const
 {

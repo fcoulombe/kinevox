@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,12 +21,13 @@
  */
 
 
-#include "renderer/GLRenderer.h"
+#include "renderer/RLRenderer.h"
 
 #include <sstream>
 
-#include <3rdparty/OpenGL.h>
+
 #include <gcl/Assert.h>
+#include <gcl/Config.h>
 #include <gcl/StringUtil.h>
 
 #include "renderer/GLRenderUtils.h"
@@ -40,10 +41,10 @@
 
 using namespace GCL;
 
-void GLRenderer::Init3DState()
+void RLRenderer::Init3DState()
 {
-
-    glViewport(0,0,(GLsizei)mViewPort.GetWidth(),(GLsizei)mViewPort.GetHeight()); glErrorCheck();
+    rlViewport(0,0,(RLint)mViewPort.GetWidth(),(RLint)mViewPort.GetHeight()); 
+#if 0
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); glErrorCheck();
 	glClearDepth(1.0); glErrorCheck();
 	glDepthMask(GL_TRUE); glErrorCheck();
@@ -58,54 +59,59 @@ void GLRenderer::Init3DState()
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); glErrorCheck();
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
 #endif
+#endif
 }
 
-GLRenderer::GLRenderer()
+RLRenderer::RLRenderer()
 {
 	mCamera=&Camera::DefaultCamera();
-	Init3DState();
+    context = OpenRLCreateContext(NULL, RLRenderer::errorCatcher, NULL);
+    OpenRLSetCurrentContext(context);
 
-	mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
-	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
-	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
-#if !defined(ES1) && !defined(OS_WIN32)
-	const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);glErrorCheck();
+
+	//Init3DState();
+
+	mVersion = std::string((const char*)rlGetString(RL_VERSION)); 
+	mVendor = std::string((const char*)rlGetString(RL_VENDOR));
+	mRenderer = std::string((const char*)rlGetString(RL_RENDERER));
+	const char *ver = (const char*)rlGetString(RL_SHADING_LANGUAGE_VERSION);
 	mShadingLanguageVersion = std::string(ver);
-#endif
 	char delim = ' ';
-	std::string extString((const char *) glGetString(GL_EXTENSIONS));
-	mExtensions = StringUtil::Explode(extString, delim); glErrorCheck();
+	std::string extString((const char *) rlGetString(RL_EXTENSIONS));
+    if (extString.length())
+	    mExtensions = StringUtil::Explode(extString, delim); 
+    else
+    {
+        mExtensions = RLExtensionList();
+    }
 
-#if ENABLE_GLEW
-	GLenum err = glewInit();
-	GCLAssertMsg(GLEW_OK == err, (const char *)glewGetErrorString(err));
-	mGlewVersion = std::string((const char*)glewGetString(GLEW_VERSION));
-#else
-	mGlewVersion  = std::string("Unused");
-#endif
 }
-GLRenderer::~GLRenderer()
+RLRenderer::~RLRenderer()
 {
+        OpenRLDestroyContext(context);
 }
 
-bool GLRenderer::Update()
+bool RLRenderer::Update()
 {
 	return true;
 }
 
 
-void GLRenderer::PreRender()
+void RLRenderer::PreRender()
 {
+#if 0
 	glClearColor(0.0, 0.0, 1.0, 0.0); glErrorCheck();
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); glErrorCheck();
+#endif
 }
-void GLRenderer::PostRender()
+void RLRenderer::PostRender()
 {
 }
 
 template<typename VertexType>
 void DrawNormals(const VertexData &data)
 {
+#if 0
     std::vector<Point3<MeshReal> > normalLines;
     const VertexType *vertexData = (const VertexType *)(data.mVertexData); 
     for (size_t i=0; i<data.mVertexCount; ++i)
@@ -118,10 +124,11 @@ void DrawNormals(const VertexData &data)
     VertexData lineData(pos, normalLines.size(), VertexP::GetComponentType());
     VertexBuffer<VertexP> buffer((const VertexP *)lineData.mVertexData, lineData.mVertexCount);
     buffer.Render(GL_LINES);
-
+#endif
 }
-void GLRenderer::Render(const RenderObjectList &renderObjectList)
+void RLRenderer::Render(const RenderObjectList &renderObjectList)
 {
+#if 0
 	mCamera->Update();
 
 	const Matrix44 &projection = mCamera->GetProjection();
@@ -204,13 +211,14 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 				DrawCube(WorldPoint3(i*1.0,  0, j*1.0), 1.0);
 		}
 	}*/
-
+#endif
 }
 
-void GLRenderer::Render(const RenderObject2DList &renderObjectList)
+void RLRenderer::Render(const RenderObject2DList &renderObjectList)
 {
+#if 0
     Matrix44 ortho;
-    ortho.SetOrtho(0.0, (Real)mViewPort.GetHeight(), (Real)mViewPort.GetWidth(), 0.0, -1.0, 1.0);
+    ortho.SetOrtho(0.0, (Real)viewportHeight, (Real)viewportWidth, 0.0, -1.0, 1.0);
 #ifdef ENABLE_FIX_PIPELINE
     SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
 #else
@@ -242,12 +250,14 @@ void GLRenderer::Render(const RenderObject2DList &renderObjectList)
 		glPopMatrix();glErrorCheck();
 #endif
 	}
+#endif
 }
 
-void GLRenderer::Render(const Text2DList &renderObjectList)
+void RLRenderer::Render(const Text2DList &renderObjectList)
 {
+#if 0
     Matrix44 ortho;
-    ortho.SetOrtho(0.0, (Real)mViewPort.GetHeight(), (Real)mViewPort.GetWidth(), 0.0, -1.0, 1.0);
+    ortho.SetOrtho(0.0, (Real)viewportHeight, (Real)viewportWidth, 0.0, -1.0, 1.0);
 #ifdef ENABLE_FIX_PIPELINE
     SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
 #else
@@ -279,11 +289,13 @@ void GLRenderer::Render(const Text2DList &renderObjectList)
 		glPopMatrix();glErrorCheck();
 #endif
 	}
+#endif
 }
 
 static bool isRenderingExtra = false;
-void GLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth)
+void RLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth)
 {
+#if 0
 #if !defined(ES1) && !defined(ES2)
 	glBindTexture(GL_TEXTURE_2D, gl_depth_tex);glErrorCheck();
 	if (depth == 1) {
@@ -303,10 +315,11 @@ void GLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height, si
 #else
 	GCLAssert(false &&" TBD");
 #endif
-
+#endif
 }
-void GLRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
+void RLRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
 {
+#if 0
 #if !defined(ES1) && !defined(ES2)
 
 	if (!isRenderingExtra) {
@@ -339,11 +352,12 @@ void GLRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
 #else 
 	GCLAssert(false && "TBD");
 #endif
-
+#endif
 }
 
-void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
+void RLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 {
+#if 0
 	if (isEnabled)
 	{
 		glEnable(GL_TEXTURE_2D); glErrorCheck();
@@ -353,74 +367,39 @@ void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 		glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
 		glDisable(GL_TEXTURE_2D); glErrorCheck();
 	}
+#endif
 }
 
 
-Matrix44 GLRenderer::GetGLProjection()
+Matrix44 RLRenderer::GetRLProjection()
 {
-	Matrix44f projectionMatrix;
-	glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
-	Matrix44 projectionMatrixd;
-	projectionMatrixd[0].x = projectionMatrix.m0.x;
-	projectionMatrixd[0].y = projectionMatrix.m0.y;
-	projectionMatrixd[0].z = projectionMatrix.m0.z;
-	projectionMatrixd[0].w = projectionMatrix.m0.w;
-	projectionMatrixd[1].x = projectionMatrix.m1.x;
-	projectionMatrixd[1].y = projectionMatrix.m1.y;
-	projectionMatrixd[1].z = projectionMatrix.m1.z;
-	projectionMatrixd[1].w = projectionMatrix.m1.w;
-	projectionMatrixd[2].x = projectionMatrix.m2.x;
-	projectionMatrixd[2].y = projectionMatrix.m2.y;
-	projectionMatrixd[2].z = projectionMatrix.m2.z;
-	projectionMatrixd[2].w = projectionMatrix.m2.w;
-	projectionMatrixd[3].x = projectionMatrix.m3.x;
-	projectionMatrixd[3].y = projectionMatrix.m3.y;
-	projectionMatrixd[3].z = projectionMatrix.m3.z;
-	projectionMatrixd[3].w = projectionMatrix.m3.w;
+
+    	Matrix44 projectionMatrixd;
+GCLAssert(false);
 	return projectionMatrixd;
 }
-Matrix44 GLRenderer::GetGLModelView()
+Matrix44 RLRenderer::GetRLModelView()
 {
-	Matrix44f modelViewMatrix;
-	glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&modelViewMatrix);
-	Matrix44 modelViewMatrixd;
-	modelViewMatrixd[0].x = modelViewMatrix.m0.x;
-	modelViewMatrixd[0].y = modelViewMatrix.m0.y;
-	modelViewMatrixd[0].z = modelViewMatrix.m0.z;
-	modelViewMatrixd[0].w = modelViewMatrix.m0.w;
-	modelViewMatrixd[1].x = modelViewMatrix.m1.x;
-	modelViewMatrixd[1].y = modelViewMatrix.m1.y;
-	modelViewMatrixd[1].z = modelViewMatrix.m1.z;
-	modelViewMatrixd[1].w = modelViewMatrix.m1.w;
-	modelViewMatrixd[2].x = modelViewMatrix.m2.x;
-	modelViewMatrixd[2].y = modelViewMatrix.m2.y;
-	modelViewMatrixd[2].z = modelViewMatrix.m2.z;
-	modelViewMatrixd[2].w = modelViewMatrix.m2.w;
-	modelViewMatrixd[3].x = modelViewMatrix.m3.x;
-	modelViewMatrixd[3].y = modelViewMatrix.m3.y;
-	modelViewMatrixd[3].z = modelViewMatrix.m3.z;
-	modelViewMatrixd[3].w = modelViewMatrix.m3.w;
+    	Matrix44 modelViewMatrixd;
+GCLAssert(false);
 	return modelViewMatrixd;
 }
 
 
-void GLRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &modelView, const Matrix44 &transform, Shader *shader)
+void RLRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &modelView, const Matrix44 &transform, Shader *shader)
 {
+
 	Matrix44 f = modelView*transform;
 
-#ifdef ENABLE_FIX_PIPELINE
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrix(reinterpret_cast<const GLreal*>(&projection));
 
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrix(reinterpret_cast<const GLreal*>(&f));
-	(void)shader;
-#else
 	if (shader)
 	{
 		shader->SetProjectionMatrix(projection);
 		shader->SetModelViewMatrix(f);
 	}
-#endif
+    else
+    {
+        GCLAssertMsg(false, "We need a shader");
+    }
+
 }

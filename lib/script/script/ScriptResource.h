@@ -33,6 +33,7 @@ public:
 	ScriptResource(const char *scriptFileName);
 	~ScriptResource();
     void ExecuteFunction(const char *functionName) const;
+    const std::string &GetFileName() const { return mFilename; }
 private:
 	ScriptResource() {}
     std::string mFilename;

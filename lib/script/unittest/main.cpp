@@ -24,6 +24,7 @@
 #include "ScriptTest.h"
 #include "ScriptResourceTest.h"
 #include "ExposeFunctionTest.h"
+#include "ConfigLuaTest.h"
 
 int main(int argc, char ** argv)
 {
@@ -32,6 +33,7 @@ int main(int argc, char ** argv)
 		ScriptTest::Test();
         ScriptResourceTest::Test();
         ExposeFunctionTest::Test();
+        ConfigLuaTest::Test();
 		
 	SUITE_TERMINATE
 	return 0;

@@ -48,3 +48,17 @@ void ScriptResourceManager::Free( Resource * resource )
 {
 	delete resource;
 }
+
+void ScriptResourceManager::ExposeModule(const char *libName, scriptFunction constructor)  const
+{
+    LuaState &tempState = *mLuaState;
+    luaL_requiref(tempState, libName, constructor, 1);
+    lua_pop(tempState, 1);
+}
+void ScriptResourceManager::ExposeFunction(const char *funcName, scriptFunction func) const
+{
+    const luaL_Reg f[] = {{funcName, func}, {NULL, NULL}};
+    lua_pushglobaltable(*mLuaState);
+    luaL_setfuncs(*mLuaState, f, 0);
+    lua_pop(*mLuaState, 1);
+}

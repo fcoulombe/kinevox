@@ -23,6 +23,7 @@
 #include "LuaTest.h"
 #include "ScriptTest.h"
 #include "ScriptResourceTest.h"
+#include "ExposeFunctionTest.h"
 
 int main(int argc, char ** argv)
 {
@@ -30,6 +31,7 @@ int main(int argc, char ** argv)
         LuaTest::Test();
 		ScriptTest::Test();
         ScriptResourceTest::Test();
+        ExposeFunctionTest::Test();
 		
 	SUITE_TERMINATE
 	return 0;

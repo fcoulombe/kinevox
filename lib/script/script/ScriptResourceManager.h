@@ -26,9 +26,12 @@
 #include <gcl/ResourceManager.h>
 #include "script/ScriptResource.h"
 
+struct lua_State;
 namespace GCL
 {
+  struct ExposedLib;
   class LuaState;
+  typedef int (*scriptFunction) (lua_State *L);
   class ScriptResourceManager : public ResourceManager
   {
   public:
@@ -48,6 +51,8 @@ namespace GCL
     Resource *Allocate(const char *filename);
     void Free(Resource * /*resource*/);
 
+    void ExposeModule(const char *libName, scriptFunction constructor) const;
+    void ExposeFunction(const char *funcName, scriptFunction func) const;
   private:
     static ScriptResourceManager *smpInstance;
     LuaState *mLuaState;

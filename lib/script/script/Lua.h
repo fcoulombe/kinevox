@@ -87,6 +87,4 @@ namespace GCL
             printf("\n");  /* end the listing */
         }
     };
-
-
 }

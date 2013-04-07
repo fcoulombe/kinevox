@@ -39,7 +39,8 @@ namespace LuaTest
             : mFilename(filename)
         {
             int s = luaL_loadfile(L, filename); //1
-            GCLAssert(s==0);
+            L.ReportLuaErrors(s);
+            GCLAssertMsg(s==0, filename);
 
 
             //create environment

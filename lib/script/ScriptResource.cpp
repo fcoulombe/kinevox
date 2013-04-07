@@ -34,7 +34,8 @@ mFilename(scriptFileName)
 {
     LuaState &L = ScriptResourceManager::Instance().GetLuaState();
     int s = luaL_loadfile(L, scriptFileName); //1
-    GCLAssert(s==0);
+    L.ReportLuaErrors(s);
+    GCLAssertMsg(s==0, scriptFileName);
     //create environment
     lua_newtable(L); //push new table on the stack 21
     lua_getglobal(L,"_G"); //put the global on the stack 321

@@ -24,7 +24,7 @@ Import('env')
 name = "script"
 incPath = [env.Dir("#/lib/"+name), env.Dir("#lib/"+name+"/lua-5.2.1/src")]
 dependencies = ['gcl']
-cflags = ['-DLUA_COMPAT_ALL'] #, '-DLUA_ANSI']
+cflags = ['-DLUA_COMPAT_ALL'] 
 disabledWarnings = ['/wd 4702', '/wd 4244', '/wd 4324', '/wd 4334', '/wd 4146', '/wd 4267']
 
 

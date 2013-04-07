@@ -22,46 +22,22 @@
 
 #pragma once
 
-#include <gcl/Assert.h>
-#include <gcl/ResourceManager.h>
-#include "script/ConfigLua.h"
-#include "script/ScriptResource.h"
-
-struct lua_State;
 namespace GCL
 {
-  class LuaState;
-  typedef int (*scriptFunction) (lua_State *L);
-  class ScriptResourceManager : public ResourceManager
-  {
-  public:
-    static void Initialize()
+    class ScriptResource;
+    class ConfigLua
     {
-      GCLAssert(smpInstance == NULL);
-      smpInstance = new ScriptResourceManager();
-    }
-    static void Terminate()
-    {
-      GCLAssert(smpInstance != NULL);
-      delete smpInstance;
-      smpInstance = NULL;
-    }
-    static ScriptResourceManager &Instance() { GCLAssert(smpInstance != NULL);return *smpInstance;}
+    public:
+        ConfigLua(const char *configLua);
+        ~ConfigLua();
+        int GetInt(const char *key) const;
 
-    Resource *Allocate(const char *filename);
-    void Free(Resource * /*resource*/);
+        float GetFloat(const char *key) const;
 
-    void ExposeModule(const char *libName, scriptFunction constructor) const;
-    void ExposeFunction(const char *funcName, scriptFunction func) const;
-  private:
-    static ScriptResourceManager *smpInstance;
-    LuaState *mLuaState;
-    LuaState &GetLuaState() { return *mLuaState; }
-    ScriptResourceManager();
-    ~ScriptResourceManager();
-    friend class ScriptResource;
-    friend class ConfigLua;
-  };
+        const char * GetString(const char *key) const;
 
+    private:
+        void GetValue(const char* key) const;
+        const ScriptResource *mResource;
+    };
 }
-

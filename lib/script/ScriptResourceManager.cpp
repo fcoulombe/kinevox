@@ -18,23 +18,47 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */#include <iostream>
+ */
 
-#include "LuaTest.h"
-#include "ScriptTest.h"
-#include "ScriptResourceTest.h"
-#include "ExposeFunctionTest.h"
-#include "ConfigLuaTest.h"
+#include "script/ScriptResourceManager.h"
+#include "script/Lua.h"
+#include "script/ScriptResource.h"
 
-int main(int argc, char ** argv)
+using namespace GCL;
+
+ScriptResourceManager *ScriptResourceManager::smpInstance = NULL;
+
+ScriptResourceManager::ScriptResourceManager()
 {
-	 SUITE_INIT(argc, argv)
-        LuaTest::Test();
-		ScriptTest::Test();
-        ScriptResourceTest::Test();
-        ExposeFunctionTest::Test();
-        ConfigLuaTest::Test();
-		
-	SUITE_TERMINATE
-	return 0;
+    mLuaState = new LuaState();
+}
+
+ScriptResourceManager::~ScriptResourceManager()
+{
+    delete mLuaState;
+}
+
+
+Resource * ScriptResourceManager::Allocate( const char *filename )
+{
+  return new ScriptResource(filename);
+}
+
+void ScriptResourceManager::Free( Resource * resource )
+{
+	delete resource;
+}
+
+void ScriptResourceManager::ExposeModule(const char *libName, scriptFunction constructor)  const
+{
+    LuaState &tempState = *mLuaState;
+    luaL_requiref(tempState, libName, constructor, 1);
+    lua_pop(tempState, 1);
+}
+void ScriptResourceManager::ExposeFunction(const char *funcName, scriptFunction func) const
+{
+    const luaL_Reg f[] = {{funcName, func}, {NULL, NULL}};
+    lua_pushglobaltable(*mLuaState);
+    luaL_setfuncs(*mLuaState, f, 0);
+    lua_pop(*mLuaState, 1);
 }

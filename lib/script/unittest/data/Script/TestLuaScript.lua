@@ -1,4 +1,5 @@
-print "loading script"
+bleh = 0
 function Logic()
-    io.write("Logic ",_VERSION,"!\n")
+    bleh = bleh+1
+    io.write("Logic ",bleh,"!\n")
 end

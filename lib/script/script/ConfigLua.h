@@ -18,23 +18,26 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */#include <iostream>
+ */
 
-#include "LuaTest.h"
-#include "ScriptTest.h"
-#include "ScriptResourceTest.h"
-#include "ExposeFunctionTest.h"
-#include "ConfigLuaTest.h"
+#pragma once
 
-int main(int argc, char ** argv)
+namespace GCL
 {
-	 SUITE_INIT(argc, argv)
-        LuaTest::Test();
-		ScriptTest::Test();
-        ScriptResourceTest::Test();
-        ExposeFunctionTest::Test();
-        ConfigLuaTest::Test();
-		
-	SUITE_TERMINATE
-	return 0;
+    class ScriptResource;
+    class ConfigLua
+    {
+    public:
+        ConfigLua(const char *configLua);
+        ~ConfigLua();
+        int GetInt(const char *key) const;
+
+        float GetFloat(const char *key) const;
+
+        const char * GetString(const char *key) const;
+
+    private:
+        void GetValue(const char* key) const;
+        const ScriptResource *mResource;
+    };
 }

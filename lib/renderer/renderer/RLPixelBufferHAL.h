@@ -98,7 +98,6 @@ public:
 	}
 	uint8_t *PullData()
 	{
-		rlBindBuffer(RL_PIXEL_PACK_BUFFER, mPixelBufferId);
 		const uint8_t *pixels = static_cast<const uint8_t *>(rlMapBuffer(RL_PIXEL_PACK_BUFFER, RL_READ_ONLY));
 		size_t bufferSize = mWidth*mHeight*mBytesPerPixel;
 		uint8_t *buffer = new uint8_t[bufferSize];

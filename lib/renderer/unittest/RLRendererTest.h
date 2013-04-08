@@ -41,10 +41,11 @@ void Test()
 	TEST_START
         	TextureResourceManager::Initialize();
     {
-    WinDriver winDriver("GLRendererTest");
+#if 0
+    //WinDriver winDriver("GLRendererTest");
 	RLRenderer renderer;
 
-
+    printf("bleh");
 	std::cout << "OpenGL Stats"<<std::endl;
 	std::cout << "Version: " << renderer.GetVersion()<<std::endl;
 	std::cout << "Vendor: " << renderer.GetVendor()<<std::endl;
@@ -76,39 +77,237 @@ void Test()
 
     RLTexture colorBuffer(renderer.GetViewPort().GetWidth(),renderer.GetViewPort().GetHeight());
     RLFrameBuffer frameBuffer(colorBuffer);
-    RLProgram program;
+    frameBuffer.Bind();
+    
+    RLProgram frameProgram;
     RLShader frameShader("DefaultFrameShader.txt", RL_FRAME_SHADER);
+    frameProgram.AttachShader(frameShader);
+    frameProgram.Link();
+    frameProgram.Bind();
+#if 1
+    RLProgram geomProgram;
     RLShader vertexShader("DefaultVertexShader.txt", RL_VERTEX_SHADER);
     RLShader rayShader("DefaultRayShader.txt", RL_RAY_SHADER);
-    program.AttachShader(frameShader);
-    //program.AttachShader(vertexShader);
-    //program.AttachShader(rayShader);
-    program.Link();
-    program.Bind();
+    geomProgram.AttachShader(vertexShader);
+    geomProgram.AttachShader(rayShader);
+    geomProgram.Link();
+    geomProgram.Bind();
     AttribLocations loc;
-    loc.position = program.GetAttributeLocation("InPosition");
+    loc.position = geomProgram.GetAttributeLocation("InPosition");
 
     std::vector<WorldPoint3> vertexData;
     std::vector<WorldPoint3> normalData;
     std::vector<WorldPoint2> tcoordData;
     GeomUtil::MakeMeshCube(vertexData,normalData,tcoordData,1.0);
- 
-    RLVertexBuffer<VertexP> buffer((const VertexP*)vertexData.data(), vertexData.size());
-    buffer.BindShaderLoc(loc);
-    buffer.Render();
-    
     float transformMatrix[16] = {
         1.0f, 0.0f, 0.0f, 0.0f,
         0.0f, 1.0f, 0.0f, 0.0f,
         0.0f, 0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, -3.0f, 1.0f,
     };
+
+
+    RLVertexBuffer<VertexP> buffer((const VertexP*)vertexData.data(), vertexData.size());
     rlPrimitiveParameterMatrixf(RL_PRIMITIVE, RL_PRIMITIVE_TRANSFORM_MATRIX, transformMatrix);
+    buffer.BindShaderLoc(loc);
+    buffer.Render();
+    
+#endif
+    //frameProgram.Bind();
     rlRenderFrame();
 
     colorBuffer.Save("RLColorBuffer.tga");
+#else
+    {
+        OpenRLContext context = OpenRLCreateContext(NULL, RLRenderer::errorCatcher, NULL);
+        OpenRLSetCurrentContext(context);
+        rlViewport(0,0,640,480); 
+        RLtexture mTextureId;
+        rlGenTextures(1, &mTextureId); 
+        rlBindTexture(RL_TEXTURE_2D, mTextureId);
+        rlTexImage2D(RL_TEXTURE_2D, 0, RL_RGBA,
+            640, 480, 0,RL_RGBA,
+            RL_UNSIGNED_BYTE, NULL);
+
+        RLframebuffer mainFramebuffer;
+        rlGenFramebuffers(1, &mainFramebuffer);
+        rlBindFramebuffer(RL_FRAMEBUFFER, mainFramebuffer);
+        rlFramebufferTexture2D(RL_FRAMEBUFFER, RL_COLOR_ATTACHMENT0,
+            RL_TEXTURE_2D, mTextureId, 0);
+#if 0
+        const char *shaderSource = "void main()\n"
+        "{\n"
+            "vec4 color = vec4(rl_FrameCoord.x/rl_FrameSize.x,\n"
+                "rl_FrameCoord.y/rl_FrameSize.y,\n"
+                "0.0, 1.0);\n"
+                "	if(rl_FrameCoord.x<1.0)\n"
+                "       print(rl_FrameCoord);;\n"
+            "accumulate(color);\n"
+        "}\n";
+#else
+        const char *shaderSource = "void setup()"
+        "{"
+            "rl_OutputRayCount = 1;"
+        "}"
+        "void main()"
+        "{"
+            "vec3 origin = vec3(0.0);"
+            "float frameScale = 3.0;"
+            "vec2 frameSize = rl_FrameSize.xy;"
+            "vec2 normalFramePosition = rl_FrameCoord.xy/frameSize;"
+            "vec3 viewportPosition = vec3(frameScale*(normalFramePosition - 0.5), -3.0);"
+            "createRay();"
+            "rl_OutRay.origin = origin;"
+            "rl_OutRay.direction = viewportPosition - origin;"
+            "emitRay();"
+        "}";
+#endif
+        RLshader frameShader;
+        frameShader = rlCreateShader(RL_FRAME_SHADER);
+        rlShaderSource(frameShader, 1, &shaderSource, NULL);
+        rlCompileShader(frameShader);
+        int compileStatus;
+        rlGetShaderiv(frameShader, RL_COMPILE_STATUS, &compileStatus);
+        if(compileStatus == RL_FALSE)
+        {
+            const char* log;
+            rlGetShaderString(frameShader, RL_COMPILE_LOG, &log);
+            printf("Failed to compile frame shader:\n%s\n", log);
+            exit(1);
+        }
+        RLprogram frameProgram;
+        frameProgram = rlCreateProgram();
+        rlAttachShader(frameProgram, frameShader);
+        rlLinkProgram(frameProgram);
+        int linkStatus;
+        rlGetProgramiv(frameProgram, RL_LINK_STATUS, &linkStatus);
+        if(linkStatus == RL_FALSE)
+        {
+            const char* log;
+            // Get the link errors and print them out.
+            rlGetProgramString(frameProgram, RL_LINK_LOG, &log);
+            printf("Failed to link program:\n%s\n", log);
+            exit(1);
+        }
+
+        const char* g_basicVertexShaderSource = "attribute vec3 positionAttribute;"
+        "void main()"
+        "{"
+        "    rl_Position = vec4(positionAttribute, 0.0);"
+        "}";
+        const char* g_triangleRayShaderSource = "void main()"
+        "{"
+            "vec3 color = vec3(0.8, 0.3, 0.01);"
+            "accumulate(color);"
+        "}";
+        RLshader triangleRayShader;
+        RLshader triangleVertexShader;
+        RLprogram triangleProgram;
+        triangleRayShader = rlCreateShader(RL_RAY_SHADER);
+        rlShaderSource(triangleRayShader, 1, &g_triangleRayShaderSource, NULL);
+        rlCompileShader(triangleRayShader);
+
+        rlGetShaderiv(triangleRayShader, RL_COMPILE_STATUS, &compileStatus);
+        if(compileStatus == RL_FALSE)
+        {
+            const char* log;
+            rlGetShaderString(triangleRayShader, RL_COMPILE_LOG, &log);
+            printf("Failed to compile frame shader:\n%s\n", log);
+            exit(1);
+        }
+
+        triangleVertexShader = rlCreateShader(RL_VERTEX_SHADER);
+        rlShaderSource(triangleVertexShader, 1, &g_basicVertexShaderSource, NULL);
+        rlCompileShader(triangleVertexShader);
+
+        rlGetShaderiv(triangleVertexShader, RL_COMPILE_STATUS, &compileStatus);
+        if(compileStatus == RL_FALSE)
+        {
+            const char* log;
+            rlGetShaderString(triangleVertexShader, RL_COMPILE_LOG, &log);
+            printf("Failed to compile frame shader:\n%s\n", log);
+            exit(1);
+        }
+
+        triangleProgram = rlCreateProgram();
+        rlAttachShader(triangleProgram, triangleRayShader);
+        rlAttachShader(triangleProgram, triangleVertexShader);
+        rlLinkProgram(triangleProgram);
+
+        rlGetProgramiv(triangleProgram, RL_LINK_STATUS, &linkStatus);
+        if(linkStatus == RL_FALSE)
+        {
+            const char* log;
+            // Get the link errors and print them out.
+            rlGetProgramString(triangleProgram, RL_LINK_LOG, &log);
+            printf("Failed to link program:\n%s\n", log);
+            exit(1);
+        }
+
+
+        RLprimitive trianglePrimitive;
+        rlGenPrimitives(1, &trianglePrimitive);
+        rlBindPrimitive(RL_PRIMITIVE, trianglePrimitive);
+        rlUseProgram(triangleProgram);
+
+        float vertexPositions[3*3] = {
+            0.0f, 0.0f, 0.0f,
+            1.0f, 0.0f, 0.0f,
+            1.0f, 1.0f, 0.0f,
+        };
+        RLbuffer vertexPositionsBuffer;
+        rlGenBuffers(1, &vertexPositionsBuffer);
+        rlBindBuffer(RL_ARRAY_BUFFER, vertexPositionsBuffer);
+        rlBufferData(RL_ARRAY_BUFFER, 3*3*sizeof(float), vertexPositions, RL_STATIC_DRAW);
+
+        RLint attribLocation = rlGetAttribLocation(triangleProgram, "positionAttribute");
+        rlVertexAttribBuffer(attribLocation, 3, RL_FLOAT, RL_FALSE, 0, 0);
+
+        typedef struct Vector3
+        {
+            float x;
+            float y;
+            float z;
+        } Vector3;
+        // All objects in the scene will be translated by this amount
+        // so they will be in front of the camera.
+        const Vector3 g_sceneTranslation = {0.0f, 0.0f, -3.0f};
+        float transformMatrix[16] = {
+            1.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 1.0f, 0.0f,
+            g_sceneTranslation.x, g_sceneTranslation.y, g_sceneTranslation.z, 1.0f,
+        };
+        rlPrimitiveParameterMatrixf(RL_PRIMITIVE, RL_PRIMITIVE_TRANSFORM_MATRIX, transformMatrix);
+
+        rlDrawArrays(RL_TRIANGLES, 0, 3);
+
+
+
+        //rlBindPrimitive(RL_PRIMITIVE, (RLprimitive)NULL);
+        //rlUseProgram(frameProgram);
+        //rlRenderFrame();
+        
+        RLbuffer pixelBuffer;
+        rlGenBuffers(1, &pixelBuffer);
+        rlBindBuffer(RL_PIXEL_PACK_BUFFER, pixelBuffer);
+        rlBufferData(RL_PIXEL_PACK_BUFFER,
+            640*480*4*sizeof(uint8_t),
+            0,
+            RL_STATIC_DRAW);
+
+        rlBindBuffer(RL_PIXEL_PACK_BUFFER, pixelBuffer);
+        rlBindTexture(RL_TEXTURE_2D, mTextureId);
+        rlGetTexImage(RL_TEXTURE_2D, 0, RL_RGBA, RL_UNSIGNED_BYTE, NULL);
+        uint8_t *pixels = (uint8_t*)rlMapBuffer(RL_PIXEL_PACK_BUFFER, RL_READ_ONLY);
+        PixelBuffer::SaveTga("RLColorBuffer.tga", 640,480,4,pixels);
+
+        // We no longer need access to the original pixels
+        rlUnmapBuffer(RL_PIXEL_PACK_BUFFER);
     }
-    	TextureResourceManager::Terminate();
+#endif
+    }
+    TextureResourceManager::Terminate();
 
 }
 }

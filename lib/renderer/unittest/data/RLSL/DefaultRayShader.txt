@@ -1,5 +1,5 @@
 void main()
 {
-        vec3 color = vec3(0.8, 0.3, 0.01);
+        vec4 color = vec4(0.8, 0.3, 0.01, 1.0);
         accumulate(color);
 }

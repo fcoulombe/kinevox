@@ -84,7 +84,11 @@ public:
 
 	static Matrix44 GetRLProjection();
 	static Matrix44 GetRLModelView();
-
+    static void errorCatcher(RLenum /*error*/, const void* /*privateData*/,
+        size_t /*privateSize*/, const char* message, void* /*userData*/)
+    {
+        GCLAssertMsg(false, message);
+    }
 private:
 	void Init3DState();
 
@@ -102,10 +106,6 @@ private:
 	uint32_t gl_depth_tex;
 	uint32_t gl_rgb_tex;
 
-    static void errorCatcher(RLenum /*error*/, const void* /*privateData*/,
-        size_t /*privateSize*/, const char* message, void* /*userData*/)
-    {
-        GCLAssertMsg(false, message);
-    }
+
 };
 }

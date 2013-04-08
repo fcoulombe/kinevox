@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,30 +20,10 @@
  * THE SOFTWARE.
  */
 
-#include <iostream>
-#include <sstream>
+#pragma once
 
-#include <gcl/Exception.h>
+#include <windows.h> //include windows header for some function like MessageBox, creating the window.
+#include <d3d9.h>
 
-#include "FontResourceTest.h"
-#include "EventHandlerTest.h"
-#include "SocketUDPTest.h"
-#include "TTFFontTest.h"
-#include "WinDriverTest.h"
-#include "DXWinDriverTest.h"
-
-int main(int argc, char ** argv)
-{
-	SUITE_INIT(argc, argv)
-        DXWinDriverTest::Test();
-#if 0
-        SocketUDPTest::Test();
-		FontResourceTest::Test();
-		TTFFontTest::Test();
-		WinDriverTest::Test();
-        EventHandlerTest::Test();
-#endif
-		SUITE_TERMINATE
-
-	return 0;
-}
+#pragma comment(lib, "User32.lib") 
+#pragma comment(lib, "d3d9.lib") 

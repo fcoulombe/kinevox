@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,31 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#pragma once
 
-#include <iostream>
-#include <sstream>
+#include <kinetestlib/UnitTest.h>
 
-#include <gcl/Exception.h>
+#include <windriver/DXWinDriver.h>
 
-#include "FontResourceTest.h"
-#include "EventHandlerTest.h"
-#include "SocketUDPTest.h"
-#include "TTFFontTest.h"
-#include "WinDriverTest.h"
-#include "DXWinDriverTest.h"
-
-int main(int argc, char ** argv)
+using namespace GCL;
+namespace DXWinDriverTest
 {
-	SUITE_INIT(argc, argv)
-        DXWinDriverTest::Test();
-#if 0
-        SocketUDPTest::Test();
-		FontResourceTest::Test();
-		TTFFontTest::Test();
-		WinDriverTest::Test();
-        EventHandlerTest::Test();
-#endif
-		SUITE_TERMINATE
 
-	return 0;
+void Test()
+{
+	KINEVOX_TEST_START
+
+	DXWinDriver windows("WinDriverTest");
+    KINEVOX_TEST_LOOP_START
+
+    windows.SwapBuffer();
+    KINEVOX_TEST_LOOP_END
+}
 }

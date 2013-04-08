@@ -69,7 +69,7 @@ RLRenderer::RLRenderer()
     OpenRLSetCurrentContext(context);
 
 
-	//Init3DState();
+	Init3DState();
 
 	mVersion = std::string((const char*)rlGetString(RL_VERSION)); 
 	mVendor = std::string((const char*)rlGetString(RL_VENDOR));

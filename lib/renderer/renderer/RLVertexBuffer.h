@@ -45,9 +45,9 @@ public:
         rlGenPrimitives(1, &mPrimitive);
         rlBindPrimitive(RL_PRIMITIVE, mPrimitive);
 
-		rlGenBuffers(1, &mVertexBufferId);glErrorCheck();
-		rlBindBuffer(RL_ARRAY_BUFFER, mVertexBufferId);glErrorCheck();
-		rlBufferData(RL_ARRAY_BUFFER, sizeof(VertexType)*count, (void*)vertexArray, mBufferType);glErrorCheck();
+		rlGenBuffers(1, &mVertexBufferId);
+		rlBindBuffer(RL_ARRAY_BUFFER, mVertexBufferId);
+		rlBufferData(RL_ARRAY_BUFFER, sizeof(VertexType)*count, (void*)vertexArray, mBufferType);
 	}
     void BindShaderLoc(const AttribLocations &loc)
     {
@@ -68,13 +68,13 @@ public:
 
 	~RLVertexBuffer()
 	{
-		rlDeleteBuffers(1, &mVertexBufferId);glErrorCheck();
+		rlDeleteBuffers(1, &mVertexBufferId);
 	}
 
 
 	void Render(RLenum mode = RL_TRIANGLES)
 	{
-		rlDrawArrays(mode, 0, (RLint)mVertexCount);glErrorCheck();
+		rlDrawArrays(mode, 0, (RLint)mVertexCount);
 	}
 
 	bool IsValid() const { return mVertexBufferId!=(RLbuffer)-1; }

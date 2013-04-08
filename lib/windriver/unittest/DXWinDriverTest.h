@@ -23,7 +23,7 @@
 
 #include <kinetestlib/UnitTest.h>
 
-#include <windriver/DXWinDriver.h>
+#include <windriver/WinDriver.h>
 
 using namespace GCL;
 namespace DXWinDriverTest

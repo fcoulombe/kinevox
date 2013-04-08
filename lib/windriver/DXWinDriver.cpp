@@ -19,7 +19,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
-#ifdef USE_GLFW
+#ifdef USE_WIN32
 #include "windriver/DXWinDriver.h"
 
 #include <sstream>
@@ -117,31 +117,13 @@ namespace GCL
                 DestroyWindow(hWindow); //destroy the window
                 UnregisterClass("D3DTEST",instance); //unregister our window class
                 GCLAssertMsg(false, "Failed to create the window"); //error pop-up for debug purpose
-                
             }
             ShowWindow(hWindow,SW_SHOW); //show our window
             UpdateWindow(hWindow); //update our window
             SetForegroundWindow(hWindow); //set our window on top
             SetFocus(hWindow); //set the focus on our window
 
-            D3DPRESENT_PARAMETERS d3dpp; //the presentation parameters that will be used when we will create the device
-            ZeroMemory(&d3dpp,sizeof(d3dpp)); //to be sure d3dpp is empty
-            d3dpp.Windowed = 1; //use our global windowed variable to tell if the program is windowed or not
-            d3dpp.hDeviceWindow = hWindow; //give the window handle of the window we created above
-            d3dpp.BackBufferCount = 1; //set it to only use 1 backbuffer
-            d3dpp.BackBufferWidth = width; //set the buffer to our window width
-            d3dpp.BackBufferHeight = height; //set the buffer to out window height
-            d3dpp.BackBufferFormat = D3DFMT_X8R8G8B8; //the backbuffer format
-            d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD; //SwapEffect
-            pD3D = Direct3DCreate9(D3D_SDK_VERSION); //Create the presentation parameters
-            if(FAILED(pD3D->CreateDevice(D3DADAPTER_DEFAULT,D3DDEVTYPE_HAL,hWindow,D3DCREATE_SOFTWARE_VERTEXPROCESSING,&d3dpp,&pDevice))) //create the device and check if it failed
-            {
-                GCLAssertMsg(false, "Failed to create device"); //error pop-up for debug purpose
-                if(pD3D) //check if pD3D ism't released
-                    pD3D->Release(); //release it
-                if(pDevice) //check if pDevice ism't released
-                    pDevice->Release(); //release it
-            }
+
 
             mWindowsTitle = windowsTitle;
             // glfwSetWindowTitle( windowsTitle ); 
@@ -153,18 +135,13 @@ namespace GCL
 
         ~pWinDriver()
         {
-            if(pD3D) //check if pD3D ism't released
-                pD3D->Release(); //release it
-            if(pDevice) //check if pDevice ism't released
-                pDevice->Release(); //release it
+
         }
 
         void SwapBuffer()
         {    MSG msg; //declare a MSG local variable for the GetMessage of the while loop
         if (GetMessage(&msg,NULL,0,0)) //GetMessage reffer to the wndProc() function
         {
-
-            pDevice->Present(NULL,NULL,NULL,NULL); //display your buffer on screen
             TranslateMessage(&msg); //translate the msg of the GetMessage of your while loop
             DispatchMessage(&msg); //dispath the msg of the GetMessage of your while loop
         }
@@ -191,11 +168,6 @@ namespace GCL
         Real GetDt() const { return mDt; }
 
     private:
-        IDirect3D9 *pD3D; //global variable that will be used by a couple of our function
-        IDirect3DDevice9 *pDevice; //a device that will be used for most of our function created inside *pD3D
-        //LPD3DXFONT pFont;
-
-
         std::string mWindowsTitle;
         double mPreviousFrameTime;
         size_t mFPS;

@@ -27,8 +27,9 @@ cflags = []
 dependencies = ['gcl', 'opengl', 'freetype']
 
 useSDL = False
-useGLFW = True
+useGLFW = False
 useSFML = False
+useWin32 = True
 
 if useSDL:
     dependencies.append("sdl")
@@ -39,7 +40,8 @@ elif useGLFW:
 elif useSFML:
     dependencies.append("sfml")
     cflags.append("-DUSE_SFML")
-
+elif useWin32:
+    cflags.append("-DUSE_WIN32")
 env.AppendUnique(CPPFLAGS=cflags)
 env.AppendUnique(CXXFLAGS=cflags)
 env.AppendUnique(CFLAGS=cflags)

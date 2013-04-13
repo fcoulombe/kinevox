@@ -1,0 +1,1 @@
+SET(DEPENDENCIES windriver input renderer)

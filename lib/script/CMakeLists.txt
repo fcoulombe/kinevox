@@ -1,0 +1,11 @@
+SET(ProjectName "script")
+MESSAGE("Processing... " ${ProjectName})
+ProcessDependencies(${ProjectName})
+
+include_directories(${DEP_INC} )
+include_directories(".")
+include_directories("./lua-5.2.1/src/")
+add_definitions("-DLUA_COMPAT_ALL /wd4702 /wd4244 /wd4324 /wd4334 /wd4146 /wd4267")
+file(GLOB ${ProjectName}_src "${ProjectName}/*.h" "*.cpp" "lua-5.2.1/src/*.c")
+
+add_library(${ProjectName} ${${ProjectName}_src})

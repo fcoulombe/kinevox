@@ -25,5 +25,4 @@
 #include <windows.h> //include windows header for some function like MessageBox, creating the window.
 #include <d3d9.h>
 
-#pragma comment(lib, "User32.lib") 
 #pragma comment(lib, "d3d9.lib") 

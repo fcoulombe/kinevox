@@ -30,6 +30,7 @@
 #include "GeomUtilTest.h"
 #include "GLRendererTest.h"
 #include "RLRendererTest.h"
+//#include "D3DRendererTest.h"
 #include "MaterialTest.h"
 #include "MeshTest.h"
 #include "MeshLoadingTest.h"
@@ -53,8 +54,10 @@ int main(int argc, char **argv)
 {
     std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
     SUITE_INIT(argc, argv)
-    RLRendererTest::Test();
 #if 0
+        D3DRendererTest::Test();
+    #endif
+        RLRendererTest::Test();
     GLRendererTest::Test();
     CameraTest::Test();
     ShaderTest::Test();
@@ -69,11 +72,11 @@ int main(int argc, char **argv)
     TextureAndShaderTest::Test();
 
     MaterialTest::Test();
-    SpriteTest::Test();
+    //SpriteTest::Test();
 
     Text2DTest::Test();
 
-    RenderObject2DTest::Test();
+    //RenderObject2DTest::Test();
 
     RenderObjectTest::Test();
     RenderObjectWithMaterialTest::Test();
@@ -84,7 +87,7 @@ int main(int argc, char **argv)
     MeshLoadingTest::Test();
     MeshResourceTest::Test();
     MeshTest::Test();
-#endif
+
 
     SUITE_TERMINATE
         return 0;

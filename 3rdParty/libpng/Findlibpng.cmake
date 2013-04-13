@@ -1,0 +1,19 @@
+FIND_PACKAGE(zlib)
+
+SET(PNG_ROOT "${PROJECT_SOURCE_DIR}/3rdParty/libpng/")
+FIND_PATH(
+  PNG_INCLUDE_DIR png.h
+  PATHS ${PNG_ROOT}/include)
+
+FIND_LIBRARY(
+  PNG_LIBRARY 
+  NAMES 
+    libpng15
+  PATHS
+    ${PNG_ROOT}/lib/${KINEVOX_ARCHITECTURE}
+  NO_DEFAULT_PATHS )
+
+SET(libpng_INCLUDE_DIR ${PNG_INCLUDE_DIR} ${zlib_INCLUDE_DIR})
+list(APPEND libpng_LIBS ${PNG_LIBRARY})
+list(APPEND libpng_LIBS ${zlib_LIBS} )
+#SET(libpng_LIBS ${PNG_LIBRARY} ${zlib_LIBS})

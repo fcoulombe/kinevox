@@ -54,9 +54,9 @@ public:
 	  mBufferType(RL_STATIC_DRAW)
 	  {
 		rlGenBuffers(1, &mPixelBufferId);
-		Bind();
+		BindUnPack();
 		rlBufferData(RL_PIXEL_UNPACK_BUFFER, sizeof(PixelType)*width*height, 0, RL_STREAM_DRAW);
-		UnBind();
+		UnBindUnPack();
 	  }
 
 

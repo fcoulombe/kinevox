@@ -40,11 +40,11 @@
 #   include <OpenGL/gl.h>
 #   include <OpenGL/glu.h>
 #   include <OpenGL/glext.h>
-#elif OS_LINUX
+#elif defined(OS_LINUX)
 #   include <GL/gl.h>
 #   include <GL/glu.h>
 #   include <GL/glext.h>
-#elif OS_WIN32
+#elif defined(OS_WIN32)
 #   include <windows.h>
 #   include <GL/gl.h>
 #   include <GL/glu.h>

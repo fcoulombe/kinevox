@@ -23,6 +23,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <cstdlib>
 #include <gcl/WorldUnit.h>
 
 namespace GCL

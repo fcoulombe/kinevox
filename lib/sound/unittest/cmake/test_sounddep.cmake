@@ -1,0 +1,1 @@
+SET(DEPENDENCIES sound  kinetestlib)

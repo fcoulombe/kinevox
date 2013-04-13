@@ -1,0 +1,11 @@
+#pragma once
+#define OS_@OS@
+
+#define SIZE_OF_WORD @SIZE_T_SIZE@
+#if SIZE_OF_WORD == 4
+#define USE_64BIT_PLATFORM 0
+#elif SIZE_OF_WORD == 8
+#define USE_64BIT_PLATFORM 1
+#else
+#error "the size of word is not supported"
+#endif

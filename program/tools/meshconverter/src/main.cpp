@@ -53,11 +53,13 @@ int main(int /*argc*/, char ** argv)
 	    buffer.WriteToFile(outputMeshFileName);
 #if defined(OS_WIN32)
         size_t pos = outputMeshFileName.find("data\\Mesh");
+        if (pos == std::string::npos)
+            pos = outputMeshFileName.find("data/Mesh");
 #else
 	    size_t pos = outputMeshFileName.find("data/Mesh");
 #endif
-        GCLAssert(pos != std::string::npos);
-	    const std::string outputMatFileName = outputMeshFileName.substr(0, pos)+"data/Material/" + data.mMaterialData.matName+".mat";
+        GCLAssertMsg(pos != std::string::npos, outputMeshFileName.c_str());
+	    const std::string outputMatFileName = outputMeshFileName.substr(0, pos)+"data/Material/" + data.mMaterialData.matName+".material";
 		data.mMaterialData.WriteToFile(outputMatFileName);
 		SceneLoader::Terminate();
 

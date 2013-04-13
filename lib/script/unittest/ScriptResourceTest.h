@@ -33,11 +33,11 @@ namespace ScriptResourceTest
         KINEVOX_TEST_START
         ScriptResourceManager::Initialize();
         {
-            const Resource *resource = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"TestLuaScript.luascript");
+            const Resource *resource = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"TestLuaScript.luac");
             const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
             luaResource->ExecuteFunction("Logic");
 
-            const Resource *resource2 = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"TestLuaScript.luascript");
+            const Resource *resource2 = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"TestLuaScript.luac");
             const ScriptResource *luaResource2 = static_cast<const ScriptResource*>(resource2);
             luaResource2->ExecuteFunction("Logic");
 

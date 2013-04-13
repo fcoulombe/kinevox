@@ -58,7 +58,7 @@ namespace ExposeFunctionTest
         ScriptResourceManager::Instance().ExposeModule("kinevox", luaopen_kinevoxLib);
         ScriptResourceManager::Instance().ExposeFunction("FunctionToExpose", FunctionToExposeProx);
         {
-            const Resource *resource = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"ExposeToLuaTest.luascript");
+            const Resource *resource = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"ExposeToLuaTest.luac");
             const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
 
             luaResource->ExecuteFunction("Logic");

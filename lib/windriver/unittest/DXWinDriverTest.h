@@ -33,7 +33,7 @@ void Test()
 {
 	KINEVOX_TEST_START
 
-	DXWinDriver windows("WinDriverTest");
+	WinDriver windows("WinDriverTest");
     KINEVOX_TEST_LOOP_START
 
     windows.SwapBuffer();

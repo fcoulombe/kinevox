@@ -118,7 +118,10 @@ public:
     }
 
     Real GetDt() const { return mDt; }
-
+    size_t GetWindowsHandle() const
+    {
+        GCLAssert(false && "use WinAPI");
+    }
 private:
     std::string mWindowsTitle;
     double mPreviousFrameTime;
@@ -143,6 +146,12 @@ void WinDriver::SwapBuffer()
 Real WinDriver::GetDt() const
 {
     return mpWinDriver->GetDt();
+}
+
+
+size_t WinDriver::GetWindowsHandle() const
+{
+    return 0;
 }
 }
 #endif

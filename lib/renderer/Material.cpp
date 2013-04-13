@@ -57,7 +57,7 @@ void Material::LoadMaterial(const char *filename)
 		delete mTexture;
 		mTexture=NULL;
 	}
-	const std::string fullFileName(std::string(MATERIAL_PATH) + std::string(filename) + std::string(".mat"));
+	const std::string fullFileName(std::string(MATERIAL_PATH) + std::string(filename) + std::string(".material"));
 	std::ifstream fp(fullFileName.c_str());
 	std::stringstream s;
 	s << "Failed loading the file: " << fullFileName;

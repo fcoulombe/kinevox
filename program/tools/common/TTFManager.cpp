@@ -23,7 +23,7 @@
 #include "common/TTFManager.h"
 #include <gcl/Assert.h>
 #include <gcl/PixelBuffer.h>
-#include <renderer/TextureResource.h>
+//#include <renderer/TextureResource.h>
 
 #include <iostream>
 #include <sstream>
@@ -144,7 +144,9 @@ bool TTFManager::LoadScene(const char* pFilename)
 			pFilename,
 			0,
 			&face );
+    std::cerr << pFilename << std::endl;
 	FTErrorCheck(error);
+    
 	/*error = FT_Select_CharMap(
 	            face,
 	            FT_ENCODING_NONE );

@@ -7,6 +7,7 @@ else()
 SET(KINEVOX_ARCHITECTURE "64bit")
 ENDIF()
 
+message("OS: " ${CMAKE_SYSTEM_NAME} ${CMAKE_CXX_COMPILER_ID} )
 IF(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
    SET(OS "MACOSX")
 ENDIF()
@@ -21,6 +22,9 @@ IF(${MSVC})
    SET(CMAKE_CXX_FLAGS "/FIkinevoxconf.h")
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
 ENDIF(${MSVC})
+IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU")
+	SET(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=c++0x -include ${PROJECT_BINARY_DIR}/kinevoxconf.h")
+ENDIF()
 
 
 configure_file (

@@ -1,0 +1,8 @@
+SET(ProjectName "meshconverter")
+MESSAGE("Processing... " ${ProjectName})
+ProcessDependencies(${ProjectName})
+
+include_directories(${DEP_INC})
+file(GLOB ${ProjectName}_src "src/*.cpp")
+
+Executable(${ProjectName})

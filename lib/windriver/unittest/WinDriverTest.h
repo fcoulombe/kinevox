@@ -34,6 +34,7 @@ void Test()
 	KINEVOX_TEST_START
 
 	WinDriver windows("WinDriverTest");
+    windows.GetWindowsHandle();
     KINEVOX_TEST_LOOP_START
 
     windows.SwapBuffer();

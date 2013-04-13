@@ -35,7 +35,7 @@ namespace ConfigLuaTest
         KINEVOX_TEST_START
         ScriptResourceManager::Initialize();
         {
-        ConfigLua config("data/Script/ConfigLua.luascript");
+        ConfigLua config("data/Script/ConfigLua.luac");
    
         int testInt = config.GetInt("TestInt");
         Assert_Test(testInt == 666);

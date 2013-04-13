@@ -25,9 +25,12 @@
 #include <stdint.h>
 #include <list>
 #include <gcl/Assert.h>
+#ifdef USE_GLFW
 #include <3rdparty/GLFW.h>
+#endif
 namespace GCL
 {
+    #ifdef USE_GLFW
     enum KeyNames
     {
         GCL_ESCAPE = GLFW_KEY_ESC,
@@ -38,6 +41,18 @@ namespace GCL
         GCL_PAGEUP = GLFW_KEY_PAGEUP,
         GCL_PAGEDOWN = GLFW_KEY_PAGEDOWN,
     };
+#else
+    enum KeyNames
+    {
+        GCL_ESCAPE ,
+        GCL_UP ,
+        GCL_DOWN ,
+        GCL_LEFT ,
+        GCL_RIGHT,
+        GCL_PAGEUP ,
+        GCL_PAGEDOWN ,
+    };
+#endif
 
     class KeyListener;
     typedef std::list<KeyListener*> KeyListenerList;

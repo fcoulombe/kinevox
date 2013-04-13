@@ -19,12 +19,13 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
-#ifdef USE_WIN32
-#include "windriver/DXWinDriver.h"
+#ifdef USE_WINAPI
+#include "windriver/WinDriver.h"
 
 #include <sstream>
 #include <map>
-#include <3rdparty/D3D9.h>
+#include <windows.h>
+#pragma comment(lib, "User32.lib") 
 
 #include <gcl/Assert.h>
 #include <gcl/Config.h>
@@ -81,14 +82,14 @@ namespace GCL
             mAccumulatedTime(0.0),
             mDt(0.0)
         {
-            HINSTANCE instance = GetModuleHandle(NULL);
+            mInstance = GetModuleHandle(NULL);
             WNDCLASSEX wc; //window class won't go in detail not related to this tutorial really
             wc.cbSize = sizeof(WNDCLASSEX);
             wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
             wc.lpfnWndProc = (WNDPROC)wndProc;
             wc.cbWndExtra = 0;
             wc.cbClsExtra = 0;
-            wc.hInstance = instance;
+            wc.hInstance = mInstance;
             wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
             wc.hCursor = LoadCursor(NULL, IDC_ARROW);
             wc.hbrBackground = NULL;
@@ -110,34 +111,32 @@ namespace GCL
             GCLAssertMsg(ret, "Could not register window class");
 
             AdjustWindowRectEx(&rect,WS_OVERLAPPEDWINDOW,false,WS_EX_APPWINDOW | WS_EX_WINDOWEDGE);
-            HWND hWindow = CreateWindowEx(NULL,"D3DTEST","D3D TEST",WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_OVERLAPPEDWINDOW,
-                0,0,rect.right-rect.left,rect.bottom-rect.top,NULL,NULL,instance,NULL);
-            if(!hWindow) //if the window failed to create
+            mWindowsHandle = CreateWindowEx(NULL,"D3DTEST","D3D TEST",WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_OVERLAPPEDWINDOW,
+                0,0,rect.right-rect.left,rect.bottom-rect.top,NULL,NULL,mInstance,NULL);
+            if(!mWindowsHandle) //if the window failed to create
             {
-                DestroyWindow(hWindow); //destroy the window
-                UnregisterClass("D3DTEST",instance); //unregister our window class
+                DestroyWindow(mWindowsHandle); //destroy the window
+                UnregisterClass("D3DTEST",mInstance); //unregister our window class
                 GCLAssertMsg(false, "Failed to create the window"); //error pop-up for debug purpose
             }
-            ShowWindow(hWindow,SW_SHOW); //show our window
-            UpdateWindow(hWindow); //update our window
-            SetForegroundWindow(hWindow); //set our window on top
-            SetFocus(hWindow); //set the focus on our window
-
-
+            ShowWindow(mWindowsHandle,SW_SHOW); //show our window
+            UpdateWindow(mWindowsHandle); //update our window
+            SetForegroundWindow(mWindowsHandle); //set our window on top
+            SetFocus(mWindowsHandle); //set the focus on our window
 
             mWindowsTitle = windowsTitle;
-            // glfwSetWindowTitle( windowsTitle ); 
-            //glfwSetKeyCallback( KeyCallBack );
-            //glfwSetMousePosCallback( MouseMoveCallback);
-            //glfwSetMouseButtonCallback( MouseButtonCallback);
-            //glfwSetMouseWheelCallback( MouseWheelCallback );
         }
 
         ~pWinDriver()
         {
-
+            DestroyWindow(mWindowsHandle); //destroy the window
+            UnregisterClass("D3DTEST",mInstance); //unregister our window class
         }
 
+        HWND GetWindowsHandle() const
+        {
+            return mWindowsHandle;
+        }
         void SwapBuffer()
         {    MSG msg; //declare a MSG local variable for the GetMessage of the while loop
         if (GetMessage(&msg,NULL,0,0)) //GetMessage reffer to the wndProc() function
@@ -168,29 +167,36 @@ namespace GCL
         Real GetDt() const { return mDt; }
 
     private:
+        HINSTANCE mInstance;
+        HWND mWindowsHandle;
         std::string mWindowsTitle;
         double mPreviousFrameTime;
         size_t mFPS;
         double mAccumulatedTime;
         Real mDt;
     };
-    DXWinDriver::DXWinDriver(const char *windowsTitle)
+    WinDriver::WinDriver(const char *windowsTitle)
     {
         EventManager::Initialize();
         mpWinDriver = new pWinDriver(windowsTitle);
     }
-    DXWinDriver::~DXWinDriver()
+    WinDriver::~WinDriver()
     {
         delete mpWinDriver;
         EventManager::Terminate();
     }
-    void DXWinDriver::SwapBuffer()
+    void WinDriver::SwapBuffer()
     {
         mpWinDriver->SwapBuffer();
     }
-    Real DXWinDriver::GetDt() const
+    Real WinDriver::GetDt() const
     {
         return mpWinDriver->GetDt();
+    }
+
+    size_t WinDriver::GetWindowsHandle() const
+    {
+        return (size_t)mpWinDriver->GetWindowsHandle();
     }
 }
 #endif

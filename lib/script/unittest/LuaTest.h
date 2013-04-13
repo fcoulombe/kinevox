@@ -75,7 +75,7 @@ namespace LuaTest
     class GObj
     {
     public:
-        GObj(const char *scriptName = SCRIPT_PATH"TestLuaScript.luascript")
+        GObj(const char *scriptName = SCRIPT_PATH"TestLuaScript.luac")
             : mScript(scriptName)
         {
             
@@ -94,8 +94,8 @@ namespace LuaTest
         KINEVOX_TEST_START
             std::stringstream s;
         {
-            GObj obj(SCRIPT_PATH"TestLuaScript.luascript");
-            GObj obj2(SCRIPT_PATH"TestLuaScript2.luascript");
+            GObj obj(SCRIPT_PATH"TestLuaScript.luac");
+            GObj obj2(SCRIPT_PATH"TestLuaScript2.luac");
             obj2.Logic();
             obj.Logic();
             

@@ -14,6 +14,7 @@ FIND_LIBRARY(
   NO_DEFAULT_PATHS )
 
 SET(libpng_INCLUDE_DIR ${PNG_INCLUDE_DIR} ${zlib_INCLUDE_DIR})
-list(APPEND libpng_LIBS ${PNG_LIBRARY})
 list(APPEND libpng_LIBS ${zlib_LIBS} )
+list(APPEND libpng_LIBS ${PNG_LIBRARY})
+
 #SET(libpng_LIBS ${PNG_LIBRARY} ${zlib_LIBS})

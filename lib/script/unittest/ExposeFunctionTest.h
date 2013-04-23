@@ -35,7 +35,7 @@ namespace ExposeFunctionTest
         std::cout << "exposed function: " << bleh << " " << blah << " " << str<<std::endl;
     }
 
-    int FunctionToExposeProx(lua_State *L)
+    int FunctionToExposeProx(lua_State * /*L*/)
     {
         std::cout << "we call a C func!" << std::endl;
         return 1;

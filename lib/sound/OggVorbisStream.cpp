@@ -155,7 +155,7 @@ void OggStream::Stream(ALuint buffer)
 	int  section;
 	long  result;
 
-	while(size < BUFFER_SIZE)
+	while(size < (ALsizei)BUFFER_SIZE)
 	{
 		result = ov_read(&mOggStream, data + size, BUFFER_SIZE - size, 0, 2, 1, &section);
 		ovErrorCheck(result);

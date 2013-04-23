@@ -1,4 +1,4 @@
-FIND_PACKAGE(opengl)
+FIND_PACKAGE(OpenGL)
 
 SET(glext_ROOT "${PROJECT_SOURCE_DIR}/3rdParty/opengl/")
 SET(glext_INCLUDE_DIR ${glext_ROOT}/include)

@@ -57,7 +57,9 @@ int main(int argc, char **argv)
 #if 0
         D3DRendererTest::Test();
     #endif
+#if USE_OPENRL
         RLRendererTest::Test();
+#endif
     GLRendererTest::Test();
     CameraTest::Test();
     ShaderTest::Test();

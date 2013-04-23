@@ -1,3 +1,4 @@
+IF(${WIN32})
 SET(VORBIS_ROOT "${CMAKE_CURRENT_LIST_DIR}")
 
 SET(VORBIS_INCLUDE_DIR ${VORBIS_ROOT}/include)
@@ -23,3 +24,11 @@ SET(vorbis_INCLUDE_DIR ${VORBIS_INCLUDE_DIR} )
 list(APPEND vorbis_LIBS ${VORBIS_LIBRARY})
 list(APPEND vorbis_LIBS ${VORBIS_LIBRARY2})
 #SET(vorbis_LIBS ${VORBIS_LIBRARY} ${VORBIS_LIBRARY2} )
+ELSE()
+        #FIND_PACKAGE(glfw)
+        SET(vorbis_INCLUDE_DIR "")
+	list(APPEND vorbis_LIBS "vorbisfile")
+        list(APPEND vorbis_LIBS "vorbis")
+ 	list(APPEND vorbis_LIBS "m")
+ENDIF()
+

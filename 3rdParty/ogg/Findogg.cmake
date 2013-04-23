@@ -1,3 +1,4 @@
+IF(${WIN32})
 SET(OGG_ROOT "${CMAKE_CURRENT_LIST_DIR}")
 
 SET(OGG_INCLUDE_DIR ${OGG_ROOT}/include)
@@ -12,3 +13,9 @@ FIND_LIBRARY(
 SET(ogg_INCLUDE_DIR ${OGG_INCLUDE_DIR} )
 list(APPEND ogg_LIBS ${OGG_LIBRARY} )
 #SET(ogg_LIBS ${OGG_LIBRARY} )
+ELSE()
+        #FIND_PACKAGE(glfw)
+        SET(ogg_INCLUDE_DIR "")
+        list(APPEND ogg_LIBS "ogg")
+ENDIF()
+

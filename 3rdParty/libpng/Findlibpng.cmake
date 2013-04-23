@@ -1,3 +1,4 @@
+IF(${WIN32})
 FIND_PACKAGE(zlib)
 
 SET(PNG_ROOT "${PROJECT_SOURCE_DIR}/3rdParty/libpng/")
@@ -17,3 +18,11 @@ SET(libpng_INCLUDE_DIR ${PNG_INCLUDE_DIR} ${zlib_INCLUDE_DIR})
 list(APPEND libpng_LIBS ${PNG_LIBRARY})
 list(APPEND libpng_LIBS ${zlib_LIBS} )
 #SET(libpng_LIBS ${PNG_LIBRARY} ${zlib_LIBS})
+
+ELSE()
+FIND_PACKAGE(PNG)
+SET(libpng_INCLUDE_DIR ${PNG_INCLUDE_DIR})
+list(APPEND libpng_LIBS ${PNG_LIBRARY})
+
+ENDIF()
+

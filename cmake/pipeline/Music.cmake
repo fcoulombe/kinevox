@@ -9,7 +9,7 @@ foreach(src ${musicFiles})
 	get_filename_component(SrcExt ${src} EXT)
 	string(REPLACE ${SrcExt} ".ogg" DstFile ${src})
 	string(REPLACE ${dataPath} ${OUT_MUSIC_DIR} DstFile ${DstFile})
-	message(${LAME_EXE} --decode ${src} | ${OGGENC_EXE} -o ${DstFile})
+	#message(${LAME_EXE} --decode ${src} | ${OGGENC_EXE} -o ${DstFile})
 	IF(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
 		add_custom_command(
 			OUTPUT ${DstFile}

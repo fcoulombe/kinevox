@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 #pragma once
-
+#if USE_OPENRL
 #include <kinetestlib/UnitTest.h>
 #include <renderer/RLRenderer.h>
 #include <renderer/RLTexture.h>
@@ -311,3 +311,4 @@ void Test()
 
 }
 }
+#endif

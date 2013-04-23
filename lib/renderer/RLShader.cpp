@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#if USE_OPENRL
 #include "renderer/RLShader.h"
 #include <gcl/Exception.h>
 #include <gcl/File.h>
@@ -95,3 +96,4 @@ RLshader RLShader::CompileShader(const char *shaderSrc, RLenum type)
 
 	return shader;
 }
+#endif

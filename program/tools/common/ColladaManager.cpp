@@ -98,13 +98,13 @@ public:
     /** Deletes the entire scene.
     @param errorMessage A message containing informations about the error that occurred.
     */
-    void cancel(const std::string & errorMessage);;
+    void cancel(const std::string & errorMessage);
 
     /** Prepare to receive data.*/
-    void start();;
+    void start();
 
     /** Remove all objects that don't have an object. Deletes unused visual scenes.*/
-    void finish();;
+    void finish();
 
     /** When this method is called, the writer must write the global document asset.
     @return The writer should return true, if writing succeeded, false otherwise.*/

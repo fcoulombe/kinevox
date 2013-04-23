@@ -87,7 +87,7 @@ void TTFFont::BlitText(PixelBuffer &buffer, const char * text, size_t /*x*/, siz
             buffer.mPixels[i*3] = fColor.r;
             buffer.mPixels[i*3+1] = fColor.g;
             buffer.mPixels[i*3+2] = fColor.b;
-			//*(SDL_Color*)(&(buffer.mPixels[i*3])) = fColor;
+			// *(SDL_Color*)(&(buffer.mPixels[i*3])) = fColor;
         }
 	}*/
 	buffer.mHeight = fontSurface->h;

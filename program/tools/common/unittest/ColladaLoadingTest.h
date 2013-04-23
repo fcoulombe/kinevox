@@ -36,6 +36,7 @@ void Test()
 
     ColladaManager::LoadScene("datamisc/ExampleMesh.dae");
     ToolMeshData &data = ColladaManager::GetMeshData();
+    (void)data;
     ColladaManager::LoadScene("datamisc/World1.dae");
     ToolNodeData &nodeData = ColladaManager::GetNodeData();
     Assert_Test(nodeData.mName == "World1");

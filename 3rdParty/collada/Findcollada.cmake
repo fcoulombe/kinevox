@@ -32,7 +32,7 @@ ELSE()
 
 FIND_PACKAGE(LibXml2)
 
-SET(COLLADA_ROOT "${CMAKE_CURRENT_LIST_DIR}../opencollada_release/")
+SET(COLLADA_ROOT "${CMAKE_CURRENT_LIST_DIR}/../opencollada_release/")
  find_path(COLLADA_BASE_INCLUDE_DIR COLLADABU.h
  PATHS
   ${COLLADA_ROOT}/include/COLLADABaseUtils

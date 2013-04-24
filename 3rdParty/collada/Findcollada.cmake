@@ -34,14 +34,17 @@ FIND_PACKAGE(LibXml2)
 
 SET(COLLADA_ROOT "${CMAKE_CURRENT_LIST_DIR}../opencollada_release/")
  find_path(COLLADA_BASE_INCLUDE_DIR COLLADABU.h
+ PATHS
   ${COLLADA_ROOT}/include/COLLADABaseUtils
   /usr/local/include/opencollada/COLLADABaseUtils
   )
   find_path(COLLADA_FRAMEWORK_INCLUDE_DIR COLLADAFW.h
+  PATHS
   ${COLLADA_ROOT}/include/COLLADAFramework
   /usr/local/include/opencollada/COLLADAFramework
   )
   find_path(COLLADA_SAXFRAMEWORKLOADER_INCLUDE_DIR COLLADASaxFWLLoader.h
+  PATHS
   ${COLLADA_ROOT}/include/COLLADASaxFrameworkLoader
   /usr/local/include/opencollada/COLLADASaxFrameworkLoader
   )

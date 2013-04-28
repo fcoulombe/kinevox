@@ -23,9 +23,8 @@
 #pragma once
 #include <gcl/Macro.h>
 
-#define TEXTURE_INCLUDE GET_GFX_INCLUDE(Texture.h)
-#define ITexture GET_GFX_CLASS(Texture)
-#include TEXTURE_INCLUDE
+#include "rendererconf.h"
+#include GFXAPI_Texture_H
 
 
 namespace GCL

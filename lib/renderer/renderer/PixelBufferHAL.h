@@ -21,9 +21,9 @@
  */
 
 #pragma once
-#define PBO_INCLUDE GET_GFX_INCLUDE(PixelBufferHAL.h)
-#define IPixelBufferHAL GET_GFX_CLASS(PixelBufferHAL)
-#include PBO_INCLUDE
+
+#include "rendererconf.h"
+#include GFXAPI_PixelBufferHAL_H
 
 #include <gcl/PixelBuffer.h>
 

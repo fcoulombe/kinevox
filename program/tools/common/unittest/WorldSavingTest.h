@@ -59,6 +59,7 @@ void Test()
         testData.mSubMeshList.push_back(subMeshTestData);
 
 		ToolMeshData *testData2 = reinterpret_cast<ToolMeshData*>(buffer.GetBuffer());
+		(void)testData2;
 #if 0  
         s<< testData.mSubMeshList.size() << " == " << testData2->mSubMeshList.size() << std::endl;
         AssertMsg_Test(testData.mSubMeshList.size()  == testData2->mSubMeshList.size(), s.str().c_str());

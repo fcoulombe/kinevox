@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#if USE_OPENRL
 #include "renderer/RLFrameBuffer.h"
 
 #include <sstream>
@@ -74,3 +75,4 @@ RLFrameBuffer::RLFrameBuffer(const RLTexture & texture/*, const RenderBuffer & d
 
 	rlBindFramebuffer(RL_FRAMEBUFFER, 0);
 }
+#endif

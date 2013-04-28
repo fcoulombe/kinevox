@@ -47,17 +47,17 @@ void Text2D::Render()
     Real halfHeight = (heightRatio/2.0)*mScale.y;
 
     VertexPT square[4];
-    square[0].position = Point3<MeshReal>(halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
-    square[0].textureCoordinate = Point2<MeshReal>(bottomTextureCoord.x, topTextureCoord.y);
+    square[0].position = Point3<MeshReal>(MeshReal(halfWidth+mPosition.x), MeshReal(-halfHeight+mPosition.y), MeshReal(0.0));
+    square[0].textureCoordinate = Point2<MeshReal>(MeshReal(bottomTextureCoord.x), MeshReal(topTextureCoord.y));
 
-    square[1].position =Point3<MeshReal>(-halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
-    square[1].textureCoordinate = Point2<MeshReal>(topTextureCoord.x, topTextureCoord.y);
+    square[1].position =Point3<MeshReal>(MeshReal(-halfWidth+mPosition.x), MeshReal(-halfHeight+mPosition.y), MeshReal(0.0));
+    square[1].textureCoordinate = Point2<MeshReal>(MeshReal(topTextureCoord.x), MeshReal(topTextureCoord.y));
 
-    square[2].position = Point3<MeshReal>(halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
-    square[2].textureCoordinate = Point2<MeshReal>(bottomTextureCoord.x, bottomTextureCoord.y);
+    square[2].position = Point3<MeshReal>(MeshReal(halfWidth+mPosition.x), MeshReal(halfHeight+mPosition.y), MeshReal(0.0));
+    square[2].textureCoordinate = Point2<MeshReal>(MeshReal(bottomTextureCoord.x), MeshReal(bottomTextureCoord.y));
 
-    square[3].position = Point3<MeshReal>(-halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
-    square[3].textureCoordinate = Point2<MeshReal>(topTextureCoord.x, bottomTextureCoord.y);
+    square[3].position = Point3<MeshReal>(MeshReal(-halfWidth+mPosition.x), MeshReal(halfHeight+mPosition.y), MeshReal(0.0));
+    square[3].textureCoordinate = Point2<MeshReal>(MeshReal(topTextureCoord.x), MeshReal(bottomTextureCoord.y));
     VertexBuffer<VertexPT> buffer(square, 4);
     buffer.PreRender();
     buffer.Render(GL_TRIANGLE_STRIP);

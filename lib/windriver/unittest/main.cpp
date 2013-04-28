@@ -35,14 +35,12 @@
 int main(int argc, char ** argv)
 {
 	SUITE_INIT(argc, argv)
-        DXWinDriverTest::Test();
-#if 0
+        //DXWinDriverTest::Test();
         SocketUDPTest::Test();
 		FontResourceTest::Test();
 		TTFFontTest::Test();
 		WinDriverTest::Test();
         EventHandlerTest::Test();
-#endif
 		SUITE_TERMINATE
 
 	return 0;

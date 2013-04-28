@@ -1,6 +1,5 @@
 SET(DepName "windriver")
 ProcessDependencies(${DepName})
-include(winapi)
 SET(windriver_ROOT ${CMAKE_CURRENT_LIST_DIR}/../)
 SET(windriver_INCLUDE_DIR ${windriver_ROOT})
 

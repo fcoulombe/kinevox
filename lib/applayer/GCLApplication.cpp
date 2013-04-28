@@ -29,7 +29,7 @@
 #include "applayer/GCLText2D.h"
 #include <gcl/Assert.h>
 #include <input/Input.h>
-#include <renderer/GLRenderer.h>
+#include <renderer/Renderer.h>
 #include <renderer/MeshResourceManager.h>
 #include <renderer/TextureResourceManager.h>
 #include <windriver/FontResourceManager.h>
@@ -38,7 +38,7 @@
 using namespace GCL;
 
 GCLWorld *GCLApplication::mCurrentWorld=NULL;
-GLRenderer *GCLApplication::mRenderer = NULL;
+Renderer *GCLApplication::mRenderer = NULL;
 WinDriver *GCLApplication::mWinDriver = NULL;
 RenderObjectList GCLApplication::mRenderObjectList;
 RenderObject2DList GCLApplication::mRenderObject2DList;
@@ -52,7 +52,7 @@ Text2DList GCLApplication::mText2DList;
 	MeshResourceManager::Initialize();
 	GCLAssert(mRenderer == NULL);
     mWinDriver = new WinDriver(windowsTitle);
-	mRenderer = new GLRenderer();
+	mRenderer = new Renderer(mWinDriver->GetWindowsHandle());
 }
 /*static */void GCLApplication::Terminate()
 {

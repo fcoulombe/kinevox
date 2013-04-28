@@ -26,8 +26,6 @@
 #include <gcl/Assert.h>
 #include <gcl/Math.h>
 
-#include "renderer/GLRenderer.h"
-
 using namespace GCL;
 
 

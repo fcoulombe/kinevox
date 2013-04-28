@@ -26,7 +26,7 @@
 #include <kinetestlib/UnitTest.h>
 
 #include <renderer/Camera.h>
-#include <renderer/GLRenderer.h>
+#include <renderer/Renderer.h>
 #include <windriver/WinDriver.h>
 
 using namespace GCL;
@@ -39,7 +39,7 @@ void Test()
 	KINEVOX_TEST_START
 
     WinDriver winDriver("CameraTest");
-	GLRenderer renderer;
+	Renderer renderer(winDriver.GetWindowsHandle());
 
 	Camera camera;
 	camera.Update();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,48 +21,45 @@
  */
 
 #pragma once
-#include <3rdparty/OpenGL.h>
 #include <gcl/Macro.h>
-#include "renderer/PixelBufferHAL.h"
+
+#define TEXTURE_INCLUDE GET_GFX_INCLUDE(Texture.h)
+#define ITexture GET_GFX_CLASS(Texture)
+#include TEXTURE_INCLUDE
+
 
 namespace GCL
 {
+class TextureResource;
+class PixelBuffer;
 
-
-class GLTexture
+class Texture
 {
 public:
-	GLTexture(const PixelBuffer &imageData)
-	: mTextureId((GLuint)-1),
-	  mTextureUnit((GLuint)0)
-	{
-        Initialize(imageData);
-    }
-	~GLTexture();
-	void Bind() const
-	{
-		//std::cout << "Binding Texture: " <<mTextureId << std::endl;
-		GCLAssert(IsValid());
-		glBindTexture(GL_TEXTURE_2D, mTextureId);  glErrorCheck();
-		//mPBO->Bind();
-	}
+	Texture(const PixelBuffer &buffer);
+	Texture(const char *filename);
+	Texture(size_t width, size_t height, size_t bypesPerPixel = 4);
+	~Texture();
+	bool LoadTexture(const char *filename);
 
-	size_t GetWidth() const { return mPBO->mWidth; }
-	size_t GetHeight() const { return mPBO->mHeight; }
-    size_t GetBytesPerPixel() const { return mPBO->mBytesPerPixel; }
-	void Initialize(const PixelBuffer &imageData);
-	bool IsValid() const { return (int)mTextureId!=-1; }
+	void Save(const char *filename);
 
-    const uint8_t *GetTextureFromVRAM() const;
-    const uint8_t *GetPixelBufferFromVRAM() const;
 
-    uint32_t GetTextureUnit() const { return mTextureUnit; }
-    uint32_t GetTextureId() const { return mTextureId; }
+	void Bind() const { mPimpl->Bind(); }
+	bool IsValid() const { return mPimpl->IsValid(); }
+	size_t GetWidth() const { return mPimpl->GetWidth(); }
+	size_t GetHeight() const { return mPimpl->GetHeight(); }
+    size_t GetBytesPerPixel() const { return mPimpl->GetBytesPerPixel(); }
+
+
+    const uint8_t *GetTextureFromVRAM() const { return mPimpl->GetTextureFromVRAM(); }
+    const uint8_t *GetPixelBufferFromVRAM() const { return mPimpl->GetPixelBufferFromVRAM(); }
 private:
-	GLuint mTextureId;
-	GLuint mTextureUnit;
-	PixelBufferHAL *mPBO;
+    const ITexture &GetImpl() const { return *mPimpl; }
+	ITexture *mPimpl;
+    friend class FrameBuffer;
+    friend class Shader;
+	const TextureResource *mTextureResource;
 };
-
 
 }

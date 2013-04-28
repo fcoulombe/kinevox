@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,35 +20,11 @@
  * THE SOFTWARE.
  */
 
-#pragma once
-#include <3rdparty/OpenGL.h>
+#include "renderer/Shader.h"
+#include <gcl/Exception.h>
+#include <gcl/Matrix44.h>
 
-namespace GCL
-{
-class Matrix44;
-class GLTexture;
-  class GLShader
-  {
-  public:
-	GLShader();
+#include "renderer/ShaderAttributeDefaultLocations.h"
+#include "renderer/Texture.h"
 
-    ~GLShader();
-    void Bind();
-    bool IsValid() const { return mIsValid; }
-
-    void SetTextureSampler(const GLTexture &sampler);
-    void SetProjectionMatrix(const Matrix44 &m);
-    void SetModelViewMatrix(const Matrix44 &m);
-    void GetUniform(const char *unformName, Matrix44 &m44) const;
-    void GetUniform(const char *unformName, int &ret) const;
-    int GetAttributeLocation(const char *attributeName) const;
-
-    static void ResetDefault();
-  private:
-    void PrintInfoLog(GLuint );
-    GLuint CompileShader(const char *shaderSrc, GLenum type);
-
-    GLuint mProgramObject;
-    bool mIsValid;
-  };
-}
+using namespace GCL;

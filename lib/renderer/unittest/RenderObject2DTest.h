@@ -44,7 +44,7 @@ void Test()
 	TextureResourceManager::Initialize();
 	{
 		WinDriver winDriver("RenderObject2DTest");
-		GLRenderer renderer;
+		Renderer renderer(winDriver.GetWindowsHandle());
 		MyRenderObject2D obj;
 		RenderObject2DList objList;
 		objList.push_back(&obj);

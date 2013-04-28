@@ -9,3 +9,24 @@
 #else
 #error "the size of word is not supported"
 #endif
+
+#define ENABLE_GLEW @IS_GLEW_ENABLED@
+#define ENABLE_FIX_PIPELINE @IS_FIX_PIPELINE_ENABLED@
+#cmakedefine ES1
+#cmakedefine ES2
+#cmakedefine ES3
+#cmakedefine USE_WINAPI
+#cmakedefine USE_GLFW
+
+#define GFXAPI_NAME @GFXAPI_NAME@
+//this is a weird thing.
+//basically I am trying to concatenate strings for an include statements and this is what needs to happen for it to work
+#define stringify(x) #x
+#define CONCAT_INCLUDE2(a, b) stringify(renderer/ ## a ## / ## a ## b)
+#define CONCAT_INCLUDE(a, b) CONCAT_INCLUDE2(a, b)
+#define GET_GFX_INCLUDE( b) CONCAT_INCLUDE(GFXAPI_NAME, b)
+
+//same goes for class name concatenation
+#define GET_GFX_CLASSNAME2(a,b) a ## b
+#define GET_GFX_CLASSNAME(a,b) GET_GFX_CLASSNAME2(a,b)
+#define GET_GFX_CLASS(a) GET_GFX_CLASSNAME(GFXAPI_NAME, a)

@@ -44,7 +44,7 @@ void Test()
 	TextureResourceManager::Initialize();
 	FontResourceManager::Initialize();
 	WinDriver winDriver("TextureTest");
-	GLRenderer renderer;
+	Renderer renderer(winDriver.GetWindowsHandle());
 	std::stringstream s;
 	//png
 	{

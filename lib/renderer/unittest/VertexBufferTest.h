@@ -32,7 +32,7 @@ void Test()
 {
 	TEST_START
 	WinDriver winDriver("VertexBufferTest");
-	GLRenderer renderer;
+	Renderer renderer(winDriver.GetWindowsHandle());
 
 	Shader shader;
 	shader.Bind();

@@ -29,7 +29,7 @@
 namespace GCL
 {
 class Camera;
-class GLRenderer;
+class Renderer;
 class GCLRenderObject;
 class GCLRenderObject2D;
 class Text2D;
@@ -50,7 +50,7 @@ public:
 
 	GCLTEST_EXPORT static bool IsRegistered(const GCLRenderObject &obj);
 
-	GCLEXPORT static GLRenderer *GetRenderer() { return mRenderer; }
+	GCLEXPORT static Renderer *GetRenderer() { return mRenderer; }
     GCLEXPORT static WinDriver *GetWinDriver() { return mWinDriver; }
 	GCLEXPORT static void RegisterCustomRenderObject(RenderObject* newRenderObject);
 
@@ -74,7 +74,7 @@ private:
     static void RegisterWorld(GCLWorld* currentWorld);
     static void ReleaseWorld(GCLWorld* shouldBeTheSameWorldAsTheCurrent);
 
-	static GLRenderer *mRenderer;
+	static Renderer *mRenderer;
     static WinDriver *mWinDriver;
 
     static GCLWorld *mCurrentWorld;

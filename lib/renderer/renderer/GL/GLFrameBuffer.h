@@ -25,13 +25,13 @@
 
 namespace GCL
 {
-class Texture;
-class RenderBuffer;
-class FrameBuffer
+class GLTexture;
+class GLRenderBuffer;
+class GLFrameBuffer 
 {
 public:
-	FrameBuffer(const Texture &texture, const RenderBuffer &depthBuffer);
-	~FrameBuffer()
+	GLFrameBuffer(const GLTexture &texture, const GLRenderBuffer &depthBuffer);
+	~GLFrameBuffer()
 	{
 		glDeleteFramebuffers(1, &mFrameBufferId); glErrorCheck();
 	}
@@ -41,8 +41,6 @@ public:
 	}
 
 	bool IsValid() const { return (int)mFrameBufferId!=-1; }
-
-	void Save(const char * /*filename*/) { GCLAssert(false && "TBD"); }
 
 	static void ResetDefault()
 	{

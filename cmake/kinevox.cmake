@@ -28,6 +28,8 @@ macro(ProcessDependencies projName)
 	foreach(dep ${DEPENDENCIES})
 		FIND_PACKAGE( ${dep} MODULE REQUIRED)
 		SET(DEP_INC ${DEP_INC} ${${dep}_INCLUDE_DIR})
+		SET(DEP_DLL ${DEP_DLL} ${${dep}_DLL})
+		
 		FOREACH( d ${${dep}_LIBS} )
 			IF(${d} STREQUAL "debug" OR ${d} STREQUAL "optimized")
 				SET(DebugOptimized ${d})
@@ -46,12 +48,14 @@ macro(ProcessDependencies projName)
 		#SET(DEP_LIBS ${DEP_LIBS} ${${dep}_LIBS})
 	endforeach()
 
-	
 	list(REMOVE_DUPLICATES DEP_INC)
+	
 endmacro()
 
 macro(Executable ProjectName)
+	INCLUDE(DLL)
 	add_executable(${ProjectName} ${${ProjectName}_src} ${DATA_DEP})
+	 #list(REVERSE DEP_LIBS)
 	target_link_libraries( ${ProjectName} ${DEP_LIBS})
 endmacro()
 

@@ -49,7 +49,7 @@ void Test()
 	TextureResourceManager::Initialize();
 	{
 		WinDriver winDriver("RenderObjectWithMaterialTest");
-		GLRenderer renderer;
+		Renderer renderer(winDriver.GetWindowsHandle());
 
 		MyRenderObject obj;
 		RenderObjectList objList;

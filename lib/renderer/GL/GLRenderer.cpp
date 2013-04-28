@@ -21,7 +21,7 @@
  */
 
 
-#include "renderer/GLRenderer.h"
+#include "renderer/GL/GLRenderer.h"
 
 #include <sstream>
 
@@ -29,7 +29,7 @@
 #include <gcl/Assert.h>
 #include <gcl/StringUtil.h>
 
-#include "renderer/GLRenderUtils.h"
+#include "renderer/GL/GLRenderUtils.h"
 #include "renderer/Material.h"
 #include "renderer/RenderObject.h"
 #include "renderer/RenderObject2D.h"
@@ -50,9 +50,12 @@ void GLRenderer::Init3DState()
 	glDepthFunc(GL_LESS); glErrorCheck();
 	glEnable(GL_DEPTH_TEST); glErrorCheck();
 	glDisable(GL_BLEND); glErrorCheck();
+#if ENABLE_FIX_PIPELINE
+    glShadeModel(GL_FLAT); glErrorCheck();
 	glDisable(GL_ALPHA_TEST); glErrorCheck();
+#endif
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
-	glShadeModel(GL_FLAT); glErrorCheck();
+	
 	glEnable(GL_TEXTURE_2D); glErrorCheck();
 #if !defined(ES1) && !defined(ES2)
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); glErrorCheck();
@@ -60,8 +63,10 @@ void GLRenderer::Init3DState()
 #endif
 }
 
-GLRenderer::GLRenderer()
+GLRenderer::GLRenderer(size_t windowsHandle)
 {
+    mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
+
 	mCamera=&Camera::DefaultCamera();
 	Init3DState();
 
@@ -126,13 +131,6 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 
 	const Matrix44 &projection = mCamera->GetProjection();
     const Matrix44 &modelView = mCamera->GetModelView();
-#ifdef ENABLE_FIX_PIPELINE
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrix(reinterpret_cast<const GLreal*>(&projection)); glErrorCheck();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrix(reinterpret_cast<const GLreal*>(&modelView));
-#endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
@@ -237,9 +235,9 @@ void GLRenderer::Render(const RenderObject2DList &renderObjectList)
 		glEnd ();
 		glPopMatrix();glErrorCheck();
 #else
-		glPushMatrix();glErrorCheck();
+		//glPushMatrix();glErrorCheck();
 		renderObjectList[i]->Render();
-		glPopMatrix();glErrorCheck();
+		//glPopMatrix();glErrorCheck();
 #endif
 	}
 }
@@ -274,9 +272,9 @@ void GLRenderer::Render(const Text2DList &renderObjectList)
 		glEnd ();
 		glPopMatrix();glErrorCheck();
 #else
-		glPushMatrix();glErrorCheck();
+		//glPushMatrix();glErrorCheck();
 		renderObjectList[i]->Render();
-		glPopMatrix();glErrorCheck();
+		//glPopMatrix();glErrorCheck();
 #endif
 	}
 }
@@ -358,9 +356,12 @@ void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 
 Matrix44 GLRenderer::GetGLProjection()
 {
-	Matrix44f projectionMatrix;
+    Matrix44 projectionMatrixd;
+	
+#if !defined(ES1) && !defined(ES2)
+        Matrix44f projectionMatrix;
 	glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
-	Matrix44 projectionMatrixd;
+
 	projectionMatrixd[0].x = projectionMatrix.m0.x;
 	projectionMatrixd[0].y = projectionMatrix.m0.y;
 	projectionMatrixd[0].z = projectionMatrix.m0.z;
@@ -377,13 +378,18 @@ Matrix44 GLRenderer::GetGLProjection()
 	projectionMatrixd[3].y = projectionMatrix.m3.y;
 	projectionMatrixd[3].z = projectionMatrix.m3.z;
 	projectionMatrixd[3].w = projectionMatrix.m3.w;
+#else
+    GCLAssert(false && "UNSUPPORTED");
+#endif
 	return projectionMatrixd;
 }
 Matrix44 GLRenderer::GetGLModelView()
 {
+    Matrix44 modelViewMatrixd;
+    #if !defined(ES1) && !defined(ES2)
 	Matrix44f modelViewMatrix;
 	glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&modelViewMatrix);
-	Matrix44 modelViewMatrixd;
+	
 	modelViewMatrixd[0].x = modelViewMatrix.m0.x;
 	modelViewMatrixd[0].y = modelViewMatrix.m0.y;
 	modelViewMatrixd[0].z = modelViewMatrix.m0.z;
@@ -400,6 +406,9 @@ Matrix44 GLRenderer::GetGLModelView()
 	modelViewMatrixd[3].y = modelViewMatrix.m3.y;
 	modelViewMatrixd[3].z = modelViewMatrix.m3.z;
 	modelViewMatrixd[3].w = modelViewMatrix.m3.w;
+#else
+    GCLAssert(false && "UNSUPPORTED");
+#endif
 	return modelViewMatrixd;
 }
 
@@ -408,7 +417,7 @@ void GLRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &model
 {
 	Matrix44 f = modelView*transform;
 
-#ifdef ENABLE_FIX_PIPELINE
+#if ENABLE_FIX_PIPELINE
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrix(reinterpret_cast<const GLreal*>(&projection));
 

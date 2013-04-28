@@ -19,55 +19,73 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 #pragma once
+#define PBO_INCLUDE GET_GFX_INCLUDE(PixelBufferHAL.h)
+#define IPixelBufferHAL GET_GFX_CLASS(PixelBufferHAL)
+#include PBO_INCLUDE
 
-#include <gcl/UnitTest.h>
-#include <renderer/PixelBufferHAL.h>
+#include <gcl/PixelBuffer.h>
 
-using namespace GCL;
-namespace PixelBufferHALTest
+namespace GCL
 {
-void Test();
-void Test()
+
+class PixelBufferHAL : public PixelBuffer
 {
-	TEST_START
-	WinDriver winDriver("PixelBufferHALTest");
-	Renderer renderer(winDriver.GetWindowsHandle());
-
-	Shader shader;
-	shader.Bind();
-
+public:
+	PixelBufferHAL()
+	: PixelBuffer()
 	{
-	PixelBufferHAL buffer;
-	buffer.IsValid();
-	buffer.Bind();
 	}
+	PixelBufferHAL(const PixelBuffer &buffer)
 	{
-		static const size_t BUFFER_SIZE = 64*64;
-		PixelRGB buffer[BUFFER_SIZE];
-		for (size_t i=0; i<BUFFER_SIZE; ++i)
-		{
-			buffer[i].mColor.x = uint8_t(0xffffff00^i);
-			buffer[i].mColor.y =uint8_t((0xffff00ff^i)>>8);
-			buffer[i].mColor.z =0;
-		}
-		PixelBufferHAL pb(buffer, 64, 64);
-		Assert_Test(pb.IsValid());
-		pb.Bind();
-		pb.PushData();
-		pb.UnBind();
+		mBitDepth = buffer.mBitDepth;
+		mBitsPerPixel = buffer.mBitsPerPixel;
+		mBytesPerPixel = buffer.mBytesPerPixel;
+		mHeight = buffer.mHeight;
+		mWidth = buffer.mWidth;
+		mPixels = buffer.mPixels;
 	}
-	{
-		const char *fullFileName = TEXTURE_PATH"mushroomtga.tga";
-		std::fstream fp(fullFileName, std::fstream::binary|std::fstream::in);
-		AssertMsg_Test( fp.good(), fullFileName);
 
-		PixelBufferHAL pb;
-		PixelBuffer::LoadTga(fp, pb);
-		pb.Bind();
-		pb.PushData();
-		pb.PullData();
-		PixelBuffer::SaveTga("PBOTest.tga", pb.mWidth, pb.mHeight, pb.mBytesPerPixel, pb.mPixels);
+	template<typename PixelType>
+	PixelBufferHAL(const PixelType *pixelArray, size_t width, size_t height)
+	: PixelBuffer(pixelArray, width, height)
+	  {
+		Bind();
+		mPimpl.PushData(width, height, PixelType::OffsetToNext(), 0);
+		UnBind();
+	  }
+
+
+	~PixelBufferHAL()
+	{
 	}
-}
+
+	void UnBind()
+	{
+		mPimpl.UnBind();
+	}
+	void Bind()
+	{
+		mPimpl.Bind();
+	}
+
+	void PushData()
+	{
+		mPimpl.PushData(mWidth, mHeight, mBytesPerPixel, mPixels);
+	}
+	uint8_t *PullData()
+	{
+		return mPimpl.PullData(mWidth, mHeight, mBytesPerPixel);
+	}
+	bool IsValid() const 
+    { 
+		return mPimpl.IsValid();
+    }
+
+private:
+	IPixelBufferHAL mPimpl;
+
+};
+
 }

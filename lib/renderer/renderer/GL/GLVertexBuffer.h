@@ -30,10 +30,10 @@ namespace GCL
 {
 
 template<typename VertexType>
-class VertexBuffer
+class GLVertexBuffer
 {
 public:
-	VertexBuffer(const VertexType *vertexArray, size_t count)
+	GLVertexBuffer(const VertexType *vertexArray, size_t count)
 	: mBufferType(GL_STATIC_DRAW),
 	  mVertexCount(count)
 	{
@@ -43,13 +43,13 @@ public:
 	}
 
 
-	~VertexBuffer()
+	~GLVertexBuffer()
 	{
 		glDeleteBuffers(1, &mVertexBufferId);glErrorCheck();
 	}
 	void PreRender()
 	{
-#ifdef ENABLE_FIX_PIPELINE
+#if ENABLE_FIX_PIPELINE
 		if (VertexType::GetComponentType() & ePOSITION)
 		{
 			glEnableClientState(GL_VERTEX_ARRAY);
@@ -85,16 +85,16 @@ public:
 #endif
 	}
 
-	void Render(GLenum mode = GL_TRIANGLES)
+	void Render(int mode = GL_TRIANGLES)
 	{
 		PreRender();
-		glDrawArrays(mode, 0, (GLsizei)mVertexCount);glErrorCheck();
+		glDrawArrays((GLenum)mode, 0, (GLsizei)mVertexCount);glErrorCheck();
 		PostRender();
 	}
 
 	void PostRender()
 	{
-#ifdef ENABLE_FIX_PIPELINE
+#if ENABLE_FIX_PIPELINE
 		if (VertexType::GetComponentType() & ePOSITION)
 		{
 			glDisableClientState(GL_VERTEX_ARRAY);

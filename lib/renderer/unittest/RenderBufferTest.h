@@ -60,7 +60,7 @@ void Test()
 	TextureResourceManager::Initialize();
 	{
         WinDriver winDriver("RenderBufferTest");
-		GLRenderer renderer;
+		Renderer renderer(winDriver.GetWindowsHandle());
 		size_t width = renderer.GetViewPort().GetWidth();
 		size_t height = renderer.GetViewPort().GetHeight();
 		RenderBuffer target(width, height);;
@@ -73,7 +73,7 @@ void Test()
 
 	{
         WinDriver winDriver("RenderBufferTest2");
-        GLRenderer renderer;
+        Renderer renderer(winDriver.GetWindowsHandle());
 		size_t width = renderer.GetViewPort().GetWidth();
 		size_t height = renderer.GetViewPort().GetHeight();
 		RenderBuffer target(width, height);;

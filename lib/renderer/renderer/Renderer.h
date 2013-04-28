@@ -21,36 +21,49 @@
  */
 
 #pragma once
-#include <stdint.h>
-#include <cstdlib>
-#include <vector>
 
-#include <gcl/Config.h>
-#include "renderer/ViewPort.h"
+#define RENDERER_INCLUDE GET_GFX_INCLUDE(Renderer.h)
+#define IRenderer GET_GFX_CLASS(Renderer)
+#include RENDERER_INCLUDE
 
 namespace GCL
 {
-  class RenderObject;
-  class RenderObject2D;
-  class Text2D;
-  typedef std::vector<const RenderObject*> RenderObjectList;
-  typedef std::vector<RenderObject2D*> RenderObject2DList;
-  typedef std::vector<Text2D*> Text2DList;
   class Renderer
   {
   public:
-      Renderer()
+      Renderer(size_t windowsHandle)
+  : mPimpl(windowsHandle)
       {
-          mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
       }
-    virtual ~Renderer() {}
-    virtual bool Update() =0;
-    virtual void Render(const RenderObjectList &renderObjectList) =0;
-    virtual void Render(const RenderObject2DList &renderObjectList) =0;
-    virtual void Render(const Text2DList &text2DList) =0;
-    virtual void Render(uint8_t *rgb_front, uint8_t *depth_front) =0;
-    const ViewPort &GetViewPort() const { return mViewPort; }
-  protected:
-      ViewPort mViewPort;
+    ~Renderer() {}
+    bool Update() { return mPimpl.Update();}
+	void PreRender() { mPimpl.PreRender(); }
+	void PostRender() { mPimpl.PostRender(); }
+    void Render(const RenderObjectList &renderObjectList) { mPimpl.Render(renderObjectList); }
+    void Render(const RenderObject2DList &renderObjectList) { mPimpl.Render(renderObjectList); }
+    void Render(const Text2DList &text2DList) { mPimpl.Render(text2DList); }
+    void Render(uint8_t *rgb_front, uint8_t *depth_front) {mPimpl.Render(rgb_front, depth_front); }
+    const ViewPort &GetViewPort() const { return mPimpl.GetViewPort(); }
+
+	const std::string &GetVendor() const { return mPimpl.GetVendor() ; }
+	const std::string &GetVersion() const { return mPimpl.GetVersion(); }
+	const std::string &GetRenderer() const { return mPimpl.GetRenderer(); }
+	const std::string &GetShadingLanguageVersion() const { return mPimpl.GetShadingLanguageVersion(); }
+	const std::string &GetGlewVersion() const { return mPimpl.GetGlewVersion(); }
+	const ExtensionList &GetExtensions() const { return mPimpl.GetExtensions(); }
+	bool IsExtensionSupported(const std::string &ext) const { return mPimpl.IsExtensionSupported(ext); }
+
+	void SetCamera(Camera &camera) { mPimpl.SetCamera(camera); }
+	static void SetTransform( const Matrix44 &projection,
+									const Matrix44 &modelView,
+									const Matrix44 &transform,
+									Shader *shader=NULL)
+	{
+		IRenderer::SetTransform(projection,modelView,transform,shader);
+	}
+	static Matrix44 GetGLProjection() {return IRenderer::GetGLProjection();}
+	static Matrix44 GetGLModelView() {return IRenderer::GetGLModelView();}
+  private:
+      IRenderer mPimpl;
   };
 }

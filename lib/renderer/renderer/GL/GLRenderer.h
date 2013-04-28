@@ -22,31 +22,37 @@
 
 #pragma once
 
+#include <algorithm>
 #include <cstdlib>
 #include <stdint.h>
-#include <algorithm>
 #include <string>
+#include <vector>
 
+#include <gcl/Config.h>
 #include "renderer/Camera.h"
-#include "renderer/Renderer.h"
-
+#include "renderer/ViewPort.h"
 
 namespace GCL
 {
-
-typedef std::vector<std::string> GLExtensionList;
+    class RenderObject;
+    class RenderObject2D;
+    class Text2D;
+    typedef std::vector<const RenderObject*> RenderObjectList;
+    typedef std::vector<RenderObject2D*> RenderObject2DList;
+    typedef std::vector<Text2D*> Text2DList;
+typedef std::vector<std::string> ExtensionList;
 class Shader;
-class GLRenderer : public Renderer
+class GLRenderer
 {
 public:
-	GLRenderer();
+	GLRenderer(size_t windowsHandle);
 	~GLRenderer();
 	bool Update();
 	void PreRender();
 	void PostRender();
-	virtual void Render(const RenderObjectList &renderObjectList);
-	virtual void Render(const RenderObject2DList &spriteList);
-	virtual void Render(const Text2DList &text2DList);
+	void Render(const RenderObjectList &renderObjectList);
+	void Render(const RenderObject2DList &spriteList);
+	void Render(const Text2DList &text2DList);
 	void Render(uint8_t *rgb_front, uint8_t *depth_front);
 	void RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth);
 
@@ -58,19 +64,19 @@ public:
 	};
 	RenderState mCurrentRenderState;
 
-
+    const ViewPort &GetViewPort() const { return mViewPort; }
 	const std::string &GetVendor() const { return mVendor; }
 	const std::string &GetVersion() const { return mVersion; }
 	const std::string &GetRenderer() const { return mRenderer; }
 	const std::string &GetShadingLanguageVersion() const { return mShadingLanguageVersion; }
 	const std::string &GetGlewVersion() const { return mGlewVersion; }
-	const GLExtensionList &GetExtensions() const { return mExtensions; }
+	const ExtensionList &GetExtensions() const { return mExtensions; }
 
 	bool IsExtensionSupported(const std::string &ext) const
 	{
-		GLExtensionList::const_iterator b = mExtensions.begin();
-		GLExtensionList::const_iterator e = mExtensions.end();
-		GLExtensionList::const_iterator r =  std::find(b, e, ext);
+		ExtensionList::const_iterator b = mExtensions.begin();
+		ExtensionList::const_iterator e = mExtensions.end();
+		ExtensionList::const_iterator r =  std::find(b, e, ext);
 
 		bool res = r != mExtensions.end();
 		return res;
@@ -88,7 +94,7 @@ public:
 
 private:
 	void Init3DState();
-
+    ViewPort mViewPort;
 	Camera *mCamera;
 
 	std::string mVendor,
@@ -97,7 +103,7 @@ private:
 				mShadingLanguageVersion,
 				mGlewVersion;
 
-	GLExtensionList mExtensions;
+	ExtensionList mExtensions;
 
 
 	uint32_t gl_depth_tex;

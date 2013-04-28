@@ -25,7 +25,6 @@
 #include <sstream>
 #include <map>
 #include <3rdparty/GLFW.h>
-#include <3rdparty/OpenGL.h>
 
 #include <gcl/Assert.h>
 #include <gcl/Config.h>
@@ -96,7 +95,7 @@ public:
 
     void SwapBuffer()
     {
-        glfwSwapBuffers();glErrorCheck();
+        glfwSwapBuffers();
         //calculate fps
         double currentTime = glfwGetTime();
         double dt = currentTime - mPreviousFrameTime;

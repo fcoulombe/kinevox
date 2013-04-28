@@ -59,7 +59,7 @@ void Test()
 	TextureResourceManager::Initialize();
 	{
         WinDriver winDriver("TextureAndShaderTest");
-        GLRenderer renderer;
+        Renderer renderer(winDriver.GetWindowsHandle());
 		Shader shader;
 		shader.Bind();
 

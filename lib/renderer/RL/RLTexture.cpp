@@ -34,7 +34,7 @@ using namespace GCL;
 
 
 
-static const RLenum BytesPerPixel[] =
+static const RLenum RLBytesPerPixel[] =
 {
 		RL_LUMINANCE,
 		-1,
@@ -119,8 +119,8 @@ void RLTexture::Initialize(const PixelBuffer &data )
 
 	GCLAssert(BytesPerPixel[data.mBytesPerPixel-1]<= RL_RGBA);
 
-	rlTexImage2D(RL_TEXTURE_2D, 0, BytesPerPixel[data.mBytesPerPixel-1],
-			(RLint)data.mWidth, (RLint)data.mHeight, 0,BytesPerPixel[data.mBytesPerPixel-1],
+	rlTexImage2D(RL_TEXTURE_2D, 0, RLBytesPerPixel[data.mBytesPerPixel-1],
+			(RLint)data.mWidth, (RLint)data.mHeight, 0,RLBytesPerPixel[data.mBytesPerPixel-1],
 			RL_UNSIGNED_BYTE, NULL);
 
 	mPBO = new RLPixelBufferHAL(data);
@@ -128,8 +128,8 @@ void RLTexture::Initialize(const PixelBuffer &data )
     mPBO->BindUnPack();
     mPBO->PushData();
     //push from pbo to texture
-    rlTexImage2D(RL_TEXTURE_2D, 0, BytesPerPixel[data.mBytesPerPixel-1], 
-        (RLint)data.mWidth,	(RLint)data.mHeight, 0, BytesPerPixel[data.mBytesPerPixel-1],
+    rlTexImage2D(RL_TEXTURE_2D, 0, RLBytesPerPixel[data.mBytesPerPixel-1], 
+        (RLint)data.mWidth,	(RLint)data.mHeight, 0, RLBytesPerPixel[data.mBytesPerPixel-1],
         RL_UNSIGNED_BYTE, NULL);
 
     mPBO->UnBindUnPack();

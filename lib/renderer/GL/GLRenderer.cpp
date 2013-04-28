@@ -63,7 +63,7 @@ void GLRenderer::Init3DState()
 #endif
 }
 
-GLRenderer::GLRenderer(size_t windowsHandle)
+GLRenderer::GLRenderer(size_t /*windowsHandle*/)
 {
     mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
 

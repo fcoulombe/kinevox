@@ -21,9 +21,8 @@
  */
 
 #pragma once
-#define RENDERBUFFER_INCLUDE GET_GFX_INCLUDE(RenderBuffer.h)
-#define IRenderBuffer GET_GFX_CLASS(RenderBuffer)
-#include RENDERBUFFER_INCLUDE
+#include "rendererconf.h"
+#include GFXAPI_RenderBuffer_H
 
 
 namespace GCL

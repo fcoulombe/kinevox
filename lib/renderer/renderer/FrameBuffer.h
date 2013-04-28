@@ -22,9 +22,8 @@
 
 #pragma once
 
-#define FRAMEBUFFER_INCLUDE GET_GFX_INCLUDE(FrameBuffer.h)
-#define IFrameBuffer GET_GFX_CLASS(FrameBuffer)
-#include FRAMEBUFFER_INCLUDE
+#include "rendererconf.h"
+#include GFXAPI_FrameBuffer_H
 
 namespace GCL
 {

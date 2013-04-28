@@ -58,6 +58,28 @@
 #   include <GL/gl.h>
 #   include <GL/glu.h>
 #   include <GL/glext.h>
+#   undef glGenFramebuffers
+#   define glGenFramebuffers glGenFramebuffersEXT
+#   undef glBindFramebuffer
+#   define glBindFramebuffer glBindFramebufferEXT
+#   undef glFramebufferTexture2D
+#   define glFramebufferTexture2D glFramebufferTexture2DEXT
+#   undef glFramebufferRenderbuffer
+#   define glFramebufferRenderbuffer glFramebufferRenderbufferEXT
+#   undef glCheckFramebufferStatus
+#   define glCheckFramebufferStatus glCheckFramebufferStatusEXT
+#   undef glDeleteFramebuffers
+#   define glDeleteFramebuffers glDeleteFramebuffersEXT
+#   undef glGenRenderbuffers
+#   define glGenRenderbuffers glGenRenderbuffersEXT
+#   undef glBindRenderbuffer
+#   define glBindRenderbuffer glBindRenderbufferEXT
+#   undef glRenderbufferStorage
+#   define glRenderbufferStorage glRenderbufferStorageEXT
+#   undef glDeleteRenderbuffers
+#   define glDeleteRenderbuffers glDeleteRenderbuffersEXT
+#   undef glGenerateMipmap
+#   define glGenerateMipmap glGenerateMipmapEXT
 #elif defined(OS_WIN32)
 #   include <windows.h>
 #   include <GL/gl.h>
@@ -86,26 +108,6 @@
 #   define glDeleteRenderbuffers glDeleteRenderbuffersEXT
 #   undef glGenerateMipmap 
 #   define glGenerateMipmap glGenerateMipmapEXT
-/*// function pointers for PBO Extension
-// Windows needs to get function pointers from ICD OpenGL drivers,
-// because opengl32.dll does not support extensions higher than v1.1.
-PFNGLGENBUFFERSARBPROC pglGenBuffersARB = NULL;                     // VBO Name Generation Procedure
-PFNGLBINDBUFFERARBPROC pglBindBufferARB = NULL;                     // VBO Bind Procedure
-PFNGLBUFFERDATAARBPROC pglBufferDataARB = NULL;                     // VBO Data Loading Procedure
-PFNGLBUFFERSUBDATAARBPROC pglBufferSubDataARB = NULL;               // VBO Sub Data Loading Procedure
-PFNGLDELETEBUFFERSARBPROC pglDeleteBuffersARB = NULL;               // VBO Deletion Procedure
-PFNGLGETBUFFERPARAMETERIVARBPROC pglGetBufferParameterivARB = NULL; // return various parameters of VBO
-PFNGLMAPBUFFERARBPROC pglMapBufferARB = NULL;                       // map VBO procedure
-PFNGLUNMAPBUFFERARBPROC pglUnmapBufferARB = NULL;                   // unmap VBO procedure
-#define glGenBuffersARB           pglGenBuffersARB
-#define glBindBufferARB           pglBindBufferARB
-#define glBufferDataARB           pglBufferDataARB
-#define glBufferSubDataARB        pglBufferSubDataARB
-#define glDeleteBuffersARB        pglDeleteBuffersARB
-#define glGetBufferParameterivARB pglGetBufferParameterivARB
-#define glMapBufferARB            pglMapBufferARB
-#define glUnmapBufferARB          pglUnmapBufferARB
-*/
 #else
 #   error "TBD"
 #endif

@@ -92,7 +92,7 @@ void GCL::SocketUDP::Open( uint16_t port )
 void GCL::SocketUDP::Close()
 {
 #if defined(OS_MACOSX) || defined(OS_LINUX)
-    close( mHandle );
+	shutdown( mHandle , 2);
 #elif defined(OS_WIN32)
     closesocket( mHandle );
 #else

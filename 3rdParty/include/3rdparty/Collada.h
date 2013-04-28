@@ -23,7 +23,9 @@
 #pragma once
 
 #include "3rdparty/ExternalHeader_Start.h"
-
+#if defined(__GNUC__)
+#		pragma GCC system_header
+#endif
 #include <COLLADABUURI.h>
 #include <COLLADAFWArrayPrimitiveType.h>
 #include <COLLADAFWEffect.h>

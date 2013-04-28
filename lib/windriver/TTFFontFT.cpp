@@ -374,8 +374,8 @@ void TTFFont::BlitText(PixelBuffer &buffer, const char * text, size_t fontSize, 
 {
     Point2<size_t> bufferSize = GetBufferSize(text, fontSize);
     buffer = PixelBuffer(bufferSize.x, bufferSize.y, 4);
-    for (int x = 0; x < bufferSize.x; ++x)
-        for (int y = 0; y < bufferSize.y; ++y)
+    for (size_t x = 0; x < bufferSize.x; ++x)
+        for (size_t y = 0; y < bufferSize.y; ++y)
             buffer.SetPixel(x, y, Point4<uint8_t>(0, 0, 0, 255));
    
     bool bold = false;

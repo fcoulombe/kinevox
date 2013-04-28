@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-
+#if USE_OPENRL
 #include "renderer/RLRenderer.h"
 
 #include <sstream>
@@ -403,3 +403,4 @@ void RLRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &model
     }
 
 }
+#endif

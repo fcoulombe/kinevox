@@ -48,8 +48,10 @@ macro(ProcessDependencies projName)
 		#SET(DEP_LIBS ${DEP_LIBS} ${${dep}_LIBS})
 	endforeach()
 
-	list(REMOVE_DUPLICATES DEP_INC)
-	
+	list(LENGTH DEP_INC listLen)
+	if (${listLen} GREATER 1)
+		list(REMOVE_DUPLICATES DEP_INC)
+	endif()
 endmacro()
 
 macro(Executable ProjectName)

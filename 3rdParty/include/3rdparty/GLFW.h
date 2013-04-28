@@ -22,11 +22,11 @@
 
 #pragma once
 
+#if defined(OS_WIN32)
 #include <Windows.h>
-#if ENABLE_GLEW
-#include <GL/glew.h>
 #endif
-//#include <3rdparty/OpenGL.h> //needed so that glew doesn't get included before gl.h
-//#define GLFW_DLL
+#if ENABLE_GLEW
+#	include <GL/glew.h>
+#endif
 #include <GL/glfw.h>
 

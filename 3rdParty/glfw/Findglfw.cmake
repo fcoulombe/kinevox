@@ -1,4 +1,6 @@
 FIND_PACKAGE(glew)
+
+IF(${WIN32})
 SET(GLFW_ROOT "${CMAKE_CURRENT_LIST_DIR}")
 
 SET(GLFW_INCLUDE_DIR ${GLFW_ROOT}/include)
@@ -16,3 +18,10 @@ list(APPEND glfw_LIBS ${GLFW_LIBRARY} )
 list(APPEND glfw_LIBS ${glew_LIBS} )
 
 #SET(glfw_LIBS ${GLFW_LIBRARY} )
+ELSE()
+        #FIND_PACKAGE(glfw)
+        SET(glfw_INCLUDE_DIR ""  ${glew_INCLUDE_DIR})
+        list(APPEND glfw_LIBS "glfw")
+	list(APPEND glfw_LIBS ${glew_LIBS} )
+ENDIF()
+

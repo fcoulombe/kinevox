@@ -20,6 +20,7 @@
  * THE SOFTWARE.
  */
 
+#if USE_OPENRL
 #include "renderer/RLTexture.h"
 
 #include <cstring>
@@ -181,3 +182,4 @@ void RLTexture::Save(const char *filename)
 	PixelBuffer::SaveTga(name.c_str(), GetWidth(), GetHeight(), mTextureData.bytesPerPixel,buffer);
 	delete [] buffer;
 }
+#endif

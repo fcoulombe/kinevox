@@ -40,7 +40,7 @@ ELSEIF(${ES2})
 ELSEIF(${ES3})
 	message("ES3")
 ELSE()
-	FIND_PACKAGE(opengl)
+	FIND_PACKAGE(OpenGL)
 	FIND_PACKAGE(glew)
 	
 	SET(glext_ROOT "${PROJECT_SOURCE_DIR}/3rdParty/opengl/")

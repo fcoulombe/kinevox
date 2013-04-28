@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+#if USE_OPENRL
 #include "renderer/RLProgram.h"
 #include "renderer/RLShader.h"
 #include <gcl/Exception.h>
@@ -136,3 +136,4 @@ void RLProgram::ResetDefault()
 {
 	rlUseProgram(0);
 }
+#endif

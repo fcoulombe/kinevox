@@ -1,3 +1,4 @@
+IF(${WIN32})
 SET(COLLADA_ROOT "${CMAKE_CURRENT_LIST_DIR}")
 
 SET(COLLADA_INCLUDE_DIR ${COLLADA_ROOT}/include/COLLADABaseUtils)
@@ -26,4 +27,68 @@ list(APPEND collada_LIBS ${COLLADA_LIBRARY} )
 list(APPEND collada_LIBS ${COLLADA_DEBUG_LIBRARY} )
 
 #SET(collada_LIBS ${COLLADA_LIBRARY} ${COLLADA_DEBUG_LIBRARY} )
+ELSE()
 
+
+FIND_PACKAGE(LibXml2)
+
+SET(COLLADA_ROOT "${CMAKE_CURRENT_LIST_DIR}/../opencollada_release/")
+ find_path(COLLADA_BASE_INCLUDE_DIR COLLADABU.h
+ PATHS
+  ${COLLADA_ROOT}/include/COLLADABaseUtils
+  /usr/local/include/opencollada/COLLADABaseUtils
+  )
+  find_path(COLLADA_FRAMEWORK_INCLUDE_DIR COLLADAFW.h
+  PATHS
+  ${COLLADA_ROOT}/include/COLLADAFramework
+  /usr/local/include/opencollada/COLLADAFramework
+  )
+  find_path(COLLADA_SAXFRAMEWORKLOADER_INCLUDE_DIR COLLADASaxFWLLoader.h
+  PATHS
+  ${COLLADA_ROOT}/include/COLLADASaxFrameworkLoader
+  /usr/local/include/opencollada/COLLADASaxFrameworkLoader
+  )
+
+ SET(collada_INCLUDE_DIR ${COLLADA_BASE_INCLUDE_DIR} ${COLLADA_FRAMEWORK_INCLUDE_DIR} ${COLLADA_SAXFRAMEWORKLOADER_INCLUDE_DIR} )
+ 
+ find_library(COLLADA_LIBRARY_COLLADABaseUtils 
+                NAMES "OpenCOLLADABaseUtils" 
+                HINTS ${COLLADA_ROOT}/lib/${KINEVOX_ARCHITECTURE}
+                HINTS "/usr/local/lib/opencollada")
+ find_library(COLLADA_LIBRARY_COLLADAFramework
+                NAMES "OpenCOLLADAFramework" 
+                HINTS ${COLLADA_ROOT}/lib/${KINEVOX_ARCHITECTURE}
+                HINTS "/usr/local/lib/opencollada")
+ find_library(COLLADA_LIBRARY_COLLADASaxFrameworkLoader 
+                NAMES "OpenCOLLADASaxFrameworkLoader" 
+                HINTS ${COLLADA_ROOT}/lib/${KINEVOX_ARCHITECTURE}
+                HINTS "/usr/local/lib/opencollada")
+ find_library(COLLADA_LIBRARY_GeneratedSaxParser 
+                NAMES "GeneratedSaxParser" 
+                HINTS ${COLLADA_ROOT}/lib/${KINEVOX_ARCHITECTURE}
+                HINTS "/usr/local/lib/opencollada")
+ find_library(COLLADA_LIBRARY_MathMLSolver 
+                NAMES "MathMLSolver" 
+                HINTS ${COLLADA_ROOT}/lib/${KINEVOX_ARCHITECTURE}
+                HINTS "/usr/local/lib/opencollada")
+ find_library(COLLADA_LIBRARY_UTF 
+                NAMES "UTF" 
+                HINTS ${COLLADA_ROOT}/lib/${KINEVOX_ARCHITECTURE}
+                HINTS "/usr/local/lib/opencollada")
+list(APPEND collada_LIBS ${COLLADA_LIBRARY_UTF})
+list(APPEND collada_LIBS ${COLLADA_LIBRARY_COLLADABaseUtils})
+list(APPEND collada_LIBS ${COLLADA_LIBRARY_COLLADAFramework})
+
+list(APPEND collada_LIBS "pcre")
+list(APPEND collada_LIBS ${LIBXML2_LIBRARIES})
+list(APPEND collada_LIBS ${COLLADA_LIBRARY_GeneratedSaxParser})
+list(APPEND collada_LIBS ${COLLADA_LIBRARY_MathMLSolver})
+
+list(APPEND collada_LIBS ${COLLADA_LIBRARY_COLLADASaxFrameworkLoader})
+
+
+#SET(collada_INCLUDE_DIR ${collada_INCLUDE_DIR} ${LIBXML2_INCLUDE_DIR})
+
+#pcre
+#libxml
+ENDIF()

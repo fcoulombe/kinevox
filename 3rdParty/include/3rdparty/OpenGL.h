@@ -26,16 +26,30 @@
 #if ENABLE_GLEW
 #include <GL/glew.h>
 #endif
+#if defined(ES1) || defined(ES2)
+#define IS_PBO_SUPPORTED 0
+#else
+#define IS_PBO_SUPPORTED 1
+#endif
 
-#if defined(OS_IPHONE)
-#   if defined( ES2)
-#       include <OpenGLES/ES2/gl.h>
-#       include <OpenGLES/ES2/glext.h>
-#   elif defined(ES1)
-#       include <OpenGLES/ES1/gl.h>
-#       include <OpenGLES/ES1/glext.h>
-#       define ENABLE_FIX_PIPELINE
-#   endif
+#if defined( ES2)
+#   include <GLES2/gl2.h>
+#   include <GLES2/gl2ext.h>
+#define glGenBuffersARB glGenBuffers
+#define glDeleteBuffersARB glDeleteBuffers
+
+#define glBindBufferARB glBindBuffer
+#define GL_STREAM_DRAW_ARB GL_STREAM_DRAW
+#define glMapBufferARB glMapBuffer
+#define glUnmapBufferARB glUnmapBuffer
+
+#define glClearDepth                            glClearDepthf
+#elif defined (ES3)
+#define GL_PIXEL_UNPACK_BUFFER_ARB GL_PIXEL_UNPACK_BUFFER
+#define GL_PIXEL_PACK_BUFFER_ARB GL_PIXEL_PACK_BUFFER
+#elif defined(ES1)
+#   include <GLES/gl.h>
+#   include <GLES/glext.h>
 #elif defined(OS_MACOSX) 
 #   include <OpenGL/gl.h>
 #   include <OpenGL/glu.h>
@@ -48,6 +62,7 @@
 #   include <windows.h>
 #   include <GL/gl.h>
 #   include <GL/glu.h>
+//#define GL_GLEXT_PROTOTYPES
 #   include <GL/glext.h>
 #   undef glGenFramebuffers 
 #   define glGenFramebuffers glGenFramebuffersEXT
@@ -69,10 +84,8 @@
 #   define glRenderbufferStorage glRenderbufferStorageEXT
 #   undef glDeleteRenderbuffers
 #   define glDeleteRenderbuffers glDeleteRenderbuffersEXT
-
 #   undef glGenerateMipmap 
 #   define glGenerateMipmap glGenerateMipmapEXT
-
 /*// function pointers for PBO Extension
 // Windows needs to get function pointers from ICD OpenGL drivers,
 // because opengl32.dll does not support extensions higher than v1.1.
@@ -111,7 +124,7 @@ PFNGLUNMAPBUFFERARBPROC pglUnmapBufferARB = NULL;                   // unmap VBO
 
 #ifdef ES1
 #define glClearDepth                            glClearDepthf
-#define glGenerateMipmap                        glGenerateMipmapOES
+/*#define glGenerateMipmap                        glGenerateMipmapOES
 #define glGenFramebuffers                       glGenFramebuffersOES
 #define glGenRenderbuffers                       glGenRenderbuffersOES
 #define glBindRenderbuffer                       glBindRenderbufferOES
@@ -132,7 +145,7 @@ PFNGLUNMAPBUFFERARBPROC pglUnmapBufferARB = NULL;                   // unmap VBO
 #define GL_COLOR_ATTACHMENT0         GL_COLOR_ATTACHMENT0_OES
 #define GL_FRAMEBUFFER_COMPLETE      GL_FRAMEBUFFER_COMPLETE_OES
 #define GL_DEPTH_COMPONENT GL_DEPTH_COMPONENT16_OES
-#define GL_DEPTH_ATTACHMENT GL_DEPTH_ATTACHMENT_OES
+#define GL_DEPTH_ATTACHMENT GL_DEPTH_ATTACHMENT_OES*/
 
 #endif
 
@@ -141,6 +154,34 @@ PFNGLUNMAPBUFFERARBPROC pglUnmapBufferARB = NULL;                   // unmap VBO
 #else
 #define ENABLE_SHADERS 0
 #endif
+
+
+static const GLenum BytePerPixel[] =
+{
+    GL_LUMINANCE,
+    GL_LUMINANCE_ALPHA,
+#if defined(ES1) || defined(ES2) || defined(ES3)
+    GL_RGB,
+    GL_RGBA
+#else
+    GL_RGB8,
+    GL_RGBA8
+#endif
+};
+static const GLenum BytesPerPixel[] =
+{
+    GL_LUMINANCE,
+    GL_LUMINANCE_ALPHA,
+    GL_RGB,
+    GL_RGBA,
+};
+static const GLenum GLUInternalFormat[] =
+{
+    GL_LUMINANCE,
+    GL_LUMINANCE_ALPHA,
+    GL_RGB,
+    GL_RGBA
+};
 
 #include <gcl/Assert.h>
 #include <sstream>

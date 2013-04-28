@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,55 +19,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 #pragma once
 
-#include <gcl/UnitTest.h>
-#include <renderer/PixelBufferHAL.h>
+#define VERTEXBUFFER_INCLUDE GET_GFX_INCLUDE(VertexBuffer.h)
+#define IVertexBuffer GET_GFX_CLASS(VertexBuffer)
+#include VERTEXBUFFER_INCLUDE
 
-using namespace GCL;
-namespace PixelBufferHALTest
+
+namespace GCL
 {
-void Test();
-void Test()
+
+template<typename VertexType>
+class VertexBuffer
 {
-	TEST_START
-	WinDriver winDriver("PixelBufferHALTest");
-	Renderer renderer(winDriver.GetWindowsHandle());
-
-	Shader shader;
-	shader.Bind();
-
+public:
+	VertexBuffer(const VertexType *vertexArray, size_t count)
+		: mPimpl(vertexArray, count)
 	{
-	PixelBufferHAL buffer;
-	buffer.IsValid();
-	buffer.Bind();
 	}
-	{
-		static const size_t BUFFER_SIZE = 64*64;
-		PixelRGB buffer[BUFFER_SIZE];
-		for (size_t i=0; i<BUFFER_SIZE; ++i)
-		{
-			buffer[i].mColor.x = uint8_t(0xffffff00^i);
-			buffer[i].mColor.y =uint8_t((0xffff00ff^i)>>8);
-			buffer[i].mColor.z =0;
-		}
-		PixelBufferHAL pb(buffer, 64, 64);
-		Assert_Test(pb.IsValid());
-		pb.Bind();
-		pb.PushData();
-		pb.UnBind();
-	}
-	{
-		const char *fullFileName = TEXTURE_PATH"mushroomtga.tga";
-		std::fstream fp(fullFileName, std::fstream::binary|std::fstream::in);
-		AssertMsg_Test( fp.good(), fullFileName);
 
-		PixelBufferHAL pb;
-		PixelBuffer::LoadTga(fp, pb);
-		pb.Bind();
-		pb.PushData();
-		pb.PullData();
-		PixelBuffer::SaveTga("PBOTest.tga", pb.mWidth, pb.mHeight, pb.mBytesPerPixel, pb.mPixels);
+
+	~VertexBuffer()
+	{
+
 	}
-}
+	void PreRender()
+	{
+		mPimpl.PreRender();
+	}
+
+	void Render()
+	{
+		mPimpl.Render();
+	}
+	void Render(int mode)
+	{
+		mPimpl.Render(mode);
+	}
+
+	void PostRender()
+	{
+		mPimpl.PostRender();
+	}
+
+	bool IsValid() const { return mPimpl.IsValid(); }
+
+private:
+	IVertexBuffer<VertexType> mPimpl;
+};
+
 }

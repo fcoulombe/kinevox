@@ -1,5 +1,10 @@
 cmake_minimum_required (VERSION 2.8)
 project (kinevox)
+
+SET(GFXAPI_TO_USE "OpenGLFix" CACHE STRING "library to use for graphics")
+
+SET_PROPERTY(CACHE GFXAPI_TO_USE PROPERTY STRINGS OpenGLFix OpenGL OpenGLES1 OpenGLES2 OpenGLES3 D3D) 
+
 enable_testing()
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/")
 INCLUDE(kinevoxconf)

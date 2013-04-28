@@ -1,7 +1,6 @@
 SET(ProjectName "windriver")
 MESSAGE("Processing... " ${ProjectName})
 ProcessDependencies(${ProjectName})
-include(winapi)
 include_directories(${DEP_INC})
 include_directories(".")
 

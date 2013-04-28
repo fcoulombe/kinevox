@@ -60,7 +60,7 @@ void Test()
 	{
 		std::stringstream s;
 		WinDriver winDriver("Text2dTest");
-		GLRenderer renderer;
+		Renderer renderer(winDriver.GetWindowsHandle());
 
 		TestText2D obj("HelloWorld");
 		s.str("");
@@ -92,9 +92,9 @@ void Test()
 #endif
         obj.Update();
         renderer.PreRender();
-        glPushMatrix();glErrorCheck();
+        //glPushMatrix();glErrorCheck();
         obj.Render();
-        glPopMatrix();glErrorCheck();
+        //glPopMatrix();glErrorCheck();
         renderer.PostRender();
         winDriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END

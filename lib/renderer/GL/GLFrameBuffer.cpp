@@ -20,12 +20,12 @@
  * THE SOFTWARE.
  */
 
-#include "renderer/FrameBuffer.h"
+#include "renderer/GL/GLFrameBuffer.h"
 
 #include <sstream>
 
-#include "renderer/RenderBuffer.h"
-#include "renderer/Texture.h"
+#include "renderer/GL/GLRenderBuffer.h"
+#include "renderer/GL/GLTexture.h"
 
 using namespace GCL;
 
@@ -76,7 +76,7 @@ void checkFrameBufferStatus(GLenum stat)
 }
 }
 
-FrameBuffer::FrameBuffer(const Texture & texture, const RenderBuffer & depthBuffer)
+GLFrameBuffer::GLFrameBuffer(const GLTexture & texture, const GLRenderBuffer & depthBuffer)
 : mFrameBufferId((GLuint)-1)
 {
 	GCLAssert(texture.IsValid());

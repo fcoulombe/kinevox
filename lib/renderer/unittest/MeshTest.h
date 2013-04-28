@@ -63,7 +63,7 @@ void Test()
 	MeshResourceManager::Initialize();
 
     WinDriver windriver("MeshTest");
-	GLRenderer render;
+	Renderer renderer(windriver.GetWindowsHandle());
 	std::stringstream s;
 #if 1
 	{
@@ -92,9 +92,9 @@ void Test()
         KINEVOX_TEST_LOOP_START
             rot+=0.001;
         myMesh.SetOrientation(0.0,rot,0.0);
-		render.PreRender();
-		render.Render(renderList);
-		render.PostRender();
+		renderer.PreRender();
+		renderer.Render(renderList);
+		renderer.PostRender();
         windriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END
 	}

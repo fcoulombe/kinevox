@@ -22,7 +22,7 @@
 #pragma once
 
 #include <kinetestlib/UnitTest.h>
-#include <renderer/GLRenderer.h>
+#include <renderer/Renderer.h>
 #include <windriver/WinDriver.h>
 
 using namespace GCL;
@@ -34,7 +34,7 @@ void Test()
 {
 	TEST_START
     WinDriver winDriver("GLRendererTest");
-	GLRenderer renderer;
+	Renderer renderer(winDriver.GetWindowsHandle());
 
 
 	std::cout << "OpenGL Stats"<<std::endl;
@@ -44,12 +44,12 @@ void Test()
 	std::cout << "ShadingLanguageVersion: " << renderer.GetShadingLanguageVersion()<<std::endl;
 	std::cout << "GlewVersion: " << renderer.GetGlewVersion()<<std::endl;
 
-	/*std::cout << "Extensions: " << std::endl;
+	std::cout << "Extensions: " << std::endl;
 	const std::vector<std::string> &ext = renderer.GetExtensions();
 	for (size_t i=0; i<ext.size();++i)
 	{
 		std::cout << ext[i] << std::endl;;
-	}*/
+	}
 
 #ifdef OS_IPHONE
 #   ifdef ES1
@@ -88,6 +88,7 @@ void Test()
 		AssertMsg_Test(renderer.GetViewPort().GetWidth()==Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), s.str().c_str());
 	}
 
+#if !defined(ES1) && !defined(ES2)
 	Matrix44 projection = GLRenderer::GetGLProjection();
 	//here we simulate creating a modelviewmatrix of identity.
 	//we modulate it with a transform
@@ -113,7 +114,7 @@ void Test()
 		AssertMsg_Test(modelView1 == modelView2, s.str().c_str());
 
 	}
-
+#endif
 
 #if ENABLE_GLEW
 	Assert_Test(GLEW_ARB_vertex_program);

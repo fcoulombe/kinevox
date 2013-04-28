@@ -122,7 +122,7 @@ void Test()
 
 	{
 		WinDriver winDriver("GeomUtilTest");
-		GLRenderer renderer;
+		Renderer renderer(winDriver.GetWindowsHandle());
 
         RenderObjectList objList;
 		MyCubeRenderObject cube;

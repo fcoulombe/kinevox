@@ -66,7 +66,7 @@ void Test()
 
 	{
         WinDriver winDriver("FrameBufferTest");
-		GLRenderer renderer;
+		Renderer renderer(winDriver.GetWindowsHandle());
 		size_t width = renderer.GetViewPort().GetWidth();
 		size_t height = renderer.GetViewPort().GetHeight();
 
@@ -94,7 +94,7 @@ void Test()
 
 	{
         WinDriver winDriver("FrameBufferTest2");
-		GLRenderer renderer;
+		Renderer renderer(winDriver.GetWindowsHandle());
 
 		MyRenderObject obj;
 		obj.SetPosition(0,0,-10.0);

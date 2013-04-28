@@ -22,12 +22,12 @@
 #pragma once
 
 #include <kinetestlib/UnitTest.h>
-#include <renderer/RLRenderer.h>
-#include <renderer/RLTexture.h>
-#include <renderer/RLFrameBuffer.h>
-#include <renderer/RLProgram.h>
-#include <renderer/RLShader.h>
-#include <renderer/RLVertexBuffer.h>
+#include <renderer/RL/RLRenderer.h>
+#include <renderer/RL/RLTexture.h>
+#include <renderer/RL/RLFrameBuffer.h>
+#include <renderer/RL/RLProgram.h>
+#include <renderer/RL/RLShader.h>
+#include <renderer/RL/RLVertexBuffer.h>
 #include <windriver/WinDriver.h>
 #include <renderer/TextureResourceManager.h>
 #include <renderer/GeomUtil.h>

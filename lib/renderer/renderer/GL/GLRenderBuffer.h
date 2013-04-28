@@ -26,10 +26,10 @@
 
 namespace GCL
 {
-class RenderBuffer
+class GLRenderBuffer
 {
 public:
-	RenderBuffer(size_t width, size_t height)
+	GLRenderBuffer(size_t width, size_t height)
 	: mRenderBufferId((GLuint)-1)
 	{
 		glGenRenderbuffers(1, &mRenderBufferId); glErrorCheck();
@@ -37,7 +37,7 @@ public:
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, (GLsizei)width, (GLsizei)height);glErrorCheck();
 		glBindRenderbuffer(GL_RENDERBUFFER, 0); glErrorCheck();
 	}
-	~RenderBuffer()
+	~GLRenderBuffer()
 	{
 		glDeleteRenderbuffers(1, &mRenderBufferId); glErrorCheck();
 	}
@@ -45,12 +45,8 @@ public:
 
 	bool IsValid() const { return (int)mRenderBufferId!=-1; }
 
-	void Save(const char * /*filename*/) { GCLAssert(false && "TBD"); }
-
-	static void ResetDefault() { GCLAssert(false && "TBD"); }
-
 private:
-	friend class FrameBuffer;
+	friend class GLFrameBuffer;
 	GLuint GetRenderBufferId() const  { return  mRenderBufferId; }
 	GLuint mRenderBufferId;
 };

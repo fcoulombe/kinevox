@@ -23,7 +23,7 @@
 #pragma once
 #include <3rdparty/OpenRL.h>
 #include <gcl/Macro.h>
-#include "renderer/RLPixelBufferHAL.h"
+#include "renderer/RL/RLPixelBufferHAL.h"
 
 namespace GCL
 {

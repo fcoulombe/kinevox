@@ -21,86 +21,67 @@
  */
 
 #pragma once
+
 #include <3rdparty/OpenGL.h>
-#include <gcl/PixelBuffer.h>
 
 namespace GCL
 {
 
-class PixelBufferHAL : public PixelBuffer
+class GLPixelBufferHAL
 {
 public:
-	PixelBufferHAL()
-	: PixelBuffer(),
-	  mBufferType(GL_STATIC_DRAW)
-	{
-        glGenBuffersARB(1, &mPixelBufferId);glErrorCheck();
-	}
-	PixelBufferHAL(const PixelBuffer &buffer)
+	GLPixelBufferHAL()
 	: mBufferType(GL_STATIC_DRAW)
 	{
-		mBitDepth = buffer.mBitDepth;
-		mBitsPerPixel = buffer.mBitsPerPixel;
-		mBytesPerPixel = buffer.mBytesPerPixel;
-		mHeight = buffer.mHeight;
-		mWidth = buffer.mWidth;
-		mPixels = buffer.mPixels;
-		glGenBuffersARB(1, &mPixelBufferId);glErrorCheck();
-		/*Bind();
-		glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB, mBytesPerPixel*mWidth*mHeight, 0, GL_STREAM_DRAW_ARB);glErrorCheck();
-		UnBind();*/
-
+        glGenBuffers(1, &mPixelBufferId);glErrorCheck();
 	}
 
-	template<typename PixelType>
-	PixelBufferHAL(const PixelType *pixelArray, size_t width, size_t height)
-	: PixelBuffer(pixelArray, width, height),
-	  mBufferType(GL_STATIC_DRAW)
-	  {
-		glGenBuffersARB(1, &mPixelBufferId);glErrorCheck();
-		Bind();
-		glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_ARB, sizeof(PixelType)*width*height, 0, GL_STREAM_DRAW_ARB);glErrorCheck();
-		UnBind();
-	  }
 
-
-	~PixelBufferHAL()
+	~GLPixelBufferHAL()
 	{
-		glDeleteBuffersARB(1, &mPixelBufferId);glErrorCheck();
+		glDeleteBuffers(1, &mPixelBufferId);glErrorCheck();
 	}
 
 	void UnBind()
 	{
-		glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, 0);glErrorCheck();
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, 0);glErrorCheck();
 	}
 	void Bind()
 	{
-		glBindBufferARB(GL_PIXEL_UNPACK_BUFFER_ARB, mPixelBufferId);glErrorCheck();
+		glBindBuffer(GL_PIXEL_UNPACK_BUFFER, mPixelBufferId);glErrorCheck();
 	}
 
-	void PushData()
+	void PushData(size_t width, size_t height, size_t bytesPerPixel, const uint8_t *pixels)
 	{
-		glBufferDataARB(GL_PIXEL_UNPACK_BUFFER_EXT, mBytesPerPixel*mWidth*mHeight, NULL, GL_STREAM_DRAW_ARB);glErrorCheck();
-		uint8_t * pPixelsPBO = static_cast<uint8_t *>(glMapBufferARB(GL_PIXEL_UNPACK_BUFFER_EXT, GL_WRITE_ONLY));glErrorCheck();
-		// copy image data into the buffer
-		memcpy(pPixelsPBO, mPixels, mBytesPerPixel*mWidth*mHeight);
+		glBufferData(GL_PIXEL_UNPACK_BUFFER, bytesPerPixel*width*height, NULL, GL_STREAM_DRAW);glErrorCheck();
+        if (pixels)
+        {
+            uint8_t * pPixelsPBO = static_cast<uint8_t *>(glMapBufferARB(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY));glErrorCheck();
+            // copy image data into the buffer
+            memcpy(pPixelsPBO, pixels, bytesPerPixel*width*height);
 
-		GLint res = glUnmapBufferARB(GL_PIXEL_UNPACK_BUFFER_EXT);glErrorCheck();
-		GCLAssertMsg(res == GL_TRUE, "Couldn't unmap pixel buffer. Exiting");
+            GLint res = glUnmapBuffer(GL_PIXEL_UNPACK_BUFFER);glErrorCheck();
+            GCLAssertMsg(res == GL_TRUE, "Couldn't unmap pixel buffer. Exiting");
+        }
+
 	}
-	uint8_t *PullData()
+	uint8_t *PullData(size_t width, size_t height, size_t bytesPerPixel)
 	{
-		glBindBufferARB(GL_PIXEL_PACK_BUFFER_EXT, mPixelBufferId);glErrorCheck();
-		const uint8_t *pixels = static_cast<const uint8_t *>(glMapBufferARB(GL_PIXEL_PACK_BUFFER_EXT, GL_READ_ONLY_ARB));glErrorCheck();
-		size_t bufferSize = mWidth*mHeight*mBytesPerPixel;
+		glBindBuffer(GL_PIXEL_PACK_BUFFER, mPixelBufferId);glErrorCheck();
+		const uint8_t *pixels = static_cast<const uint8_t *>(glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_ONLY));glErrorCheck();
+		size_t bufferSize = width*height*bytesPerPixel;
 		uint8_t *buffer = new uint8_t[bufferSize];
 		memcpy(buffer, pixels, bufferSize);
 		//memcpy(mPixels, pixels, mWidth*mHeight*mBytesPerPixel);
-		GLuint res = glUnmapBufferARB(GL_PIXEL_PACK_BUFFER_EXT);glErrorCheck();
+		GLuint res = glUnmapBuffer(GL_PIXEL_PACK_BUFFER);glErrorCheck();
 		GCLAssertMsg(res == GL_TRUE, "Couldn't unmap pixel buffer. Exiting");
 		return buffer;
+
 	}
-	bool IsValid() const { return mPixelBufferId!=(GLuint)-1; }
+	bool IsValid() const 
+    { 
+        return mPixelBufferId!=(GLuint)-1; 
+    }
 
 private:
 	GLuint mPixelBufferId;

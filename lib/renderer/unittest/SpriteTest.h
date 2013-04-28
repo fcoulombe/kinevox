@@ -36,7 +36,7 @@ void Test()
 	TextureResourceManager::Initialize();
 	{
 		WinDriver winDriver("SpriteTest");
-		GLRenderer renderer;
+		Renderer renderer(winDriver.GetWindowsHandle());
 
 		Sprite obj;
 		Assert_Test(obj.GetWidth() == 64);
@@ -70,9 +70,9 @@ void Test()
 #endif
 			obj.Update();
 			renderer.PreRender();
-			glPushMatrix();glErrorCheck();
+			//glPushMatrix();glErrorCheck();
 			obj.Render();
-			glPopMatrix();glErrorCheck();
+			//glPopMatrix();glErrorCheck();
 			renderer.PostRender();
 			winDriver.SwapBuffer();
 			Time::SleepMs(1);

@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-#include "renderer/Shader.h"
+#include "renderer/GL/GLShader.h"
 #include <gcl/Exception.h>
 #include <gcl/Matrix44.h>
 
@@ -93,7 +93,7 @@ const char *SHADER_HEADER =
 #endif
 		"\n";
 
-Shader::Shader()
+GLShader::GLShader()
 :mIsValid (false)
 {
 	std::string vbuffer(SHADER_HEADER);
@@ -133,7 +133,7 @@ Shader::Shader()
 	return;
 }
 
-Shader::~Shader()
+GLShader::~GLShader()
 {
 #if ENABLE_SHADERS
     if (mIsValid)
@@ -141,7 +141,7 @@ Shader::~Shader()
 #endif
 }
 
-void Shader::Bind()
+void GLShader::Bind()
 {
 #if ENABLE_SHADERS
 	GCLAssert(mIsValid);
@@ -150,7 +150,7 @@ void Shader::Bind()
 }
 
 
-GLuint Shader::CompileShader(const char *shaderSrc, GLenum type)
+GLuint GLShader::CompileShader(const char *shaderSrc, GLenum type)
 {
     
 	GLuint shader=0;
@@ -197,7 +197,7 @@ GLuint Shader::CompileShader(const char *shaderSrc, GLenum type)
 	return shader;
 }
 
-void Shader::PrintInfoLog(GLuint p)
+void GLShader::PrintInfoLog(GLuint p)
 {
 #if ENABLE_SHADERS
 	GLint infoLen = 0;
@@ -218,7 +218,7 @@ void Shader::PrintInfoLog(GLuint p)
 
 
 
-void Shader::SetProjectionMatrix(const Matrix44 &m)
+void GLShader::SetProjectionMatrix(const Matrix44 &m)
 {
 #if ENABLE_SHADERS
 	GCLAssert(mIsValid);
@@ -229,7 +229,7 @@ void Shader::SetProjectionMatrix(const Matrix44 &m)
 	(void)m;
 #endif
 }
-void Shader::SetModelViewMatrix(const Matrix44 &m)
+void GLShader::SetModelViewMatrix(const Matrix44 &m)
 {
 #if ENABLE_SHADERS
 	GCLAssert(mIsValid);
@@ -243,7 +243,7 @@ void Shader::SetModelViewMatrix(const Matrix44 &m)
 
 
 
-void Shader::SetTextureSampler(const Texture &sampler)
+void GLShader::SetTextureSampler(const GLTexture &sampler)
 {
     #if ENABLE_SHADERS
 	GLint textureLoc = glGetUniformLocation(mProgramObject,"texture");glErrorCheck();
@@ -253,7 +253,7 @@ void Shader::SetTextureSampler(const Texture &sampler)
 #endif
 }
 
-void Shader::GetUniform(const char *uniformName, Matrix44 &m44) const
+void GLShader::GetUniform(const char *uniformName, Matrix44 &m44) const
 {
     #if ENABLE_SHADERS
 	GLfloat mf[16];
@@ -267,7 +267,7 @@ void Shader::GetUniform(const char *uniformName, Matrix44 &m44) const
 	(void)m44;
 #endif
 }
-void Shader::GetUniform(const char *uniformName, int &sampler) const
+void GLShader::GetUniform(const char *uniformName, int &sampler) const
 {
     #if ENABLE_SHADERS
 	GCLAssert(mIsValid);
@@ -279,7 +279,7 @@ void Shader::GetUniform(const char *uniformName, int &sampler) const
 	(void)sampler;
 #endif
 }
-int Shader::GetAttributeLocation(const char *attributeName) const
+int GLShader::GetAttributeLocation(const char *attributeName) const
 {
     int ret=-1;
     #if ENABLE_SHADERS
@@ -291,7 +291,7 @@ int Shader::GetAttributeLocation(const char *attributeName) const
 
 	return ret;
 }
-void Shader::ResetDefault()
+void GLShader::ResetDefault()
 {
 #if ENABLE_SHADERS
 	glUseProgram(0);glErrorCheck();

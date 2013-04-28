@@ -25,7 +25,7 @@
 #include <gcl/File.h>
 #include <gcl/ResourceManagerConfig.h>
 #include "renderer/Texture.h"
-
+#include "renderer/VertexBuffer.h"
 
 using namespace GCL;
 
@@ -137,30 +137,23 @@ void Sprite::Render() const
 	//std::cout << "bot " <<bottomTextureCoord << std::endl;
 
 	mTextureList[whatTexture]->Bind();
-	glBegin (GL_TRIANGLE_STRIP);
-#if 1
-	Real halfWidth = (mHeader->width/2.0)*mScale.x;
-	Real halfHeight = (mHeader->height/2.0)*mScale.y;
 
-	glTexCoord2f (GLfloat(bottomTextureCoord.x), GLfloat(topTextureCoord.y));
-	glVertex3f (GLfloat(halfWidth+mPosition.x), GLfloat(-halfHeight+mPosition.y), 0.0);
-	glTexCoord2f (GLfloat(topTextureCoord.x), GLfloat(topTextureCoord.y));
-	glVertex3f (GLfloat(-halfWidth+mPosition.x), GLfloat(-halfHeight+mPosition.y), 0.0);
-	glTexCoord2f (GLfloat(bottomTextureCoord.x), GLfloat(bottomTextureCoord.y));
-	glVertex3f (GLfloat(halfWidth+mPosition.x), GLfloat(halfHeight+mPosition.y), 0.0);
-	glTexCoord2f (GLfloat(topTextureCoord.x), GLfloat(bottomTextureCoord.y));
-	glVertex3f (GLfloat(-halfWidth+mPosition.x), GLfloat(halfHeight+mPosition.y), 0.0);
-#else
-	glTexCoord2f (0.0, 0.0);
-	glVertex3f (-5, -5, 0.0);
-	glTexCoord2f (1.0, 0.0);
-	glVertex3f (5, -5, 0.0);
-	glTexCoord2f (0.0, 1.0);
-	glVertex3f (-5, 5, 0.0);
-	glTexCoord2f (1.0, 1.0);
-	glVertex3f (5, 5, 0.0);
+    Real halfWidth = (mHeader->width/2.0)*mScale.x;
+    Real halfHeight = (mHeader->height/2.0)*mScale.y;
+    VertexPT square[4];
+    square[0].position = Point3<MeshReal>(halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
+    square[0].textureCoordinate = Point2<MeshReal>(bottomTextureCoord.x, topTextureCoord.y);
 
-#endif
-	glEnd ();
+    square[1].position =Point3<MeshReal>(-halfWidth+mPosition.x, -halfHeight+mPosition.y, 0.0);
+    square[1].textureCoordinate = Point2<MeshReal>(topTextureCoord.x, topTextureCoord.y);
 
+    square[2].position = Point3<MeshReal>(halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
+    square[2].textureCoordinate = Point2<MeshReal>(bottomTextureCoord.x, bottomTextureCoord.y);
+
+    square[3].position = Point3<MeshReal>(-halfWidth+mPosition.x, halfHeight+mPosition.y, 0.0);
+    square[3].textureCoordinate = Point2<MeshReal>(topTextureCoord.x, bottomTextureCoord.y);
+	VertexBuffer<VertexPT> buffer(square, 4);
+    buffer.PreRender();
+    buffer.Render(GL_TRIANGLE_STRIP);
+    buffer.PostRender();
 }

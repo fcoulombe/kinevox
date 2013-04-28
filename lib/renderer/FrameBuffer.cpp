@@ -19,55 +19,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#pragma once
 
-#include <gcl/UnitTest.h>
-#include <renderer/PixelBufferHAL.h>
+#include "renderer/FrameBuffer.h"
+#include "renderer/RenderBuffer.h"
+#include "renderer/Texture.h"
 
 using namespace GCL;
-namespace PixelBufferHALTest
+
+FrameBuffer::FrameBuffer(const Texture & texture, const RenderBuffer & depthBuffer)
+    :mPimpl(texture.GetImpl(), depthBuffer.GetImpl())
 {
-void Test();
-void Test()
-{
-	TEST_START
-	WinDriver winDriver("PixelBufferHALTest");
-	Renderer renderer(winDriver.GetWindowsHandle());
-
-	Shader shader;
-	shader.Bind();
-
-	{
-	PixelBufferHAL buffer;
-	buffer.IsValid();
-	buffer.Bind();
-	}
-	{
-		static const size_t BUFFER_SIZE = 64*64;
-		PixelRGB buffer[BUFFER_SIZE];
-		for (size_t i=0; i<BUFFER_SIZE; ++i)
-		{
-			buffer[i].mColor.x = uint8_t(0xffffff00^i);
-			buffer[i].mColor.y =uint8_t((0xffff00ff^i)>>8);
-			buffer[i].mColor.z =0;
-		}
-		PixelBufferHAL pb(buffer, 64, 64);
-		Assert_Test(pb.IsValid());
-		pb.Bind();
-		pb.PushData();
-		pb.UnBind();
-	}
-	{
-		const char *fullFileName = TEXTURE_PATH"mushroomtga.tga";
-		std::fstream fp(fullFileName, std::fstream::binary|std::fstream::in);
-		AssertMsg_Test( fp.good(), fullFileName);
-
-		PixelBufferHAL pb;
-		PixelBuffer::LoadTga(fp, pb);
-		pb.Bind();
-		pb.PushData();
-		pb.PullData();
-		PixelBuffer::SaveTga("PBOTest.tga", pb.mWidth, pb.mHeight, pb.mBytesPerPixel, pb.mPixels);
-	}
 }
-}
+

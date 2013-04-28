@@ -53,7 +53,7 @@ void Test()
 	TextureResourceManager::Initialize();
 	{
 		WinDriver winDriver("ShaderTest");
-		GLRenderer renderer;
+		Renderer renderer(winDriver.GetWindowsHandle());
 		Shader shader;
 		shader.Bind();
 		Assert_Test(shader.IsValid());
@@ -148,7 +148,7 @@ void Test()
 
 	{
 		WinDriver winDriver("ShaderTest");
-		GLRenderer renderer;
+		Renderer renderer(winDriver.GetWindowsHandle());
 		MyRenderObject obj;
 		const WorldPoint3 position(0.0,0.0, -10.0);
 		obj.SetPosition(position);

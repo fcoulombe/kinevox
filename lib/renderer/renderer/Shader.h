@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,48 +21,32 @@
  */
 
 #pragma once
-#include <3rdparty/OpenGL.h>
-#include <gcl/Macro.h>
-#include "renderer/PixelBufferHAL.h"
-
+#define SHADER_INCLUDE GET_GFX_INCLUDE(Shader.h)
+#define IShader GET_GFX_CLASS(Shader)
+#include SHADER_INCLUDE
+#include "renderer/Texture.h"
 namespace GCL
 {
+class Matrix44;
+class Texture;
+  class Shader
+  {
+  public:
+    Shader() { }
 
+    ~Shader() {}
+    void Bind() { mPimpl.Bind(); }
+    bool IsValid() const { return mPimpl.IsValid(); }
 
-class GLTexture
-{
-public:
-	GLTexture(const PixelBuffer &imageData)
-	: mTextureId((GLuint)-1),
-	  mTextureUnit((GLuint)0)
-	{
-        Initialize(imageData);
-    }
-	~GLTexture();
-	void Bind() const
-	{
-		//std::cout << "Binding Texture: " <<mTextureId << std::endl;
-		GCLAssert(IsValid());
-		glBindTexture(GL_TEXTURE_2D, mTextureId);  glErrorCheck();
-		//mPBO->Bind();
-	}
+    void SetTextureSampler(const Texture &sampler) { mPimpl.SetTextureSampler(sampler.GetImpl()); }
+    void SetProjectionMatrix(const Matrix44 &m) { mPimpl.SetProjectionMatrix(m); }
+    void SetModelViewMatrix(const Matrix44 &m) { mPimpl.SetModelViewMatrix(m); }
+    void GetUniform(const char *unformName, Matrix44 &m44) const { mPimpl.GetUniform(unformName, m44); }
+    void GetUniform(const char *unformName, int &ret) const { mPimpl.GetUniform(unformName, ret); }
+    int GetAttributeLocation(const char *attributeName) const { return mPimpl.GetAttributeLocation(attributeName); }
 
-	size_t GetWidth() const { return mPBO->mWidth; }
-	size_t GetHeight() const { return mPBO->mHeight; }
-    size_t GetBytesPerPixel() const { return mPBO->mBytesPerPixel; }
-	void Initialize(const PixelBuffer &imageData);
-	bool IsValid() const { return (int)mTextureId!=-1; }
-
-    const uint8_t *GetTextureFromVRAM() const;
-    const uint8_t *GetPixelBufferFromVRAM() const;
-
-    uint32_t GetTextureUnit() const { return mTextureUnit; }
-    uint32_t GetTextureId() const { return mTextureId; }
-private:
-	GLuint mTextureId;
-	GLuint mTextureUnit;
-	PixelBufferHAL *mPBO;
-};
-
-
+    static void ResetDefault() { IShader::ResetDefault(); }
+  private:
+    IShader mPimpl;
+  };
 }

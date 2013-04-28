@@ -34,7 +34,7 @@ void Test()
 
 	TextureResourceManager::Initialize();
     WinDriver windriver("MaterialTest");
-	GLRenderer render;
+	Renderer render(windriver.GetWindowsHandle());
 
 	{
 	Material material("Default");

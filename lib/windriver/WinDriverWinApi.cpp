@@ -67,6 +67,20 @@ namespace GCL
     {
         switch(uMsg) //switch the MSG variable passed
         {
+           /*
+			Here we are handling 2 system messages: screen saving and monitor power.
+			They are especially relevent on mobile devices.
+		*/
+		case WM_SYSCOMMAND:
+		{
+			switch (wParam)
+			{
+				case SC_SCREENSAVE:					// Screensaver trying to start ?
+				case SC_MONITORPOWER:				// Monitor trying to enter powersave ?
+				return 0;							// Prevent this from happening
+			}
+			break;
+		}
         case WM_CLOSE: //case it's a Window Close MSG
             PostQuitMessage(0); //Apply a Quit Message
             break;
@@ -92,7 +106,7 @@ namespace GCL
             wc.hInstance = mInstance;
             wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
             wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-            wc.hbrBackground = NULL;
+            wc.hbrBackground = (HBRUSH) GetStockObject(WHITE_BRUSH);
             wc.lpszMenuName = NULL;
             wc.lpszClassName = "D3DTEST"; //class name
             wc.hIconSm = LoadIcon(NULL, IDI_WINLOGO);
@@ -119,6 +133,16 @@ namespace GCL
                 UnregisterClass("D3DTEST",mInstance); //unregister our window class
                 GCLAssertMsg(false, "Failed to create the window"); //error pop-up for debug purpose
             }
+
+            // Get the associated device context
+            hDC = GetDC(hWnd);
+            if (!hDC)
+            {
+                DestroyWindow(mWindowsHandle); //destroy the window
+                UnregisterClass("D3DTEST",mInstance); //unregister our window class
+                GCLAssertMsg(false, "Failed to create the device context");
+            }
+
             ShowWindow(mWindowsHandle,SW_SHOW); //show our window
             UpdateWindow(mWindowsHandle); //update our window
             SetForegroundWindow(mWindowsHandle); //set our window on top

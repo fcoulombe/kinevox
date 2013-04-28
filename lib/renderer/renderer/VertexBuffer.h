@@ -22,9 +22,8 @@
 
 #pragma once
 
-#define VERTEXBUFFER_INCLUDE GET_GFX_INCLUDE(VertexBuffer.h)
-#define IVertexBuffer GET_GFX_CLASS(VertexBuffer)
-#include VERTEXBUFFER_INCLUDE
+#include "rendererconf.h"
+#include GFXAPI_VertexBuffer_H
 
 
 namespace GCL

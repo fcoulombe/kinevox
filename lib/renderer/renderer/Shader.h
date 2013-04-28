@@ -21,9 +21,8 @@
  */
 
 #pragma once
-#define SHADER_INCLUDE GET_GFX_INCLUDE(Shader.h)
-#define IShader GET_GFX_CLASS(Shader)
-#include SHADER_INCLUDE
+#include "rendererconf.h"
+#include GFXAPI_Shader_H
 #include "renderer/Texture.h"
 namespace GCL
 {

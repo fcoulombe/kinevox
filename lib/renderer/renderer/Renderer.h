@@ -22,9 +22,8 @@
 
 #pragma once
 
-#define RENDERER_INCLUDE GET_GFX_INCLUDE(Renderer.h)
-#define IRenderer GET_GFX_CLASS(Renderer)
-#include RENDERER_INCLUDE
+#include "rendererconf.h"
+#include GFXAPI_Renderer_H
 
 namespace GCL
 {

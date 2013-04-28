@@ -44,8 +44,8 @@ private:
 	mutable Shader *mShader; //mutable because we need to set uniforms before rendering
 
 	WorldPoint4 mAmbient;
-	WorldPoint4 mDiffuset;
-	WorldPoint4 mspecular;
+	WorldPoint4 mDiffuse;
+	WorldPoint4 mSpecular;
 	WorldPoint4 mEmissive;
 	Real mShininess;
 };

@@ -41,7 +41,6 @@ namespace GCL
     void Render(const RenderObjectList &renderObjectList) { mPimpl.Render(renderObjectList); }
     void Render(const RenderObject2DList &renderObjectList) { mPimpl.Render(renderObjectList); }
     void Render(const Text2DList &text2DList) { mPimpl.Render(text2DList); }
-    void Render(uint8_t *rgb_front, uint8_t *depth_front) {mPimpl.Render(rgb_front, depth_front); }
     const ViewPort &GetViewPort() const { return mPimpl.GetViewPort(); }
 
 	const std::string &GetVendor() const { return mPimpl.GetVendor() ; }

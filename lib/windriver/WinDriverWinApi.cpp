@@ -134,15 +134,7 @@ namespace GCL
                 GCLAssertMsg(false, "Failed to create the window"); //error pop-up for debug purpose
             }
 
-            // Get the associated device context
-            hDC = GetDC(hWnd);
-            if (!hDC)
-            {
-                DestroyWindow(mWindowsHandle); //destroy the window
-                UnregisterClass("D3DTEST",mInstance); //unregister our window class
-                GCLAssertMsg(false, "Failed to create the device context");
-            }
-
+       
             ShowWindow(mWindowsHandle,SW_SHOW); //show our window
             UpdateWindow(mWindowsHandle); //update our window
             SetForegroundWindow(mWindowsHandle); //set our window on top
@@ -193,6 +185,7 @@ namespace GCL
     private:
         HINSTANCE mInstance;
         HWND mWindowsHandle;
+        //HDC	 hDC;
         std::string mWindowsTitle;
         double mPreviousFrameTime;
         size_t mFPS;

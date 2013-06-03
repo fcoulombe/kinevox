@@ -81,23 +81,23 @@ void Material::LoadMaterial(const char *filename)
 #else
 #define FLOAT_FLAG "%f"
 #endif
-	WorldPoint4 ambient;
+	WorldPoint4 &ambient = mAmbient;
 	fp.getline(buffer, BUFFER_SIZE);
 	sscanf(buffer, "ambient: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &ambient.x, &ambient.y, &ambient.z, &ambient.w);
 
-	WorldPoint4 diffuse;
+	WorldPoint4 &diffuse = mDiffuse;
 	fp.getline(buffer, BUFFER_SIZE);
 	sscanf(buffer, "diffuse: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &diffuse.x, &diffuse.y, &diffuse.z, &diffuse.w);
 
-	WorldPoint4 specular;
+	WorldPoint4 &specular = mSpecular;
 	fp.getline(buffer, BUFFER_SIZE);
 	sscanf(buffer, "specular: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &specular.x, &specular.y, &specular.z, &specular.w);
 
-	WorldPoint4 emissive;
+	WorldPoint4 &emissive = mEmissive;
 	fp.getline(buffer, BUFFER_SIZE);
 	sscanf(buffer, "emissive: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &emissive.x, &emissive.y, &emissive.z, &emissive.w);
 
-	Real shininess;
+	Real &shininess = mShininess;
 	fp.getline(buffer, BUFFER_SIZE);
 	sscanf(buffer, "shininess: " FLOAT_FLAG, &shininess);
 

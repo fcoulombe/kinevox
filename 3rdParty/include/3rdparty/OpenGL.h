@@ -88,6 +88,28 @@
 #   include <GL/gl.h>
 #   include <GL/glu.h>
 #   include <GL/glext.h>
+#   undef glGenFramebuffers
+#   define glGenFramebuffers glGenFramebuffersEXT
+#   undef glBindFramebuffer
+#   define glBindFramebuffer glBindFramebufferEXT
+#   undef glFramebufferTexture2D
+#   define glFramebufferTexture2D glFramebufferTexture2DEXT
+#   undef glFramebufferRenderbuffer
+#   define glFramebufferRenderbuffer glFramebufferRenderbufferEXT
+#   undef glCheckFramebufferStatus
+#   define glCheckFramebufferStatus glCheckFramebufferStatusEXT
+#   undef glDeleteFramebuffers
+#   define glDeleteFramebuffers glDeleteFramebuffersEXT
+#   undef glGenRenderbuffers
+#   define glGenRenderbuffers glGenRenderbuffersEXT
+#   undef glBindRenderbuffer
+#   define glBindRenderbuffer glBindRenderbufferEXT
+#   undef glRenderbufferStorage
+#   define glRenderbufferStorage glRenderbufferStorageEXT
+#   undef glDeleteRenderbuffers
+#   define glDeleteRenderbuffers glDeleteRenderbuffersEXT
+#   undef glGenerateMipmap
+#   define glGenerateMipmap glGenerateMipmapEXT
 #elif defined(OS_WIN32)
 #   include <windows.h>
 #   include <GL/gl.h>

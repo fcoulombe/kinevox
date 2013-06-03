@@ -1,5 +1,6 @@
 
 IF(${ES1})
+	FIND_PACKAGE(eglew)
 	SET(POWERVR_SDK_ROOT "C:\\Imagination\\PowerVR\\GraphicsSDK\\SDK_3.1\\Builds\\")
 	SET(GL_INCLUDE ${POWERVR_SDK_ROOT}/Include/)
 	
@@ -12,10 +13,14 @@ IF(${ES1})
 	
 	SET(GLES_LIB ${GL_LIBS_PATH}/libGLES_CM.lib)
 	
-	SET(glext_INCLUDE_DIR ${GL_INCLUDE} )
+	SET(glext_INCLUDE_DIR ${GL_INCLUDE} ${eglew_INCLUDE_DIR})
 
+	list(APPEND glext_LIBS ${eglew_LIBS})
 	list(APPEND glext_LIBS ${EGL_LIB})
 	list(APPEND glext_LIBS ${GLES_LIB})
+	
+	list(APPEND glext_DLL ${GL_LIBS_PATH}/libEGL.dll)
+	list(APPEND glext_DLL ${GL_LIBS_PATH}/libGLES_CM.dll)
 	
 ELSEIF(${ES2})
 	SET(POWERVR_SDK_ROOT "C:\\Imagination\\PowerVR\\GraphicsSDK\\SDK_3.1\\Builds\\")

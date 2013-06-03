@@ -25,6 +25,8 @@
 
 #if ENABLE_GLEW
 #include <GL/glew.h>
+#elif ENABLE_EGLEW
+#include <eglew.h>
 #endif
 #if defined(ES1) || defined(ES2)
 #define IS_PBO_SUPPORTED 0
@@ -32,7 +34,38 @@
 #define IS_PBO_SUPPORTED 1
 #endif
 
-#if defined( ES2)
+#if defined(ES1)
+#   include <EGL/egl.h>
+#   include <GLES/gl.h>
+//#   define GL_GLEXT_PROTOTYPES
+#   include <GLES/glext.h>
+
+#   define glGenerateMipmap         glGenerateMipmapOES
+
+#   define glDeleteFramebuffers     glDeleteFramebuffersOES
+#   define glBindFramebuffer        glBindFramebufferOES
+#   define glGenFramebuffers        glGenFramebuffersOES
+#   define glFramebufferTexture2D   glFramebufferTexture2DOES
+#   define glFramebufferRenderbuffer glFramebufferRenderbufferOES
+#   define glCheckFramebufferStatus glCheckFramebufferStatusOES
+
+#   define glGenRenderbuffers       glGenRenderbuffersOES
+#   define glBindRenderbuffer       glBindRenderbufferOES
+#   define glRenderbufferStorage    glRenderbufferStorageOES
+#   define glDeleteRenderbuffers    glDeleteRenderbuffersOES
+
+#   define glClearDepth glClearDepthf
+
+#   define GL_RENDERBUFFER          GL_RENDERBUFFER_OES
+#   define GL_FRAMEBUFFER           GL_FRAMEBUFFER_OES
+#   define GL_FRAMEBUFFER_BINDING   GL_FRAMEBUFFER_BINDING_OES
+#   define GL_COLOR_ATTACHMENT0     GL_COLOR_ATTACHMENT0_OES
+#   define GL_FRAMEBUFFER_COMPLETE  GL_FRAMEBUFFER_COMPLETE_OES
+#   define GL_DEPTH_COMPONENT       GL_DEPTH_COMPONENT16_OES
+#   define GL_DEPTH_ATTACHMENT      GL_DEPTH_ATTACHMENT_OES
+
+#elif defined( ES2)
+#   include <EGL/egl.h>
 #   include <GLES2/gl2.h>
 #   include <GLES2/gl2ext.h>
 #define glGenBuffersARB glGenBuffers
@@ -47,9 +80,6 @@
 #elif defined (ES3)
 #define GL_PIXEL_UNPACK_BUFFER_ARB GL_PIXEL_UNPACK_BUFFER
 #define GL_PIXEL_PACK_BUFFER_ARB GL_PIXEL_PACK_BUFFER
-#elif defined(ES1)
-#   include <GLES/gl.h>
-#   include <GLES/glext.h>
 #elif defined(OS_MACOSX) 
 #   include <OpenGL/gl.h>
 #   include <OpenGL/glu.h>
@@ -86,31 +116,11 @@
 #   define glDeleteRenderbuffers glDeleteRenderbuffersEXT
 #   undef glGenerateMipmap 
 #   define glGenerateMipmap glGenerateMipmapEXT
-/*// function pointers for PBO Extension
-// Windows needs to get function pointers from ICD OpenGL drivers,
-// because opengl32.dll does not support extensions higher than v1.1.
-PFNGLGENBUFFERSARBPROC pglGenBuffersARB = NULL;                     // VBO Name Generation Procedure
-PFNGLBINDBUFFERARBPROC pglBindBufferARB = NULL;                     // VBO Bind Procedure
-PFNGLBUFFERDATAARBPROC pglBufferDataARB = NULL;                     // VBO Data Loading Procedure
-PFNGLBUFFERSUBDATAARBPROC pglBufferSubDataARB = NULL;               // VBO Sub Data Loading Procedure
-PFNGLDELETEBUFFERSARBPROC pglDeleteBuffersARB = NULL;               // VBO Deletion Procedure
-PFNGLGETBUFFERPARAMETERIVARBPROC pglGetBufferParameterivARB = NULL; // return various parameters of VBO
-PFNGLMAPBUFFERARBPROC pglMapBufferARB = NULL;                       // map VBO procedure
-PFNGLUNMAPBUFFERARBPROC pglUnmapBufferARB = NULL;                   // unmap VBO procedure
-#define glGenBuffersARB           pglGenBuffersARB
-#define glBindBufferARB           pglBindBufferARB
-#define glBufferDataARB           pglBufferDataARB
-#define glBufferSubDataARB        pglBufferSubDataARB
-#define glDeleteBuffersARB        pglDeleteBuffersARB
-#define glGetBufferParameterivARB pglGetBufferParameterivARB
-#define glMapBufferARB            pglMapBufferARB
-#define glUnmapBufferARB          pglUnmapBufferARB
-*/
 #else
 #   error "TBD"
 #endif
 
-#if USE_64BIT_PLATFORM
+#if USE_64BIT_PLATFORM && !defined(ES1) 
 #	define GL_UNIT GL_FLOAT //our mesh data are passed in float for portability/performance reason
 #	define GLreal GLdouble
 #	define glLoadMatrix glLoadMatrixd
@@ -120,33 +130,6 @@ PFNGLUNMAPBUFFERARBPROC pglUnmapBufferARB = NULL;                   // unmap VBO
 #	define GLreal GLfloat
 #	define glLoadMatrix glLoadMatrixf
 #	define glMultMatrix glMultMatrixf
-#endif
-
-#ifdef ES1
-#define glClearDepth                            glClearDepthf
-/*#define glGenerateMipmap                        glGenerateMipmapOES
-#define glGenFramebuffers                       glGenFramebuffersOES
-#define glGenRenderbuffers                       glGenRenderbuffersOES
-#define glBindRenderbuffer                       glBindRenderbufferOES
-#define glBindFramebuffer                       glBindFramebufferOES
-#define glFramebufferTexture2D          glFramebufferTexture2DOES
-#define glDeleteFramebuffers            glDeleteFramebuffersOES
-#define glDeleteRenderbuffers            glDeleteRenderbuffersOES
-#define glCheckFramebufferStatus        glCheckFramebufferStatusOES
-#define glDeleteVertexArrays            glDeleteVertexArraysOES
-#define glGenVertexArrays                       glGenVertexArraysOES
-#define glBindVertexArray                       glBindVertexArrayOES
-#define glRenderbufferStorage glRenderbufferStorageOES
-#define glFramebufferRenderbuffer glFramebufferRenderbufferOES
-
-#define GL_RENDERBUFFER                       GL_RENDERBUFFER_OES
-#define GL_FRAMEBUFFER                       GL_FRAMEBUFFER_OES
-#define GL_FRAMEBUFFER_BINDING       GL_FRAMEBUFFER_BINDING_OES
-#define GL_COLOR_ATTACHMENT0         GL_COLOR_ATTACHMENT0_OES
-#define GL_FRAMEBUFFER_COMPLETE      GL_FRAMEBUFFER_COMPLETE_OES
-#define GL_DEPTH_COMPONENT GL_DEPTH_COMPONENT16_OES
-#define GL_DEPTH_ATTACHMENT GL_DEPTH_ATTACHMENT_OES*/
-
 #endif
 
 #if !defined(ES1 ) 
@@ -227,7 +210,7 @@ inline void i_glErrorCheck(const char *file, int line)
 		break;
 #endif
 	default:
-		s<<"OpenGL: don't know what happenedl";
+		s<<"OpenGL: don't know what happened";
 	}
 	GCLAssertMsg(false, s.str().c_str());
 }

@@ -12,6 +12,7 @@
 #endif
 
 #define ENABLE_GLEW @IS_GLEW_ENABLED@
+#define ENABLE_EGLEW @IS_EGLEW_ENABLED@
 #define ENABLE_FIX_PIPELINE @IS_FIX_PIPELINE_ENABLED@
 #cmakedefine ES1
 #cmakedefine ES2

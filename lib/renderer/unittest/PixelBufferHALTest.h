@@ -31,6 +31,9 @@ void Test();
 void Test()
 {
 	TEST_START
+#ifdef ES1
+        return; //pbo not supported on ES1
+#endif
 	WinDriver winDriver("PixelBufferHALTest");
 	Renderer renderer(winDriver.GetWindowsHandle());
 

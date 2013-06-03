@@ -51,16 +51,12 @@ void Test()
 		std::cout << ext[i] << std::endl;;
 	}
 
+#if defined(ES1) || defined(ES2)
 #ifdef OS_IPHONE
-#   ifdef ES1
     Assert_Test(renderer.IsExtensionSupported("GL_OES_framebuffer_object"));
+#endif
     Assert_Test(renderer.IsExtensionSupported("GL_OES_vertex_array_object"));
     Assert_Test(renderer.IsExtensionSupported("GL_IMG_texture_compression_pvrtc"));
-#   elif defined(ES2)
-#       error "TBD: implement extension check for ES2"
-#   else
-#       error "INVALID"
-#   endif
 #else
 	Assert_Test(renderer.IsExtensionSupported("GL_ARB_multitexture"));
 	Assert_Test(renderer.IsExtensionSupported("GL_ARB_pixel_buffer_object"));
@@ -72,8 +68,7 @@ void Test()
     Assert_Test(renderer.IsExtensionSupported("GL_ARB_shading_language_100"));
 	Assert_Test(renderer.IsExtensionSupported("GL_ARB_texture_compression"));
     Assert_Test(renderer.IsExtensionSupported("GL_EXT_framebuffer_object"));
-    // GL_EXT_texture_compression_s3tc
-        
+    // GL_EXT_texture_compression_s3tc      
 #endif
 
 	//test default viewport values

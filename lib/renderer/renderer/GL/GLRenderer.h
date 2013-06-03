@@ -53,8 +53,6 @@ public:
 	void Render(const RenderObjectList &renderObjectList);
 	void Render(const RenderObject2DList &spriteList);
 	void Render(const Text2DList &text2DList);
-	void Render(uint8_t *rgb_front, uint8_t *depth_front);
-	void RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth);
 
 	void SetCamera(Camera &camera) { mCamera = &camera; }
 
@@ -106,7 +104,5 @@ private:
 	ExtensionList mExtensions;
 
 
-	uint32_t gl_depth_tex;
-	uint32_t gl_rgb_tex;
 };
 }

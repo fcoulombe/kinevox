@@ -57,10 +57,8 @@ void GLRenderer::Init3DState()
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
 	
 	glEnable(GL_TEXTURE_2D); glErrorCheck();
-#if !defined(ES1) && !defined(ES2)
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); glErrorCheck();
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
-#endif
 }
 
 GLRenderer::GLRenderer(size_t /*windowsHandle*/)
@@ -279,67 +277,6 @@ void GLRenderer::Render(const Text2DList &renderObjectList)
 	}
 }
 
-static bool isRenderingExtra = false;
-void GLRenderer::RenderExtra(uint8_t *rgb_front, size_t width, size_t height, size_t depth)
-{
-#if !defined(ES1) && !defined(ES2)
-	glBindTexture(GL_TEXTURE_2D, gl_depth_tex);glErrorCheck();
-	if (depth == 1) {
-		glTexImage2D(GL_TEXTURE_2D, 0, (GLint)depth, (GLsizei)width, (GLsizei)height, 0, GL_LUMINANCE, GL_UNSIGNED_BYTE, rgb_front); glErrorCheck();
-	}
-	else if (depth == 3) {
-		glTexImage2D(GL_TEXTURE_2D, 0, (GLint)depth, (GLsizei)width, (GLsizei)height, 0, GL_RGB, GL_UNSIGNED_BYTE, rgb_front); glErrorCheck();
-	}
-	glBegin(GL_TRIANGLE_FAN);
-	glColor4f(255.0f, 255.0f, 255.0f, 255.0f);
-	glTexCoord2f(0, 0); glVertex3f(0,0,0);
-	glTexCoord2f(1, 0); glVertex3f(640,0,0);
-	glTexCoord2f(1, 1); glVertex3f(640,480,0);
-	glTexCoord2f(0, 1); glVertex3f(0,480,0);
-	glEnd(); glErrorCheck();
-	isRenderingExtra = true;
-#else
-	GCLAssert(false &&" TBD");
-#endif
-
-}
-void GLRenderer::Render(uint8_t *rgb_front, uint8_t *depth_front)
-{
-#if !defined(ES1) && !defined(ES2)
-
-	if (!isRenderingExtra) {
-		glBindTexture(GL_TEXTURE_2D, gl_depth_tex); glErrorCheck();
-		glTexImage2D(GL_TEXTURE_2D, 0, 3, 640, 480, 0, GL_RGB, GL_UNSIGNED_BYTE, depth_front); glErrorCheck();
-
-		glBegin(GL_TRIANGLE_FAN);
-		glColor4f(255.0f, 255.0f, 255.0f, 255.0f);
-		glTexCoord2f(0, 0); glVertex3f(0,0,0);
-		glTexCoord2f(1, 0); glVertex3f(640,0,0);
-		glTexCoord2f(1, 1); glVertex3f(640,480,0);
-		glTexCoord2f(0, 1); glVertex3f(0,480,0);
-		glEnd(); glErrorCheck();
-	} else {
-		isRenderingExtra = false;
-	}
-
-
-	glBindTexture(GL_TEXTURE_2D, gl_rgb_tex); glErrorCheck();
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, 640, 480, 0, GL_RGB, GL_UNSIGNED_BYTE, rgb_front); glErrorCheck();
-
-	glBegin(GL_TRIANGLE_FAN);
-	glColor4f(255.0f, 255.0f, 255.0f, 255.0f);
-	glTexCoord2f(0, 0); glVertex3f(640,0,0);
-	glTexCoord2f(1, 0); glVertex3f(1280,0,0);
-	glTexCoord2f(1, 1); glVertex3f(1280,480,0);
-	glTexCoord2f(0, 1); glVertex3f(640,480,0);
-	glEnd(); glErrorCheck();
-
-#else 
-	GCLAssert(false && "TBD");
-#endif
-
-}
-
 void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 {
 	if (isEnabled)
@@ -357,8 +294,6 @@ void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 Matrix44 GLRenderer::GetGLProjection()
 {
     Matrix44 projectionMatrixd;
-	
-#if !defined(ES1) && !defined(ES2)
         Matrix44f projectionMatrix;
 	glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
 
@@ -378,15 +313,12 @@ Matrix44 GLRenderer::GetGLProjection()
 	projectionMatrixd[3].y = projectionMatrix.m3.y;
 	projectionMatrixd[3].z = projectionMatrix.m3.z;
 	projectionMatrixd[3].w = projectionMatrix.m3.w;
-#else
-    GCLAssert(false && "UNSUPPORTED");
-#endif
+
 	return projectionMatrixd;
 }
 Matrix44 GLRenderer::GetGLModelView()
 {
     Matrix44 modelViewMatrixd;
-    #if !defined(ES1) && !defined(ES2)
 	Matrix44f modelViewMatrix;
 	glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&modelViewMatrix);
 	
@@ -406,9 +338,6 @@ Matrix44 GLRenderer::GetGLModelView()
 	modelViewMatrixd[3].y = modelViewMatrix.m3.y;
 	modelViewMatrixd[3].z = modelViewMatrix.m3.z;
 	modelViewMatrixd[3].w = modelViewMatrix.m3.w;
-#else
-    GCLAssert(false && "UNSUPPORTED");
-#endif
 	return modelViewMatrixd;
 }
 

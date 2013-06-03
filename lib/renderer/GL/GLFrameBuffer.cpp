@@ -35,9 +35,7 @@ void checkFrameBufferStatus(GLenum stat)
 {
 	if (GL_FRAMEBUFFER_COMPLETE == stat)
 		return;
-#if defined(ES1) || defined(ES2)
-	GCLAssert(GL_FRAMEBUFFER_COMPLETE == stat);
-#else
+
 	std::stringstream s;
 	switch (stat)
 	{
@@ -71,8 +69,6 @@ void checkFrameBufferStatus(GLenum stat)
 	}
     
 	GCLAssertMsg(GL_FRAMEBUFFER_COMPLETE == stat, s.str().c_str());
-#endif
-
 }
 }
 

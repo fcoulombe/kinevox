@@ -91,3 +91,8 @@ macro(ProcessData path)
 		Include(${pathName})
 	endforeach()
 endmacro()
+
+macro(FindLibrary varname lib lpath)
+	FIND_LIBRARY(${varname} NAMES ${lib}.a ${lib}.lib ${lib}.so ${lib}.dll  PATHS ${lpath} NO_DEFAULT_PATHS  NO_SYSTEM_ENVIRONMENT_PATH  )
+endmacro()
+

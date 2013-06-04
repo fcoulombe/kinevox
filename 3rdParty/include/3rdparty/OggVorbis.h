@@ -22,8 +22,10 @@
 
 #pragma once
 
-
-
+#include "3rdparty/ExternalHeader_Start.h"
+#if defined(__GNUC__)
+#		pragma GCC system_header
+#endif
 #if defined(OS_IPHONE)
 #elif defined(OS_MACOSX)
 #elif defined(OS_LINUX)
@@ -39,7 +41,7 @@
 #else
 #   error "TBD"
 #endif
-
+#include "3rdparty/ExternalHeader_End.h"
 
 #include <gcl/Assert.h>
 #include <sstream>

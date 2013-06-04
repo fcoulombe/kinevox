@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifdef OS_WIN32
+#if	defined( OS_WIN32) && !defined(__GNUC__)
 #include <windows.h>
 #include <iostream>
 extern int main(int argc, char **argv);

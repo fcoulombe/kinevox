@@ -23,13 +23,12 @@
 #include <iostream>
 #include <gcl/Assert.h>
 
-#ifdef OS_WIN32
-#include <winsock2.h>
-#pragma comment( lib, "wsock32.lib" )
+#if defined(OS_WIN32)
+#		include <winsock2.h>
 #else
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <fcntl.h>
+#	include <sys/socket.h>
+#	include <netinet/in.h>
+#	include <fcntl.h>
 #endif
 
 using namespace GCL;

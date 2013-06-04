@@ -5,7 +5,10 @@ SET(windriver_INCLUDE_DIR ${windriver_ROOT})
 
 
 SET(windriver_INCLUDE_DIR ${windriver_INCLUDE_DIR} ${DEP_INC})
+IF (${WIN32})
+	list(APPEND windriver_LIBS "wsock32.lib" )
+ENDIF()
 list(APPEND windriver_LIBS windriver)
 list(APPEND windriver_LIBS ${DEP_LIBS} )
 
-#SET(windriver_LIBS windriver ${DEP_LIBS} )
+

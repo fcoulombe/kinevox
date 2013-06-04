@@ -39,7 +39,7 @@ namespace GCL
         GCL_LEFT = GLFW_KEY_LEFT,
         GCL_RIGHT = GLFW_KEY_RIGHT,
         GCL_PAGEUP = GLFW_KEY_PAGEUP,
-        GCL_PAGEDOWN = GLFW_KEY_PAGEDOWN,
+        GCL_PAGEDOWN = GLFW_KEY_PAGEDOWN
     };
 #else
     enum KeyNames

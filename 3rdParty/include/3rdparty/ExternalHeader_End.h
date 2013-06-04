@@ -21,5 +21,9 @@
  */
 
 #if defined(OS_WIN32)
-#   pragma warning(pop)  
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#else
+#   pragma warning(pop)
+#endif
 #endif

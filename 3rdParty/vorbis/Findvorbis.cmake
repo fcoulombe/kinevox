@@ -1,34 +1,27 @@
 IF(${WIN32})
-SET(VORBIS_ROOT "${CMAKE_CURRENT_LIST_DIR}")
-
-SET(VORBIS_INCLUDE_DIR ${VORBIS_ROOT}/include)
-
-FIND_LIBRARY(
-  VORBIS_LIBRARY 
-  NAMES 
-    libvorbis_static 
-  PATHS
-    ${VORBIS_ROOT}/lib/${KINEVOX_ARCHITECTURE}
-  NO_DEFAULT_PATHS )
-  
-  FIND_LIBRARY(
-  VORBIS_LIBRARY2 
-  NAMES 
-    libvorbisfile_static 
-  PATHS
-    ${VORBIS_ROOT}/lib/${KINEVOX_ARCHITECTURE}
-  NO_DEFAULT_PATHS )
-  
-  
-SET(vorbis_INCLUDE_DIR ${VORBIS_INCLUDE_DIR} )
-list(APPEND vorbis_LIBS ${VORBIS_LIBRARY})
-list(APPEND vorbis_LIBS ${VORBIS_LIBRARY2})
-#SET(vorbis_LIBS ${VORBIS_LIBRARY} ${VORBIS_LIBRARY2} )
+	IF(${IS_MSVC})
+		SET(VORBIS_ROOT "${CMAKE_CURRENT_LIST_DIR}")
+		SET(LPATH ${VORBIS_ROOT}/lib/${KINEVOX_ARCHITECTURE})
+		SET(LIB_NAME "libvorbis_static")
+		SET(LIB_NAME2 "libvorbisfile_static")
+	ELSEIF(${IS_GNU})
+		SET(VORBIS_ROOT "${MSYS_PATH}/local")		
+		SET(LPATH ${VORBIS_ROOT}/lib/)
+		SET(LIB_NAME "libvorbis")
+		SET(LIB_NAME2 "libvorbisfile")
+	ENDIF()
+	
+	SET(VORBIS_INCLUDE_DIR ${VORBIS_ROOT}/include)
+	FindLibrary(VORBIS_LIBRARY ${LIB_NAME} ${LPATH})
+	FindLibrary(VORBIS_LIBRARY2 ${LIB_NAME2} ${LPATH})
+	  
+	SET(vorbis_INCLUDE_DIR ${VORBIS_INCLUDE_DIR} )
+	list(APPEND vorbis_LIBS ${VORBIS_LIBRARY})
+	list(APPEND vorbis_LIBS ${VORBIS_LIBRARY2})
 ELSE()
-        #FIND_PACKAGE(glfw)
-        SET(vorbis_INCLUDE_DIR "")
+    SET(vorbis_INCLUDE_DIR "")
 	list(APPEND vorbis_LIBS "vorbisfile")
-        list(APPEND vorbis_LIBS "vorbis")
+    list(APPEND vorbis_LIBS "vorbis")
  	list(APPEND vorbis_LIBS "m")
 ENDIF()
 

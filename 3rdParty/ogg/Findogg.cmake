@@ -1,20 +1,21 @@
 IF(${WIN32})
-SET(OGG_ROOT "${CMAKE_CURRENT_LIST_DIR}")
-
-SET(OGG_INCLUDE_DIR ${OGG_ROOT}/include)
-
-FIND_LIBRARY(
-  OGG_LIBRARY 
-  NAMES 
-    libogg_static
-  PATHS
-    ${OGG_ROOT}/lib/${KINEVOX_ARCHITECTURE}
-  NO_DEFAULT_PATHS )
-SET(ogg_INCLUDE_DIR ${OGG_INCLUDE_DIR} )
-list(APPEND ogg_LIBS ${OGG_LIBRARY} )
-#SET(ogg_LIBS ${OGG_LIBRARY} )
+	IF(${IS_MSVC})
+		SET(OGG_ROOT "${CMAKE_CURRENT_LIST_DIR}")
+		SET(LPATH ${OGG_ROOT}/lib/${KINEVOX_ARCHITECTURE})
+		SET(LIB_NAME "libogg_static")
+	ELSEIF(${IS_GNU})
+		SET(OGG_ROOT "${MSYS_PATH}/local")		
+		SET(LPATH ${OGG_ROOT}/lib/)
+		SET(LIB_NAME "libogg")
+	ENDIF()
+	
+	SET(OGG_INCLUDE_DIR ${OGG_ROOT}/include)
+	FindLibrary(OGG_LIBRARY ${LIB_NAME} ${LPATH})
+	
+	SET(ogg_INCLUDE_DIR ${OGG_INCLUDE_DIR} )
+	list(APPEND ogg_LIBS ${OGG_LIBRARY} )
+	#message("ogg!!!" ${OGG_LIBRARY})
 ELSE()
-        #FIND_PACKAGE(glfw)
         SET(ogg_INCLUDE_DIR "")
         list(APPEND ogg_LIBS "ogg")
 ENDIF()

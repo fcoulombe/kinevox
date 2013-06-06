@@ -26,7 +26,7 @@ macro(ProcessDependencies projName)
 	include (${projName}dep)
 	SET(DebugOptimized "")
 	foreach(dep ${DEPENDENCIES})
-		FIND_PACKAGE( ${dep} MODULE REQUIRED)
+		FIND_PACKAGE( ${dep}  REQUIRED)
 		SET(DEP_INC ${DEP_INC} ${${dep}_INCLUDE_DIR})
 		SET(DEP_DLL ${DEP_DLL} ${${dep}_DLL})
 		

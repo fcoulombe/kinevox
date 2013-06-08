@@ -47,7 +47,7 @@ namespace GCL
     {
         node.mId = (uint32_t)nodeOffset.size();
         buffer.Write(node.mId); //node ID
-        nodeOffset.push_back(buffer.GetCurrentOffset());
+        nodeOffset.push_back((uint32_t)buffer.GetCurrentOffset());
         buffer << node.mName;
         buffer << node.mTransform;
         uint32_t parentOffset;

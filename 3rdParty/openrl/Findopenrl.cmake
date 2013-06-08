@@ -1,4 +1,4 @@
-IF(${WIN32})
+IF(${WIN32} AND USE_OPENRL)
 SET(OPENRL_ROOT "C:\\Program Files\\Imagination Technologies\\OpenRL SDK 1.2 R2\\")
 FIND_PATH(
   OPENRL_INCLUDE_DIR OpenRL.h
@@ -19,7 +19,8 @@ FIND_LIBRARY(
     ${OPEN_RL_PATH}
   NO_DEFAULT_PATHS )
 
+
 SET(openrl_INCLUDE_DIR ${OPENRL_INCLUDE_DIR}/.. )
 list(APPEND openrl_LIBS ${OPENRL_LIBRARY} )
-#SET(openrl_LIBS ${OPENRL_LIBRARY} )
+#message("openrl!!" ${OPENRL_LIBRARY} )
 ENDIF()

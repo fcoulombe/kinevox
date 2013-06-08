@@ -530,7 +530,7 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                 if (uvs.getType() == COLLADAFW::MeshVertexData::DATA_TYPE_DOUBLE )
                 {
                     const double *rawUv = uvs.getDoubleValues()->getData();
-                    int uvIndex = uvi[j]*uvs.getStride(0);           
+                    size_t uvIndex = uvi[j]*uvs.getStride(0);           
                     newUv.x = (MeshReal)(rawUv[uvIndex]);
                     newUv.y = (MeshReal)(rawUv[uvIndex+1]);
                     subMeshData.mUvList.push_back(newUv);
@@ -538,7 +538,7 @@ bool KinevoxWriter::writeGeometry( const COLLADAFW::Geometry* geometry )
                 else
                 {
                     const float *rawUv = uvs.getFloatValues()->getData();
-                    int uvIndex = uvi[j]*uvs.getStride(0);     
+                    size_t uvIndex = uvi[j]*uvs.getStride(0);     
                     newUv.x = rawUv[uvIndex];
                     newUv.y = rawUv[uvIndex+1];
                     subMeshData.mUvList.push_back(newUv);

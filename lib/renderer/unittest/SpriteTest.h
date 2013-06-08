@@ -61,12 +61,12 @@ void Test()
             const ViewPort &viewport = renderer.GetViewPort();
         Matrix44 ortho;
         ortho.SetOrtho(0.0, (Real)viewport.GetHeight(), (Real)viewport.GetWidth(), 0.0, -1.0, 1.0);
-#ifdef ENABLE_FIX_PIPELINE
+#if ENABLE_FIX_PIPELINE
         renderer.SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
 #else
         Shader shader;
         shader.Bind();
-        renderer.SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
+        renderer.SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
 #endif
 			obj.Update();
 			renderer.PreRender();

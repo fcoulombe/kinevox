@@ -56,7 +56,7 @@ const char *TextureVShaderStr =
 		"varying vec4 color;  \n"
 		"void main()                 \n"
 		"{                           \n"
-		"#ifdef ENABLE_FIX_PIPELINE \n"
+		"#if ENABLE_FIX_PIPELINE \n"
 		"	gl_Position    = gl_ModelViewProjectionMatrix * gl_Vertex; \n"
 		"	gl_TexCoord[0] = gl_MultiTexCoord0; \n"
 		"#else \n"
@@ -73,7 +73,7 @@ const char *TextureFShaderStr =
 		"varying vec4 color;	\n"
 		"void main() \n"
 		"{\n"
-		"#ifdef ENABLE_FIX_PIPELINE \n"
+		"#if ENABLE_FIX_PIPELINE \n"
 		"	gl_FragColor = texture2D( texture, gl_TexCoord[0].st ); \n"
 		"#else \n"
 		"	gl_FragColor = texture2D(texture, texcoord);\n"
@@ -88,8 +88,10 @@ const char *SHADER_HEADER =
 		"#version 110	\n"
 		"#pragma optimize(off) \n"
 		"#pragma debug(on) \n"
-#ifdef ENABLE_FIX_PIPELINE
-		"#define ENABLE_FIX_PIPELINE \n"
+#if ENABLE_FIX_PIPELINE
+		"#define ENABLE_FIX_PIPELINE 1\n"
+#else
+		"#define ENABLE_FIX_PIPELINE 0\n"
 #endif
 		"\n";
 
@@ -120,7 +122,6 @@ GLShader::GLShader()
 	glGetProgramiv(mProgramObject, GL_LINK_STATUS, &linked);glErrorCheck();
 	if(linked)
 	{
-
 		mIsValid = true;
 	}
 	else

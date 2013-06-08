@@ -55,7 +55,7 @@ void Test()
 		s <<std::setprecision(16)<< std::endl<<perspective << std::endl << "==" << std::endl << camera.GetProjection();
 		AssertMsg_Test(perspective==camera.GetProjection(), s.str().c_str());
 	}
-#if !defined(ES1) && !defined(ES2)
+#if ENABLE_FIX_PIPELINE //!defined(ES1) && !defined(ES2) works on 2.0 but not on 3.x
 	//camera projection equal gluPerspective projection
 	{
 		glMatrixMode(GL_PROJECTION);

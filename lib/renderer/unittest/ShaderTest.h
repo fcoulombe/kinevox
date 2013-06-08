@@ -78,7 +78,7 @@ void Test()
 		}
 
 		std::stringstream s;
-#ifndef ENABLE_FIX_PIPELINE
+#if !ENABLE_FIX_PIPELINE
 
 		//query pro0jection matrix test
 		Matrix44 proj2;
@@ -117,7 +117,7 @@ void Test()
 		catch (GCLException & /*e*/)
 		{}
 
-#ifndef ENABLE_FIX_PIPELINE
+#if !ENABLE_FIX_PIPELINE
 		//attribute position query test
 		int loc = shader.GetAttributeLocation("InPosition");
 		s.str("");

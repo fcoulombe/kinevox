@@ -42,8 +42,9 @@ using namespace GCL;
 
 void GLRenderer::Init3DState()
 {
-
-    glViewport(0,0,(GLsizei)mViewPort.GetWidth(),(GLsizei)mViewPort.GetHeight()); glErrorCheck();
+	glErrorCheck();
+    glViewport(0,0,(GLsizei)mViewPort.GetWidth(),(GLsizei)mViewPort.GetHeight()); 
+	glErrorCheck();
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); glErrorCheck();
 	glClearDepth(1.0); glErrorCheck();
 	glDepthMask(GL_TRUE); glErrorCheck();
@@ -53,16 +54,27 @@ void GLRenderer::Init3DState()
 #if ENABLE_FIX_PIPELINE
     glShadeModel(GL_FLAT); glErrorCheck();
 	glDisable(GL_ALPHA_TEST); glErrorCheck();
+	glEnable(GL_TEXTURE_2D); glErrorCheck();
 #endif
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
 	
-	glEnable(GL_TEXTURE_2D); glErrorCheck();
+
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); glErrorCheck();
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
 }
 
 GLRenderer::GLRenderer(size_t /*windowsHandle*/)
 {
+#if ENABLE_GLEW
+	glewExperimental=TRUE;
+	GLenum err = glewInit();
+	GCLAssertMsg(GLEW_OK == err, (const char *)glewGetErrorString(err));
+	mGlewVersion = std::string((const char*)glewGetString(GLEW_VERSION));
+	glGetError(); //glew generates an error that can be ignored. on 3.x+
+	glErrorCheck();
+#else
+	mGlewVersion  = std::string("Unused");
+#endif
     mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
 
 	mCamera=&Camera::DefaultCamera();
@@ -76,16 +88,25 @@ GLRenderer::GLRenderer(size_t /*windowsHandle*/)
 	mShadingLanguageVersion = std::string(ver);
 #endif
 	char delim = ' ';
-	std::string extString((const char *) glGetString(GL_EXTENSIONS));
+#if 0
+	
+	const char *ex = (const char *) glGetString(GL_EXTENSIONS);
+	std::string extString(ex);
 	mExtensions = StringUtil::Explode(extString, delim); glErrorCheck();
-
-#if ENABLE_GLEW
-	GLenum err = glewInit();
-	GCLAssertMsg(GLEW_OK == err, (const char *)glewGetErrorString(err));
-	mGlewVersion = std::string((const char*)glewGetString(GLEW_VERSION));
 #else
-	mGlewVersion  = std::string("Unused");
+	GLint n, i;
+	glGetIntegerv(GL_NUM_EXTENSIONS, &n);glErrorCheck();
+	std::string extString;
+	for (i = 0; i < n; i++)
+	{
+		const char *ex = (const char*)glGetStringi(GL_EXTENSIONS, i); glErrorCheck();
+		extString = extString +ex;
+		extString = extString + " ";
+	}
+	mExtensions = StringUtil::Explode(extString, delim); 
 #endif
+
+
 }
 GLRenderer::~GLRenderer()
 {
@@ -207,12 +228,12 @@ void GLRenderer::Render(const RenderObject2DList &renderObjectList)
 {
     Matrix44 ortho;
     ortho.SetOrtho(0.0, (Real)mViewPort.GetHeight(), (Real)mViewPort.GetWidth(), 0.0, -1.0, 1.0);
-#ifdef ENABLE_FIX_PIPELINE
+#if ENABLE_FIX_PIPELINE
     SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
 #else
     Shader shader;
     shader.Bind();
-    SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
+    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
 #endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
@@ -244,12 +265,12 @@ void GLRenderer::Render(const Text2DList &renderObjectList)
 {
     Matrix44 ortho;
     ortho.SetOrtho(0.0, (Real)mViewPort.GetHeight(), (Real)mViewPort.GetWidth(), 0.0, -1.0, 1.0);
-#ifdef ENABLE_FIX_PIPELINE
+#if ENABLE_FIX_PIPELINE
     SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
 #else
     Shader shader;
     shader.Bind();
-    SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
+    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
 #endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)

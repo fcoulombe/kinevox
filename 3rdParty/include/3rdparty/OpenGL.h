@@ -198,7 +198,14 @@ inline void i_glErrorCheck(const char *file, int line)
 		return;
 
 	std::stringstream s;
-	s<<file << ":" <<  line << ": OpenGL Error" << std::endl;
+	s<<std::endl
+		<<file 
+#ifdef OS_WIN32
+		<< "(" <<  line  <<")"
+#else
+		<< ":" <<  line  <<":"
+#endif
+		<< " OpenGL Error" << std::endl;
 	switch (err)
 	{
 	case GL_INVALID_ENUM:

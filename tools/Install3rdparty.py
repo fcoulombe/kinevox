@@ -40,6 +40,6 @@ def Copy3rdParty(root):
 
 
 
-CreateRepo("kinevox/")
-Copy3rdParty("kinevox/")
-RemoveDir("kinevox/tmp")
+CreateRepo("./")
+Copy3rdParty("./")
+RemoveDir("./tmp")

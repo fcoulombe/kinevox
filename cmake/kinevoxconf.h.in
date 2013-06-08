@@ -11,6 +11,7 @@
 #error "the size of word is not supported"
 #endif
 
+#define ENABLE_OPENRL @IS_OPENRL_ENABLED@
 #define ENABLE_GLEW @IS_GLEW_ENABLED@
 #define ENABLE_EGLEW @IS_EGLEW_ENABLED@
 #define ENABLE_FIX_PIPELINE @IS_FIX_PIPELINE_ENABLED@

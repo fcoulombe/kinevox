@@ -1,6 +1,8 @@
 cmake_minimum_required (VERSION 2.8)
 project (kinevox)
 
+option(USE_OPENRL "Enables Open Ray Tracing Library. SDK from caustic must be installed" OFF)
+
 SET(GFXAPI_TO_USE "OpenGLFix" CACHE STRING "library to use for graphics")
 
 SET_PROPERTY(CACHE GFXAPI_TO_USE PROPERTY STRINGS OpenGLFix OpenGL OpenGLES1 OpenGLES2 OpenGLES3 D3D) 

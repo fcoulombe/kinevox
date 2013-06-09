@@ -31,13 +31,8 @@
 using namespace GCL;
 
 GCLText2D::GCLText2D(const char *text)
-:mFont(FONT_PATH"FreeMono.ttf")
+: Text2D(text)
 {
-
-	PixelBuffer buffer;
-	mFont.BlitText(buffer, text, 18, 100, 100);
-	mTexture = new Texture(buffer);
-
 	GCLApplication::RegisterText2D(this);
 }
 

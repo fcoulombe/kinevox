@@ -24,18 +24,14 @@
 #include <cstdlib>
 #include <gcl/Point3.h>
 #include "renderer/Texture.h"
+#include "renderer/TTFFont.h"
 
 namespace GCL
 {
 class Text2D
 {
 public:
-	Text2D()
-	: mScale(1.0,1.0),
-	  mIsVisible(true)
-	{
-		mTexture = NULL;
-	}
+	Text2D(const char *text);
 	virtual ~Text2D()
 	{
 	}
@@ -59,6 +55,7 @@ public:
 	const WorldPoint2 &GetScale() const { return mScale; }
 
 protected:
+	TTFFont mFont;
 	Texture *mTexture;
 	WorldPoint3 mPosition;
 	WorldPoint2 mScale;

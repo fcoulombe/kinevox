@@ -26,6 +26,15 @@
 
 using namespace GCL;
 
+GCL::Text2D::Text2D() : mScale(1.0,1.0),
+	mIsVisible(true),
+	mFont(FONT_PATH"FreeMono.ttf")
+{
+	PixelBuffer buffer;
+	mFont.BlitText(buffer, text, 18, 100, 100);
+	mTexture = new Texture(buffer);
+
+}
 void Text2D::Render()
 {
 	GCLAssert(mTexture);
@@ -58,8 +67,7 @@ void Text2D::Render()
 
     square[3].position = Point3<MeshReal>(MeshReal(-halfWidth+mPosition.x), MeshReal(halfHeight+mPosition.y), MeshReal(0.0));
     square[3].textureCoordinate = Point2<MeshReal>(MeshReal(topTextureCoord.x), MeshReal(bottomTextureCoord.y));
-    VertexBuffer<VertexPT> buffer(square, 4);
-    buffer.PreRender();
+    VertexBuffer buffer(square, 4);
     buffer.Render(GL_TRIANGLE_STRIP);
-    buffer.PostRender();
 }
+

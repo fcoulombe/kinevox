@@ -1,1 +1,1 @@
-SET(DEPENDENCIES gcl  glext openrl)
+SET(DEPENDENCIES gcl  glext openrl freetype)

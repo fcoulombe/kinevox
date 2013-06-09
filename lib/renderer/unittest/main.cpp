@@ -26,6 +26,7 @@
 #include <gcl/Assert.h>
 
 #include "CameraTest.h"
+#include "FontResourceTest.h"
 #include "FrameBufferTest.h"
 #include "GeomUtilTest.h"
 #include "GLRendererTest.h"
@@ -46,6 +47,7 @@
 #include "Text2DTest.h"
 #include "TextureTest.h"
 #include "TextureAndShaderTest.h"
+#include "TTFFontTest.h"
 #include "VertexBufferTest.h"
 #include "VertexTest.h"
 
@@ -74,11 +76,13 @@ int main(int argc, char **argv)
     TextureAndShaderTest::Test();
 
     MaterialTest::Test();
-    //SpriteTest::Test();
+    SpriteTest::Test();
 
+	FontResourceTest::Test();
+	TTFFontTest::Test();
     Text2DTest::Test();
 
-    //RenderObject2DTest::Test();
+    RenderObject2DTest::Test();
 
     RenderObjectTest::Test();
     RenderObjectWithMaterialTest::Test();

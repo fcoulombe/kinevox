@@ -19,8 +19,8 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
-#ifndef USE_SDL
-#include "windriver/FontResource.h"
+
+#include "renderer/FontResource.h"
 #include <gcl/Assert.h>
 #include <3rdparty/FreeType.h>
 
@@ -92,4 +92,3 @@ namespace GCL
     }
 
 }
-#endif

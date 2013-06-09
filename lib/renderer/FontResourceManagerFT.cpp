@@ -19,9 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#ifndef USE_SDL
-#include "windriver/FontResourceManager.h"
-#include "windriver/FontResource.h"
+
+#include "renderer/FontResourceManager.h"
+#include "renderer/FontResource.h"
 #include <3rdparty/FreeType.h>
 
 using namespace GCL;
@@ -52,4 +52,3 @@ GCL::FontResourceManager::FontResourceManager()
     FT_Error err = FT_Init_FreeType( &library );
     FTErrorCheck(err);
 }
-#endif

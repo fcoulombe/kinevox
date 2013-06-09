@@ -22,7 +22,7 @@
 
 #pragma once
 
-#include <windriver/TTFFont.h>
+
 #include <renderer/Text2D.h>
 
 namespace GCL
@@ -35,7 +35,7 @@ public:
 
 	~GCLText2D();
 private:
-	TTFFont mFont;
+
 };
 
 }

@@ -20,14 +20,14 @@
 * THE SOFTWARE.
 */
 #ifndef USE_SDL
-#include "windriver/TTFFont.h"
+#include "renderer/TTFFont.h"
 
 #include <sstream>
 #include <3rdparty/FreeType.h>
 #include <gcl/Assert.h>
 #include <gcl/PixelBuffer.h>
-#include "windriver/FontResource.h"
-#include "windriver/FontResourceManager.h"
+#include "renderer/FontResource.h"
+#include "renderer/FontResourceManager.h"
 
 
 using namespace GCL;

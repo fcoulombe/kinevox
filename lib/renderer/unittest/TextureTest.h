@@ -25,8 +25,8 @@
 #include <gcl/UnitTest.h>
 #include <gcl/PixelBuffer.h>
 #include <renderer/Texture.h>
-#include <windriver/TTFFont.h>
-#include <windriver/FontResourceManager.h>
+#include <renderer/TTFFont.h>
+#include <renderer/FontResourceManager.h>
 
 using namespace GCL;
 namespace TextureTest

@@ -20,11 +20,22 @@
  * THE SOFTWARE.
  */
 
+#include <gcl/ResourceManagerConfig.h>
+
 #include "renderer/Text2D.h"
 #include "renderer/VertexBuffer.h"
 
 
 using namespace GCL;
+
+GCL::Text2D::Text2D( const char *text ) : mScale(1.0,1.0),
+	mIsVisible(true),
+	mFont(FONT_PATH"FreeMono.ttf")
+{
+	PixelBuffer buffer;
+	mFont.BlitText(buffer, text, 18, 100, 100);
+	mTexture = new Texture(buffer);
+}
 
 void Text2D::Render()
 {

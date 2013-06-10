@@ -20,7 +20,7 @@
 * THE SOFTWARE.
 */
 #ifndef USE_SDL
-#include "windriver/FontResource.h"
+#include "renderer/FontResource.h"
 #include <gcl/Assert.h>
 #include <3rdparty/FreeType.h>
 

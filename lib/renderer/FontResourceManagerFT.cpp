@@ -20,8 +20,8 @@
  * THE SOFTWARE.
  */
 #ifndef USE_SDL
-#include "windriver/FontResourceManager.h"
-#include "windriver/FontResource.h"
+#include "renderer/FontResourceManager.h"
+#include "renderer/FontResource.h"
 #include <3rdparty/FreeType.h>
 
 using namespace GCL;

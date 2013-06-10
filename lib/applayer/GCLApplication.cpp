@@ -30,9 +30,9 @@
 #include <gcl/Assert.h>
 #include <input/Input.h>
 #include <renderer/Renderer.h>
+#include <renderer/FontResourceManager.h>
 #include <renderer/MeshResourceManager.h>
 #include <renderer/TextureResourceManager.h>
-#include <windriver/FontResourceManager.h>
 #include <windriver/WinDriver.h>
 
 using namespace GCL;

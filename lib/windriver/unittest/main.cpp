@@ -25,10 +25,8 @@
 
 #include <gcl/Exception.h>
 
-#include "FontResourceTest.h"
 #include "EventHandlerTest.h"
 #include "SocketUDPTest.h"
-#include "TTFFontTest.h"
 #include "WinDriverTest.h"
 #include "DXWinDriverTest.h"
 
@@ -37,8 +35,6 @@ int main(int argc, char ** argv)
 	SUITE_INIT(argc, argv)
         //DXWinDriverTest::Test();
         SocketUDPTest::Test();
-		FontResourceTest::Test();
-		TTFFontTest::Test();
 		WinDriverTest::Test();
         EventHandlerTest::Test();
 		SUITE_TERMINATE

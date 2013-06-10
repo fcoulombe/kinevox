@@ -24,7 +24,7 @@
 #include <gcl/UnitTest.h>
 #include <gcl/ResourceManagerConfig.h>
 #include <gcl/PixelBuffer.h>
-#include <windriver/TTFFont.h>
+#include <renderer/TTFFont.h>
 
 using namespace GCL;
 namespace TTFFontTest

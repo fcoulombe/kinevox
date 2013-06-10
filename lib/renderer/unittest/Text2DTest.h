@@ -26,31 +26,15 @@
 #include <gcl/PixelBuffer.h>
 #include <gcl/Time.h>
 #include <kinetestlib/UnitTest.h>
-#include <windriver/FontResourceManager.h>
-#include <windriver/TTFFont.h>
+#include <renderer/FontResourceManager.h>
+#include <renderer/TTFFont.h>
 
 using namespace GCL;
 
 namespace Text2DTest
 {
 
-class TestText2D : public Text2D
-{
-public:
-	TestText2D(const char *text)
-	:mFont(FONT_PATH"FreeMono.ttf")
-	{
-		PixelBuffer buffer;
-		mFont.BlitText(buffer, text, 12, 100, 100);
-        //buffer.PadToNextPOT();
-        //buffer.SaveTga("Text2DTest.tga", buffer.mWidth, buffer.mHeight, buffer.mBytesPerPixel, buffer.mPixels);
-		mTexture = new Texture(buffer);
-		mTexture->Save("Text2DTest.tga");
-	}
 
-private:
-	TTFFont mFont;
-};
 void Test()
 {
 	KINEVOX_TEST_START
@@ -62,7 +46,8 @@ void Test()
 		WinDriver winDriver("Text2dTest");
 		Renderer renderer(winDriver.GetWindowsHandle());
 
-		TestText2D obj("HelloWorld");
+		Text2D obj("HelloWorld");
+		obj.Save("Text2DTest.tga");
 		s.str("");
 		s<< obj.GetWidth()<<" == 72"<<std::endl;
 		AssertMsg_Test(obj.GetWidth() == 72, s.str().c_str());

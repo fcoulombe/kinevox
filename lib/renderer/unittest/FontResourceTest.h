@@ -22,8 +22,8 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
-#include <windriver/FontResource.h>
-#include <windriver/FontResourceManager.h>
+#include <renderer/FontResource.h>
+#include <renderer/FontResourceManager.h>
 
 using namespace GCL;
 

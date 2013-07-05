@@ -28,6 +28,7 @@
 #include <string>
 #include <vector>
 
+#include <3rdparty/OpenGL.h>
 #include <gcl/Config.h>
 #include "renderer/Camera.h"
 #include "renderer/ViewPort.h"
@@ -89,7 +90,7 @@ public:
 
 	static Matrix44 GetGLProjection();
 	static Matrix44 GetGLModelView();
-
+	void SwapBuffer();
 private:
 	void Init3DState();
     ViewPort mViewPort;
@@ -103,6 +104,10 @@ private:
 
 	ExtensionList mExtensions;
 
+
+	HWND mhWnd;
+	HDC mhDC;
+	HGLRC mhRC;
 
 };
 }

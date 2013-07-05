@@ -154,7 +154,8 @@ namespace GCL
             return mWindowsHandle;
         }
         void SwapBuffer()
-        {    MSG msg; //declare a MSG local variable for the GetMessage of the while loop
+        {   
+			MSG msg; //declare a MSG local variable for the GetMessage of the while loop
         if (GetMessage(&msg,NULL,0,0)) //GetMessage reffer to the wndProc() function
         {
             TranslateMessage(&msg); //translate the msg of the GetMessage of your while loop

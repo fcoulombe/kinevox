@@ -28,19 +28,6 @@
 using namespace GCL;
 namespace RenderObjectWithMaterialTest
 {
-
-class MyRenderObject : public SquareRenderObject
-{
-public:
-	MyRenderObject()
-	: SquareRenderObject("MyRenderObject", Matrix44(true)) //identity
-	{
-    }
-	const Material &GetMaterial() const { return mMaterial; }
-private:
-	Material mMaterial;
-};
-
 void Test();
 void Test()
 {
@@ -51,10 +38,10 @@ void Test()
 		WinDriver winDriver("RenderObjectWithMaterialTest");
 		Renderer renderer(winDriver.GetWindowsHandle());
 
-		MyRenderObject obj;
+		SquareRenderObject obj;
 		RenderObjectList objList;
 
-		objList.push_back(&obj);
+		objList.push_back(obj.GetRenderObject());
 
 		Material material("Default");
 		material.Bind();
@@ -66,7 +53,6 @@ void Test()
 		renderer.PreRender();
 		renderer.Render(objList);
 		renderer.PostRender();
-		winDriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END
 	}
 	TextureResourceManager::Terminate();

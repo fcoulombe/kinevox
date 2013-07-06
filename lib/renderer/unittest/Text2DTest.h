@@ -49,11 +49,11 @@ void Test()
 		Text2D obj("HelloWorld");
 		obj.Save("Text2DTest.tga");
 		s.str("");
-		s<< obj.GetWidth()<<" == 72"<<std::endl;
-		AssertMsg_Test(obj.GetWidth() == 72, s.str().c_str());
+		s<< obj.GetWidth()<<" == 108"<<std::endl;
+		AssertMsg_Test(obj.GetWidth() == 108, s.str().c_str());
 		s.str("");
-		s<< obj.GetHeight()<<" == 12"<<std::endl;
-		AssertMsg_Test(obj.GetHeight() == 12, s.str().c_str());
+		s<< obj.GetHeight()<<" == 18"<<std::endl;
+		AssertMsg_Test(obj.GetHeight() == 18, s.str().c_str());
 
 		static const WorldPoint3 kPositionTest(256.0, 256.0, 0.0);
 		obj.SetPosition(kPositionTest);
@@ -63,25 +63,13 @@ void Test()
 		obj.SetScale(kScaleTest);
 		Assert_Test(obj.GetScale() == kScaleTest);
 
-
+		RenderObjectList objList;
+		objList.push_back(obj);
         KINEVOX_TEST_LOOP_START
-        const ViewPort &viewport = renderer.GetViewPort();
-        Matrix44 ortho;
-        ortho.SetOrtho(0.0, (Real)viewport.GetHeight(), (Real)viewport.GetWidth(), 0.0, -1.0, 1.0);            
-#if ENABLE_FIX_PIPELINE
-        renderer.SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
-#else
-        Shader shader;
-        shader.Bind();
-        renderer.SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
-#endif
         obj.Update();
         renderer.PreRender();
-        //glPushMatrix();glErrorCheck();
-        obj.Render();
-        //glPopMatrix();glErrorCheck();
-        renderer.PostRender();
-        winDriver.SwapBuffer();
+		renderer.Render2D(objList);
+		renderer.PostRender();
         KINEVOX_TEST_LOOP_END
 
 	}

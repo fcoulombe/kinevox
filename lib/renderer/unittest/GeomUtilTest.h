@@ -29,70 +29,6 @@ using namespace GCL;
 namespace GeomUtilTest
 {
 
-class MyRenderObject : public SquareRenderObject
-{
-public:
-	MyRenderObject()
-	: SquareRenderObject("MyRenderObject", Matrix44(true)) //identity
-	{
-    }
-
-	const Material &GetMaterial() const { return mMaterial; }
-private:
-	Material mMaterial;
-};
-
-
-class MySphereRenderObject : public SphereRenderObject
-{
-public:
-    MySphereRenderObject()
-        : SphereRenderObject("MyRenderObject", Matrix44(true)) //identity
-    {
-    }
-
-    const Material &GetMaterial() const { return mMaterial; }
-private:
-    Material mMaterial;
-};
-
-
-class MyCircleRenderObject : public CircleRenderObject 
-{
-public:
-    MyCircleRenderObject()
-        : CircleRenderObject("MyRenderObject", Matrix44(true)) //identity
-    {
-    }
-
-    const Material &GetMaterial() const { return mMaterial; }
-private:
-    Material mMaterial;
-};
-
-class MyPlaneRenderObject : public PlaneRenderObject 
-{
-public:
-    MyPlaneRenderObject()
-        : PlaneRenderObject("MyRenderObject", Matrix44(true)) //identity
-    {
-    }
-    const Material &GetMaterial() const { return mMaterial; }
-private:
-    Material mMaterial;
-};
-
-class MyCubeRenderObject : public CubeRenderObject
-{
-public:
-    MyCubeRenderObject()
-        : CubeRenderObject("MyRenderObject", Matrix44(true)) //identity
-    {
-    }
-    const Material &GetMaterial() const { return mMaterial; }
-private:
-    Material mMaterial;
-};
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 {
@@ -125,19 +61,19 @@ void Test()
 		Renderer renderer(winDriver.GetWindowsHandle());
 
         RenderObjectList objList;
-		MyCubeRenderObject cube;
+		CubeRenderObject cube;
         cube.SetPosition(3.0,0.0,-8.0);
         cube.SetEnableDrawNormals();
-		objList.push_back(&cube);
-        MySphereRenderObject sphere;
+		objList.push_back(cube.GetRenderObject());
+        SphereRenderObject sphere;
         sphere.SetPosition(1,0.0,-8.0);
-        objList.push_back(&sphere);
-        MyPlaneRenderObject plane;
+        objList.push_back(sphere.GetRenderObject());
+        PlaneRenderObject plane;
         plane.SetPosition(-1,0.0,-8.0);
-        objList.push_back(&plane);
-        MyCircleRenderObject circle;
+        objList.push_back(plane.GetRenderObject());
+        CircleRenderObject circle;
         circle.SetPosition(-3.0,0.0,-8.0);
-        objList.push_back(&circle);
+        objList.push_back(circle.GetRenderObject());
 
 
 		try

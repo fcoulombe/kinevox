@@ -101,9 +101,9 @@ void Test()
 #if !ENABLE_FIX_PIPELINE
 		enum AttributePositions
 		{
-		  ATTRIB_POSITION=1,
+		  ATTRIB_POSITION=0,
 		  ATTRIB_NORMAL=2,
-		  ATTRIB_TEXTURE_COORD=3
+		  ATTRIB_TEXTURE_COORD=1
 		};
 		//attribute position query test
 		int loc = program.GetAttributeLocation("InPosition");

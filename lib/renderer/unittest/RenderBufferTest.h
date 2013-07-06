@@ -33,20 +33,6 @@ using namespace GCL;
 namespace RenderBufferTest
 {
 
-class MyRenderObject : public SquareRenderObject
-{
-public:
-	MyRenderObject()
-	: SquareRenderObject("MyRenderObject", Matrix44(true)) //identity
-	{
-    }
-
-	const Material &GetMaterial() const { return mMaterial; }
-	private:
-		Material mMaterial;
-};
-
-
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 {
@@ -79,13 +65,12 @@ void Test()
 		RenderBuffer target(width, height);;
 		target.Bind();
 
-	    MyRenderObject obj;
+	    SquareRenderObject obj;
 	    RenderObjectList renderObjectList;
-	    renderObjectList.push_back(&obj);
+	    renderObjectList.push_back(obj.GetRenderObject());
 		renderer.PreRender();
 		renderer.Render(renderObjectList);
 		renderer.PostRender();
-        winDriver.SwapBuffer();
 	}
 
 	TextureResourceManager::Terminate();

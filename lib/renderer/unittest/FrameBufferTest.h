@@ -39,20 +39,6 @@ using namespace GCL;
 namespace FrameBufferTest
 {
 
-
-class MyRenderObject : public CubeRenderObject
-{
-public:
-	MyRenderObject()
-	: CubeRenderObject("MyRenderObject", Matrix44(true)) //identity
-	{
-    }
-    const GCL::Material &GetMaterial() const { return mMaterial; }
-private:
-	Material mMaterial;
-};
-
-
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 {
@@ -96,10 +82,10 @@ void Test()
         WinDriver winDriver("FrameBufferTest2");
 		Renderer renderer(winDriver.GetWindowsHandle());
 
-		MyRenderObject obj;
+		CubeRenderObject obj;
 		obj.SetPosition(0,0,-10.0);
 		RenderObjectList renderObjectList;
-		renderObjectList.push_back(&obj);
+		renderObjectList.push_back(obj.GetRenderObject());
 
         size_t width = renderer.GetViewPort().GetWidth();
 		size_t height = renderer.GetViewPort().GetHeight();

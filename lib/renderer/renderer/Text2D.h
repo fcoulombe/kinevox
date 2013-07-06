@@ -25,6 +25,7 @@
 #include <gcl/Point3.h>
 #include "renderer/Texture.h"
 #include "renderer/TTFFont.h"
+#include "renderer/RenderObject.h"
 namespace GCL
 {
 class Text2D
@@ -39,26 +40,26 @@ public:
 	{
 	}
 
-	void Render();
-
 	void SetVisible(bool isVisible = true) { mIsVisible = isVisible; }
 	bool IsVisible() const { return mIsVisible; }
 
 	size_t GetWidth() const { GCLAssert(mTexture);return mTexture->GetWidth(); }
 	size_t GetHeight() const { GCLAssert(mTexture);return mTexture->GetHeight(); }
 
-	void SetPosition(const WorldPoint3 &position)  	{mPosition = position;	}
-	const WorldPoint3 &GetPosition() const { return mPosition; }
+	void SetPosition(const WorldPoint3 &position)  	{mObj->SetPosition(position);	}
+	const WorldPoint3 &GetPosition() const { return *(const WorldPoint3 *)&mObj->GetTransform().GetPosition(); }
 
 	void SetScale(const WorldPoint2 &scale) { mScale = scale; }
 	const WorldPoint2 &GetScale() const { return mScale; }
 
 	void Save(const char *filename) { mTexture->Save(filename);}
+	operator RenderObject *() { return mObj; }
 protected:
 	TTFFont mFont;
 	Texture *mTexture;
-	WorldPoint3 mPosition;
-	WorldPoint2 mScale;
+	RenderObject *mObj;
 	bool mIsVisible;
+	Material mMaterial;
+	WorldPoint2 mScale;
 };
 }

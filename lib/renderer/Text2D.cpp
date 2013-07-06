@@ -21,58 +21,29 @@
  */
 
 #include "renderer/Text2D.h"
-#include "renderer/VertexBuffer.h"
-
 
 using namespace GCL;
 
-GCL::Text2D::Text2D( const char *text ) : mScale(1.0,1.0),
-	mIsVisible(true),
-	mFont(FONT_PATH"FreeMono.ttf")
+GCL::Text2D::Text2D( const char *text ) 
+	: mIsVisible(true),
+	mFont(FONT_PATH"FreeMono.ttf"),
+	mMaterial("DefaultSprite")
 {
 	PixelBuffer buffer;
 	mFont.BlitText(buffer, text, 18, 100, 100);
 	mTexture = new Texture(buffer);
+
+	MeshReal halfWidth = (buffer.mWidth/2.0);
+	MeshReal halfHeight = (buffer.mHeight/2.0);
+	const   VertexP square[6] = {
+		{Point3<MeshReal>(-halfWidth, -halfHeight, 0.0)},
+		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0)},
+		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0)},
+		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0)},
+		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0)},
+		{Point3<MeshReal>(halfWidth, halfHeight, 0.0)}
+	};
+	mObj = new RenderObject(Matrix44::IDENTITY, mMaterial, square, 6);
 }
 
-void Text2D::Render()
-{
-	GCLAssert(mTexture);
 
-	WorldPoint2 topTextureCoord, bottomTextureCoord;
-
-	topTextureCoord.x = 0.0;
-	topTextureCoord.y = 0.0;
-	bottomTextureCoord.x = 1.0;
-	bottomTextureCoord.y = 1.0;
-	const Texture &texture = *mTexture;
-	texture.Bind();
-
-    size_t width = texture.GetWidth();
-    size_t height = texture.GetHeight();
-    Real widthRatio = Real(width);
-    Real heightRatio = Real(height);
-    Real halfWidth = (widthRatio/2.0)*mScale.x;
-    Real halfHeight = (heightRatio/2.0)*mScale.y;
-
-    VertexPT square[4];
-    square[0].position = Point3<MeshReal>(MeshReal(halfWidth+mPosition.x), MeshReal(-halfHeight+mPosition.y), MeshReal(0.0));
-    square[0].textureCoordinate = Point2<MeshReal>(MeshReal(bottomTextureCoord.x), MeshReal(topTextureCoord.y));
-
-    square[1].position =Point3<MeshReal>(MeshReal(-halfWidth+mPosition.x), MeshReal(-halfHeight+mPosition.y), MeshReal(0.0));
-    square[1].textureCoordinate = Point2<MeshReal>(MeshReal(topTextureCoord.x), MeshReal(topTextureCoord.y));
-
-    square[2].position = Point3<MeshReal>(MeshReal(halfWidth+mPosition.x), MeshReal(halfHeight+mPosition.y), MeshReal(0.0));
-    square[2].textureCoordinate = Point2<MeshReal>(MeshReal(bottomTextureCoord.x), MeshReal(bottomTextureCoord.y));
-
-    square[3].position = Point3<MeshReal>(MeshReal(-halfWidth+mPosition.x), MeshReal(halfHeight+mPosition.y), MeshReal(0.0));
-    square[3].textureCoordinate = Point2<MeshReal>(MeshReal(topTextureCoord.x), MeshReal(bottomTextureCoord.y));
-#if 0
-	VertexBuffer buffer(square, 4);
-    buffer.PreRender();
-    buffer.Render(VBM_TRIANGLE_STRIP);
-    buffer.PostRender();
-#else
-GCLAssert(false && "reimplement");
-#endif
-}

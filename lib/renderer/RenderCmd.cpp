@@ -49,6 +49,8 @@ GCL::ReturnMessage::~ReturnMessage()
 			break;
 		}
 	case RMT_BOOL:
+	case RMT_NUMBER:
+	case RMT_POINTER:
 		break;
 	default:
 		GCLAssert(false);

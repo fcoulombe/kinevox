@@ -29,44 +29,83 @@ namespace GCL
 {
 enum RenderCommandType
 {
-	SWAP_BUFFER,
-	CREATE_RENDERER,
-	CREATE_VERTEX_BUFFER,
-	CREATE_TEXTURE,
-	CREATE_SHADER,
-	CREATE_VAO,
-	GET_VENDOR,
-	GET_VERSION,
-	GET_RENDERER,
-	GET_SHADING_LANGUAGE_VERSION,
-	GET_GLEW_VERSION,
-	GET_EXTENSIONS,
-	GET_IS_EXTENSION_SUPPORTED,
-	GET_IS_GLEW_EXTENSION_SUPPORTED,
-	GET_GL_PROJECTION,
-	GET_GL_MODELVIEW,
-	SET_VIEWPORT,
-	SET_PROJECTION,
-	SET_MODELVIEW,
+	SWAP_BUFFER=0,
+	CREATE_RENDERER=1,
+	DESTROY_RENDERER=2,
+	GET_VENDOR=3,
+	GET_VERSION=4,
+	GET_RENDERER=5,
+	GET_SHADING_LANGUAGE_VERSION=6,
+	GET_GLEW_VERSION=7,
+	GET_EXTENSIONS=8,
+	GET_IS_EXTENSION_SUPPORTED=9,
+	GET_IS_GLEW_EXTENSION_SUPPORTED=10,
+	GET_GL_PROJECTION=11,
+	GET_GL_MODELVIEW=12,
+	SET_VIEWPORT=13,
+	SET_PROJECTION=14,
+	SET_MODELVIEW=15,
+	GPUPROGRAM_CREATE=16,
+	GPUPROGRAM_DESTROY=17,
+	GPUPROGRAM_BIND=18,
+	GPUPROGRAM_ATTACH_SHADER=19,
+	GPUPROGRAM_LINK=20,
+	IS_GPUPROGRAM_VALID=21,
+	GPUPROGRAM_SET_TEXTURE_SAMPLER=22,
+	GPUPROGRAM_SET_PROJECTION=23,
+	GPUPROGRAM_SET_MODELVIEW=24,
+	GPUPROGRAM_GET_UNIFORM_MATRIX=25,
+	GPUPROGRAM_GET_UNIFORM_NUMBER=26,
+	GPUPROGRAM_GET_ATTRIBUTE_LOCATION=27,
+	GPUPROGRAM_RESETDEFAULT=28,
+	SHADER_CREATE=29,
+	SHADER_DESTROY=30,
+	IS_SHADER_VALID=31,
+	TEXTURE_DESTROY=32,
+	TEXTURE_CREATE=33,
+	TEXTURE_BIND=34,
+	IS_TEXTURE_VALID=35,
+	TEXTURE_GET_WIDTH=36,
+	TEXTURE_GET_HEIGHT=37,
+	TEXTURE_GET_BPP=38,
+	TEXTURE_GET_TEXTURE_FROM_VRAM=39,
+	TEXTURE_GET_PIXELBUFFER_FROM_VRAM=40,
+	FRAMEBUFFER_CREATE=41,
+	FRAMEBUFFER_DESTROY=42,
+	FRAMEBUFFER_BIND=43,
+	IS_FRAMEBUFFER_VALID=44,
+	FRAMEBUFFER_RESETDEFAULT=45,
+	RENDERBUFFER_CREATE=46,
+	RENDERBUFFER_DESTROY=47,
+	RENDERBUFFER_BIND=48,
+	IS_RENDERBUFFER_VALID=49,
 	RenderCommandMax
 };
 class RenderCommand
 {
 public:
-	RenderCommand(RenderCommandType cmd, void *data=NULL)
+	RenderCommand(RenderCommandType cmd, void *data=NULL, void *data2=NULL, void *data3=NULL)
 	{
 		mCmd = cmd;
 		mData = data;
+		mData2 = data2;
+		mData3 = data3;
 	}
 	//virtual void Run(RenderData &renderThread)=0;
 	RenderCommandType mCmd;
 	void *mData;
+	void *mData2;
+	void *mData3;
 };
 struct RenderData
 {
+	RenderData()
+		: pad(0xf2f2f2f2)
+	{
+	}
 	size_t pad;
 };
-typedef void (*RenderCommandFunction)(void *, RenderData &);
+typedef void (*RenderCommandFunction)(RenderCommand *, RenderData &);
 
 class ReturnMessage
 {
@@ -78,12 +117,18 @@ public:
 		RMT_FLOAT,
 		RMT_STRING,
 		RMT_MATRIX4,
-		RMT_STRINGLIST
+		RMT_STRINGLIST,
+		RMT_POINTER
 	};
 	ReturnMessage(bool data)
 	{
 		mType = RMT_BOOL;
 		mData = (data) ? (void*)1 : (void*)0;
+	}
+	ReturnMessage(int data)
+	{
+		mType = RMT_NUMBER;
+		mData = (void*)(data) ;
 	}
 	ReturnMessage(const std::string &data)
 	{
@@ -100,6 +145,11 @@ public:
 		mType = RMT_MATRIX4;
 		mData = new Matrix44(data);
 	}
+	ReturnMessage(const void *data)
+	{
+		mType = RMT_POINTER;
+		mData = (void*)data;
+	}
 	~ReturnMessage();
 	
 	const std::string &GetString() const
@@ -113,6 +163,14 @@ public:
 	const bool GetBool() const
 	{
 		return (mData) ? true : false;
+	}
+	const int GetNumber() const
+	{
+		return (int)(mData);
+	}
+	const void* GetPointer() const
+	{
+		return (mData);
 	}
 	const std::vector<std::string> &GetStringList() const
 	{

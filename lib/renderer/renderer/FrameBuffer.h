@@ -22,8 +22,9 @@
 
 #pragma once
 
-#include "rendererconf.h"
-#include GFXAPI_FrameBuffer_H
+#include <gcl/Assert.h>
+#include "renderer/RenderCmd.h"
+#include "renderer/RenderPipe.h"
 
 namespace GCL
 {
@@ -33,24 +34,28 @@ class RenderBuffer;
 class FrameBuffer
 {
 public:
-	FrameBuffer(const Texture & texture, const RenderBuffer & depthBuffer);
+	FrameBuffer(const Texture & texture, const RenderBuffer & depthBuffer)
+	{
+		RenderPipe::SendCommand(new RenderCommand(FRAMEBUFFER_CREATE, this, (void*)&texture, (void*)&depthBuffer));
+	}
 	~FrameBuffer()
 	{
+		RenderPipe::SendCommand(new RenderCommand(FRAMEBUFFER_DESTROY, this));
 	}
 	void Bind()
 	{
-		mPimpl.Bind();
+		RenderPipe::SendCommand(new RenderCommand(FRAMEBUFFER_BIND, this));
 	}
 	static void ResetDefault()
 	{
-		IFrameBuffer::ResetDefault();
+
+		RenderPipe::SendCommand(new RenderCommand(FRAMEBUFFER_RESETDEFAULT));
 	}
 
-	bool IsValid() const { return mPimpl.IsValid(); }
+	bool IsValid() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_FRAMEBUFFER_VALID, (void*)this)).GetBool(); }
 
 	void Save(const char * /*filename*/) { GCLAssert(false && "TBD"); }
 private:
-	IFrameBuffer mPimpl;
 };
 
 }

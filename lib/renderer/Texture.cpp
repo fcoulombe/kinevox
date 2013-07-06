@@ -33,7 +33,7 @@ using namespace GCL;
 
 Texture::~Texture()
 {
-	delete mPimpl;
+	RenderPipe::SendCommand(new RenderCommand(TEXTURE_DESTROY, this));
 	if (mTextureResource)
 		TextureResourceManager::Instance().ReleaseResource(mTextureResource);
 }
@@ -41,7 +41,7 @@ Texture::~Texture()
 Texture::Texture(const PixelBuffer &buffer)
 {
 	mTextureResource = NULL;
-	mPimpl = new ITexture(buffer);
+	RenderPipe::SendCommand(new RenderCommand(TEXTURE_CREATE, this,(void*) &buffer));
 }
 
 Texture::Texture(const char *filename)
@@ -53,7 +53,7 @@ Texture::Texture(const char *filename)
 	const TextureResource::TextureData &tempTextureData = mTextureResource->mTextureData;
 	const PixelBuffer &imageData = tempTextureData.imageData;
 
-	mPimpl = new ITexture(imageData);
+	RenderPipe::SendCommand(new RenderCommand(TEXTURE_CREATE, this, (void*)&imageData));
 }
 
 Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
@@ -64,19 +64,22 @@ Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
 	case 1:
 	{
 		PixelBuffer buffer((PixelMono*)NULL, width, height);
-        mPimpl = new ITexture(buffer);
+
+		RenderPipe::SendCommand(new RenderCommand(TEXTURE_CREATE, this, &buffer));
 		break;
 	}
 	case 3:
 	{
 		PixelBuffer buffer((PixelRGB*)NULL, width, height);
-		mPimpl = new ITexture(buffer);
+
+		RenderPipe::SendCommand(new RenderCommand(TEXTURE_CREATE, this, &buffer));
 		break;
 	}
 	case 4:
 	{
 		PixelBuffer buffer((PixelRGBA*)NULL, width, height);
-        mPimpl = new ITexture(buffer);
+
+		RenderPipe::SendCommand(new RenderCommand(TEXTURE_CREATE, this, &buffer));
 		break;
 	}
 	}

@@ -21,9 +21,9 @@
  */
 
 #pragma once
-#include "rendererconf.h"
-#include GFXAPI_Shader_H
 
+#include "renderer/RenderCmd.h"
+#include "renderer/RenderPipe.h"
 namespace GCL
 {
 
@@ -38,13 +38,16 @@ enum ShaderType
   {
   public:
     Shader(const char *shaderSourcePath, ShaderType type)
-  :mPimpl(shaderSourcePath, IShader::GetShaderType((size_t)type)) { }
-    ~Shader() {}
-    bool IsValid() const { return mPimpl.IsValid(); }
+	{
+		RenderPipe::SendCommand(new RenderCommand(SHADER_CREATE, this, (void*)shaderSourcePath, (void*)type));
+	}
+    ~Shader() 
+	{
+		RenderPipe::SendCommand(new RenderCommand(SHADER_DESTROY, this));
+	}
+    bool IsValid() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_SHADER_VALID, (void*)this)).GetBool(); }
 
 private:
-	const IShader &GetImpl() const { return mPimpl; }
-	friend class GPUProgram;
-    IShader mPimpl;
+	
   };
 }

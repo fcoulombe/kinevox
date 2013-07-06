@@ -23,11 +23,8 @@
 #pragma once
 #include <vector>
 
-#include "rendererconf.h"
-#include GFXAPI_GPUProgram_H
-
-#include "renderer/Shader.h"
-#include "renderer/Texture.h"
+#include "renderer/RenderCmd.h"
+#include "renderer/RenderPipe.h"
 namespace GCL
 {
 class Matrix44;
@@ -36,28 +33,39 @@ class Shader;
   class GPUProgram
   {
   public:
-	GPUProgram() { }
+	GPUProgram() 
+	{ 
+		RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_CREATE, this)); 
+	}
 
-    ~GPUProgram() {mShaderList.clear();}
-    void Bind() { mPimpl.Bind(); }
+    ~GPUProgram() 
+	{
+		RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_DESTROY, this)); 
+
+		mShaderList.clear();
+	}
+    void Bind() 
+	{
+		RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_BIND, this)); 
+	}
     void AttachShader(Shader &shader)
     {
     	mShaderList.push_back(&shader);
-    	mPimpl.AttachShader(shader.GetImpl());
+		RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_ATTACH_SHADER, this, &shader)); 
     }
-    void Link() { mPimpl.Link(); }
-    bool IsValid() const { return mPimpl.IsValid(); }
+	void Link() { RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_LINK, this));  }
+    bool IsValid() const {  return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_GPUPROGRAM_VALID, (void*)this)).GetBool(); }
 
-    void SetTextureSampler(const Texture &sampler) { mPimpl.SetTextureSampler(sampler.GetImpl()); }
-    void SetProjectionMatrix(const Matrix44 &m) { mPimpl.SetProjectionMatrix(m); }
-    void SetModelViewMatrix(const Matrix44 &m) { mPimpl.SetModelViewMatrix(m); }
-    void GetUniform(const char *unformName, Matrix44 &m44) const { mPimpl.GetUniform(unformName, m44); }
-    void GetUniform(const char *unformName, int &ret) const { mPimpl.GetUniform(unformName, ret); }
-    int GetAttributeLocation(const char *attributeName) const { return mPimpl.GetAttributeLocation(attributeName); }
+    void SetTextureSampler(const Texture &sampler) { RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_SET_TEXTURE_SAMPLER, (void*)this, (void*)&sampler)); }
+    void SetProjectionMatrix(const Matrix44 &m) { RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_SET_PROJECTION, (void*)this, (void*)&m));  }
+    void SetModelViewMatrix(const Matrix44 &m) { RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_SET_MODELVIEW, (void*)this, (void*)&m));}
+    void GetUniform(const char *unformName, Matrix44 &m44) const { m44 = RenderPipe::SendCommandSyncRet(new RenderCommand(GPUPROGRAM_GET_UNIFORM_MATRIX, (void*)this, (void*)unformName)).GetMatrix(); }
+    void GetUniform(const char *unformName, int &ret) const { ret = RenderPipe::SendCommandSyncRet(new RenderCommand(GPUPROGRAM_GET_UNIFORM_NUMBER, (void*)this, (void*)unformName)).GetNumber();  }
+    int GetAttributeLocation(const char *attributeName) const { return RenderPipe::SendCommandSyncRet(new RenderCommand(GPUPROGRAM_GET_ATTRIBUTE_LOCATION, (void*)this, (void*)attributeName)).GetNumber();   }
 
-    static void ResetDefault() { IGPUProgram::ResetDefault(); }
+    static void ResetDefault() { RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_RESETDEFAULT)); }
   private:
 	std::vector<Shader *> mShaderList;
-    IGPUProgram mPimpl;
+    //IGPUProgram mPimpl;
   };
 }

@@ -20,13 +20,11 @@
  * THE SOFTWARE.
  */
 
-
+#include <gcl/Config.h>
 #include "renderer/RenderThread.h"
 #include "renderer/RenderPipe.h"
 
 using namespace GCL;
-
-
 
 void GCL::RenderThread::Run()
 {
@@ -61,13 +59,24 @@ GCL::RenderThread::~RenderThread()
 
 void GCL::RenderThread::SendCommand( RenderCommand *cmd )
 {
-#if ENABLE_RENDER_THREAD 
-	mMutex.Lock();
-	mCommandList.push(cmd);
-	mMutex.Unlock();
-	mRunMutex.Notify();
-#else
-	mRenderCommandMap[cmd->mCmd](cmd, *mRenderData);
-	delete cmd;
-#endif
+	if (IsThreaded())
+	{
+		mMutex.Lock();
+		mCommandList.push(cmd);
+		mMutex.Unlock();
+		mRunMutex.Notify();
+	}
+	else
+	{
+		mRenderCommandMap[cmd->mCmd](cmd, *mRenderData);
+		delete cmd;
+	}
+}
+
+GCL::RenderThread::RenderThread()
+{
+	if (Config::Instance().GetInt("IS_RENDERER_THREDED"))
+		mIsThreaded = true;
+	else
+		mIsThreaded = false;
 }

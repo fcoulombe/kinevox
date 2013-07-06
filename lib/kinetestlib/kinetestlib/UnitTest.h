@@ -22,6 +22,8 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
+#include <gcl/Time.h>
+#include <gcl/ThreadManager.h>
 #include <windriver/EventHandler.h>
 
 namespace GCL
@@ -64,17 +66,31 @@ public:
 
 
 #define KINEVOX_TEST_START KinevoxTestCounter testCounter(__FILE__);
+
+//this loop will run at 60fps
 #define KINEVOX_TEST_LOOP_START \
     {\
     KineTestKeyListener kineTestKeyListener;\
     size_t i=0;\
 	kineTestKeyListener.mIsLooping = testCounter.mIsInteractive;\
+	const size_t TICKS_PER_SECOND = 30;\
+const size_t SKIP_TICKS = 1000 / TICKS_PER_SECOND;\
+const int MAX_FRAMESKIP = 5;\
+size_t next_game_tick = Time::GetTickMs();\
+int loops;\
 while(i<2 || kineTestKeyListener.mIsLooping)\
+{\
+			loops = 0;\
+			while(Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP) \
 {\
 \
 
 
 #define KINEVOX_TEST_LOOP_END 	\
+ThreadManager::ReThrowException();\
+	next_game_tick += SKIP_TICKS;\
+loops++;\
+}\
 	++i;\
 }\
 }\

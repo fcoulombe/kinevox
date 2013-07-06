@@ -32,7 +32,8 @@ class ViewPort : private Rect<size_t>
 {
 public:
 
-    ViewPort(){}
+    ViewPort()
+	{Set(0,0,640,480);}
 
     void Set(size_t ix, size_t iy, size_t iwidth, size_t iheight)
     {

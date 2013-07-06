@@ -32,7 +32,7 @@ class RenderBuffer
 public:
 	RenderBuffer(size_t width, size_t height)
 	{
-		RenderPipe::SendCommand(new RenderCommand(RENDERBUFFER_CREATE, this, (void*)width, (void*)height));
+		RenderPipe::SendCommand(new RenderCommand3Arg(RENDERBUFFER_CREATE, this, (void*)width, (void*)height));
 	}
 	~RenderBuffer()
 	{

@@ -39,7 +39,7 @@ enum ShaderType
   public:
     Shader(const char *shaderSourcePath, ShaderType type)
 	{
-		RenderPipe::SendCommand(new RenderCommand(SHADER_CREATE, this, (void*)shaderSourcePath, (void*)type));
+		RenderPipe::SendCommand(new RenderCommand3Arg(SHADER_CREATE, this, (void*)shaderSourcePath, (void*)type));
 	}
     ~Shader() 
 	{

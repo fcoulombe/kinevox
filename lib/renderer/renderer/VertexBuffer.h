@@ -21,51 +21,38 @@
  */
 
 #pragma once
-
-#include "rendererconf.h"
-#include GFXAPI_VertexBuffer_H
-
+#include "renderer/ShaderAttributeLocations.h"
+#include "renderer/Vertex.h"
 
 namespace GCL
 {
-
-template<typename VertexType>
+	enum VertexBufferMode
+	{
+		VBM_TRIANGLES=0,
+		VBM_LINES=1,
+		VBM_TRIANGLE_STRIP=2
+	};
 class VertexBuffer
 {
 public:
-	VertexBuffer(const VertexType *vertexArray, size_t count)
-		: mPimpl(vertexArray, count)
+	template<typename VertexType>
+	VertexBuffer(const VertexType *vertexArray, size_t count, const AttribLocations &loc)
 	{
+		RenderPipe::SendCommand(new RenderCommand5Arg(VBO_CREATE, (void*)this, (void*)VertexType::GetComponentType(), (void*)vertexArray, (void*)count, (void*)&loc));
 	}
-
-
 	~VertexBuffer()
 	{
-
-	}
-	void PreRender()
-	{
-		mPimpl.PreRender();
+		RenderPipe::SendCommand(new RenderCommand(VBO_DESTROY, (void*)this));
 	}
 
-	void Render()
+	void Render(VertexBufferMode mode=VBM_TRIANGLES)
 	{
-		mPimpl.Render();
-	}
-	void Render(int mode)
-	{
-		mPimpl.Render(mode);
+		RenderPipe::SendCommand(new RenderCommand2Arg(VBO_RENDER, (void*)this, (void*)mode));
 	}
 
-	void PostRender()
-	{
-		mPimpl.PostRender();
-	}
-
-	bool IsValid() const { return mPimpl.IsValid(); }
+	bool IsValid() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_VBO_VALID, (void*)this)).GetBool(); }
 
 private:
-	IVertexBuffer<VertexType> mPimpl;
 };
 
 }

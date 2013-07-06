@@ -21,10 +21,6 @@
  */
 
 #include "renderer/Shader.h"
-#include <gcl/Exception.h>
-#include <gcl/Matrix44.h>
 
-#include "renderer/ShaderAttributeDefaultLocations.h"
-#include "renderer/Texture.h"
 
 using namespace GCL;

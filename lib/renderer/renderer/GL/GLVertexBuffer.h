@@ -22,114 +22,77 @@
 
 #pragma once
 #include <3rdparty/OpenGL.h>
-#include "renderer/ShaderAttributeDefaultLocations.h"
 #include "renderer/Vertex.h"
+#include "renderer/GL/GLVertexArrayObject.h"
 
 
 namespace GCL
 {
-
-template<typename VertexType>
+	const GLint GLVertexBufferMode[] = 
+	{
+		GL_TRIANGLES,
+		GL_LINES,
+		GL_TRIANGLE_STRIP
+	};
 class GLVertexBuffer
 {
 public:
-	GLVertexBuffer(const VertexType *vertexArray, size_t count)
-	: mBufferType(GL_STATIC_DRAW),
+	template<typename VertexType>
+	GLVertexBuffer(const VertexType *vertexArray, size_t count, const AttribLocations &loc)
+	: mVao(vertexArray),
+	mBufferType(GL_STATIC_DRAW),
 	  mVertexCount(count)
 	{
 		glGenBuffers(1, &mVertexBufferId);glErrorCheck();
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);glErrorCheck();
+		mVao.PostInit(vertexArray, loc);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(VertexType)*count, (void*)vertexArray, mBufferType);glErrorCheck();
 	}
-
 
 	~GLVertexBuffer()
 	{
 		glDeleteBuffers(1, &mVertexBufferId);glErrorCheck();
 	}
-	void PreRender()
-	{
-#if ENABLE_FIX_PIPELINE
-		if (VertexType::GetComponentType() & ePOSITION)
-		{
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glVertexPointer(3, GL_UNIT, sizeof(VertexType), (char*)NULL+VertexType::OffsetToPosition()); glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eNORMAL)
-		{
-			glEnableClientState(GL_NORMAL_ARRAY);
-			glNormalPointer(GL_UNIT, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal()); glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eTEXTURE_COORD)
-		{
-			glClientActiveTexture(GL_TEXTURE0);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			glTexCoordPointer(2, GL_UNIT, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
-		}
-#else
-		if (VertexType::GetComponentType() & ePOSITION)
-		{
-            glEnableVertexAttribArray(ATTRIB_POSITION);glErrorCheck();
-			glVertexAttribPointer(ATTRIB_POSITION, 3, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToPosition());glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eNORMAL)
-		{
-            glEnableVertexAttribArray(ATTRIB_NORMAL);glErrorCheck();
-            glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_UNIT, GL_TRUE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal());glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eTEXTURE_COORD)
-		{
-			glEnableVertexAttribArray(ATTRIB_TEXTURE_COORD);glErrorCheck();
-			glVertexAttribPointer(ATTRIB_TEXTURE_COORD, 2, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
-		}
-#endif
-	}
 
 	void Render(int mode = GL_TRIANGLES)
 	{
-		PreRender();
+		mVao.Bind();
 		glDrawArrays((GLenum)mode, 0, (GLsizei)mVertexCount);glErrorCheck();
-		PostRender();
-	}
-
-	void PostRender()
-	{
-#if ENABLE_FIX_PIPELINE
-		if (VertexType::GetComponentType() & ePOSITION)
-		{
-			glDisableClientState(GL_VERTEX_ARRAY);
-		}
-		if (VertexType::GetComponentType() & eNORMAL)
-		{
-			glDisableClientState(GL_NORMAL_ARRAY);
-		}
-		if (VertexType::GetComponentType() & eTEXTURE_COORD)
-		{
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		}
-
-#else
-		if (VertexType::GetComponentType() & ePOSITION)
-		{
-			glDisableVertexAttribArray(ATTRIB_POSITION);glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eNORMAL)
-		{
-			glDisableVertexAttribArray(ATTRIB_NORMAL);glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eTEXTURE_COORD)
-		{
-			glDisableVertexAttribArray(ATTRIB_TEXTURE_COORD);glErrorCheck();
-		}
-#endif
+		mVao.UnBind();
 	}
 
 	bool IsValid() const { return mVertexBufferId!=(GLuint)-1; }
 
+	static int GetRenderMode(int mode)
+	{
+		GCLAssert(mode<sizeof(GLVertexBufferMode)/sizeof(GLint));
+		return GLVertexBufferMode[mode];
+	}
+	static GLVertexBuffer *CreateVBO(size_t type, const void *vertexArray, size_t count, const AttribLocations &loc)
+	{
+		switch (type)
+		{
+		case ePOSITION:
+			return new GLVertexBuffer((const VertexP *)vertexArray, count, loc);
+			break;
+		case ePOSITION|eNORMAL:
+			return new GLVertexBuffer((const VertexPN *)vertexArray, count, loc);
+			break;
+		case ePOSITION|eNORMAL|eTEXTURE_COORD:
+			return new GLVertexBuffer((const VertexPNT *)vertexArray, count, loc);
+			break;
+		case ePOSITION|eTEXTURE_COORD:
+			return new GLVertexBuffer((const VertexPT *)vertexArray, count, loc);
+			break;
+		default:
+			GCLAssert(false);
+		}
+	}
 private:
 	GLuint mVertexBufferId;
 	GLuint mBufferType;
 	size_t mVertexCount;
+	GLVertexArrayObject mVao;
 };
 
 }

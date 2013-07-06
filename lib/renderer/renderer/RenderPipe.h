@@ -26,6 +26,7 @@
 #include <gcl/Mutex.h>
 #include <gcl/Semaphore.h>
 
+#define ENABLE_RENDER_THREAD 1
 
 namespace GCL
 {

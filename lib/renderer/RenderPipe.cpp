@@ -74,7 +74,9 @@ void GCL::RenderPipe::Initialize()
 	mIsInitialized = true;
 	mRetMsg = NULL;
 	mRenderThreads.push_back(new GLRenderThread());
+#if ENABLE_RENDER_THREAD 
 	mRenderThreads[0]->Start();
+#endif
 }
 
 void GCL::RenderPipe::Terminate()

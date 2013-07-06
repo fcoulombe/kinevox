@@ -22,6 +22,7 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
+#include <renderer/Shader.h>
 #include <renderer/VertexBuffer.h>
 
 using namespace GCL;
@@ -33,15 +34,23 @@ void Test()
 	TEST_START
 	WinDriver winDriver("VertexBufferTest");
 	Renderer renderer(winDriver.GetWindowsHandle());
-
-	Shader shader;
-	shader.Bind();
-
+	GPUProgram program;
+	Shader vertexShader("DefaultVertexShader", VERTEX_SHADER);
+	Shader fragmentShader("DefaultFragmentShader", FRAGMENT_SHADER);
+	program.AttachShader(vertexShader);
+	program.AttachShader(fragmentShader);
+	program.Link();
+	program.Bind();
+	AttribLocations loc;
+	loc.position = program.GetAttributeLocation("InPosition");
+	loc.normal = program.GetAttributeLocation("InNormal");
+	loc.texCoord = program.GetAttributeLocation("InTexCoord");
+	
 	VertexPNT square[4] = { {Point3<MeshReal>(-0.5, -0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } ,
 			{Point3<MeshReal>(0.5, -0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } ,
 			{Point3<MeshReal>(0.5, 0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } ,
 			{Point3<MeshReal>(-0.5, 0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } };
-	VertexBuffer<VertexPNT> vb(square, 4);
+	VertexBuffer vb(square, 4, loc);
 	Assert_Test(vb.IsValid());
 
 
@@ -49,7 +58,7 @@ void Test()
 			{Point3<MeshReal>(0.5, -0.5, 0.0), Point2<MeshReal>(0.0, 0.0) } ,
 			{Point3<MeshReal>(0.5, 0.5, 0.0), Point2<MeshReal>(0.0, 0.0)} ,
 			{Point3<MeshReal>(-0.5, 0.5, 0.0), Point2<MeshReal>(0.0, 0.0)} };
-	VertexBuffer<VertexPT> vb2(square2, 4);
+	VertexBuffer vb2(square2, 4, loc);
 	Assert_Test(vb2.IsValid());
 }
 }

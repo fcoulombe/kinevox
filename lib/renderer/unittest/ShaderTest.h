@@ -26,7 +26,7 @@
 #include <renderer/Shader.h>
 #include <renderer/GPUProgram.h>
 #include <renderer/Texture.h>
-#include <renderer/ShaderAttributeDefaultLocations.h>
+#include <renderer/ShaderAttributeLocations.h>
 #include <renderer/Material.h>
 #include <renderer/TextureResourceManager.h>
 
@@ -112,6 +112,12 @@ void Test()
 
 
 #if !ENABLE_FIX_PIPELINE
+		enum AttributePositions
+		{
+		  ATTRIB_POSITION=1,
+		  ATTRIB_NORMAL=2,
+		  ATTRIB_TEXTURE_COORD=3
+		};
 		//attribute position query test
 		int loc = program.GetAttributeLocation("InPosition");
 		s.str("");

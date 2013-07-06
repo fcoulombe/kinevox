@@ -23,6 +23,7 @@
 
 #include <gcl/UnitTest.h>
 #include <renderer/Material.h>
+#include <renderer/TextureResourceManager.h>
 
 using namespace GCL;
 namespace MaterialTest

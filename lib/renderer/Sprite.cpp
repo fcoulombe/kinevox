@@ -23,7 +23,6 @@
 #include "renderer/Sprite.h"
 #include <gcl/Assert.h>
 #include <gcl/File.h>
-#include <gcl/ResourceManagerConfig.h>
 #include "renderer/Texture.h"
 #include "renderer/VertexBuffer.h"
 

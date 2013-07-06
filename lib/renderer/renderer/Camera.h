@@ -37,6 +37,7 @@ public:
 	void TiltUp();
 	void TiltDown();
 
+	//flush matrices to the renderer
 	void Update();
 
 	const Matrix44 &GetTransform() const { return mCameraMatrix; }

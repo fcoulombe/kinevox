@@ -24,7 +24,10 @@
 #include <kinetestlib/UnitTest.h>
 #include <renderer/GeomUtilHelper.h>
 #include <renderer/Shader.h>
+#include <renderer/GPUProgram.h>
 #include <renderer/ShaderAttributeDefaultLocations.h>
+#include <renderer/Material.h>
+#include <renderer/TextureResourceManager.h>
 
 
 using namespace GCL;
@@ -54,23 +57,29 @@ void Test()
 	{
 		WinDriver winDriver("ShaderTest");
 		Renderer renderer(winDriver.GetWindowsHandle());
-		Shader shader;
-		shader.Bind();
-		Assert_Test(shader.IsValid());
+		GPUProgram program;
+		Shader vertexShader("DefaultVertexShader", VERTEX_SHADER);
+		Shader fragmentShader("DefaultFragmentShader", FRAGMENT_SHADER);
+		program.AttachShader(vertexShader);
+		program.AttachShader(fragmentShader);
+		program.Link();
+		program.Bind();
+
+		Assert_Test(program.IsValid());
 
 		//set matrix uniform test
 		Matrix44 proj;
 		proj.SetPerspective(45.0, 640.0/480.0,0.1,100.0);
 		Matrix44 modelView;
 		modelView.SetRotationX(90.0);
-		shader.SetModelViewMatrix(modelView);
-		shader.SetProjectionMatrix(proj);
+		program.SetModelViewMatrix(modelView);
+		program.SetProjectionMatrix(proj);
 
 		//query uniform fail test
 		try
 		{
 			Matrix44 m2;
-			shader.GetUniform("NonExistingUniform", m2);
+			program.GetUniform("NonExistingUniform", m2);
 			Assert_Test(true);
 		}
 		catch (GCLException & /*e*/)
@@ -82,14 +91,14 @@ void Test()
 
 		//query pro0jection matrix test
 		Matrix44 proj2;
-		shader.GetUniform("ProjectionMatrix", proj2);
+		program.GetUniform("ProjectionMatrix", proj2);
 		s.str("");
 		s<<std::endl<<proj2<<std::endl<<"=="<<std::endl<<proj;
 		AssertMsg_Test(proj2==proj, s.str().c_str());
 
 		//query modelview matrix test
 		Matrix44 modelView2;
-		shader.GetUniform("ModelViewMatrix", modelView2);
+		program.GetUniform("ModelViewMatrix", modelView2);
 		s.str("");
 		s<<std::endl<<modelView2<<std::endl<<"=="<<std::endl<<modelView;
 		AssertMsg_Test(modelView2==modelView, s.str().c_str());
@@ -98,10 +107,10 @@ void Test()
 
 		Texture tex(TEXTURE_PATH"mushroomtga.tga");
 		tex.Bind();
-		shader.SetTextureSampler(tex);
+		program.SetTextureSampler(tex);
 
 		int sampler;
-		shader.GetUniform("texture", sampler);
+		program.GetUniform("texture", sampler);
 		s.str("");
 		s<<sampler<<" == 0";
 		AssertMsg_Test(sampler==0, s.str().c_str());
@@ -111,7 +120,7 @@ void Test()
 		//attribute location fail test
 		try
 		{
-			shader.GetAttributeLocation("NonExistingAttribute");
+			program.GetAttributeLocation("NonExistingAttribute");
 			Assert_Test(true);
 		}
 		catch (GCLException & /*e*/)
@@ -119,19 +128,19 @@ void Test()
 
 #if !ENABLE_FIX_PIPELINE
 		//attribute position query test
-		int loc = shader.GetAttributeLocation("InPosition");
+		int loc = program.GetAttributeLocation("InPosition");
 		s.str("");
 		s<<loc<<" == ATTRIB_POSITION";
 		AssertMsg_Test(loc == ATTRIB_POSITION, s.str().c_str());
 
         //attribute normal query test
-        loc = shader.GetAttributeLocation("InNormal");
+        loc = program.GetAttributeLocation("InNormal");
         s.str("");
         s<<loc<<" == ATTRIB_NORMAL";
         AssertMsg_Test(loc == ATTRIB_NORMAL, s.str().c_str());
 
 		//attribute texcoord query test
-		loc = shader.GetAttributeLocation("InTexCoord");
+		loc = program.GetAttributeLocation("InTexCoord");
 		s.str("");
 		s<<loc<<" == ATTRIB_TEXTURE_COORD";
 		AssertMsg_Test(loc == ATTRIB_TEXTURE_COORD, s.str().c_str());
@@ -139,11 +148,8 @@ void Test()
 
 #endif
 
-		renderer.PreRender();
-		renderer.Render(RenderObjectList());
-		renderer.PostRender();
-		winDriver.SwapBuffer();
-		Shader::ResetDefault();
+		RenderPipe::Render();
+		GPUProgram::ResetDefault();
 	}
 
 	{
@@ -153,29 +159,20 @@ void Test()
 		const WorldPoint3 position(0.0,0.0, -10.0);
 		obj.SetPosition(position);
 
-		RenderObjectList renderList;
-		renderList.push_back(&obj);
+		//RenderObjectList renderList;
+		//renderList.push_back(&obj);
 
 		KINEVOX_TEST_LOOP_START
-			renderer.PreRender();
+			/*renderer.PreRender();
 			renderer.Render(renderList);
 			renderer.PostRender();
-			winDriver.SwapBuffer();
+			winDriver.SwapBuffer();*/
+			RenderPipe::Render();
 			Time::SleepMs(10);
 		KINEVOX_TEST_LOOP_END
 
-		Shader::ResetDefault();
+		GPUProgram::ResetDefault();
 	}
-
-	/*VertexPNT square[4] = { {WorldPoint3(-0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } ,
-                          {WorldPoint3(0.5, -0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } ,
-                          {WorldPoint3(0.5, 0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } ,
-                          {WorldPoint3(-0.5, 0.5, 0.0), WorldPoint2(0.0, 0.0), WorldPoint3(0.0, 0.0, 1.0) } };
-  VertexBuffer<VertexPNT> vb(square, 4);
-
-  renderer->Render(vb);
-	 */
-
 	TextureResourceManager::Terminate();
 #endif
 }

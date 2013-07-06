@@ -29,8 +29,7 @@
 #include <vector>
 
 #include <3rdparty/OpenGL.h>
-
-#include "renderer/Camera.h"
+#include <gcl/Matrix44.h>
 #include "renderer/ViewPort.h"
 
 namespace GCL
@@ -41,7 +40,7 @@ namespace GCL
     typedef std::vector<const RenderObject*> RenderObjectList;
     typedef std::vector<RenderObject2D*> RenderObject2DList;
     typedef std::vector<Text2D*> Text2DList;
-class Shader;
+class GLGPUProgram;
 class GLRenderer
 {
 public:
@@ -53,8 +52,6 @@ public:
 	void Render(const RenderObjectList &renderObjectList);
 	void Render(const RenderObject2DList &spriteList);
 	void Render(const Text2DList &text2DList);
-
-	//void SetCamera(Camera &camera) { mCamera = &camera; }
 
 	struct RenderState
 	{
@@ -88,7 +85,7 @@ public:
 	static void SetTransform( const Matrix44 &projection,
 								const Matrix44 &modelView,
 								const Matrix44 &transform,
-								Shader *shader=NULL);
+								GLGPUProgram *shader=NULL);
 
 	static Matrix44 GetGLProjection();
 	static Matrix44 GetGLModelView();
@@ -96,6 +93,14 @@ public:
 	void SetViewPort(const ViewPort &viewport)
 	{
 		mViewPort = viewport;
+	}
+	void SetProjection(const Matrix44 &projection)
+	{
+		mProjection = projection;
+	}
+	void SetModelView(const Matrix44 &modelView)
+	{
+		mModelView = modelView;
 	}
 private:
 	void Init3DState();
@@ -108,7 +113,8 @@ private:
 
 	std::vector<std::string> mExtensions;
 	ViewPort mViewPort;
-	Camera *mCamera;
+	Matrix44 mProjection;
+	Matrix44 mModelView;
 
 	HWND mhWnd;
 	HDC mhDC;

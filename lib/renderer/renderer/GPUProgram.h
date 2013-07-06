@@ -21,30 +21,43 @@
  */
 
 #pragma once
-#include "rendererconf.h"
-#include GFXAPI_Shader_H
+#include <vector>
 
+#include "rendererconf.h"
+#include GFXAPI_GPUProgram_H
+
+#include "renderer/Shader.h"
+#include "renderer/Texture.h"
 namespace GCL
 {
-
-enum ShaderType
-{
-	VERTEX_SHADER=0,
-	FRAGMENT_SHADER=1,
-	GEOMETRY_SHADER=2
-};
-
-  class Shader
+class Matrix44;
+class Texture;
+class Shader;
+  class GPUProgram
   {
   public:
-    Shader(const char *shaderSourcePath, ShaderType type)
-  :mPimpl(shaderSourcePath, IShader::GetShaderType((size_t)type)) { }
-    ~Shader() {}
+	GPUProgram() { }
+
+    ~GPUProgram() {mShaderList.clear();}
+    void Bind() { mPimpl.Bind(); }
+    void AttachShader(Shader &shader)
+    {
+    	mShaderList.push_back(&shader);
+    	mPimpl.AttachShader(shader.GetImpl());
+    }
+    void Link() { mPimpl.Link(); }
     bool IsValid() const { return mPimpl.IsValid(); }
 
-private:
-	const IShader &GetImpl() const { return mPimpl; }
-	friend class GPUProgram;
-    IShader mPimpl;
+    void SetTextureSampler(const Texture &sampler) { mPimpl.SetTextureSampler(sampler.GetImpl()); }
+    void SetProjectionMatrix(const Matrix44 &m) { mPimpl.SetProjectionMatrix(m); }
+    void SetModelViewMatrix(const Matrix44 &m) { mPimpl.SetModelViewMatrix(m); }
+    void GetUniform(const char *unformName, Matrix44 &m44) const { mPimpl.GetUniform(unformName, m44); }
+    void GetUniform(const char *unformName, int &ret) const { mPimpl.GetUniform(unformName, ret); }
+    int GetAttributeLocation(const char *attributeName) const { return mPimpl.GetAttributeLocation(attributeName); }
+
+    static void ResetDefault() { IGPUProgram::ResetDefault(); }
+  private:
+	std::vector<Shader *> mShaderList;
+    IGPUProgram mPimpl;
   };
 }

@@ -38,16 +38,6 @@ using namespace GCL;
 
 
 
-class ThreadedRenderer
-{
-public:
-	ThreadedRenderer(size_t windowsHandle)
-	{
-		RenderPipe::Instance().SendCommand(new RenderCommand(CREATE_RENDERER, (void*)windowsHandle));
-	}
-};
-
-
 namespace GLRendererThreadedTest
 { 
 #if 0
@@ -91,10 +81,9 @@ namespace GLRendererThreadedTest
 void Test()
 {
 	TEST_START
-	RenderPipe::Initialize();
     
 	WinDriver winDriver("GLRendererThreadedTest");
-	ThreadedRenderer mRenderer(winDriver.GetWindowsHandle());
+	Renderer mRenderer(winDriver.GetWindowsHandle());
 	//MyRenderObject2D obj;
 	//RenderObject2DList objList;
 	//objList.push_back(&obj);
@@ -117,16 +106,12 @@ void Test()
 
 			std::cout <<"update"<<std::endl;
 			//flush command buffer to render thread and activate it.
-			RenderPipe::Instance().Render();
+			RenderPipe::Render();
 			ThreadManager::ReThrowException();
 
 			next_game_tick += SKIP_TICKS;
 			loops++;
 		}
 	}
-	
-	//ThreadedRenderer renderer(winDriver.GetWindowsHandle());
-	RenderPipe::Terminate();
-
 }
 }

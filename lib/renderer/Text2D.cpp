@@ -20,8 +20,6 @@
  * THE SOFTWARE.
  */
 
-#include <gcl/ResourceManagerConfig.h>
-
 #include "renderer/Text2D.h"
 #include "renderer/VertexBuffer.h"
 

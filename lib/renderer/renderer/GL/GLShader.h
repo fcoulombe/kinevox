@@ -25,30 +25,21 @@
 
 namespace GCL
 {
-class Matrix44;
-class GLTexture;
+
   class GLShader
   {
   public:
-	GLShader();
-
+	GLShader(const char *shaderSourcePath, GLenum type);
     ~GLShader();
-    void Bind();
     bool IsValid() const { return mIsValid; }
-
-    void SetTextureSampler(const GLTexture &sampler);
-    void SetProjectionMatrix(const Matrix44 &m);
-    void SetModelViewMatrix(const Matrix44 &m);
-    void GetUniform(const char *unformName, Matrix44 &m44) const;
-    void GetUniform(const char *unformName, int &ret) const;
-    int GetAttributeLocation(const char *attributeName) const;
-
-    static void ResetDefault();
+    static GLenum GetShaderType(size_t type) { return GLShaderType[type]; }
   private:
     void PrintInfoLog(GLuint );
+	friend class GLGPUProgram;
     GLuint CompileShader(const char *shaderSrc, GLenum type);
 
-    GLuint mProgramObject;
+    GLuint mShaderObject;
     bool mIsValid;
+	static const GLenum GLShaderType[];
   };
 }

@@ -24,6 +24,7 @@
 #include <stdint.h>
 #include <vector>
 #include <gcl/Matrix44.h>
+#include "renderer/GPUProgram.h"
 #include "renderer/Material.h"
 #include "renderer/VertexBuffer.h"
 

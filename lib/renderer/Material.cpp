@@ -25,6 +25,7 @@
 #include <fstream>
 #include <sstream>
 
+#include <gcl/Assert.h>
 #include "renderer/GPUProgram.h"
 #include "renderer/Shader.h"
 #include "renderer/Texture.h"

@@ -70,6 +70,7 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 
 	// get the device context (DC)
 	mhDC = GetDC( mhWnd );
+	GCLAssertMsg(mhDC, "Failed to get the device context");
 
 	// set the pixel format for the DC
 	PIXELFORMATDESCRIPTOR pfd;
@@ -83,12 +84,12 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 	pfd.cDepthBits = 16;
 	pfd.iLayerType = PFD_MAIN_PLANE;
 	int format = ChoosePixelFormat( mhDC, &pfd );
-	SetPixelFormat( mhDC, format, &pfd );
+	BOOL wglRet = SetPixelFormat( mhDC, format, &pfd );
 
 	// create the render context (RC)
 	mhRC = wglCreateContext( mhDC );
 	// make it the current render context
-	wglMakeCurrent( mhDC, mhRC );
+	wglRet = wglMakeCurrent( mhDC, mhRC );
 #if ENABLE_GLEW
 	glewExperimental=TRUE;
 	GLenum err = glewInit();

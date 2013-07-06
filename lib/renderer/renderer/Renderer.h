@@ -41,6 +41,7 @@ namespace GCL
       }
     ~Renderer() 
 	{
+		RenderPipe::SendCommand(new RenderCommand(DESTROY_RENDERER));
 		RenderPipe::Terminate();
 	}
 

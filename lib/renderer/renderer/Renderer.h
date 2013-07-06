@@ -22,46 +22,51 @@
 
 #pragma once
 
-#include "rendererconf.h"
-#include GFXAPI_Renderer_H
+//#include "rendererconf.h"
+//#include GFXAPI_Renderer_H
+#include <gcl/Config.h>
 
+#include "renderer/RenderPipe.h"
+#include "renderer/RenderCmd.h"
+#include "renderer/ViewPort.h"
 namespace GCL
 {
   class Renderer
   {
   public:
       Renderer(size_t windowsHandle)
-  : mPimpl(windowsHandle)
       {
+		  RenderPipe::Initialize();
+		  RenderPipe::SendCommand(new RenderCommand(CREATE_RENDERER, (void*)windowsHandle));
+		  mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
+		  RenderPipe::SendCommand(new RenderCommand(SET_VIEWPORT, (void*)&mViewPort));
       }
-    ~Renderer() {}
-    bool Update() { return mPimpl.Update();}
-	void PreRender() { mPimpl.PreRender(); }
-	void PostRender() { mPimpl.PostRender(); }
-    void Render(const RenderObjectList &renderObjectList) { mPimpl.Render(renderObjectList); }
-    void Render(const RenderObject2DList &renderObjectList) { mPimpl.Render(renderObjectList); }
-    void Render(const Text2DList &text2DList) { mPimpl.Render(text2DList); }
-    const ViewPort &GetViewPort() const { return mPimpl.GetViewPort(); }
-
-	const std::string &GetVendor() const { return mPimpl.GetVendor() ; }
-	const std::string &GetVersion() const { return mPimpl.GetVersion(); }
-	const std::string &GetRenderer() const { return mPimpl.GetRenderer(); }
-	const std::string &GetShadingLanguageVersion() const { return mPimpl.GetShadingLanguageVersion(); }
-	const std::string &GetGlewVersion() const { return mPimpl.GetGlewVersion(); }
-	const ExtensionList &GetExtensions() const { return mPimpl.GetExtensions(); }
-	bool IsExtensionSupported(const std::string &ext) const { return mPimpl.IsExtensionSupported(ext); }
-
-	void SetCamera(Camera &camera) { mPimpl.SetCamera(camera); }
-	static void SetTransform( const Matrix44 &projection,
-									const Matrix44 &modelView,
-									const Matrix44 &transform,
-									Shader *shader=NULL)
+    ~Renderer() 
 	{
-		IRenderer::SetTransform(projection,modelView,transform,shader);
+		RenderPipe::Terminate();
 	}
-	static Matrix44 GetGLProjection() {return IRenderer::GetGLProjection();}
-	static Matrix44 GetGLModelView() {return IRenderer::GetGLModelView();}
+
+    const ViewPort &GetViewPort() const { return mViewPort; }
+
+	const std::string GetVendor() const 
+	{ 
+		return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_VENDOR)).GetString(); 
+	}
+	const std::string GetVersion() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_VERSION)).GetString(); }
+	const std::string GetRenderer() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_RENDERER)).GetString();  }
+	const std::string GetShadingLanguageVersion() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_SHADING_LANGUAGE_VERSION)).GetString();  }
+	const std::string GetGlewVersion() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_GLEW_VERSION)).GetString();  }
+	const std::vector<std::string> GetExtensions() const { return  RenderPipe::SendCommandSyncRet(new RenderCommand(GET_EXTENSIONS)).GetStringList();  }
+	bool IsExtensionSupported(const std::string &ext) const { return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_IS_EXTENSION_SUPPORTED, (void*)&ext)).GetBool(); }
+	bool IsGlewExtensionSupported(const std::string &ext) const { return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_IS_GLEW_EXTENSION_SUPPORTED, (void*)&ext)).GetBool(); }
+
+	//void SetCamera(Camera &camera) { mCamera = &camera; }
+
+	static Matrix44 GetGLProjection() {return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_GL_PROJECTION)).GetMatrix(); }
+	static Matrix44 GetGLModelView() {return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_GL_MODELVIEW)).GetMatrix();}
   private:
-      IRenderer mPimpl;
+	   ViewPort mViewPort;
+	   
+     // IRenderer mPimpl;
   };
 }

@@ -65,7 +65,6 @@ void GLRenderer::Init3DState()
 
 GLRenderer::GLRenderer(size_t windowsHandle)
 {
-
 	// remember the window handle (HWND)
 	mhWnd = (HWND)windowsHandle;
 
@@ -100,15 +99,14 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 #else
 	mGlewVersion  = std::string("Unused");
 #endif
-    mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
 
-	mCamera=&Camera::DefaultCamera();
+
 	Init3DState();
-
+	 mCamera=&Camera::DefaultCamera();
 	mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
 	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
 	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
-#if !defined(ES1) && !defined(OS_WIN32)
+#if !defined(ES1)
 	const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);glErrorCheck();
 	mShadingLanguageVersion = std::string(ver);
 #endif

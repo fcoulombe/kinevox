@@ -36,9 +36,15 @@ class RenderThread : public Thread
 public:
 	RenderThread()
 	{
-
+		
 	}
-	virtual ~RenderThread() {}
+	virtual ~RenderThread() 
+	{
+		mIsRunning = false;
+		mRunMutex.Notify();
+		if (IsJoinable())
+			Join();
+	}
 	void SendCommand(RenderCommand *cmd)
 	{
 		mMutex.Lock();

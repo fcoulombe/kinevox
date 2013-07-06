@@ -25,6 +25,7 @@
 #include <renderer/GeomUtilHelper.h>
 #include <renderer/Shader.h>
 #include <renderer/GPUProgram.h>
+#include <renderer/Texture.h>
 #include <renderer/ShaderAttributeDefaultLocations.h>
 #include <renderer/Material.h>
 #include <renderer/TextureResourceManager.h>
@@ -76,15 +77,6 @@ void Test()
 		program.SetProjectionMatrix(proj);
 
 		//query uniform fail test
-		try
-		{
-			Matrix44 m2;
-			program.GetUniform("NonExistingUniform", m2);
-			Assert_Test(true);
-		}
-		catch (GCLException & /*e*/)
-		{
-		}
 
 		std::stringstream s;
 #if !ENABLE_FIX_PIPELINE
@@ -117,14 +109,7 @@ void Test()
 
 
 		//attribute
-		//attribute location fail test
-		try
-		{
-			program.GetAttributeLocation("NonExistingAttribute");
-			Assert_Test(true);
-		}
-		catch (GCLException & /*e*/)
-		{}
+
 
 #if !ENABLE_FIX_PIPELINE
 		//attribute position query test

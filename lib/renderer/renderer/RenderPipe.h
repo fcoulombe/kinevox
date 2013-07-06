@@ -45,7 +45,6 @@ public:
 	static const ReturnMessage &SendCommandSyncRet(RenderCommand *cmd);
 	static void SendReturnMessage(ReturnMessage *retMsg);
 
-	static void Render();
 private:
 	static std::vector<RenderThread *> mRenderThreads;
 	static ReturnMessage *mRetMsg;

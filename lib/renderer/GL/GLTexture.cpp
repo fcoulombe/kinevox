@@ -62,14 +62,14 @@ void GLTexture::Initialize(const PixelBuffer &data )
         (GLsizei)data.mWidth, (GLsizei)data.mHeight, 0,BytesPerPixel[data.mBytesPerPixel-1],
         GL_UNSIGNED_BYTE, NULL);glErrorCheck();
 
-    mPBO = new PixelBufferHAL(data);
+    mPBO = new GLPixelBufferHAL();
     if (data.mPixels)
     {
         mPBO->Bind();
-        mPBO->PushData();
+        mPBO->PushData(data.mWidth, data.mHeight, data.mBytesPerPixel, data.mPixels);
         //push from pbo to texture
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)mPBO->mWidth,
-            (GLsizei)mPBO->mHeight, BytesPerPixel[mPBO->mBytesPerPixel-1],
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)data.mWidth,
+            (GLsizei)data.mHeight, BytesPerPixel[data.mBytesPerPixel-1],
             GL_UNSIGNED_BYTE, 0);glErrorCheck();
         mPBO->UnBind();
     }
@@ -82,7 +82,7 @@ void GLTexture::Initialize(const PixelBuffer &data )
 const uint8_t *GLTexture::GetPixelBufferFromVRAM() const
 {
     mPBO->Bind();
-    uint8_t *buffer = mPBO->PullData();
+    uint8_t *buffer = mPBO->PullData(GetWidth(), GetHeight(), GetBytesPerPixel());
     mPBO->UnBind();
     return buffer;
 }
@@ -91,24 +91,21 @@ const uint8_t *GLTexture::GetTextureFromVRAM() const
 {
 #if !defined(ES1) && !defined(ES2)
     Bind();
-    GLint width, height;
+    GLint width, height, format;
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-    size_t imageSize = width*height*mPBO->mBytesPerPixel;
+	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &format);
+    size_t bpp = (format == GL_RGB8)?3:4;
+	size_t imageSize = width*height*bpp;
 
     uint8_t *data = new uint8_t[imageSize];
     memset(data, 0, imageSize);
     glPixelStorei(GL_PACK_ALIGNMENT, 1);glErrorCheck();
-
-    if (mPBO->mBytesPerPixel == 3)
-        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    else if (mPBO->mBytesPerPixel == 4)
-        glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    else
-    {
-        GCLAssert(false);
-    }
-    glErrorCheck();
+	if (bpp == 3)
+		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, data);  
+	else
+		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glErrorCheck();
     return data;
 #else
     GCLAssert(false && "unsupported");

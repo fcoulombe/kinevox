@@ -36,20 +36,6 @@ void GCL::RenderPipe::SendCommand( RenderCommand *cmd )
 	mRenderThreads[0]->SendCommand(cmd);
 }
 
-void GCL::RenderPipe::Render( /*const RenderObject2DList &spriteList */)
-{
-
-	/*
-	//send the commands to the render thread in multhreaded
-	for (size_t i=0; i<spriteList.size(); ++i)
-	{
-
-	}
-	*/
-	SendCommand(new RenderCommand(SWAP_BUFFER));
-	//call process commands in single threaded
-}
-
 const GCL::ReturnMessage &GCL::RenderPipe::SendCommandSyncRet( RenderCommand *cmd )
 {
 	if (mRetMsg)

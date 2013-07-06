@@ -23,6 +23,8 @@
 #pragma once
 #include "renderer/ShaderAttributeLocations.h"
 #include "renderer/Vertex.h"
+#include "renderer/RenderCmd.h"
+#include "renderer/RenderPipe.h"
 
 namespace GCL
 {
@@ -45,7 +47,7 @@ public:
 		RenderPipe::SendCommand(new RenderCommand(VBO_DESTROY, (void*)this));
 	}
 
-	void Render(VertexBufferMode mode=VBM_TRIANGLES)
+	void Render(VertexBufferMode mode=VBM_TRIANGLES) const
 	{
 		RenderPipe::SendCommand(new RenderCommand2Arg(VBO_RENDER, (void*)this, (void*)mode));
 	}

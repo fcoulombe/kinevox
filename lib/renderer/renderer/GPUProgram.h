@@ -25,6 +25,7 @@
 
 #include "renderer/RenderCmd.h"
 #include "renderer/RenderPipe.h"
+#include "renderer/ShaderAttributeLocations.h"
 namespace GCL
 {
 class Matrix44;
@@ -56,6 +57,14 @@ class Shader;
 	void Link() { RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_LINK, this));  }
     bool IsValid() const {  return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_GPUPROGRAM_VALID, (void*)this)).GetBool(); }
 
+	AttribLocations GetShaderLocations() const
+	{
+		AttribLocations loc;
+		loc.position = GetAttributeLocation("InPosition");
+		loc.normal = GetAttributeLocation("InNormal");
+		loc.texCoord = GetAttributeLocation("InTexCoord");
+		return loc;
+	}
     void SetTextureSampler(const Texture &sampler) { RenderPipe::SendCommand(new RenderCommand2Arg(GPUPROGRAM_SET_TEXTURE_SAMPLER, (void*)this, (void*)&sampler)); }
     void SetProjectionMatrix(const Matrix44 &m) { RenderPipe::SendCommand(new RenderCommand2Arg(GPUPROGRAM_SET_PROJECTION, (void*)this, (void*)&m));  }
     void SetModelViewMatrix(const Matrix44 &m) { RenderPipe::SendCommand(new RenderCommand2Arg(GPUPROGRAM_SET_MODELVIEW, (void*)this, (void*)&m));}

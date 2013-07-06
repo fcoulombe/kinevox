@@ -37,7 +37,7 @@ namespace GCL
     class RenderObject;
     class RenderObject2D;
     class Text2D;
-    typedef std::vector<const RenderObject*> RenderObjectList;
+    
     typedef std::vector<RenderObject2D*> RenderObject2DList;
     typedef std::vector<Text2D*> Text2DList;
 class GLGPUProgram;
@@ -49,10 +49,11 @@ public:
 	bool Update();
 	void PreRender();
 	void PostRender();
+#if 0
 	void Render(const RenderObjectList &renderObjectList);
 	void Render(const RenderObject2DList &spriteList);
 	void Render(const Text2DList &text2DList);
-
+#endif
 	struct RenderState
 	{
 		void SetTextureEnabled(bool isEnabled);

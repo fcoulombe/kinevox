@@ -171,6 +171,8 @@ void DrawNormals(const VertexData &data)
     buffer.Render(GL_LINES);
 
 }
+
+#if 0
 void GLRenderer::Render(const RenderObjectList &renderObjectList)
 {
 	const Matrix44 &projection = mProjection;
@@ -199,7 +201,7 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		tempMaterial.Bind();
 
 		const Matrix44 &transform = tempRenderObject->GetTransform();
-#if 0
+#if 1
 		SetTransform(projection, modelView, transform, tempMaterial.GetShader());
 #else
 		(void)projection;
@@ -342,6 +344,7 @@ void GLRenderer::Render(const Text2DList &renderObjectList)
 #endif
 	}
 }
+#endif
 
 void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 {

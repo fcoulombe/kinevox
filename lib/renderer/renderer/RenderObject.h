@@ -24,7 +24,8 @@
 #include <stdint.h>
 #include <vector>
 #include <gcl/Matrix44.h>
-#include "renderer/Vertex.h"
+#include "renderer/Material.h"
+#include "renderer/VertexBuffer.h"
 
 
 namespace GCL
@@ -80,14 +81,19 @@ GCLINLINE std::ostream& operator<<( std::ostream& output, const VertexData &P)
 class RenderObject
 {
 public:
-	RenderObject(const char *name, const Matrix44 &transform)
-	: mObjName(name), mIsDrawNormals(false)
+	template<typename VertexType>
+	RenderObject( const Matrix44 &transform, Material &material, const VertexType *vertexArray, size_t count)
+	:  mTransform(transform),
+	mVBO(vertexArray, count, material.GetShader()->GetShaderLocations()),
+	mIsDrawNormals(false)
 	{
-		mTransform = (transform);
+		mMaterial = (&material);
 	}
 	virtual ~RenderObject() {}
-	virtual const VertexDataList &GetVertexData() const=0;
-	virtual const Material &GetMaterial() const=0;
+	//virtual const VertexDataList &GetVertexData() const=0;
+	const Material &GetMaterial() const { return *mMaterial; }
+	Material &GetMaterial() { return *mMaterial; }
+	const VertexBuffer &GetVBO() const { return mVBO; }
 	const Matrix44 &GetTransform() const {return mTransform; }
 	void SetTransform(const Matrix44 &transform) {mTransform = transform; }
 
@@ -106,16 +112,15 @@ public:
 	}
 	void SetPosition(Real x, Real y,Real z)
 	{ SetPosition(WorldPoint3(x,y,z));	}
-	void SetPosition(const WorldPoint3 &position)
-	{
-		mTransform.SetPosition(position);
-	}
+	void SetPosition(const WorldPoint3 &position){ 	mTransform.SetPosition(position);	}
 
     void SetEnableDrawNormals(bool isDrawingNormals = true) { mIsDrawNormals = isDrawingNormals; }
     bool IsDrawingNormals() const { return mIsDrawNormals; }
 protected:
 	Matrix44 mTransform;
-	std::string mObjName;
+	Material *mMaterial;
+	VertexBuffer mVBO;
     bool mIsDrawNormals;
 };
+	typedef std::vector<const RenderObject*> RenderObjectList;
 }

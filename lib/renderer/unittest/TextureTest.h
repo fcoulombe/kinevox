@@ -56,7 +56,19 @@ void Test()
 		s.str("");
 		s<<texture.GetHeight() << " == " << 256 << std::endl;
 		AssertMsg_Test(texture.GetHeight() == 256, s.str().c_str());
-
+		s.str("");
+		s<<texture.GetBytesPerPixel() << " == " << 4 << std::endl;
+		AssertMsg_Test(texture.GetBytesPerPixel() == 4, s.str().c_str());
+		
+		s.str("");
+		s<<texture.GetResourceWidth() << " == " << 256 << std::endl;
+		AssertMsg_Test(texture.GetResourceWidth() == 256, s.str().c_str());
+		s.str("");
+		s<<texture.GetResourceHeight() << " == " << 256 << std::endl;
+		AssertMsg_Test(texture.GetResourceHeight() == 256, s.str().c_str());
+		s.str("");
+		s<<texture.GetResourceBytesPerPixel() << " == " << 4 << std::endl;
+		AssertMsg_Test(texture.GetResourceBytesPerPixel() == 4, s.str().c_str());
 #ifndef OS_IPHONE
 		texture.Save("PNGTextureTest.tga");
 #endif

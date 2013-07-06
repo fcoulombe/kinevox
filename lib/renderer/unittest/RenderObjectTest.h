@@ -32,21 +32,6 @@
 using namespace GCL;
 namespace RenderObjectTest
 {
-
-class MyRenderObject : public SquareRenderObject
-{
-public:
-	MyRenderObject()
-	: SquareRenderObject("MyRenderObject", Matrix44(true)) //identity
-	{
-    }
-
-	const Material &GetMaterial() const { return mMaterial; }
-private:
-	Material mMaterial;
-};
-
-
 void Test();
 void Test()
 {
@@ -55,9 +40,9 @@ void Test()
 	{
 		WinDriver winDriver("RenderObjectTest");
 		Renderer renderer(winDriver.GetWindowsHandle());
-		MyRenderObject obj;
+		SquareRenderObject obj;
 		RenderObjectList objList;
-		objList.push_back(&obj);
+		objList.push_back(obj.GetRenderObject());
 
 		std::stringstream s;
 		//test initial transform is identity

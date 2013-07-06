@@ -32,22 +32,6 @@ using namespace GCL;
 namespace TextureAndShaderTest
 {
 
-class MyRenderObject : public SquareRenderObject
-{
-public:
-	MyRenderObject()
-	: SquareRenderObject("MyRenderObject", Matrix44(true)) //identity
-	{}
-	~MyRenderObject()
-	{
-	}
-	const Material &GetMaterial() const { return mMaterial; }
-	Material &GetMaterial() { return mMaterial; }
-private:
-	Material mMaterial;
-};
-
-
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/);
 bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 {
@@ -70,21 +54,21 @@ void Test()
 		program.Link();
 		program.Bind();
 
-		MyRenderObject obj1;
+		SquareRenderObject obj1;
 		const WorldPoint3 position1(2.5,0.0, -10.0);
 		obj1.SetPosition(position1);
 		obj1.GetMaterial().SetTexture(TEXTURE_PATH"mushroomcompressedtga.tga");
 
 
-		MyRenderObject obj2;
+		SquareRenderObject obj2;
 		const WorldPoint3 position2(-2.5,0.0, -10.0);
 		obj2.SetPosition(position2);
 		obj2.GetMaterial().SetTexture(TEXTURE_PATH"HappyFish.tga");
 
 		RenderObjectList renderObjectList;
-		renderObjectList.push_back(&obj1);
+		renderObjectList.push_back(obj1.GetRenderObject());
 
-		renderObjectList.push_back(&obj2);
+		renderObjectList.push_back(obj2.GetRenderObject());
         KINEVOX_TEST_LOOP_START
 		renderer.PreRender();
 		renderer.Render(renderObjectList);

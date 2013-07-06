@@ -31,6 +31,7 @@
 #include "renderer/GL/GLVertexBuffer.h"
 #include "renderer/GL/GLPixelBufferHAL.h"
 #include "renderer/RenderPipe.h"
+#include "renderer/RenderObject.h"
 
 using namespace GCL;
 typedef std::map<void *, GLGPUProgram*> GPUProgramMap;
@@ -77,7 +78,24 @@ void RCDestroyRenderer(RenderCommand *, RenderData &renderData)
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	delete rd.mRenderer ;
 }
-
+void RCRendererPreRender(RenderCommand *, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	rd.mRenderer->PreRender();
+}
+void RCRendererPostRender(RenderCommand *, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	rd.mRenderer->PostRender();
+}
+void RCRendererRender(RenderCommand *, RenderData &)
+{
+	LOG_RENDER_CMD
+	//	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	//rd.mRenderer->Render(*(const RenderObjectList *)data->mData);
+}
 void RCGetVendor(RenderCommand *, RenderData &renderData)
 {
 	LOG_RENDER_CMD
@@ -517,6 +535,9 @@ static RenderCommandFunction GLRenderCommandMap[] =
 	RCSwapBuffer, //0
 	RCCreateRenderer, //1
 	RCDestroyRenderer, //2
+	RCRendererPreRender,
+	RCRendererPostRender,
+	RCRendererRender,
 	RCGetVendor, //3
 	RCGetVersion, //4
 	RCGetRenderer, //5

@@ -25,6 +25,8 @@
 
 #include <gcl/Assert.h>
 #include <gcl/Math.h>
+#include "renderer/RenderPipe.h"
+#include "renderer/RenderCmd.h"
 
 using namespace GCL;
 
@@ -48,6 +50,9 @@ void Camera::Update()
 {
 	mProjectionMatrix.SetPerspective(mFov,mAspect,mNear,mFar);
 	mModelViewMatrix = Inverse(mCameraMatrix);
+	RenderPipe::SendCommand(new RenderCommand(SET_PROJECTION, &mProjectionMatrix));
+	RenderPipe::SendCommand(new RenderCommand(SET_MODELVIEW, &mProjectionMatrix));
+
 }
 
 

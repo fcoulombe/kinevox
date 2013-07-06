@@ -25,7 +25,7 @@
 #include <fstream>
 #include <sstream>
 
-#include <gcl/ResourceManagerConfig.h>
+#include "renderer/GPUProgram.h"
 #include "renderer/Shader.h"
 #include "renderer/Texture.h"
 
@@ -34,23 +34,23 @@ using namespace GCL;
 //TODO: turn this into a material reosurce
 Material::Material(const char *filename)
 {
-	mShader = NULL;
+	mProgram = NULL;
 	mTexture=NULL;
 	LoadMaterial(filename);
 }
 
 Material::~Material()
 {
-	delete mShader;
+	delete mProgram;
 	delete mTexture;
 }
 
 void Material::LoadMaterial(const char *filename)
 {
-	if (mShader )
+	if (mProgram )
 	{
-		delete mShader;
-		mShader = NULL;
+		delete mProgram;
+		mProgram = NULL;
 	}
 	if (mTexture)
 	{
@@ -103,7 +103,13 @@ void Material::LoadMaterial(const char *filename)
 
 	fp.close();
 
-	mShader = new Shader();
+	mProgram = new GPUProgram();
+	Shader *vertexShader = new Shader("DefaultVertexShader", VERTEX_SHADER);
+	Shader *fragmentShader =  new Shader("DefaultFragmentShader", FRAGMENT_SHADER);
+	mProgram->AttachShader(*vertexShader);
+	mProgram->AttachShader(*fragmentShader);
+	mProgram->Link();
+	mProgram->Bind();
     s.str("");
     s<< "Material: "<<filename<< " doesn't have a texture. for now all materials must have a texture"<<std::endl;
     GCLAssertMsg(strcmp(texture, "null")!=0, s.str().c_str());
@@ -113,7 +119,7 @@ void Material::LoadMaterial(const char *filename)
 
 void Material::Bind() const
 {
-	mShader->Bind();
+	mProgram->Bind();
 	mTexture->Bind();
 }
 

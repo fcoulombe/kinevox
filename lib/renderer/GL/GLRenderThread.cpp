@@ -150,6 +150,20 @@ void RCSetViewport(void *data, RenderData &renderData)
 	const ViewPort *viewport = (const ViewPort *)data; 
 	rd.mRenderer->SetViewPort(*viewport);
 }
+void RCSetProjection(void *data, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	const Matrix44 *viewport = (const Matrix44 *)data; 
+	rd.mRenderer->SetProjection(*viewport);
+}
+void RCSetModelView(void *data, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	const Matrix44 *viewport = (const Matrix44 *)data; 
+	rd.mRenderer->SetModelView(*viewport);
+}
 static RenderCommandFunction GLRenderCommandMap[] =
 {
 	RCSwapBuffer,
@@ -168,7 +182,9 @@ static RenderCommandFunction GLRenderCommandMap[] =
 	RCIsGlewExtensionSupported,
 	RCGetGLProjection,
 	RCGetGLModelView,
-	RCSetViewport
+	RCSetViewport,
+	RCSetProjection,
+	RCSetModelView
 };
 GCL::GLRenderThread::GLRenderThread()
 {

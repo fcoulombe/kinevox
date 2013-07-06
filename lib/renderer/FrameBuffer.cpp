@@ -26,8 +26,5 @@
 
 using namespace GCL;
 
-FrameBuffer::FrameBuffer(const Texture & texture, const RenderBuffer & depthBuffer)
-    :mPimpl(texture.GetImpl(), depthBuffer.GetImpl())
-{
-}
+
 

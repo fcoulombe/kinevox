@@ -21,8 +21,8 @@
  */
 
 #pragma once
-#include "rendererconf.h"
-#include GFXAPI_RenderBuffer_H
+#include "renderer/RenderCmd.h"
+#include "renderer/RenderPipe.h"
 
 
 namespace GCL
@@ -31,25 +31,23 @@ class RenderBuffer
 {
 public:
 	RenderBuffer(size_t width, size_t height)
-	: mPimpl(width, height)
 	{
+		RenderPipe::SendCommand(new RenderCommand(RENDERBUFFER_CREATE, this, (void*)width, (void*)height));
 	}
 	~RenderBuffer()
 	{
+		RenderPipe::SendCommand(new RenderCommand(RENDERBUFFER_DESTROY, this));
 	}
-	void Bind() { mPimpl.Bind(); }
+	void Bind() { RenderPipe::SendCommand(new RenderCommand(RENDERBUFFER_BIND, this)); }
 
-	bool IsValid() const { return mPimpl.IsValid(); }
+	bool IsValid() const {  return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_RENDERBUFFER_VALID, (void*)this)).GetBool(); }
 
 	void Save(const char * /*filename*/) { GCLAssert(false && "TBD"); }
 
 	static void ResetDefault() { GCLAssert(false && "TBD"); }
 
 private:
-	IRenderBuffer mPimpl;
-    const IRenderBuffer &GetImpl() const { return mPimpl; }
-    friend class FrameBuffer;
-
+	
 };
 
 }

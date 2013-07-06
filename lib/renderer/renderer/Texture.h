@@ -22,10 +22,8 @@
 
 #pragma once
 #include <gcl/Macro.h>
-
-#include "rendererconf.h"
-#include GFXAPI_Texture_H
-
+#include "renderer/RenderCmd.h"
+#include "renderer/RenderPipe.h"
 
 namespace GCL
 {
@@ -44,20 +42,16 @@ public:
 	void Save(const char *filename);
 
 
-	void Bind() const { mPimpl->Bind(); }
-	bool IsValid() const { return mPimpl->IsValid(); }
-	size_t GetWidth() const { return mPimpl->GetWidth(); }
-	size_t GetHeight() const { return mPimpl->GetHeight(); }
-    size_t GetBytesPerPixel() const { return mPimpl->GetBytesPerPixel(); }
+	void Bind() const { RenderPipe::SendCommand(new RenderCommand(TEXTURE_BIND, (void*)this));}
+	bool IsValid() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_TEXTURE_VALID, (void*)this)).GetBool();}
+	size_t GetWidth() const { return (size_t)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_WIDTH, (void*)this)).GetNumber(); }
+	size_t GetHeight() const { return (size_t)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_HEIGHT, (void*)this)).GetNumber();  }
+    size_t GetBytesPerPixel() const { return (size_t)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_BPP, (void*)this)).GetNumber();  }
 
 
-    const uint8_t *GetTextureFromVRAM() const { return mPimpl->GetTextureFromVRAM(); }
-    const uint8_t *GetPixelBufferFromVRAM() const { return mPimpl->GetPixelBufferFromVRAM(); }
+    const uint8_t *GetTextureFromVRAM() const { return (const uint8_t *)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_TEXTURE_FROM_VRAM, (void*)this)).GetPointer();  }
+    const uint8_t *GetPixelBufferFromVRAM() const { return (const uint8_t *)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_PIXELBUFFER_FROM_VRAM, (void*)this)).GetPointer();}
 private:
-    const ITexture &GetImpl() const { return *mPimpl; }
-	ITexture *mPimpl;
-    friend class FrameBuffer;
-    friend class GPUProgram;
 	const TextureResource *mTextureResource;
 };
 

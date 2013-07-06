@@ -36,7 +36,7 @@ class FrameBuffer
 public:
 	FrameBuffer(const Texture & texture, const RenderBuffer & depthBuffer)
 	{
-		RenderPipe::SendCommand(new RenderCommand(FRAMEBUFFER_CREATE, this, (void*)&texture, (void*)&depthBuffer));
+		RenderPipe::SendCommand(new RenderCommand3Arg(FRAMEBUFFER_CREATE, this, (void*)&texture, (void*)&depthBuffer));
 	}
 	~FrameBuffer()
 	{

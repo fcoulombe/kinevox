@@ -79,23 +79,70 @@ enum RenderCommandType
 	RENDERBUFFER_DESTROY=47,
 	RENDERBUFFER_BIND=48,
 	IS_RENDERBUFFER_VALID=49,
+	VBO_CREATE=50,
+	VBO_DESTROY=51,
+	VBO_RENDER=52,
+	IS_VBO_VALID=53,
+	PBO_CREATE=54,
+	PBO_DESTROY=55,
+	PBO_UNBIND=56,
+	PBO_BIND=57,
+	PBO_PUSH=58,
+	PBO_PULL=59,
+	IS_PBO_VALID=60,
 	RenderCommandMax
 };
 class RenderCommand
 {
 public:
-	RenderCommand(RenderCommandType cmd, void *data=NULL, void *data2=NULL, void *data3=NULL)
+	RenderCommand(RenderCommandType cmd, void *data=NULL)
 	{
 		mCmd = cmd;
 		mData = data;
-		mData2 = data2;
-		mData3 = data3;
+
 	}
-	//virtual void Run(RenderData &renderThread)=0;
 	RenderCommandType mCmd;
 	void *mData;
+};
+class RenderCommand2Arg : public RenderCommand
+{
+public:
+	RenderCommand2Arg(RenderCommandType cmd, void *data, void *data2)
+		:RenderCommand(cmd, data)
+	{
+		mData2 = data2;
+	}
 	void *mData2;
+};
+class RenderCommand3Arg : public RenderCommand2Arg
+{
+public:
+	RenderCommand3Arg(RenderCommandType cmd, void *data, void *data2, void *data3)
+		:RenderCommand2Arg(cmd, data, data2)
+	{
+		mData3 = data3;
+	}
 	void *mData3;
+};
+class RenderCommand4Arg : public RenderCommand3Arg
+{
+public:
+	RenderCommand4Arg(RenderCommandType cmd, void *data, void *data2, void *data3, void *data4)
+		:RenderCommand3Arg(cmd, data, data2, data3)
+	{
+		mData4 = data4;
+	}
+	void *mData4;
+};
+class RenderCommand5Arg : public RenderCommand4Arg
+{
+public:
+	RenderCommand5Arg(RenderCommandType cmd, void *data, void *data2, void *data3, void *data4,  void *data5)
+		:RenderCommand4Arg(cmd, data, data2, data3, data4)
+	{
+		mData5 = data5;
+	}
+	void *mData5;
 };
 struct RenderData
 {

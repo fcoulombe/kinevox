@@ -67,8 +67,12 @@ void Text2D::Render()
 
     square[3].position = Point3<MeshReal>(MeshReal(-halfWidth+mPosition.x), MeshReal(halfHeight+mPosition.y), MeshReal(0.0));
     square[3].textureCoordinate = Point2<MeshReal>(MeshReal(topTextureCoord.x), MeshReal(bottomTextureCoord.y));
-    VertexBuffer<VertexPT> buffer(square, 4);
+#if 0
+	VertexBuffer buffer(square, 4);
     buffer.PreRender();
-    buffer.Render(GL_TRIANGLE_STRIP);
+    buffer.Render(VBM_TRIANGLE_STRIP);
     buffer.PostRender();
+#else
+GCLAssert(false && "reimplement");
+#endif
 }

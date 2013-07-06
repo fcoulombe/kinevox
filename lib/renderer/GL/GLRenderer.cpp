@@ -34,8 +34,9 @@
 #include "renderer/RenderObject.h"
 #include "renderer/RenderObject2D.h"
 #include "renderer/Text2D.h"
-#include "renderer/Shader.h"
-#include "renderer/VertexBuffer.h"
+#include "renderer/GL/GLGPUProgram.h"
+#include "renderer/GL/GLShader.h"
+#include "renderer/GL/GLVertexBuffer.h"
 
 
 using namespace GCL;
@@ -210,18 +211,19 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		const VertexDataList &dataList = tempRenderObject->GetVertexData();
         for (size_t j=0; j<dataList.size(); ++j)
         {
+			#if 0
             const VertexData &data = dataList[j]; 
             switch (data.mVertexType)
             {
             case ePOSITION:
                 {
-                    VertexBuffer<VertexP> buffer((const VertexP *)data.mVertexData, data.mVertexCount);
+                    VertexBuffer buffer((const VertexP *)data.mVertexData, data.mVertexCount);
                     buffer.Render();
                 }
                 break;
             case ePOSITION|eNORMAL:
                 {
-                    VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.mVertexCount);
+                    VertexBuffer buffer((const VertexPN *)data.mVertexData, data.mVertexCount);
                     buffer.Render();
                     if (tempRenderObject->IsDrawingNormals())
                         DrawNormals<VertexPN>(data);
@@ -229,19 +231,22 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
                 break;
             case ePOSITION|eTEXTURE_COORD:
                 {
-                    VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.mVertexCount);
+                    VertexBuffer buffer((const VertexPT *)data.mVertexData, data.mVertexCount);
                     buffer.Render();
                 }
                 break;
             case ePOSITION|eNORMAL|eTEXTURE_COORD:
                 {
-                    VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.mVertexCount);
+                    VertexBuffer buffer((const VertexPNT *)data.mVertexData, data.mVertexCount);
                     buffer.Render();
                     if (tempRenderObject->IsDrawingNormals())
                         DrawNormals<VertexPNT>(data);
                 }
                 break;
             }
+#else
+			GCLAssert(false && "to port");
+#endif
         }
 #endif
 	}
@@ -261,9 +266,14 @@ void GLRenderer::Render(const RenderObject2DList &renderObjectList)
 #if ENABLE_FIX_PIPELINE
     SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
 #else
-    Shader shader;
-    shader.Bind();
-    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
+	GLGPUProgram program;
+	GLShader vertexShader("DefaultVertexShader", GL_VERTEX_SHADER);
+	GLShader fragmentShader("DefaultFragmentShader", GL_FRAGMENT_SHADER);
+	program.AttachShader(vertexShader);
+	program.AttachShader(fragmentShader);
+	program.Link();
+	program.Bind();
+    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY, &program);
 #endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
@@ -298,9 +308,14 @@ void GLRenderer::Render(const Text2DList &renderObjectList)
 #if ENABLE_FIX_PIPELINE
     SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
 #else
-    Shader shader;
-    shader.Bind();
-    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
+	GLGPUProgram program;
+	GLShader vertexShader("DefaultVertexShader", GL_VERTEX_SHADER);
+	GLShader fragmentShader("DefaultFragmentShader", GL_FRAGMENT_SHADER);
+	program.AttachShader(vertexShader);
+	program.AttachShader(fragmentShader);
+	program.Link();
+	program.Bind();
+    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY, &program);
 #endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)

@@ -25,11 +25,11 @@
 namespace GCL
 {
 
-enum AttributePositions
-{
-  ATTRIB_POSITION=1,
-  ATTRIB_NORMAL=2,
-  ATTRIB_TEXTURE_COORD=3
-};
+	struct AttribLocations
+	{
+		int position;
+		int texCoord;
+		int normal;
+	};
 
 }

@@ -41,7 +41,7 @@ Texture::~Texture()
 Texture::Texture(const PixelBuffer &buffer)
 {
 	mTextureResource = NULL;
-	RenderPipe::SendCommand(new RenderCommand(TEXTURE_CREATE, this,(void*) &buffer));
+	RenderPipe::SendCommand(new RenderCommand2Arg(TEXTURE_CREATE, this,(void*) &buffer));
 }
 
 Texture::Texture(const char *filename)
@@ -53,7 +53,7 @@ Texture::Texture(const char *filename)
 	const TextureResource::TextureData &tempTextureData = mTextureResource->mTextureData;
 	const PixelBuffer &imageData = tempTextureData.imageData;
 
-	RenderPipe::SendCommand(new RenderCommand(TEXTURE_CREATE, this, (void*)&imageData));
+	RenderPipe::SendCommand(new RenderCommand2Arg(TEXTURE_CREATE, this, (void*)&imageData));
 }
 
 Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
@@ -65,21 +65,21 @@ Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
 	{
 		PixelBuffer buffer((PixelMono*)NULL, width, height);
 
-		RenderPipe::SendCommand(new RenderCommand(TEXTURE_CREATE, this, &buffer));
+		RenderPipe::SendCommand(new RenderCommand2Arg(TEXTURE_CREATE, this, &buffer));
 		break;
 	}
 	case 3:
 	{
 		PixelBuffer buffer((PixelRGB*)NULL, width, height);
 
-		RenderPipe::SendCommand(new RenderCommand(TEXTURE_CREATE, this, &buffer));
+		RenderPipe::SendCommand(new RenderCommand2Arg(TEXTURE_CREATE, this, &buffer));
 		break;
 	}
 	case 4:
 	{
 		PixelBuffer buffer((PixelRGBA*)NULL, width, height);
 
-		RenderPipe::SendCommand(new RenderCommand(TEXTURE_CREATE, this, &buffer));
+		RenderPipe::SendCommand(new RenderCommand2Arg(TEXTURE_CREATE, this, &buffer));
 		break;
 	}
 	}

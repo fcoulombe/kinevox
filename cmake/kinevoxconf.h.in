@@ -23,3 +23,17 @@
 
 #define GFXAPI_NAME @GFXAPI_NAME@
 
+#define DATA_PATH  "data/"
+#define TEXTURE_PATH  DATA_PATH"Texture/"
+#define MATERIAL_PATH DATA_PATH"Material/"
+#define SPRITE_PATH DATA_PATH"Sprite/"
+#define SOUND_PATH DATA_PATH"Sound/"
+#define MUSIC_PATH DATA_PATH"Music/"
+#define MESH_PATH DATA_PATH"Mesh/"
+#define FONT_PATH DATA_PATH"Font/"
+#define SCRIPT_PATH DATA_PATH"Script/"
+#define CONFIG_PATH DATA_PATH"Conf/"
+#define RLSL_PATH DATA_PATH"RLSL/"
+#define GLSL_PATH DATA_PATH"GLSL/"
+
+

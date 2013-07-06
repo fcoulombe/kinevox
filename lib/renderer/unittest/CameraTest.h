@@ -55,38 +55,8 @@ void Test()
 		s <<std::setprecision(16)<< std::endl<<perspective << std::endl << "==" << std::endl << camera.GetProjection();
 		AssertMsg_Test(perspective==camera.GetProjection(), s.str().c_str());
 	}
-#if ENABLE_FIX_PIPELINE //!defined(ES1) && !defined(ES2) works on 2.0 but not on 3.x
-	//camera projection equal gluPerspective projection
-	{
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		gluPerspective(45.0,640.0/480.0,0.1,100.0);
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
 
-		s.str("");
-		s<<std::setprecision(16)<< std::endl<<GLRenderer::GetGLProjection() << std::endl <<"==" << std::endl << camera.GetProjection();
-		AssertMsg_Test(GLRenderer::GetGLProjection() == camera.GetProjection(), s.str().c_str());
-	}
 
-    //camera projection equal gluPerspective projection
-    {
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho (0, 600, 800, 0, -1.0f, 1.0f); glErrorCheck();
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-
-        Matrix44 o;
-        o.SetOrtho (0, 600, 800, 0, -1.0f, 1.0f); 
-
-        s.str("");
-        s<<std::setprecision(16)<< std::endl<<GLRenderer::GetGLProjection() << std::endl <<"==" << std::endl << o;
-        AssertMsg_Test(GLRenderer::GetGLProjection() == o, s.str().c_str());
-    }
-#endif
-
-	renderer.SetCamera(camera);
 	ViewPort viewport;
 
 	camera.Update();
@@ -105,6 +75,10 @@ void Test()
 	camera.Update();
 	camera.TiltDown();
 	camera.Update();
+	KINEVOX_TEST_LOOP_START
+		camera.Update();
+		RenderPipe::Render();
+	KINEVOX_TEST_LOOP_END
 	//Camera::DefaultCamera.Update();
 }
 }

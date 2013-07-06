@@ -21,44 +21,35 @@
  */
 
 #pragma once
-#include <gcl/Macro.h>
-
-#include "rendererconf.h"
-#include GFXAPI_Texture_H
-
+#include <3rdparty/OpenGL.h>
 
 namespace GCL
 {
-class TextureResource;
-class PixelBuffer;
+class Matrix44;
+class GLShader;
+class GLTexture;
+  class GLGPUProgram
+  {
+  public:
+	GLGPUProgram();
 
-class Texture
-{
-public:
-	Texture(const PixelBuffer &buffer);
-	Texture(const char *filename);
-	Texture(size_t width, size_t height, size_t bypesPerPixel = 4);
-	~Texture();
-	bool LoadTexture(const char *filename);
+    ~GLGPUProgram();
+    void Bind();
+    void AttachShader(const GLShader &shader);
+    void Link();
+    bool IsValid() const { return mIsValid; }
 
-	void Save(const char *filename);
+    void SetTextureSampler(const GLTexture &sampler);
+    void SetProjectionMatrix(const Matrix44 &m);
+    void SetModelViewMatrix(const Matrix44 &m);
+    void GetUniform(const char *unformName, Matrix44 &m44) const;
+    void GetUniform(const char *unformName, int &ret) const;
+    int GetAttributeLocation(const char *attributeName) const;
 
-
-	void Bind() const { mPimpl->Bind(); }
-	bool IsValid() const { return mPimpl->IsValid(); }
-	size_t GetWidth() const { return mPimpl->GetWidth(); }
-	size_t GetHeight() const { return mPimpl->GetHeight(); }
-    size_t GetBytesPerPixel() const { return mPimpl->GetBytesPerPixel(); }
-
-
-    const uint8_t *GetTextureFromVRAM() const { return mPimpl->GetTextureFromVRAM(); }
-    const uint8_t *GetPixelBufferFromVRAM() const { return mPimpl->GetPixelBufferFromVRAM(); }
-private:
-    const ITexture &GetImpl() const { return *mPimpl; }
-	ITexture *mPimpl;
-    friend class FrameBuffer;
-    friend class GPUProgram;
-	const TextureResource *mTextureResource;
-};
-
+    static void ResetDefault();
+  private:
+    void PrintInfoLog(GLuint );
+    GLuint mProgramObject;
+    bool mIsValid;
+  };
 }

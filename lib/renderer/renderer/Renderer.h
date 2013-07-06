@@ -22,8 +22,6 @@
 
 #pragma once
 
-//#include "rendererconf.h"
-//#include GFXAPI_Renderer_H
 #include <gcl/Config.h>
 
 #include "renderer/RenderPipe.h"
@@ -59,8 +57,6 @@ namespace GCL
 	const std::vector<std::string> GetExtensions() const { return  RenderPipe::SendCommandSyncRet(new RenderCommand(GET_EXTENSIONS)).GetStringList();  }
 	bool IsExtensionSupported(const std::string &ext) const { return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_IS_EXTENSION_SUPPORTED, (void*)&ext)).GetBool(); }
 	bool IsGlewExtensionSupported(const std::string &ext) const { return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_IS_GLEW_EXTENSION_SUPPORTED, (void*)&ext)).GetBool(); }
-
-	//void SetCamera(Camera &camera) { mCamera = &camera; }
 
 	static Matrix44 GetGLProjection() {return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_GL_PROJECTION)).GetMatrix(); }
 	static Matrix44 GetGLModelView() {return RenderPipe::SendCommandSyncRet(new RenderCommand(GET_GL_MODELVIEW)).GetMatrix();}

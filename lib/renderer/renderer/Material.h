@@ -26,7 +26,7 @@
 namespace GCL
 {
 class Texture;
-class Shader;
+class GPUProgram;
 class Material
 {
 public:
@@ -38,10 +38,10 @@ public:
 
 	void SetTexture(const char *texture);
 
-    Shader *GetShader() const { return mShader; }
+    GPUProgram *GetShader() const { return mProgram; }
 private:
 	Texture *mTexture;
-	mutable Shader *mShader; //mutable because we need to set uniforms before rendering
+	mutable GPUProgram *mProgram; //mutable because we need to set uniforms before rendering
 
 	WorldPoint4 mAmbient;
 	WorldPoint4 mDiffuse;

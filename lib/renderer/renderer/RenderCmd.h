@@ -46,6 +46,8 @@ enum RenderCommandType
 	GET_GL_PROJECTION,
 	GET_GL_MODELVIEW,
 	SET_VIEWPORT,
+	SET_PROJECTION,
+	SET_MODELVIEW,
 	RenderCommandMax
 };
 class RenderCommand

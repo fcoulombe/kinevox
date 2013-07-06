@@ -52,6 +52,7 @@ public:
 	void SetPosition(const WorldPoint3 &position)  { obj->SetPosition(position); }
 	const Matrix44 &GetTransform() const {return obj->GetTransform(); }
 	Material &GetMaterial() const { return obj->GetMaterial(); }
+	void SetEnableDrawNormals(bool enableDrawNormals=true) { obj->SetEnableDrawNormals(enableDrawNormals); }
 protected:
 	RenderObject *obj;
 	Material material;

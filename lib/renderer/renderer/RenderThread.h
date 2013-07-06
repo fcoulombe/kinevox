@@ -34,12 +34,12 @@ struct RenderData;
 class RenderThread : public Thread
 {
 public:
-	RenderThread()
-	{
-		
-	}
+	RenderThread();
 	virtual ~RenderThread();
 	void SendCommand(RenderCommand *cmd);
+
+	//returns false if we disbale multithreading
+	bool IsThreaded() const { return mIsThreaded; }
 private:
 	void Run();
 	std::queue<RenderCommand*> mCommandList;
@@ -49,6 +49,7 @@ protected:
 	Semaphore mRunMutex;
 	RenderCommandFunction *mRenderCommandMap; //vtable for render commands. configured by child class
 	RenderData *mRenderData; //holds client side render data
+	bool mIsThreaded;
 };
 
 

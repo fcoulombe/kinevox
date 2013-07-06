@@ -23,6 +23,7 @@
 #include "renderer/GL/GLRenderThread.h"
 #include "renderer/RenderCmd.h"
 #include "renderer/GL/GLRenderer.h"
+#include "renderer/RenderPipe.h"
 
 using namespace GCL;
 struct GLRenderData : public RenderData
@@ -30,38 +31,125 @@ struct GLRenderData : public RenderData
 	GLRenderer *mRenderer;
 };
 
-void RCSwapBuffer(void *, RenderData &renderData);
-void RCCreateRenderer(void *, RenderData &renderData);
-void RCCreateVertexBuffer(void *, RenderData &renderData);
-void RCCreateTexture(void *, RenderData &renderData);
-void RCCreateShader(void *, RenderData &renderData);
-void RCCreateVAO(void *, RenderData &renderData);
-
+#define IS_LOGGING_RENDER_COMMAND 1
+#if IS_LOGGING_RENDER_COMMAND
+#define LOG_RENDER_CMD std::cout << __FUNCTION__ << std::endl;
+#else
+#define LOG_RENDER_CMD 
+#endif
 void RCSwapBuffer(void *, RenderData &renderData)
 {
+	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	rd.mRenderer->SwapBuffer();
 }
 void RCCreateRenderer(void *handle, RenderData &renderData)
 {
+	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	rd.mRenderer = new GLRenderer((size_t)handle);
 }
 void RCCreateVertexBuffer(void *, RenderData &)
 {
+	LOG_RENDER_CMD
 	//create glvertex buffer
 	//return id
 }
 void RCCreateTexture(void *, RenderData &)
 {
+	LOG_RENDER_CMD
 }
 void RCCreateShader(void *, RenderData &)
 {
+	LOG_RENDER_CMD
 }
 void RCCreateVAO(void *, RenderData &)
 {
+	LOG_RENDER_CMD
 }
 
+void RCGetVendor(void *, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	const std::string &vendor = rd.mRenderer->GetVendor();
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+
+void RCGetVersion(void *, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	const std::string &vendor = rd.mRenderer->GetVersion();
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+void RCGetRenderer(void *, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	const std::string &vendor = rd.mRenderer->GetRenderer();
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+
+void RCGetShadingLanguageVersion(void *, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	const std::string &vendor = rd.mRenderer->GetShadingLanguageVersion();
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+void RCGetGlewVersion(void *, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	const std::string &vendor = rd.mRenderer->GetGlewVersion();
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+void RCGetExtensions(void *, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	const std::vector<std::string> &vendor = rd.mRenderer->GetExtensions();
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+void RCIsExtensionSupported(void *data, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+	const std::string *ext = (const std::string *)data;
+	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	bool vendor = rd.mRenderer->IsExtensionSupported(*ext);
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+void RCIsGlewExtensionSupported(void *data, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+	const std::string *ext = (const std::string *)data;
+	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	bool vendor = rd.mRenderer->IsGlewExtensionSupported(*ext);
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+
+void RCGetGLProjection(void *, RenderData &)
+{
+	LOG_RENDER_CMD
+	//const GLRenderData &rd = static_cast<const GLRenderData&>(renderData);
+	const Matrix44 &vendor = GLRenderer::GetGLProjection();
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+void RCGetGLModelView(void *, RenderData &)
+{
+	LOG_RENDER_CMD
+	const Matrix44 &vendor = GLRenderer::GetGLModelView();
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+
+void RCSetViewport(void *data, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	const ViewPort *viewport = (const ViewPort *)data; 
+	rd.mRenderer->SetViewPort(*viewport);
+}
 static RenderCommandFunction GLRenderCommandMap[] =
 {
 	RCSwapBuffer,
@@ -69,7 +157,18 @@ static RenderCommandFunction GLRenderCommandMap[] =
 	RCCreateVertexBuffer,
 	RCCreateTexture,
 	RCCreateShader,
-	RCCreateVAO
+	RCCreateVAO,
+	RCGetVendor,
+	RCGetVersion,
+	RCGetRenderer,
+	RCGetShadingLanguageVersion,
+	RCGetGlewVersion,
+	RCGetExtensions,
+	RCIsExtensionSupported,
+	RCIsGlewExtensionSupported,
+	RCGetGLProjection,
+	RCGetGLModelView,
+	RCSetViewport
 };
 GCL::GLRenderThread::GLRenderThread()
 {

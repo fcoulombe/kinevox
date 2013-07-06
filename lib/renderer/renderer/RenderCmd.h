@@ -21,7 +21,9 @@
  */
 
 #pragma once
-
+#include <string>
+#include <vector>
+#include <gcl/Matrix44.h>
 
 namespace GCL
 {
@@ -32,7 +34,19 @@ enum RenderCommandType
 	CREATE_VERTEX_BUFFER,
 	CREATE_TEXTURE,
 	CREATE_SHADER,
-	CREATE_VAO
+	CREATE_VAO,
+	GET_VENDOR,
+	GET_VERSION,
+	GET_RENDERER,
+	GET_SHADING_LANGUAGE_VERSION,
+	GET_GLEW_VERSION,
+	GET_EXTENSIONS,
+	GET_IS_EXTENSION_SUPPORTED,
+	GET_IS_GLEW_EXTENSION_SUPPORTED,
+	GET_GL_PROJECTION,
+	GET_GL_MODELVIEW,
+	SET_VIEWPORT,
+	RenderCommandMax
 };
 class RenderCommand
 {
@@ -51,5 +65,61 @@ struct RenderData
 	size_t pad;
 };
 typedef void (*RenderCommandFunction)(void *, RenderData &);
+
+class ReturnMessage
+{
+public:
+	enum ReturnMessageType
+	{
+		RMT_BOOL,
+		RMT_NUMBER,
+		RMT_FLOAT,
+		RMT_STRING,
+		RMT_MATRIX4,
+		RMT_STRINGLIST
+	};
+	ReturnMessage(bool data)
+	{
+		mType = RMT_BOOL;
+		mData = (data) ? (void*)1 : (void*)0;
+	}
+	ReturnMessage(const std::string &data)
+	{
+		mType = RMT_STRING;
+		mData = new std::string(data);
+	}
+	ReturnMessage(const std::vector<std::string> &data)
+	{
+		mType = RMT_STRINGLIST;
+		mData = new std::vector<std::string>(data);
+	}
+	ReturnMessage(const Matrix44 &data)
+	{
+		mType = RMT_MATRIX4;
+		mData = new Matrix44(data);
+	}
+	~ReturnMessage();
+	
+	const std::string &GetString() const
+	{
+		return *(std::string*)(mData);
+	}
+	const Matrix44 &GetMatrix() const
+	{
+		return *(Matrix44*)(mData);
+	}
+	const bool GetBool() const
+	{
+		return (mData) ? true : false;
+	}
+	const std::vector<std::string> &GetStringList() const
+	{
+		return *(std::vector<std::string>*)(mData);
+	}
+private:
+	ReturnMessageType mType;
+	void *mData;
+};
+
 
 }

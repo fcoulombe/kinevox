@@ -83,46 +83,18 @@ void Test()
 		AssertMsg_Test(renderer.GetViewPort().GetWidth()==(size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), s.str().c_str());
 	}
 
-#if !defined(ES1) && !defined(ES2)
-	Matrix44 projection = GLRenderer::GetGLProjection();
-	//here we simulate creating a modelviewmatrix of identity.
-	//we modulate it with a transform
-	//we perform the same operation in opengl
-	//we make sure that our final modelview is equal to
-	//the one of opengl. this asserts that we match in
-	//matrix model
-	{
-		Matrix44 modelView = Inverse(Matrix44::IDENTITY);
-		Matrix44 transform;
-		transform.SetPosition(WorldPoint3(0.0,0.0,-10.0));
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glMultMatrix(reinterpret_cast<const GLreal*>(&transform));
-
-		Matrix44 modelView1 = GLRenderer::GetGLModelView();
-		GLRenderer::SetTransform(projection, modelView, transform);
-		Matrix44 modelView2 = GLRenderer::GetGLModelView();
-
-		std::stringstream s;
-		s<<std::endl<<modelView1<<std::endl<<"=="<<std::endl<<modelView2;
-		AssertMsg_Test(modelView1 == modelView2, s.str().c_str());
-
-	}
-#endif
-
 #if ENABLE_GLEW
-	Assert_Test(GLEW_ARB_vertex_program);
-	Assert_Test(glewGetExtension("GL_ARB_multitexture"));
-	Assert_Test(glewGetExtension("GL_ARB_pixel_buffer_object"));
-	Assert_Test(glewGetExtension("GL_ARB_vertex_buffer_object"));
-	Assert_Test(glewGetExtension("GL_ARB_vertex_program"));
-	Assert_Test(glewGetExtension("GL_ARB_vertex_shader"));
-    Assert_Test(glewGetExtension("GL_ARB_fragment_program"));
-    Assert_Test(glewGetExtension("GL_ARB_fragment_shader"));
-    Assert_Test(glewGetExtension("GL_ARB_shading_language_100"));
-    Assert_Test(glewGetExtension("GL_ARB_texture_compression"));
-    Assert_Test(glewGetExtension("GL_EXT_framebuffer_object"));
+	//Assert_Test(GLEW_ARB_vertex_program);
+	Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_multitexture"));
+	Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_pixel_buffer_object"));
+	Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_vertex_buffer_object"));
+	Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_vertex_program"));
+	Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_vertex_shader"));
+    Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_fragment_program"));
+    Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_fragment_shader"));
+    Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_shading_language_100"));
+    Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_texture_compression"));
+    Assert_Test(renderer.IsGlewExtensionSupported("GL_EXT_framebuffer_object"));
 #endif
 }
 }

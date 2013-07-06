@@ -23,6 +23,7 @@
 #pragma once
 #include <iostream>
 #include <queue>
+#include <gcl/Assert.h>
 #include <gcl/Thread.h>
 #include <gcl/Mutex.h>
 #include <gcl/Semaphore.h>
@@ -35,7 +36,7 @@ class RenderThread : public Thread
 public:
 	RenderThread()
 	{
-		Start();
+
 	}
 	virtual ~RenderThread() {}
 	void SendCommand(RenderCommand *cmd)
@@ -51,7 +52,7 @@ private:
 		while (mIsRunning)
 		{
 			mRunMutex.Wait();
-			std::cout <<"render"<<std::endl;
+			//std::cout <<"render"<<std::endl;
 			RenderCommand* cmd =nullptr;
 			mMutex.Lock();
 			if (!mCommandList.empty())
@@ -62,9 +63,9 @@ private:
 			mMutex.Unlock();
 			if (cmd)
 			{
+				GCLAssert(cmd->mCmd<RenderCommandMax);
 				mRenderCommandMap[cmd->mCmd](cmd->mData, *mRenderData);
-					//cmd->Run(mRenderData);
-					delete cmd;
+				delete cmd;
 			}
 		}
 	}

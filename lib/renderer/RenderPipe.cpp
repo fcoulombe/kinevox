@@ -26,23 +26,14 @@
 #include "renderer/GL/GLRenderThread.h"
 using namespace GCL;
 
-RenderPipe *RenderPipe::mRenderPipe=NULL;
-
-GCL::RenderPipe::RenderPipe()
-{
-	mRenderThreads.push_back(new GLRenderThread());
-}
-GCL::RenderPipe::~RenderPipe()
-{
-	delete mRenderThreads[0];
-	mRenderThreads.clear();
-}
+bool RenderPipe::mIsInitialized = false;
+std::vector<RenderThread *> RenderPipe::mRenderThreads;
+ReturnMessage *RenderPipe::mRetMsg=NULL;
 
 void GCL::RenderPipe::SendCommand( RenderCommand *cmd )
 {
 	//if threaded, the thread processes the command otherwise it's the pipe itself
-	for (size_t i=0; i<mRenderThreads.size(); ++i)
-		mRenderThreads[i]->SendCommand(cmd);
+	mRenderThreads[0]->SendCommand(cmd);
 }
 
 void GCL::RenderPipe::Render( /*const RenderObject2DList &spriteList */)
@@ -56,5 +47,41 @@ void GCL::RenderPipe::Render( /*const RenderObject2DList &spriteList */)
 	*/
 	SendCommand(new RenderCommand(SWAP_BUFFER));
 	//call process commands in single threaded
+}
+
+const GCL::ReturnMessage &GCL::RenderPipe::SendCommandSyncRet( RenderCommand *cmd )
+{
+	if (mRetMsg)
+	{
+		delete mRetMsg;
+		mRetMsg = NULL;
+	}
+	mRenderThreads[0]->SendCommand(cmd);
+	while (!mRetMsg)
+		Thread::YieldThread();
+	return *mRetMsg;
+}
+
+void GCL::RenderPipe::SendReturnMessage( ReturnMessage *retMsg )
+{
+	mRetMsg = retMsg;
+}
+
+void GCL::RenderPipe::Initialize()
+{
+	GCLAssert(!mIsInitialized);
+	mIsInitialized = true;
+	mRetMsg = NULL;
+	mRenderThreads.push_back(new GLRenderThread());
+	mRenderThreads[0]->Start();
+}
+
+void GCL::RenderPipe::Terminate()
+{
+	GCLAssert(mIsInitialized);
+
+	delete mRenderThreads[0];
+	mRenderThreads.clear();
+	mIsInitialized = false;
 }
 

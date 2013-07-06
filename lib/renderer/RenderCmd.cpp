@@ -20,34 +20,37 @@
  * THE SOFTWARE.
  */
 
-#pragma once
-#include <vector>
-#include <gcl/Thread.h>
-#include <gcl/Mutex.h>
-#include <gcl/Semaphore.h>
+
+#include "renderer/RenderCmd.h"
+#include <gcl/Assert.h>
+using namespace GCL;
 
 
-namespace GCL
+GCL::ReturnMessage::~ReturnMessage()
 {
-	class RenderThread;
-	class RenderCommand;
-	class ReturnMessage;
-class RenderPipe
-{
-public:
-	static void Initialize();
-	static void Terminate();
-
-	static void SendCommand(RenderCommand *cmd);
-
-	//must pass command that actually return a value. otherwise this will stall
-	static const ReturnMessage &SendCommandSyncRet(RenderCommand *cmd);
-	static void SendReturnMessage(ReturnMessage *retMsg);
-
-	static void Render();
-private:
-	static std::vector<RenderThread *> mRenderThreads;
-	static ReturnMessage *mRetMsg;
-	static bool mIsInitialized;
-};
+	switch (mType)
+	{
+	case RMT_STRING:
+		{
+			std::string *temp = (std::string *)mData;
+			delete temp;
+			break;
+		}
+	case RMT_STRINGLIST:
+		{
+			std::vector<std::string> *temp = (std::vector<std::string> *)mData;
+			delete temp;
+			break;
+		}
+	case RMT_MATRIX4:
+		{
+			Matrix44 *temp = (Matrix44 *)mData;
+			delete temp;
+			break;
+		}
+	case RMT_BOOL:
+		break;
+	default:
+		GCLAssert(false);
+	}
 }

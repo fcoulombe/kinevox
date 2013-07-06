@@ -29,7 +29,7 @@
 #include <vector>
 
 #include <3rdparty/OpenGL.h>
-#include <gcl/Config.h>
+
 #include "renderer/Camera.h"
 #include "renderer/ViewPort.h"
 
@@ -41,7 +41,6 @@ namespace GCL
     typedef std::vector<const RenderObject*> RenderObjectList;
     typedef std::vector<RenderObject2D*> RenderObject2DList;
     typedef std::vector<Text2D*> Text2DList;
-typedef std::vector<std::string> ExtensionList;
 class Shader;
 class GLRenderer
 {
@@ -55,7 +54,7 @@ public:
 	void Render(const RenderObject2DList &spriteList);
 	void Render(const Text2DList &text2DList);
 
-	void SetCamera(Camera &camera) { mCamera = &camera; }
+	//void SetCamera(Camera &camera) { mCamera = &camera; }
 
 	struct RenderState
 	{
@@ -63,22 +62,25 @@ public:
 	};
 	RenderState mCurrentRenderState;
 
-    const ViewPort &GetViewPort() const { return mViewPort; }
 	const std::string &GetVendor() const { return mVendor; }
 	const std::string &GetVersion() const { return mVersion; }
 	const std::string &GetRenderer() const { return mRenderer; }
 	const std::string &GetShadingLanguageVersion() const { return mShadingLanguageVersion; }
 	const std::string &GetGlewVersion() const { return mGlewVersion; }
-	const ExtensionList &GetExtensions() const { return mExtensions; }
+	const std::vector<std::string> &GetExtensions() const { return mExtensions; }
 
 	bool IsExtensionSupported(const std::string &ext) const
 	{
-		ExtensionList::const_iterator b = mExtensions.begin();
-		ExtensionList::const_iterator e = mExtensions.end();
-		ExtensionList::const_iterator r =  std::find(b, e, ext);
+		std::vector<std::string>::const_iterator b = mExtensions.begin();
+		std::vector<std::string>::const_iterator e = mExtensions.end();
+		std::vector<std::string>::const_iterator r =  std::find(b, e, ext);
 
 		bool res = r != mExtensions.end();
 		return res;
+	}
+	bool IsGlewExtensionSupported(const std::string &ext) const
+	{
+		return (glewGetExtension(ext.c_str())) ? true : false;
 	}
 
 	//the shader is when we want to set the project and
@@ -91,19 +93,22 @@ public:
 	static Matrix44 GetGLProjection();
 	static Matrix44 GetGLModelView();
 	void SwapBuffer();
+	void SetViewPort(const ViewPort &viewport)
+	{
+		mViewPort = viewport;
+	}
 private:
 	void Init3DState();
-    ViewPort mViewPort;
-	Camera *mCamera;
-
+   
 	std::string mVendor,
 				mVersion,
 				mRenderer,
 				mShadingLanguageVersion,
 				mGlewVersion;
 
-	ExtensionList mExtensions;
-
+	std::vector<std::string> mExtensions;
+	ViewPort mViewPort;
+	Camera *mCamera;
 
 	HWND mhWnd;
 	HDC mhDC;

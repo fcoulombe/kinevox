@@ -83,7 +83,7 @@ void Test()
 	TEST_START
     
 	WinDriver winDriver("GLRendererThreadedTest");
-	Renderer mRenderer(winDriver.GetWindowsHandle());
+	Renderer renderer(winDriver.GetWindowsHandle());
 	//MyRenderObject2D obj;
 	//RenderObject2DList objList;
 	//objList.push_back(&obj);
@@ -106,7 +106,9 @@ void Test()
 
 			std::cout <<"update"<<std::endl;
 			//flush command buffer to render thread and activate it.
-			RenderPipe::Render();
+			renderer.PreRender();
+			renderer.Render(RenderObjectList());
+			renderer.PostRender();
 			ThreadManager::ReThrowException();
 
 			next_game_tick += SKIP_TICKS;

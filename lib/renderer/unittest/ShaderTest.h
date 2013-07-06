@@ -35,19 +35,6 @@ using namespace GCL;
 namespace ShaderTest
 {
 
-class MyRenderObject : public SquareRenderObject
-{
-public:
-	MyRenderObject()
-	: SquareRenderObject("MyRenderObject", Matrix44(true)) //identity
-	{
-    }
-	const Material &GetMaterial() const { return mMaterial; }
-private:
-	Material mMaterial;
-};
-
-
 void Test();
 void Test()
 {
@@ -139,27 +126,26 @@ void Test()
 
 #endif
 
-		RenderPipe::Render();
+		renderer.PreRender();
+		renderer.Render(RenderObjectList());
+		renderer.PostRender();
 		GPUProgram::ResetDefault();
 	}
 
 	{
 		WinDriver winDriver("ShaderTest");
 		Renderer renderer(winDriver.GetWindowsHandle());
-		MyRenderObject obj;
+		SquareRenderObject obj;
 		const WorldPoint3 position(0.0,0.0, -10.0);
 		obj.SetPosition(position);
 
-		//RenderObjectList renderList;
-		//renderList.push_back(&obj);
+		RenderObjectList renderList;
+		renderList.push_back(obj.GetRenderObject());
 
 		KINEVOX_TEST_LOOP_START
-			/*renderer.PreRender();
+			renderer.PreRender();
 			renderer.Render(renderList);
 			renderer.PostRender();
-			winDriver.SwapBuffer();*/
-			RenderPipe::Render();
-			Time::SleepMs(10);
 		KINEVOX_TEST_LOOP_END
 
 		GPUProgram::ResetDefault();

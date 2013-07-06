@@ -44,6 +44,11 @@ public:
 
 	void Bind() const { RenderPipe::SendCommand(new RenderCommand(TEXTURE_BIND, (void*)this));}
 	bool IsValid() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_TEXTURE_VALID, (void*)this)).GetBool();}
+	
+	size_t GetResourceWidth() const;
+	size_t GetResourceHeight() const;
+	size_t GetResourceBytesPerPixel() const;
+
 	size_t GetWidth() const { return (size_t)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_WIDTH, (void*)this)).GetNumber(); }
 	size_t GetHeight() const { return (size_t)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_HEIGHT, (void*)this)).GetNumber();  }
     size_t GetBytesPerPixel() const { return (size_t)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_BPP, (void*)this)).GetNumber();  }

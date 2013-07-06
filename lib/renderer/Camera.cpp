@@ -50,8 +50,8 @@ void Camera::Update()
 {
 	mProjectionMatrix.SetPerspective(mFov,mAspect,mNear,mFar);
 	mModelViewMatrix = Inverse(mCameraMatrix);
-	RenderPipe::SendCommand(new RenderCommand(SET_PROJECTION, &mProjectionMatrix));
-	RenderPipe::SendCommand(new RenderCommand(SET_MODELVIEW, &mProjectionMatrix));
+	RenderPipe::SendCommand(new RenderCommand(RENDERER_SET_PROJECTION, &mProjectionMatrix));
+	RenderPipe::SendCommand(new RenderCommand(RENDERER_SET_MODELVIEW, &mProjectionMatrix));
 
 }
 

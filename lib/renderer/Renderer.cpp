@@ -21,10 +21,22 @@
  */
 
 #include "renderer/Renderer.h"
+#include "renderer/GPUProgram.h"
 
 using namespace GCL;
 
-
-
-
-
+void GCL::Renderer::Render( const RenderObjectList &renderObjectList )
+{
+	for (size_t i=0;  i<renderObjectList.size(); ++i)
+	{
+		const RenderObject *tempRenderObject = renderObjectList[i];
+		const Material &tempMaterial = tempRenderObject->GetMaterial();
+		tempMaterial.Bind();
+		const Matrix44 &transform = tempRenderObject->GetTransform();
+		GPUProgram *tempProgram = tempMaterial.GetShader();
+		tempProgram->SetProjectionMatrix(mCamera->GetProjection());
+		tempProgram->SetModelViewMatrix(mCamera->GetModelView()*transform);
+		tempRenderObject->GetVBO().Render();
+	}
+	//RenderPipe::SendCommand(new RenderCommand(RENDERER_RENDER, &renderObjectList));
+}

@@ -77,7 +77,9 @@ void Test()
 	camera.Update();
 	KINEVOX_TEST_LOOP_START
 		camera.Update();
-		RenderPipe::Render();
+		renderer.PreRender();
+		renderer.Render(RenderObjectList());
+		renderer.PostRender();
 	KINEVOX_TEST_LOOP_END
 	//Camera::DefaultCamera.Update();
 }

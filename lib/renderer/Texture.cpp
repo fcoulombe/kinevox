@@ -109,3 +109,18 @@ void Texture::Save(const char *filename)
 }
 
 
+
+size_t GCL::Texture::GetResourceWidth() const
+{
+	return mTextureResource->mTextureData.imageData.mWidth;
+}
+
+size_t GCL::Texture::GetResourceHeight() const
+{
+	return  mTextureResource->mTextureData.imageData.mHeight;
+}
+
+size_t GCL::Texture::GetResourceBytesPerPixel() const
+{
+	return mTextureResource->mTextureData.imageData.mBytesPerPixel;
+}

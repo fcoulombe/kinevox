@@ -135,7 +135,7 @@ GLShader::~GLShader()
 GLuint GLShader::CompileShader(const char *shaderPath, GLenum type)
 {
 #if  ENABLE_SHADERS
-	const std::string fullFilename = std::string(GLSL_PATH) + std::string(shaderPath);
+	const std::string fullFilename = std::string(GLSL_PATH) + std::string(shaderPath)+std::string(".glsl");
 	char *fileContent = LoadShader(fullFilename.c_str());
 
 
@@ -162,11 +162,12 @@ GLuint GLShader::CompileShader(const char *shaderPath, GLenum type)
 			glGetShaderInfoLog(shader, infologLength, &charsWritten, infoLog);
 
 			std::string log = "Shader Compile Log: " ;
+			log += fullFilename;
 			log += infoLog;
 
 			delete [] infoLog;
-
-			throw GCLException(log);
+			glDeleteShader(shader);glErrorCheck();
+			GCLAssertMsg(false, log);
 		}
 		glDeleteShader(shader);glErrorCheck();
 		return 0;

@@ -38,6 +38,7 @@ void GCL::RenderPipe::SendCommand( RenderCommand *cmd )
 
 void GCL::RenderPipe::Render( /*const RenderObject2DList &spriteList */)
 {
+
 	/*
 	//send the commands to the render thread in multhreaded
 	for (size_t i=0; i<spriteList.size(); ++i)

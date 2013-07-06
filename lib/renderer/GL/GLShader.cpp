@@ -19,16 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+#include <iostream>
 #include "renderer/GL/GLShader.h"
 #include <gcl/Exception.h>
-#include <gcl/Matrix44.h>
+#include <gcl/File.h>
 
-#include "renderer/ShaderAttributeDefaultLocations.h"
-#include "renderer/Texture.h"
 
 using namespace GCL;
 
+const GLenum GLShader::GLShaderType[] =
+{
+	GL_VERTEX_SHADER,
+	GL_FRAGMENT_SHADER,
+	GL_GEOMETRY_SHADER
+};
 const char *PositionVShaderStr =
 		"uniform mat4 ProjectionMatrix;\n"
 		"uniform mat4 ModelViewMatrix;\n"
@@ -95,41 +99,26 @@ const char *SHADER_HEADER =
 #endif
 		"\n";
 
-GLShader::GLShader()
+namespace
+{
+    char *LoadShader(const char *filename)
+    {
+        GCLAssertMsg(GCLFile::Exists(filename), filename);
+
+        GCLFile fp(filename);
+        size_t fileSize = fp.GetFileSize();
+        char *fileContent = new char[fileSize+1];
+        fp.Read(fileContent, fileSize);
+        fileContent[fileSize] = 0;
+        return fileContent;
+    }
+}
+GLShader::GLShader(const char *shaderSourcePath, GLenum type)
 :mIsValid (false)
 {
-	std::string vbuffer(SHADER_HEADER);
-	vbuffer += DefaultVShaderStr;
-	std::string fbuffer(SHADER_HEADER);
-	fbuffer += DefaultFShaderStr;
 #if ENABLE_SHADERS
-	GLuint vertexShader = CompileShader(vbuffer.c_str(), GL_VERTEX_SHADER);
-	GLuint fragmentShader = CompileShader(fbuffer.c_str(), GL_FRAGMENT_SHADER);
+	mShaderObject = CompileShader(shaderSourcePath, type);
 
-	mProgramObject = glCreateProgram();glErrorCheck();
-	GCLAssertMsg(mProgramObject != 0, "Can't create program");
-
-	glAttachShader(mProgramObject, vertexShader);glErrorCheck();
-	glAttachShader(mProgramObject, fragmentShader);glErrorCheck();
-
-    glBindAttribLocation(mProgramObject, ATTRIB_POSITION, "InPosition");glErrorCheck();
-    glBindAttribLocation(mProgramObject, ATTRIB_NORMAL, "InNormal");glErrorCheck();
-    glBindAttribLocation(mProgramObject, ATTRIB_TEXTURE_COORD, "InTexCoord");glErrorCheck();
-
-	glLinkProgram(mProgramObject);glErrorCheck();
-
-	GLint linked;
-	glGetProgramiv(mProgramObject, GL_LINK_STATUS, &linked);glErrorCheck();
-	if(linked)
-	{
-		mIsValid = true;
-	}
-	else
-	{
-		PrintInfoLog(mProgramObject);
-		glDeleteProgram(mProgramObject);glErrorCheck();
-		mIsValid = false;
-	}
 #endif
 	return;
 }
@@ -138,39 +127,30 @@ GLShader::~GLShader()
 {
 #if ENABLE_SHADERS
     if (mIsValid)
-        glDeleteProgram(mProgramObject);glErrorCheck();
-#endif
-}
-
-void GLShader::Bind()
-{
-#if ENABLE_SHADERS
-	GCLAssert(mIsValid);
-	glUseProgram(mProgramObject);glErrorCheck();
+        glDeleteShader(mShaderObject);glErrorCheck();
 #endif
 }
 
 
-GLuint GLShader::CompileShader(const char *shaderSrc, GLenum type)
+GLuint GLShader::CompileShader(const char *shaderPath, GLenum type)
 {
-    
-	GLuint shader=0;
 #if  ENABLE_SHADERS
-	GLint compiled;
+	const std::string fullFilename = std::string(GLSL_PATH) + std::string(shaderPath);
+	char *fileContent = LoadShader(fullFilename.c_str());
 
-	// Create the shader object
+
+	std::string buffer(SHADER_HEADER);
+	buffer += fileContent;
+
+
+	GLuint shader=0;
 	shader = glCreateShader(type); glErrorCheck();
-
 	GCLAssert(shader != 0 && "glCreateShader(type);");
-
-	// Load the shader source
-	glShaderSource(shader, 1, &shaderSrc, NULL); glErrorCheck();
-
-	// Compile the shader
+	const GLchar *cbuffer = (const GLchar *)buffer.c_str();
+	glShaderSource(shader, 1, &cbuffer, NULL); glErrorCheck();
 	glCompileShader(shader); glErrorCheck();
-	// Check the compile status
+	GLint compiled;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled); glErrorCheck();
-
 	if(!compiled)
 	{
 		GLint infologLength = 0;
@@ -191,6 +171,8 @@ GLuint GLShader::CompileShader(const char *shaderSrc, GLenum type)
 		glDeleteShader(shader);glErrorCheck();
 		return 0;
 	}
+
+
 #else
 	(void)type;
 	(void)shaderSrc;
@@ -217,84 +199,3 @@ void GLShader::PrintInfoLog(GLuint p)
 }
 
 
-
-
-void GLShader::SetProjectionMatrix(const Matrix44 &m)
-{
-#if ENABLE_SHADERS
-	GCLAssert(mIsValid);
-	GLint projectionMatrixLoc = glGetUniformLocation(mProgramObject,"ProjectionMatrix");glErrorCheck();
-	Matrix44f mf(m);
-	glUniformMatrix4fv(projectionMatrixLoc,1,false,(const GLfloat*)&mf);glErrorCheck();
-#else
-	(void)m;
-#endif
-}
-void GLShader::SetModelViewMatrix(const Matrix44 &m)
-{
-#if ENABLE_SHADERS
-	GCLAssert(mIsValid);
-	GLint modelviewMatrixLoc = glGetUniformLocation(mProgramObject,"ModelViewMatrix");glErrorCheck();
-	Matrix44f mm(m);
-	glUniformMatrix4fv(modelviewMatrixLoc,1,false,(const GLfloat*)&mm);glErrorCheck();
-#else
-	(void)m;
-#endif
-}
-
-
-
-void GLShader::SetTextureSampler(const GLTexture &sampler)
-{
-    #if ENABLE_SHADERS
-	GLint textureLoc = glGetUniformLocation(mProgramObject,"texture");glErrorCheck();
-	glUniform1i(textureLoc, sampler.GetTextureUnit());glErrorCheck();
-#else
-	(void)sampler;
-#endif
-}
-
-void GLShader::GetUniform(const char *uniformName, Matrix44 &m44) const
-{
-    #if ENABLE_SHADERS
-	GLfloat mf[16];
-	GCLAssert(mIsValid);
-	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniformName);glErrorCheck();
-	GCLAssert(uniformLoc!=-1);
-	glGetUniformfv(	mProgramObject,uniformLoc,mf);glErrorCheck();
-	m44 = Matrix44((const float *)mf);
-#else
-	(void)uniformName;
-	(void)m44;
-#endif
-}
-void GLShader::GetUniform(const char *uniformName, int &sampler) const
-{
-    #if ENABLE_SHADERS
-	GCLAssert(mIsValid);
-	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniformName);glErrorCheck();
-	GCLAssert(uniformLoc!=-1);
-	glGetUniformiv(mProgramObject,uniformLoc,&sampler);glErrorCheck();
-#else
-	(void)uniformName;
-	(void)sampler;
-#endif
-}
-int GLShader::GetAttributeLocation(const char *attributeName) const
-{
-    int ret=-1;
-    #if ENABLE_SHADERS
-	ret =  (int)glGetAttribLocation(mProgramObject,attributeName);glErrorCheck();
-	GCLAssertMsg(ret!=-1, attributeName);
-#else
-	(void)attributeName;
-	#endif
-
-	return ret;
-}
-void GLShader::ResetDefault()
-{
-#if ENABLE_SHADERS
-	glUseProgram(0);glErrorCheck();
-#endif
-}

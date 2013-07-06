@@ -102,7 +102,6 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 
 
 	Init3DState();
-	 mCamera=&Camera::DefaultCamera();
 	mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
 	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
 	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
@@ -172,10 +171,8 @@ void DrawNormals(const VertexData &data)
 }
 void GLRenderer::Render(const RenderObjectList &renderObjectList)
 {
-	mCamera->Update();
-
-	const Matrix44 &projection = mCamera->GetProjection();
-    const Matrix44 &modelView = mCamera->GetModelView();
+	const Matrix44 &projection = mProjection;
+    const Matrix44 &modelView = mModelView;
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
@@ -200,8 +197,14 @@ void GLRenderer::Render(const RenderObjectList &renderObjectList)
 		tempMaterial.Bind();
 
 		const Matrix44 &transform = tempRenderObject->GetTransform();
+#if 0
 		SetTransform(projection, modelView, transform, tempMaterial.GetShader());
-
+#else
+		(void)projection;
+		(void)modelView;
+		(void)transform;
+		GCLAssert(false && "we need to port this");
+#endif
 		//FC: can sort by component type
 		const VertexDataList &dataList = tempRenderObject->GetVertexData();
         for (size_t j=0; j<dataList.size(); ++j)
@@ -389,7 +392,7 @@ Matrix44 GLRenderer::GetGLModelView()
 }
 
 
-void GLRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &modelView, const Matrix44 &transform, Shader *shader)
+void GLRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &modelView, const Matrix44 &transform, GLGPUProgram *shader)
 {
 	Matrix44 f = modelView*transform;
 

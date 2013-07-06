@@ -58,6 +58,7 @@ namespace GCL
 		RenderPipe::SendCommand(new RenderCommand(SWAP_BUFFER));
 	}
 	void Render(const RenderObjectList &renderObjectList);
+	void Render2D( const RenderObjectList &renderObjectList );
 	void SetCamera(Camera *camera)
 	{
 		mCamera = camera;

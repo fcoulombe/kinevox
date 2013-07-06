@@ -20,7 +20,7 @@
 * THE SOFTWARE.
 */
 
-#include "renderer/Texture.h"
+#include "renderer/GL/GLTexture.h"
 
 #include <cstring>
 #include <stdint.h>
@@ -30,17 +30,11 @@
 
 using namespace GCL;
 
-
-
-
 GLTexture::~GLTexture()
 {
     glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
     glDeleteTextures(1, &mTextureId); glErrorCheck();
-
 }
-
-
 
 void GLTexture::Initialize(const PixelBuffer &data )
 {

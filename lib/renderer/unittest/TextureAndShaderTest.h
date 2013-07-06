@@ -23,6 +23,8 @@
 
 #include <kinetestlib/UnitTest.h>
 #include <renderer/GeomUtilHelper.h>
+#include <renderer/GPUProgram.h>
+#include <renderer/Shader.h>
 #include <renderer/Texture.h>
 #include <renderer/Vertex.h>
 
@@ -60,8 +62,13 @@ void Test()
 	{
         WinDriver winDriver("TextureAndShaderTest");
         Renderer renderer(winDriver.GetWindowsHandle());
-		Shader shader;
-		shader.Bind();
+		GPUProgram program;
+		Shader vertexShader("DefaultVertexShader", VERTEX_SHADER);
+		Shader fragmentShader("DefaultFragmentShader", FRAGMENT_SHADER);
+		program.AttachShader(vertexShader);
+		program.AttachShader(fragmentShader);
+		program.Link();
+		program.Bind();
 
 		MyRenderObject obj1;
 		const WorldPoint3 position1(2.5,0.0, -10.0);

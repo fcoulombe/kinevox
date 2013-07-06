@@ -34,8 +34,8 @@ void Test()
 {
 	TEST_START
     WinDriver winDriver("GLRendererTest");
+	{
 	Renderer renderer(winDriver.GetWindowsHandle());
-
 
 	std::cout << "OpenGL Stats"<<std::endl;
 	std::cout << "Version: " << renderer.GetVersion()<<std::endl;
@@ -96,5 +96,6 @@ void Test()
     Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_texture_compression"));
     Assert_Test(renderer.IsGlewExtensionSupported("GL_EXT_framebuffer_object"));
 #endif
+	}
 }
 }

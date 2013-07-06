@@ -22,7 +22,9 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
+#include <renderer/GPUProgram.h>
 #include <renderer/PixelBufferHAL.h>
+#include <renderer/Shader.h>
 
 using namespace GCL;
 namespace PixelBufferHALTest
@@ -37,8 +39,13 @@ void Test()
 	WinDriver winDriver("PixelBufferHALTest");
 	Renderer renderer(winDriver.GetWindowsHandle());
 
-	Shader shader;
-	shader.Bind();
+	GPUProgram program;
+	Shader vertexShader("DefaultVertexShader", VERTEX_SHADER);
+	Shader fragmentShader("DefaultFragmentShader", FRAGMENT_SHADER);
+	program.AttachShader(vertexShader);
+	program.AttachShader(fragmentShader);
+	program.Link();
+	program.Bind();
 
 	{
 	PixelBufferHAL buffer;

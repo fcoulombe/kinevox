@@ -22,7 +22,6 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
-#include <gcl/ResourceManagerConfig.h>
 #include <gcl/PixelBuffer.h>
 #include <renderer/TTFFont.h>
 

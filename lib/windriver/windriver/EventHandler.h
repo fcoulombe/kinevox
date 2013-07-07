@@ -42,15 +42,14 @@ namespace GCL
         GCL_PAGEDOWN = GLFW_KEY_PAGEDOWN
     };
 #else
+#include <windows.h>
     enum KeyNames
     {
-        GCL_ESCAPE ,
-        GCL_UP ,
-        GCL_DOWN ,
-        GCL_LEFT ,
-        GCL_RIGHT,
-        GCL_PAGEUP ,
-        GCL_PAGEDOWN ,
+        GCL_ESCAPE = VK_ESCAPE ,
+        GCL_UP = VK_UP,
+        GCL_DOWN = VK_DOWN,
+        GCL_LEFT = VK_LEFT,
+        GCL_RIGHT = VK_RIGHT
     };
 #endif
 

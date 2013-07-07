@@ -146,6 +146,7 @@ void Test()
 			renderer.PreRender();
 			renderer.Render(renderList);
 			renderer.PostRender();
+			winDriver.SwapBuffer();
 		KINEVOX_TEST_LOOP_END
 
 		GPUProgram::ResetDefault();

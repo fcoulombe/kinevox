@@ -80,6 +80,7 @@ void Test()
 		renderer.PreRender();
 		renderer.Render(RenderObjectList());
 		renderer.PostRender();
+		winDriver.SwapBuffer();
 	KINEVOX_TEST_LOOP_END
 	//Camera::DefaultCamera.Update();
 }

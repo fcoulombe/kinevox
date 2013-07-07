@@ -67,7 +67,7 @@ void Test()
     windows.SwapBuffer();
     SIMULATE_KEYPRESS('a');
     SIMULATE_KEYRELEASE('a');
-    //SIMULATE_KEYPRESS(KEY_UP);
+    SIMULATE_KEYPRESS(GCL_UP);
     //SIMULATE_LEFT_MOUSE_CLICK(128, 128);
     KINEVOX_TEST_LOOP_END
     Assert_Test(handler.hasReceivedKeyDown == true);

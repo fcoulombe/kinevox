@@ -68,9 +68,6 @@ namespace GCL
     }mTextureData;
 
     static const TextureResource EmptyTexture;
-
-
-    static void Unload(TextureData &data);
   private:
     TextureResource() {}
   };

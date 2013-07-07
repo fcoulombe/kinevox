@@ -38,16 +38,12 @@ public:
 		RenderPipe::SendCommand(new RenderCommand(PBO_CREATE, this));
 	}
 	PixelBufferHAL(const PixelBuffer &buffer)
+	:	PixelBuffer(buffer)
 	{
 		RenderPipe::SendCommand(new RenderCommand(PBO_CREATE, this));
-		mBitDepth = buffer.mBitDepth;
-		mBitsPerPixel = buffer.mBitsPerPixel;
-		mBytesPerPixel = buffer.mBytesPerPixel;
-		mHeight = buffer.mHeight;
-		mWidth = buffer.mWidth;
-		mPixels = buffer.mPixels;
 	}
 
+#if 1
 	template<typename PixelType>
 	PixelBufferHAL(const PixelType *pixelArray, size_t width, size_t height)
 	: PixelBuffer(pixelArray, width, height)
@@ -57,7 +53,7 @@ public:
 		RenderPipe::SendCommand(new RenderCommand5Arg(PBO_PUSH, this, (void*)width, (void*)height, (void*)PixelType::OffsetToNext(), 0));
 		UnBind();
 	  }
-
+#endif
 
 	~PixelBufferHAL()
 	{
@@ -75,7 +71,9 @@ public:
 
 	void PushData()
 	{
-		RenderPipe::SendCommand(new RenderCommand5Arg(PBO_PUSH, this, (void*)mWidth, (void*)mHeight, (void*)mBytesPerPixel, mPixels));
+		uint8_t *xferBuffer = new uint8_t[mWidth * mHeight*mBytesPerPixel];
+		memcpy(xferBuffer, mPixels, mWidth * mHeight*mBytesPerPixel);
+		RenderPipe::SendCommand(new RenderCommand5Arg(PBO_PUSH, this, (void*)mWidth, (void*)mHeight, (void*)mBytesPerPixel, xferBuffer));
 	}
 	uint8_t *PullData()
 	{

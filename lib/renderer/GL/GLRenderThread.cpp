@@ -54,7 +54,7 @@ struct GLRenderData : public RenderData
 	PBOMap mPBOMap;
 };
 
-#define IS_LOGGING_RENDER_COMMAND 1
+#define IS_LOGGING_RENDER_COMMAND 0
 #if IS_LOGGING_RENDER_COMMAND
 #define LOG_RENDER_CMD std::cout << __FUNCTION__ << std::endl;
 #else
@@ -177,6 +177,8 @@ void RCSetViewport(RenderCommand *data, RenderData &renderData)
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	const ViewPort *viewport = (const ViewPort *)data->mData; 
 	rd.mRenderer->SetViewPort(*viewport);
+	uint8_t *xferbuffer = (uint8_t *)data->mData;
+	delete [] xferbuffer;
 }
 void RCSetProjection(RenderCommand *data, RenderData &renderData)
 {
@@ -248,15 +250,15 @@ void RCGPUProgramSetProjection(RenderCommand *data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
-	rd.mGPUProgramMap[data->mData]->SetProjectionMatrix(*(const Matrix44*)data2->mData2);
+	RenderCommandMatArg *data2 = static_cast<RenderCommandMatArg *>(data);
+	rd.mGPUProgramMap[data->mData]->SetProjectionMatrix(data2->mData2);
 }
 void RCGPUProgramSetModelView(RenderCommand *data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
-	rd.mGPUProgramMap[data->mData]->SetModelViewMatrix(*(const Matrix44*)data2->mData2);
+	RenderCommandMatArg *data2 = static_cast<RenderCommandMatArg *>(data);
+	rd.mGPUProgramMap[data->mData]->SetModelViewMatrix(data2->mData2);
 }
 void RCGPUProgramGetUniformMatrix(RenderCommand *data, RenderData &renderData)
 {
@@ -329,6 +331,8 @@ void RCCreateTexture(RenderCommand *data, RenderData &renderData)
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
 	rd.mTextureMap[data->mData] = new GLTexture(*(const PixelBuffer *)data2->mData2);
+	PixelBuffer *xferbuffer = (PixelBuffer *)data2->mData2;
+	delete xferbuffer;
 }
 void RCBindTexture(RenderCommand *data, RenderData &renderData)
 {
@@ -452,7 +456,10 @@ void RCCreateVBO(RenderCommand *data, RenderData &renderData)
 	RenderCommand5Arg *data5 = static_cast<RenderCommand5Arg *>(data);
 
 	rd.mVBOMap[data5->mData] = GLVertexBuffer::CreateVBO((size_t)data5->mData2, data5->mData3, (size_t)data5->mData4, *(const AttribLocations *)data5->mData5);
-
+	uint8_t *xferBuffer = (uint8_t *)data5->mData3;
+	delete [] xferBuffer;
+	xferBuffer = (uint8_t *)data5->mData5;
+	delete [] xferBuffer;
 }
 void RCDestroyVBO(RenderCommand *data, RenderData &renderData)
 {
@@ -513,6 +520,8 @@ void RCPBOPush(RenderCommand *data, RenderData &renderData)
 	RenderCommand5Arg *data5 = static_cast<RenderCommand5Arg *>(data);
 
 	rd.mPBOMap[data->mData]->PushData((size_t)data5->mData2, (size_t)data5->mData3, (size_t)data5->mData4, (const uint8_t *)data5->mData5);
+	uint8_t *xferbuffer = (uint8_t *)data5->mData5;
+	delete [] xferbuffer;
 }
 void RCPBOPull(RenderCommand *data, RenderData &renderData)
 {

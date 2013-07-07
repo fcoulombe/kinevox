@@ -40,6 +40,8 @@ public:
 
     GPUProgram *GetShader() const { return mProgram; }
 private:
+	Material(Material &);
+	void operator=(Material &);
 	Texture *mTexture;
 	mutable GPUProgram *mProgram; //mutable because we need to set uniforms before rendering
 

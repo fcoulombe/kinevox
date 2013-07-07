@@ -102,10 +102,19 @@ public:
 	{
 		mCmd = cmd;
 		mData = data;
-
 	}
 	RenderCommandType mCmd;
 	void *mData;
+};
+class RenderCommandMatArg : public RenderCommand
+{
+public:
+	RenderCommandMatArg(RenderCommandType cmd, void *data, const Matrix44 &data2)
+		:RenderCommand(cmd, data)
+	{
+		mData2 = data2;
+	}
+	Matrix44 mData2;
 };
 class RenderCommand2Arg : public RenderCommand
 {

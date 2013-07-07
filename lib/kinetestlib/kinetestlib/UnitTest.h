@@ -73,7 +73,7 @@ public:
     KineTestKeyListener kineTestKeyListener;\
     size_t i=0;\
 	kineTestKeyListener.mIsLooping = testCounter.mIsInteractive;\
-	const size_t TICKS_PER_SECOND = 30;\
+	const size_t TICKS_PER_SECOND = 60;\
 const size_t SKIP_TICKS = 1000 / TICKS_PER_SECOND;\
 const int MAX_FRAMESKIP = 5;\
 size_t next_game_tick = Time::GetTickMs();\

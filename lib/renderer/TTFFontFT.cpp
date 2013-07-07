@@ -186,8 +186,7 @@ Glyph TTFFont::LoadGlyph(uint32_t codepoint, size_t characterSize, bool bold)
     size_t cellH = slot->metrics.vertAdvance/64;
 
 
-    //PixelBuffer *buffer = new PixelBuffer(new PixelRGB[slot->bitmap.rows*slot->bitmap.width], slot->bitmap.width, slot->bitmap.rows);
-    PixelBuffer *buffer = new PixelBuffer(new PixelRGB[cellW*cellH], cellW, cellH);
+    PixelBuffer *buffer = new PixelBuffer<PixelRGB>(cellW, cellH);
     memset(buffer->mPixels, 0, cellW*cellH*buffer->mBytesPerPixel);
 
     ftBlitGlyph(slot, *buffer);
@@ -373,7 +372,7 @@ Point2<size_t> TTFFont::GetBufferSize(const char *text, size_t fontSize)
 void TTFFont::BlitText(PixelBuffer &buffer, const char * text, size_t fontSize, size_t /*x*/, size_t /*y*/)
 {
     Point2<size_t> bufferSize = GetBufferSize(text, fontSize);
-    buffer = PixelBuffer(bufferSize.x, bufferSize.y, 4);
+    buffer.Initialize(bufferSize.x, bufferSize.y, 4);
     for (size_t x = 0; x < bufferSize.x; ++x)
         for (size_t y = 0; y < bufferSize.y; ++y)
             buffer.SetPixel(x, y, Point4<uint8_t>(0, 0, 0, 255));
@@ -457,14 +456,12 @@ Page::Page() :
     nextRow(2)
 {
     // Make sure that the texture is initialized by default
-    PixelBuffer image(128, 128, 4);
+    texture.Initialize(128,128,4);
 
     // Reserve a 2x2 white square for texturing underlines
     for (int x = 0; x < 2; ++x)
         for (int y = 0; y < 2; ++y)
-            image.SetPixel(x, y, Point4<uint8_t>(255, 255, 255, 255));
+            texture.SetPixel(x, y, Point4<uint8_t>(255, 255, 255, 255));
 
-    // Create the texture
-    texture = image;
 }
 #endif

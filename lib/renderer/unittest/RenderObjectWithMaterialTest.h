@@ -53,6 +53,7 @@ void Test()
 		renderer.PreRender();
 		renderer.Render(objList);
 		renderer.PostRender();
+		winDriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END
 	}
 	TextureResourceManager::Terminate();

@@ -40,6 +40,7 @@ void Test()
 	{
 		WinDriver winDriver("RenderObjectTest");
 		Renderer renderer(winDriver.GetWindowsHandle());
+
 		SquareRenderObject obj;
 		RenderObjectList objList;
 		objList.push_back(obj.GetRenderObject());

@@ -29,7 +29,9 @@
 #include "FontResourceTest.h"
 #include "FrameBufferTest.h"
 #include "GeomUtilTest.h"
+
 #include "GLRendererTest.h"
+#include "GLRendererThreadedTest.h"
 #include "RLRendererTest.h"
 //#include "D3DRendererTest.h"
 #include "MaterialTest.h"
@@ -39,16 +41,15 @@
 #include "PixelBufferHALTest.h"
 #include "RenderBufferTest.h"
 #include "RenderObjectTest.h"
-#include "RenderObject2DTest.h"
 #include "RenderObjectWithMaterialTest.h"
 #include "TTFFontTest.h"
 #include "TextureResourceTest.h"
 #include "ShaderTest.h"
-#include "SpriteTest.h"
 
 #include "Text2DTest.h"
 #include "TextureTest.h"
 #include "TextureAndShaderTest.h"
+
 #include "VertexBufferTest.h"
 #include "VertexTest.h"
 
@@ -63,10 +64,11 @@ int main(int argc, char **argv)
 #if USE_OPENRL
         RLRendererTest::Test();
 #endif
-    GLRendererTest::Test();
-    CameraTest::Test();
+   //     GLRendererThreadedTest::Test();
+        GLRendererTest::Test();
+  CameraTest::Test();
     ShaderTest::Test();
-
+  
     VertexTest::Test();
     VertexBufferTest::Test();
     PixelBufferHALTest::Test();
@@ -74,18 +76,14 @@ int main(int argc, char **argv)
     TextureResourceTest::Test();
     TextureTest::Test();
 
-    TextureAndShaderTest::Test();
-
+	TextureAndShaderTest::Test();
+	RenderObjectTest::Test();
     MaterialTest::Test();
-    //SpriteTest::Test();
-
+	
 	FontResourceTest::Test();
 	TTFFontTest::Test();
     Text2DTest::Test();
-
-    //RenderObject2DTest::Test();
-
-    RenderObjectTest::Test();
+    
     RenderObjectWithMaterialTest::Test();
     GeomUtilTest::Test();
     
@@ -94,7 +92,7 @@ int main(int argc, char **argv)
     MeshLoadingTest::Test();
     MeshResourceTest::Test();
     MeshTest::Test();
-
+	
 
     SUITE_TERMINATE
         return 0;

@@ -27,6 +27,7 @@ using namespace GCL;
 
 void GCL::Renderer::Render( const RenderObjectList &renderObjectList )
 {
+	mCamera->Update();
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
 		const RenderObject *tempRenderObject = renderObjectList[i];

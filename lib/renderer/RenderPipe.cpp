@@ -67,7 +67,8 @@ void GCL::RenderPipe::Initialize()
 void GCL::RenderPipe::Terminate()
 {
 	GCLAssert(mIsInitialized);
-
+	if (mRetMsg)
+		delete mRetMsg;
 	delete mRenderThreads[0];
 	mRenderThreads.clear();
 	mIsInitialized = false;

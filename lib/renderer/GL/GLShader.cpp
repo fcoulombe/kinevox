@@ -149,6 +149,7 @@ GLuint GLShader::CompileShader(const char *shaderPath, GLenum type)
 	const GLchar *cbuffer = (const GLchar *)buffer.c_str();
 	glShaderSource(shader, 1, &cbuffer, NULL); glErrorCheck();
 	glCompileShader(shader); glErrorCheck();
+	delete [] fileContent;
 	GLint compiled;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled); glErrorCheck();
 	if(!compiled)

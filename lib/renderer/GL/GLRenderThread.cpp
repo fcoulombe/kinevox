@@ -44,6 +44,16 @@ typedef std::map<void *, GLPixelBufferHAL*> PBOMap;
 
 struct GLRenderData : public RenderData
 {
+	~GLRenderData()
+	{
+		mGPUProgramMap.clear();
+		mShaderMap.clear();
+		mTextureMap.clear();
+		mFrameBufferMap.clear();
+		mRenderBufferMap.clear();
+		mVBOMap.clear();
+		mPBOMap.clear();
+	}
 	GLRenderer *mRenderer;
 	GPUProgramMap mGPUProgramMap;
 	ShaderMap mShaderMap;

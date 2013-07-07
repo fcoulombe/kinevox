@@ -35,6 +35,8 @@ using namespace GCL;
 //TODO: turn this into a material reosurce
 Material::Material(const char *filename)
 {
+	mVertexShader = NULL;
+	mFragmentShader = NULL;
 	mProgram = NULL;
 	mTexture=NULL;
 	LoadMaterial(filename);
@@ -42,6 +44,8 @@ Material::Material(const char *filename)
 
 Material::~Material()
 {
+	delete mFragmentShader;
+	delete mVertexShader;
 	delete mProgram;
 	delete mTexture;
 }
@@ -50,8 +54,12 @@ void Material::LoadMaterial(const char *filename)
 {
 	if (mProgram )
 	{
+		delete mFragmentShader;
+		delete mVertexShader;
 		delete mProgram;
 		mProgram = NULL;
+		mVertexShader = NULL;
+		mFragmentShader = NULL;
 	}
 	if (mTexture)
 	{
@@ -105,10 +113,10 @@ void Material::LoadMaterial(const char *filename)
 	fp.close();
 
 	mProgram = new GPUProgram();
-	Shader *vertexShader = new Shader("DefaultVertexShader", VERTEX_SHADER);
-	Shader *fragmentShader =  new Shader("DefaultFragmentShader", FRAGMENT_SHADER);
-	mProgram->AttachShader(*vertexShader);
-	mProgram->AttachShader(*fragmentShader);
+	mVertexShader = new Shader("DefaultVertexShader", VERTEX_SHADER);
+	mFragmentShader =  new Shader("DefaultFragmentShader", FRAGMENT_SHADER);
+	mProgram->AttachShader(*mVertexShader);
+	mProgram->AttachShader(*mFragmentShader);
 	mProgram->Link();
 	mProgram->Bind();
     s.str("");

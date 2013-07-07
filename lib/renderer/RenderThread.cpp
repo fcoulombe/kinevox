@@ -28,7 +28,7 @@ using namespace GCL;
 
 void GCL::RenderThread::Run()
 {
-	while (mIsRunning)
+	while (mIsRunning || !mCommandList.empty())
 	{
 		mRunMutex.Wait();
 		//std::cout <<"render"<<std::endl;

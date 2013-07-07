@@ -33,6 +33,7 @@ using namespace GCL;
 GLTexture::~GLTexture()
 {
     glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
+	delete mPBO;
     glDeleteTextures(1, &mTextureId); glErrorCheck();
 }
 

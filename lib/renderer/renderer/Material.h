@@ -27,6 +27,7 @@ namespace GCL
 {
 class Texture;
 class GPUProgram;
+class Shader;
 class Material
 {
 public:
@@ -44,7 +45,8 @@ private:
 	void operator=(Material &);
 	Texture *mTexture;
 	mutable GPUProgram *mProgram; //mutable because we need to set uniforms before rendering
-
+	Shader *mVertexShader;
+	Shader *mFragmentShader;
 	WorldPoint4 mAmbient;
 	WorldPoint4 mDiffuse;
 	WorldPoint4 mSpecular;

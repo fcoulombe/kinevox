@@ -162,6 +162,7 @@ struct RenderData
 		: pad(0xf2f2f2f2)
 	{
 	}
+	virtual ~RenderData(){}
 	size_t pad;
 };
 typedef void (*RenderCommandFunction)(RenderCommand *, RenderData &);

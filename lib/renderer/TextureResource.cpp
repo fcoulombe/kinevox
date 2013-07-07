@@ -31,10 +31,6 @@ using namespace GCL;
 
 const TextureResource TextureResource::EmptyTexture;
 
-void TextureResource::Unload(TextureData &data)
-{
-	PixelBuffer::Unload(data.imageData);
-}
 
 
 TextureResource::TextureResource( const char *textureName )
@@ -87,7 +83,6 @@ TextureResource::TextureResource( const char *textureName )
 
 TextureResource::~TextureResource()
 {
-	Unload(mTextureData);
 }
 
 

@@ -40,7 +40,11 @@ public:
 	template<typename VertexType>
 	VertexBuffer(const VertexType *vertexArray, size_t count, const AttribLocations &loc)
 	{
-		RenderPipe::SendCommand(new RenderCommand5Arg(VBO_CREATE, (void*)this, (void*)VertexType::GetComponentType(), (void*)vertexArray, (void*)count, (void*)&loc));
+		uint8_t *xferBuffer = new uint8_t[count*sizeof(VertexType)];
+		memcpy(xferBuffer, vertexArray, count*sizeof(VertexType));
+		uint8_t *xferBuffer2 = new uint8_t[sizeof(AttribLocations)];
+		memcpy(xferBuffer2, &loc, sizeof(AttribLocations));
+		RenderPipe::SendCommand(new RenderCommand5Arg(VBO_CREATE, (void*)this, (void*)VertexType::GetComponentType(), (void*)xferBuffer, (void*)count, (void*)xferBuffer2));
 	}
 	~VertexBuffer()
 	{

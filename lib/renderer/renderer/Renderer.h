@@ -40,7 +40,9 @@ namespace GCL
 		  RenderPipe::Initialize();
 		  RenderPipe::SendCommand(new RenderCommand(CREATE_RENDERER, (void*)windowsHandle));
 		  mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
-		  RenderPipe::SendCommand(new RenderCommand(RENDERER_SET_VIEWPORT, (void*)&mViewPort));
+		  uint8_t *xferbuffer = new uint8_t[sizeof(ViewPort)];
+		  memcpy(xferbuffer, &mViewPort, sizeof(ViewPort));
+		  RenderPipe::SendCommand(new RenderCommand(RENDERER_SET_VIEWPORT, (void*)xferbuffer));
       }
     ~Renderer() 
 	{
@@ -59,9 +61,9 @@ namespace GCL
 	}
 	void Render(const RenderObjectList &renderObjectList);
 	void Render2D( const RenderObjectList &renderObjectList );
-	void SetCamera(Camera *camera)
+	void SetCamera(Camera &camera)
 	{
-		mCamera = camera;
+		mCamera = &camera;
 	}
     const ViewPort &GetViewPort() const { return mViewPort; }
 

@@ -66,8 +66,11 @@ class Shader;
 		return loc;
 	}
     void SetTextureSampler(const Texture &sampler) { RenderPipe::SendCommand(new RenderCommand2Arg(GPUPROGRAM_SET_TEXTURE_SAMPLER, (void*)this, (void*)&sampler)); }
-    void SetProjectionMatrix(const Matrix44 &m) { RenderPipe::SendCommand(new RenderCommand2Arg(GPUPROGRAM_SET_PROJECTION, (void*)this, (void*)&m));  }
-    void SetModelViewMatrix(const Matrix44 &m) { RenderPipe::SendCommand(new RenderCommand2Arg(GPUPROGRAM_SET_MODELVIEW, (void*)this, (void*)&m));}
+    void SetProjectionMatrix(const Matrix44 &m) 
+	{ 
+		RenderPipe::SendCommand(new RenderCommandMatArg(GPUPROGRAM_SET_PROJECTION, (void*)this, m));  
+	}
+    void SetModelViewMatrix(const Matrix44 &m) { RenderPipe::SendCommand(new RenderCommandMatArg(GPUPROGRAM_SET_MODELVIEW, (void*)this, m));}
     void GetUniform(const char *unformName, Matrix44 &m44) const { m44 = RenderPipe::SendCommandSyncRet(new RenderCommand2Arg(GPUPROGRAM_GET_UNIFORM_MATRIX, (void*)this, (void*)unformName)).GetMatrix(); }
     void GetUniform(const char *unformName, int &ret) const { ret = RenderPipe::SendCommandSyncRet(new RenderCommand2Arg(GPUPROGRAM_GET_UNIFORM_NUMBER, (void*)this, (void*)unformName)).GetNumber();  }
     int GetAttributeLocation(const char *attributeName) const { return RenderPipe::SendCommandSyncRet(new RenderCommand2Arg(GPUPROGRAM_GET_ATTRIBUTE_LOCATION, (void*)this, (void*)attributeName)).GetNumber();   }
@@ -75,6 +78,5 @@ class Shader;
     static void ResetDefault() { RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_RESETDEFAULT)); }
   private:
 	std::vector<Shader *> mShaderList;
-    //IGPUProgram mPimpl;
   };
 }

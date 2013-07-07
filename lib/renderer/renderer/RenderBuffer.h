@@ -27,18 +27,33 @@
 
 namespace GCL
 {
-class RenderBuffer
+#if 0
+	class GPUResource
+	{
+	public:
+		GPUResource()
+			: mGPUResourceId(ID++)
+		{
+			
+		}
+	protected:
+		size_t mGPUResourceId;
+	private:
+		static size_t ID; //we should have plenty of ids for everything
+	};
+#endif
+class RenderBuffer 
 {
 public:
 	RenderBuffer(size_t width, size_t height)
 	{
-		RenderPipe::SendCommand(new RenderCommand3Arg(RENDERBUFFER_CREATE, this, (void*)width, (void*)height));
+		RenderPipe::SendCommand(new RenderCommand3Arg(RENDERBUFFER_CREATE, (void*)this, (void*)width, (void*)height));
 	}
 	~RenderBuffer()
 	{
-		RenderPipe::SendCommand(new RenderCommand(RENDERBUFFER_DESTROY, this));
+		RenderPipe::SendCommand(new RenderCommand(RENDERBUFFER_DESTROY, (void*)this));
 	}
-	void Bind() { RenderPipe::SendCommand(new RenderCommand(RENDERBUFFER_BIND, this)); }
+	void Bind() { RenderPipe::SendCommand(new RenderCommand(RENDERBUFFER_BIND, (void*)this)); }
 
 	bool IsValid() const {  return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_RENDERBUFFER_VALID, (void*)this)).GetBool(); }
 

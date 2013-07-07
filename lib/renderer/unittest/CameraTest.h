@@ -76,6 +76,7 @@ void Test()
 	camera.TiltDown();
 	camera.Update();
 	KINEVOX_TEST_LOOP_START
+
 		camera.Update();
 		renderer.PreRender();
 		renderer.Render(RenderObjectList());

@@ -57,6 +57,7 @@ public:
     const uint8_t *GetTextureFromVRAM() const { return (const uint8_t *)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_TEXTURE_FROM_VRAM, (void*)this)).GetPointer();  }
     const uint8_t *GetPixelBufferFromVRAM() const { return (const uint8_t *)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_PIXELBUFFER_FROM_VRAM, (void*)this)).GetPointer();}
 private:
+	void Create(const PixelBuffer &buffer);
 	const TextureResource *mTextureResource;
 };
 

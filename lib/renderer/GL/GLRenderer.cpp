@@ -126,13 +126,15 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 		extString = extString +ex;
 		extString = extString + " ";
 	}
-	mExtensions = StringUtil::Explode(extString, delim); 
+	
+	StringUtil::Explode(extString, mExtensions ,delim); 
 #endif
 
 
 }
 GLRenderer::~GLRenderer()
 {
+	mExtensions.clear();
 	wglMakeCurrent( NULL, NULL );
 	wglDeleteContext( mhRC );
 	ReleaseDC( mhWnd, mhDC );

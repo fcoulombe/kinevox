@@ -34,6 +34,8 @@ public:
 	Text2D(const char *text);
 	virtual ~Text2D()
 	{
+		delete mObj;
+		delete mTexture;
 	}
 
 	void Update()

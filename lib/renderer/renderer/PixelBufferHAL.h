@@ -77,7 +77,9 @@ public:
 	}
 	uint8_t *PullData()
 	{
-		 return (uint8_t *)RenderPipe::SendCommandSyncRet(new RenderCommand4Arg(PBO_PULL, (void*)this, (void*)mWidth, (void*)mHeight, (void*)mBytesPerPixel)).GetPointer();
+		delete [] mPixels;
+		mPixels= (uint8_t *)RenderPipe::SendCommandSyncRet(new RenderCommand4Arg(PBO_PULL, (void*)this, (void*)mWidth, (void*)mHeight, (void*)mBytesPerPixel)).GetPointer();
+		return mPixels;
 	}
 	bool IsValid() const 
     { 

@@ -134,7 +134,7 @@ namespace GCL
 		void SwapBuffer()
 		{   
 			MSG msg; //declare a MSG local variable for the GetMessage of the while loop
-			if (GetMessage(&msg,NULL,0,0)) //GetMessage reffer to the wndProc() function
+			if (PeekMessage(&msg,NULL,0,0,PM_REMOVE)) //GetMessage reffer to the wndProc() function
 			{
 				TranslateMessage(&msg); //translate the msg of the GetMessage of your while loop
 				DispatchMessage(&msg); //dispath the msg of the GetMessage of your while loop
@@ -142,7 +142,7 @@ namespace GCL
 			//calculate fps
 			double currentTime = Time::GetTickMs()/1000.0;
 			double dt = currentTime - mPreviousFrameTime;
-			std::cout << dt << std::endl;
+			//std::cout << dt << std::endl;
 			mAccumulatedTime += dt;
 			mFPS++;
 			mDt = dt;

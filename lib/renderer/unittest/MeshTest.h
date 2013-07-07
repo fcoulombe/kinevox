@@ -30,27 +30,43 @@ using namespace GCL;
 namespace MeshTest
 {
 
-class MeshRenderObject : public RenderObject
+class MeshRenderObject 
 {
 public:
 	MeshRenderObject()
-	: RenderObject("MyRenderObject", Matrix44(true)), //identity
-	  mMesh(MESH_PATH"ExampleMesh.mesh")
+	 : mMesh(MESH_PATH"ExampleMesh.mesh")
 	{
         VertexData data;
 		data.mVertexCount =mMesh.GetVertexCount(0);
 		data.mVertexType = mMesh.GetVertexType();
 		data.mVertexData = mMesh.GetVertexData(0);
         mVertexData.push_back(data);
+		switch ((size_t)mMesh.GetVertexType())
+		{
+		case ePOSITION:
+			obj = new RenderObject(Matrix44::IDENTITY, mMesh.GetMaterial(), (const VertexP*)mMesh.GetVertexData(0), mMesh.GetVertexCount(0));
+			break;
+		case ePOSITION|eNORMAL:
+			obj = new RenderObject(Matrix44::IDENTITY, mMesh.GetMaterial(), (const VertexPN*)mMesh.GetVertexData(0), mMesh.GetVertexCount(0));
+			break;
+		case ePOSITION|eNORMAL|eTEXTURE_COORD:
+			obj = new RenderObject(Matrix44::IDENTITY, mMesh.GetMaterial(), (const VertexPNT*)mMesh.GetVertexData(0), mMesh.GetVertexCount(0));
+			break;
+		default:
+			GCLAssert(false);
+		}
 	}
-
-	const VertexDataList &GetVertexData() const
+	~MeshRenderObject()
 	{
-		return mVertexData;
+		delete obj;
 	}
-	const Material &GetMaterial() const { return mMesh.GetMaterial(); }
+	void SetPosition(Real x, Real y, Real z) { obj->SetPosition(x,y,z); }
+
+	void SetOrientation(Real x, Real y, Real z) { obj->SetOrientation(x,y,z); }
+	RenderObject *GetObj() { return obj; }
 private:
 	Mesh mMesh;
+	RenderObject *obj;
 	VertexDataList mVertexData;
 };
 
@@ -65,7 +81,7 @@ void Test()
     WinDriver windriver("MeshTest");
 	Renderer renderer(windriver.GetWindowsHandle());
 	std::stringstream s;
-#if 1
+
 	{
 		Mesh mesh(MESH_PATH"ExampleMesh.mesh");
 		const void * data = mesh.GetVertexData(0);
@@ -82,12 +98,11 @@ void Test()
 			std::cout << "indice: " << i << " " << vertexData[i] << std::endl;
 		}*/
 	}
-#endif
 	{
 		MeshRenderObject myMesh;
         myMesh.SetPosition(0.0,0.0,-10.0);
 		RenderObjectList renderList;
-		renderList.push_back(&myMesh);
+		renderList.push_back(myMesh.GetObj());
         Real rot = 0.0;
         KINEVOX_TEST_LOOP_START
             rot+=0.001;

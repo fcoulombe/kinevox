@@ -70,6 +70,7 @@ void Test()
         renderer.PreRender();
 		renderer.Render2D(objList);
 		renderer.PostRender();
+		winDriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END
 
 	}

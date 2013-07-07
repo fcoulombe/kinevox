@@ -38,6 +38,7 @@ public:
 	VertexComponents GetVertexType() const { return (VertexComponents)(ePOSITION|eNORMAL|eTEXTURE_COORD); }
 	size_t GetVertexCount(size_t subMeshIndex) const { return mMeshResource->mMeshData->GetSubMeshData(subMeshIndex)->mIndicesCount; }
 	const Material &GetMaterial() const { return *mMaterial; }
+	Material &GetMaterial()  { return *mMaterial; }
 private:
 	Material *mMaterial;
 	const MeshResource *mMeshResource;

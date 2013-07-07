@@ -25,23 +25,7 @@
 #include <stdint.h>
 #include <list>
 #include <gcl/Assert.h>
-#ifdef USE_GLFW
-#include <3rdparty/GLFW.h>
-#endif
-namespace GCL
-{
-    #ifdef USE_GLFW
-    enum KeyNames
-    {
-        GCL_ESCAPE = GLFW_KEY_ESC,
-        GCL_UP = GLFW_KEY_UP,
-        GCL_DOWN = GLFW_KEY_DOWN,
-        GCL_LEFT = GLFW_KEY_LEFT,
-        GCL_RIGHT = GLFW_KEY_RIGHT,
-        GCL_PAGEUP = GLFW_KEY_PAGEUP,
-        GCL_PAGEDOWN = GLFW_KEY_PAGEDOWN
-    };
-#else
+#ifdef OS_WIN32
 #include <windows.h>
     enum KeyNames
     {
@@ -51,8 +35,9 @@ namespace GCL
         GCL_LEFT = VK_LEFT,
         GCL_RIGHT = VK_RIGHT
     };
+#else
+#error "TBD"
 #endif
-
     class KeyListener;
     typedef std::list<KeyListener*> KeyListenerList;
     class EventManager

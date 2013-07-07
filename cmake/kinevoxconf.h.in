@@ -18,8 +18,6 @@
 #cmakedefine ES1
 #cmakedefine ES2
 #cmakedefine ES3
-#cmakedefine USE_WINAPI
-#cmakedefine USE_GLFW
 
 #define GFXAPI_NAME @GFXAPI_NAME@
 

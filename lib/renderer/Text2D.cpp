@@ -27,14 +27,14 @@ using namespace GCL;
 GCL::Text2D::Text2D( const char *text ) 
 	: mIsVisible(true),
 	mFont(FONT_PATH"FreeMono.ttf"),
-	mMaterial("DefaultSprite")
+	mMaterial("Default")
 {
 	PixelBuffer buffer;
 	mFont.BlitText(buffer, text, 18, 100, 100);
 	mTexture = new Texture(buffer);
 
-	MeshReal halfWidth = (buffer.mWidth/2.0);
-	MeshReal halfHeight = (buffer.mHeight/2.0);
+	MeshReal halfWidth = MeshReal(buffer.mWidth/2.0);
+	MeshReal halfHeight = MeshReal(buffer.mHeight/2.0);
 	const   VertexP square[6] = {
 		{Point3<MeshReal>(-halfWidth, -halfHeight, 0.0)},
 		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0)},

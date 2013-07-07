@@ -32,7 +32,6 @@
 #include "renderer/GL/GLRenderUtils.h"
 #include "renderer/Material.h"
 #include "renderer/RenderObject.h"
-#include "renderer/RenderObject2D.h"
 #include "renderer/Text2D.h"
 #include "renderer/GL/GLGPUProgram.h"
 #include "renderer/GL/GLShader.h"

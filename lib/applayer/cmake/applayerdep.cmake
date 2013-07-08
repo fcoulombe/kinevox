@@ -1,1 +1,1 @@
-SET(DEPENDENCIES windriver input renderer)
+SET(DEPENDENCIES windriver input renderer script)

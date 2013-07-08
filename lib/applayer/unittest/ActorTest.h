@@ -22,35 +22,23 @@
 #pragma once
 #include <sstream>
 
+#include <gcl/UnitTest.h>
+#include <applayer/Actor.h>
 #include <applayer/GCLApplication.h>
-#include <applayer/GCLRenderTarget.h>
 
-#include <kinetestlib/UnitTest.h>
 
 using namespace GCL;
-namespace GCLRenderTargetTest
+namespace ActorTest
 {
-
 
 void Test()
 {
-	KINEVOX_TEST_START
-
-	GCLApplication::Initialize("GCLRenderTargetTest");
+	TEST_START
+	GCLApplication::Initialize("ActorTest");
 	{
-	Actor obj("TestActor", "TestActor");
-	Assert_Test(GCLApplication::IsRegistered(obj));
-	Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
-
-	const WorldPoint3 position(0.0,0.0, -10.0);
-	obj.SetPosition(position);
-
-	GCLRenderTarget target(512,512);
-    KINEVOX_TEST_LOOP_START
-		GCLApplication::Update();
-		GCLApplication::Render();
-    KINEVOX_TEST_LOOP_END
-	target.Save("GCLRenderTargetTest.tga");
+	Actor actor("TestActor", "TestActor");
+	GCLApplication::Update();
+	GCLApplication::Render();
 	}
 	GCLApplication::Terminate();
 }

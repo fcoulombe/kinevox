@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,39 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 #pragma once
-#include <sstream>
 
-#include <applayer/GCLApplication.h>
-#include <applayer/GCLRenderTarget.h>
-
-#include <kinetestlib/UnitTest.h>
-
-using namespace GCL;
-namespace GCLRenderTargetTest
+namespace GCL
 {
-
-
-void Test()
+class RenderComponent : public Component
 {
-	KINEVOX_TEST_START
+public:
+	RenderComponent()
+	{}
 
-	GCLApplication::Initialize("GCLRenderTargetTest");
+	~RenderComponent()
+	{}
+	virtual void Update(Real dt)
 	{
-	Actor obj("TestActor", "TestActor");
-	Assert_Test(GCLApplication::IsRegistered(obj));
-	Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
-
-	const WorldPoint3 position(0.0,0.0, -10.0);
-	obj.SetPosition(position);
-
-	GCLRenderTarget target(512,512);
-    KINEVOX_TEST_LOOP_START
-		GCLApplication::Update();
-		GCLApplication::Render();
-    KINEVOX_TEST_LOOP_END
-	target.Save("GCLRenderTargetTest.tga");
 	}
-	GCLApplication::Terminate();
-}
+
+private:
+
+};
+
 }

@@ -18,26 +18,27 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- */#include <iostream>
+ */
+#include <iostream>
 
 #include "GCLApplicationTest.h"
+#include "ActorTest.h"
+#include "SpriteTest.h"
 #include "GCLApplicationCameraTest.h"
-#include "GCLRenderObjectTest.h"
 #include "GCLRenderTargetTest.h"
-#include "GCLRenderObject2DTest.h"
-#include "GCLText2DTest.h"
-#include "GCLWorldTest.h"
+//#include "GCLText2DTest.h"
+//#include "GCLWorldTest.h"
 
 int main(int argc, char ** argv)
 {
 	 SUITE_INIT(argc, argv)
-		GCLApplicationTest::Test();
-		GCLApplicationCameraTest::Test();
-		GCLRenderObjectTest::Test();
+	GCLApplicationTest::Test();
+	 GCLApplicationCameraTest::Test();
+	 SpriteTest::Test();	 
+	 ActorTest::Test();
 		GCLRenderTargetTest::Test();
-		//GCLRenderObject2DTest::Test();
-		GCLText2DTest::Test();
-        GCLWorldTest::Test();
+		//GCLText2DTest::Test();
+       // GCLWorldTest::Test();
 		SUITE_TERMINATE
 
 	return 0;

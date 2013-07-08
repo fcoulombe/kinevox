@@ -22,7 +22,8 @@
 #pragma once
 #include <sstream>
 
-#include <renderer/Sprite.h>
+#include <applayer/GCLApplication.h>
+#include <applayer/Sprite.h>
 #include <gcl/Time.h>
 #include <kinetestlib/UnitTest.h>
 
@@ -33,11 +34,8 @@ void Test()
 {
 	KINEVOX_TEST_START
 
-	TextureResourceManager::Initialize();
+		GCLApplication::Initialize("SpriteTest");
 	{
-		WinDriver winDriver("SpriteTest");
-		Renderer renderer(winDriver.GetWindowsHandle());
-
 		Sprite obj;
 		Assert_Test(obj.GetWidth() == 64);
 
@@ -57,25 +55,10 @@ void Test()
 		obj.Play();
 
 		Assert_Test(obj.IsPlaying() == true);
+
 		KINEVOX_TEST_LOOP_START
-            const ViewPort &viewport = renderer.GetViewPort();
-        Matrix44 ortho;
-        ortho.SetOrtho(0.0, (Real)viewport.GetHeight(), (Real)viewport.GetWidth(), 0.0, -1.0, 1.0);
-#if ENABLE_FIX_PIPELINE
-        renderer.SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
-#else
-        Shader shader;
-        shader.Bind();
-        renderer.SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
-#endif
-			obj.Update();
-			renderer.PreRender();
-			//glPushMatrix();glErrorCheck();
-			obj.Render();
-			//glPopMatrix();glErrorCheck();
-			renderer.PostRender();
-			winDriver.SwapBuffer();
-			Time::SleepMs(1);
+			GCLApplication::Update();
+			GCLApplication::Render();
 		KINEVOX_TEST_LOOP_END
 
 		obj.Pause();
@@ -83,7 +66,6 @@ void Test()
 		Assert_Test(obj.IsPlaying() == false);
 		obj.Rewind();
 	}
-	TextureResourceManager::Terminate();
-
+	GCLApplication::Terminate();
 }
 }

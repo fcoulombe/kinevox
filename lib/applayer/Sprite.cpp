@@ -20,29 +20,32 @@
  * THE SOFTWARE.
  */
 
-#include "renderer/Sprite.h"
+#include "applayer/Sprite.h"
 #include <gcl/Assert.h>
 #include <gcl/File.h>
-#include "renderer/Texture.h"
-#include "renderer/VertexBuffer.h"
+
+#include <renderer/RenderObject.h>
+#include <renderer/Texture.h>
+
+#include <script/ConfigLua.h>
 
 using namespace GCL;
-
 Sprite::~Sprite()
 {
+	delete mObj;
 	for (size_t i=0; i<mTextureList.size(); ++i)
 	{
 		Texture *tempTexture = mTextureList[i];
 		delete tempTexture;
 	}
 	mTextureList.clear();
-	delete [] mSpriteData;
 }
 
 Sprite::Sprite(const char *filename)
 : mCurrentFrame(0),
-  mScale(1.0,1.0),
-  mIsPlaying(false)
+  mIsPlaying(false),
+  mScale(1.0, 1.0)
+
 {
 	LoadSprite(filename);
 }
@@ -51,32 +54,43 @@ Sprite::Sprite(const char *filename)
 void Sprite::LoadSprite(const char * filename)
 {
 	const std::string fullFileName(std::string(SPRITE_PATH) + std::string(filename) + std::string(".spr"));
+	ConfigLua conf(fullFileName.c_str());
+	
 
-	GCLFile fp(fullFileName.c_str());
+	mHeader.frameCount = conf.GetInt("gclsprite.frame_count");
+	mHeader.width = conf.GetInt("gclsprite.width");
+	mHeader.height = conf.GetInt("gclsprite.height");
+	mHeader.textureCount = conf.GetInt("gclsprite.texture_count");
 
-	size_t fileSize = fp.GetFileSize();
-	mSpriteData = new uint8_t[fileSize];
-	fp.Read((char*)mSpriteData, fileSize);
-	mHeader = (SpriteDataHeader*)mSpriteData;
-
-	uint8_t *currentPtr = mSpriteData+sizeof(SpriteDataHeader);
-	for (size_t i=0; i<mHeader->textureCount; ++i)
+	for (size_t i=0; i<mHeader.textureCount; ++i)
 	{
-		uint32_t strLen = *(uint32_t*)currentPtr;
-		currentPtr += sizeof(uint32_t);
-
-		const char *filename = (const char *)currentPtr;
-		currentPtr += strLen+1;
-
+		const std::string filename = conf.GetString("gclsprite.textures.texture" + i);
 		std::string fullTextureFileName(TEXTURE_PATH);
 		fullTextureFileName += filename;
 		Texture *texture = new Texture(fullTextureFileName.c_str());
 
-		GCLAssertMsg(mHeader->width <= texture->GetWidth(), std::string(filename) + ": You have a sprite that is bigger than your texture");
-		GCLAssertMsg(mHeader->height <= texture->GetHeight(), std::string(filename) + ": You have a sprite that is bigger than your texture");
+		GCLAssertMsg(mHeader.width <= texture->GetWidth(), std::string(filename) + ": You have a sprite that is bigger than your texture");
+		GCLAssertMsg(mHeader.height <= texture->GetHeight(), std::string(filename) + ": You have a sprite that is bigger than your texture");
 
 		mTextureList.push_back(texture);
+
 	}
+
+	MeshReal halfWidth = MeshReal(mHeader.width/2.0);
+	MeshReal halfHeight = MeshReal(mHeader.height/2.0);
+
+	const   VertexP square[6] = {
+		{Point3<MeshReal>(-halfWidth, -halfHeight, 0.0)},
+		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0)},
+		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0)},
+		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0)},
+		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0)},
+		{Point3<MeshReal>(halfWidth, halfHeight, 0.0)}
+	};
+
+	static Material sSpriteMaterial("DefaultSprite");
+	mObj = new RenderObject(Matrix44::IDENTITY, sSpriteMaterial, square, 6);
+
 }
 
 void Sprite::Play()
@@ -100,10 +114,11 @@ void Sprite::Update()
 	if (!IsPlaying())
 		return;
 	++mCurrentFrame;
-	if (mCurrentFrame>=mHeader->frameCount)
+	if (mCurrentFrame>=mHeader.frameCount)
 		mCurrentFrame = 0;
 }
 
+#if 0
 void Sprite::Render() const
 {
 	GCLAssert(mTextureList.size());
@@ -159,4 +174,15 @@ void Sprite::Render() const
 #else
 	GCLAssert(false && "reimplement");
 #endif
+}
+#endif
+
+void GCL::Sprite::SetPosition( const WorldPoint3 &position )
+{
+	mObj->SetPosition(position);
+}
+
+const WorldPoint3 & GCL::Sprite::GetPosition() const
+{
+	return *(const WorldPoint3 *)&mObj->GetTransform().GetPosition();
 }

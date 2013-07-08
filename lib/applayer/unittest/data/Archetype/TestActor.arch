@@ -1,0 +1,5 @@
+Archetype = {
+	Name = "TestActor",
+	RenderComponent = {
+	}
+}

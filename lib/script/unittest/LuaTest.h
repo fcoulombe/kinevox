@@ -59,7 +59,7 @@ namespace LuaTest
 
         void Logic()
         {
-            L.StackDump();
+            L.DumpMyStack();
             /* retrieve the environment from the resgistry */
              lua_getfield(L, LUA_REGISTRYINDEX, mFilename.c_str());
              //stackDump(L);

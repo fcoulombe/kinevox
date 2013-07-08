@@ -37,19 +37,57 @@ namespace ConfigLuaTest
         {
         ConfigLua config("data/Script/ConfigLua.luac");
    
-        int testInt = config.GetInt("TestInt");
+        int testInt = config.GetInt("config.TestInt");
         Assert_Test(testInt == 666);
 
-        float testFloat = config.GetFloat("TestFloat");
-        Assert_Test(abseq(testFloat, 66.66f));
+        Real testFloat = config.GetReal("config.TestFloat");
+        Assert_Test(abseq(testFloat, 66.66));
 
-        const char* testString = config.GetString("TestString");
-        Assert_Test(strcmp(testString, "TestString") ==0);
+        const std::string testString = config.GetString("config.TestString");
+        Assert_Test(testString == "TestString");
 
         //test accessing embeded members into table
-        int testInt2 = config.GetInt("TableConf.tableVal");
-        std::cout << testInt2;
+        int testInt2 = config.GetInt("config.TableConf.tableVal");
         Assert_Test(testInt2 == 456);
+
+		PtrLuaTableIterator it = config.GetTableIterator("config.TableIterate");
+
+		while (!it->End())
+		{
+			switch (it->GetType())
+			{
+			case LuaTableIterator::CT_BOOL:		
+				{
+				Assert_Test(it->GetBool() == false);
+				break;
+				}
+			case LuaTableIterator::CT_NUMBER:
+				{
+					int intret = it->GetInt() ; 
+				Assert_Test(intret == 4 || intret == 65);
+				Real intret2 = it->GetReal() ; 
+				Assert_Test(abseq(intret2, 4.0)  || abseq(intret2, 65.0));
+				break;
+				}
+			case LuaTableIterator::CT_STRING:
+				{
+					const std::string rets = it->GetString();
+				Assert_Test(rets == "some string");
+				break;
+				}
+			case LuaTableIterator::CT_TABLE:
+				{
+					PtrLuaTableIterator reit = it->GetTableIterator();
+				Assert_Test(!reit->End());
+				while (!reit->End())
+				{
+					++(*reit);
+				}
+				break;
+				}
+			}
+			++(*it);
+		}
         }
         ScriptResourceManager::Terminate();
     }

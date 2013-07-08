@@ -38,9 +38,17 @@ namespace GCL
     public:
         LuaState() 
             : L(luaL_newstate()) 
-        { luaL_openlibs(L); }
+        { 
+			luaL_openlibs(L); 
+
+			//create a table to store the config threads
+			lua_newtable(L); //push new table on the stack 1
+			lua_setfield(L, LUA_REGISTRYINDEX, "ConfigTable"); //store it in the registry
+		}
 
         ~LuaState() {
+			lua_pushnil(L);
+			lua_setfield(L, LUA_REGISTRYINDEX, "ConfigTable"); //delete config table
             lua_close(L);
         }
 
@@ -55,36 +63,42 @@ namespace GCL
                 lua_pop(L, 1); // remove error message
             }
         }
-        void StackDump () 
+
+		static void StackDump(lua_State *L)
+		{
+			static int dumpCount = 0;
+			std::cout <<  dumpCount++;
+			int i;
+			int top = lua_gettop(L);
+			for (i = 1; i <= top; i++) 
+			{  /* repeat for each level */
+				int t = lua_type(L, i);
+				switch (t)
+				{
+				case LUA_TSTRING:  /* strings */
+					std::cout << "`" <<  lua_tostring(L, i) << "'";
+					break;
+
+				case LUA_TBOOLEAN:  /* booleans */
+					std::cout << lua_toboolean(L, i) ? "true" : "false";
+					break;
+
+				case LUA_TNUMBER:  /* numbers */
+					std::cout << lua_tonumber(L, i);
+					break;
+
+				default:  /* other values */
+					std::cout << lua_typename(L, t);
+					break;
+
+				}
+				std::cout << "  ";  /* put a separator */
+			}
+			std::cout << std::endl;  /* end the listing */
+		}
+        void DumpMyStack () 
         {
-            static int dumpCount = 0;
-            printf("%d", dumpCount++);
-            int i;
-            int top = lua_gettop(L);
-            for (i = 1; i <= top; i++) {  /* repeat for each level */
-                int t = lua_type(L, i);
-                switch (t) {
-
-                case LUA_TSTRING:  /* strings */
-                    printf("`%s'", lua_tostring(L, i));
-                    break;
-
-                case LUA_TBOOLEAN:  /* booleans */
-                    printf(lua_toboolean(L, i) ? "true" : "false");
-                    break;
-
-                case LUA_TNUMBER:  /* numbers */
-                    printf("%g", lua_tonumber(L, i));
-                    break;
-
-                default:  /* other values */
-                    printf("%s", lua_typename(L, t));
-                    break;
-
-                }
-                printf("  ");  /* put a separator */
-            }
-            printf("\n");  /* end the listing */
+           StackDump(L);
         }
     };
 }

@@ -24,7 +24,6 @@
 #include "applayer/GCLApplication.h"
 
 #include <gcl/PixelBuffer.h>
-#include <gcl/ResourceManagerConfig.h>
 
 #include <renderer/Texture.h>
 

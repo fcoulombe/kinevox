@@ -33,7 +33,7 @@ namespace ActorTest
 
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 	GCLApplication::Initialize("ActorTest");
 	{
 	Actor actor("TestActor", "TestActor");

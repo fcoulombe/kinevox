@@ -21,6 +21,8 @@
  */
 #include <iostream>
 
+#include <kinetestlib/UnitTest.h>
+
 #include "GCLApplicationTest.h"
 #include "ActorTest.h"
 #include "SpriteTest.h"

@@ -31,7 +31,7 @@ namespace GCLApplicationTest
 
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 
 	GCLApplication::Initialize("GCLApplicationTest");
 	GCLApplication::Update();

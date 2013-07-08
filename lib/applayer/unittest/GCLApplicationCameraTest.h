@@ -33,7 +33,7 @@ namespace GCLApplicationCameraTest
 
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
 
 	GCLApplication::Initialize("GCLApplicationCameraTest");
 	Camera camera;

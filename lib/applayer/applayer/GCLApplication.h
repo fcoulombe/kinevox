@@ -30,13 +30,13 @@ namespace GCL
 {
 class Camera;
 class Renderer;
-class GCLRenderObject;
-class GCLRenderObject2D;
+class Actor;
 class Text2D;
 class GCLText2D;
 class Input;
 class WinDriver;
 class GCLWorld;
+typedef std::vector<Actor *> ActorList;
 class GCLApplication
 {
 public:
@@ -48,25 +48,22 @@ public:
 
 	GCLEXPORT static void SetViewportCamera(Camera &camera);
 
-	GCLTEST_EXPORT static bool IsRegistered(const GCLRenderObject &obj);
+	GCLTEST_EXPORT static bool IsRegistered(const Actor &obj);
 
 	GCLEXPORT static Renderer *GetRenderer() { return mRenderer; }
     GCLEXPORT static WinDriver *GetWinDriver() { return mWinDriver; }
-	GCLEXPORT static void RegisterCustomRenderObject(RenderObject* newRenderObject);
+	GCLEXPORT static void RegisterCustomRenderObject(Actor* newRenderObject);
 
 private:
 	GCLApplication();
 	~GCLApplication();
 
-	friend class GCLRenderObject;
+	friend class Actor;
 	friend class GCLRenderObject2D;
 	friend class GCLText2D;
     friend class GCLWorld;
-	static void RegisterRenderObject(GCLRenderObject* newRenderObject);
-	static void ReleaseRenderObject(GCLRenderObject* renderObjectToDelete);
-
-	static void RegisterRenderObject2D(GCLRenderObject2D* newRenderObject);
-	static void ReleaseRenderObject2D(GCLRenderObject2D* renderObjectToDelete);
+	static void RegisterRenderObject(Actor* newRenderObject);
+	static void ReleaseRenderObject(Actor* renderObjectToDelete);
 
 	static void RegisterText2D(GCLText2D* newRenderText2d);
 	static void ReleaseText2D(GCLText2D* renderText2DToDelete);
@@ -78,9 +75,7 @@ private:
     static WinDriver *mWinDriver;
 
     static GCLWorld *mCurrentWorld;
-	static RenderObjectList mRenderObjectList;
-	static RenderObject2DList mRenderObject2DList;
-	static Text2DList mText2DList;
+	static ActorList mActorList;
 };
 
 }

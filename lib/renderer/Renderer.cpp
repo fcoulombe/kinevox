@@ -58,3 +58,21 @@ void GCL::Renderer::Render2D( const RenderObjectList &renderObjectList )
 	}
 	//RenderPipe::SendCommand(new RenderCommand(RENDERER_RENDER, &renderObjectList));
 }
+
+template<typename VertexType>
+void DrawNormals(const VertexData &data)
+{
+	std::vector<Point3<MeshReal> > normalLines;
+	const VertexType *vertexData = (const VertexType *)(data.mVertexData); 
+	for (size_t i=0; i<data.mVertexCount; ++i)
+	{
+		const VertexType &vertex = vertexData[i];
+		normalLines.push_back(vertex.position);
+		normalLines.push_back(vertex.position + (vertex.normal*0.5));
+	}
+	const VertexP *pos = (const VertexP *)(normalLines.data());
+	VertexData lineData(pos, normalLines.size(), VertexP::GetComponentType());
+	VertexBuffer buffer((const VertexP *)lineData.mVertexData, lineData.mVertexCount);
+	buffer.Render(VBM_LINES);
+
+}

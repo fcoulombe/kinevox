@@ -19,39 +19,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#pragma once
-#include <sstream>
 
-#include <applayer/GCLApplication.h>
-#include <applayer/GCLRenderTarget.h>
-
-#include <kinetestlib/UnitTest.h>
+#include "applayer/Actor.h"
+#include "applayer/GCLApplication.h"
 
 using namespace GCL;
-namespace GCLRenderTargetTest
+
+Actor::Actor(const char *, const char *)
 {
-
-
-void Test()
-{
-	KINEVOX_TEST_START
-
-	GCLApplication::Initialize("GCLRenderTargetTest");
-	{
-	Actor obj("TestActor", "TestActor");
-	Assert_Test(GCLApplication::IsRegistered(obj));
-	Assert_Test(obj.GetTransform() == Matrix44::IDENTITY);
-
-	const WorldPoint3 position(0.0,0.0, -10.0);
-	obj.SetPosition(position);
-
-	GCLRenderTarget target(512,512);
-    KINEVOX_TEST_LOOP_START
-		GCLApplication::Update();
-		GCLApplication::Render();
-    KINEVOX_TEST_LOOP_END
-	target.Save("GCLRenderTargetTest.tga");
-	}
-	GCLApplication::Terminate();
+	mParent = NULL;
+	GCLApplication::RegisterRenderObject(this);
 }
+
+Actor::~Actor()
+{
+	if (mParent)
+	{
+		mParent->RemoveChild(this);
+	}
+	GCLApplication::ReleaseRenderObject(this);
+}
+
+void GCL::Actor::RemoveChild( const Actor *child )
+{
+	auto it = std::find(mChilds.begin(), mChilds.end(), child);
+	GCLAssert(it != mChilds.end());
+	mChilds.erase(it);
 }

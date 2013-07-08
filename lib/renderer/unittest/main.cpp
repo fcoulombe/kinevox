@@ -52,6 +52,7 @@
 
 #include "VertexBufferTest.h"
 #include "VertexTest.h"
+//#include <vld.h>
 
 using namespace GCL;
 int main(int argc, char **argv)
@@ -64,11 +65,14 @@ int main(int argc, char **argv)
 #if USE_OPENRL
         RLRendererTest::Test();
 #endif
+
    //     GLRendererThreadedTest::Test();
         GLRendererTest::Test();
+
   CameraTest::Test();
-    ShaderTest::Test();
-  
+   
+  ShaderTest::Test();
+
     VertexTest::Test();
     VertexBufferTest::Test();
     PixelBufferHALTest::Test();
@@ -77,6 +81,7 @@ int main(int argc, char **argv)
     TextureTest::Test();
 
 	TextureAndShaderTest::Test();
+
 	RenderObjectTest::Test();
     MaterialTest::Test();
 	
@@ -89,11 +94,11 @@ int main(int argc, char **argv)
     
     RenderBufferTest::Test();
     FrameBufferTest::Test();
+
     MeshLoadingTest::Test();
     MeshResourceTest::Test();
     MeshTest::Test();
 	
-
     SUITE_TERMINATE
         return 0;
 }

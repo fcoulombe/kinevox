@@ -28,6 +28,9 @@ struct lua_State;
 namespace GCL
 {
 	class ScriptResource;
+	//this is an iterator for the table so that we can loop over each elements and dig deeper.
+	//do by all mean bare in mind that lua does not guarantee the order of it's tables so 
+	//you might potentially iterate over the data in random order
 	class LuaTableIterator
 	{
 	public:

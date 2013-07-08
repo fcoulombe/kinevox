@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,50 +23,56 @@
 #pragma once
 
 #include <vector>
-#include <gcl/Point3.h>
+#include <list>
+#include <gcl/Matrix44.h>
+#include "applayer/Component.h"
+
 namespace GCL
 {
-struct SpriteDataHeader
-{
-	size_t width;
-	size_t height;
-	size_t frameCount;
-	size_t textureCount;
-};
-
-class RenderObject;
-class Texture;
-class Sprite  
+class Actor
 {
 public:
-	Sprite(const char *filename="DefaultSprite");
-	~Sprite();
+	Actor(const char *name, const char *archetype);
 
-	void Update();
-	void Play();
-	void Pause();
-	void Rewind();
+	~Actor();
 
-	size_t GetWidth() const { return mHeader.width; }
-	size_t GetHeight() const { return mHeader.height; }
-	size_t GetFrameCount() const { return mHeader.frameCount; }
+	void RemoveChild(const Actor *child);
 
-	void SetPosition(const WorldPoint3 &position);
-	const WorldPoint3 &GetPosition() const;
+	void Update(Real dt)
+	{
+		for (size_t i=0; i<mComponentList.size(); ++i)
+		{
+			mComponentList[i]->Update(dt);
+		}
 
-	void SetScale(const WorldPoint2 &scale) {mScale = scale;; }
-	const WorldPoint2 &GetScale() const { return mScale; }
-	bool IsPlaying() const { return mIsPlaying; }
-	operator RenderObject *() { return mObj; }
+	}
+	const Matrix44 &GetTransform() const {return mTransform; }
+	void SetTransform(const Matrix44 &transform) {mTransform = transform; }
+
+	void SetOrientation(Real x,Real y,Real z)
+	{
+		const WorldPoint4 backupPosition = mTransform[3];
+		Matrix44 xRot;
+		xRot.SetRotationX(x);
+		Matrix44 yRot;
+		yRot.SetRotationY(y);
+		Matrix44 zRot;
+		zRot.SetRotationZ(z);
+		mTransform = xRot * yRot;// * zRot;
+
+		mTransform.SetPosition(backupPosition);
+	}
+	void SetPosition(Real x, Real y,Real z)
+	{ SetPosition(WorldPoint3(x,y,z));	}
+	void SetPosition(const WorldPoint3 &position)
+	{
+		mTransform.SetPosition(position);
+	}
 private:
-	void LoadSprite(const char *filename);
-	std::vector<Texture*> mTextureList;
-
-	SpriteDataHeader mHeader;
-	size_t mCurrentFrame;
-	bool mIsPlaying;
-	WorldPoint2 mScale;
-	RenderObject *mObj;
+	std::vector<Component*> mComponentList;
+	Matrix44 mTransform;
+	Actor *mParent;
+	std::list<Actor*> mChilds;
 };
 
 }

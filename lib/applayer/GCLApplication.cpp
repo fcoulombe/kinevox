@@ -24,8 +24,7 @@
 
 #include <algorithm>
 
-#include "applayer/GCLRenderObject.h"
-#include "applayer/GCLRenderObject2D.h"
+#include "applayer/Actor.h"
 #include "applayer/GCLText2D.h"
 #include <gcl/Assert.h>
 #include <input/Input.h>
@@ -33,6 +32,7 @@
 #include <renderer/FontResourceManager.h>
 #include <renderer/MeshResourceManager.h>
 #include <renderer/TextureResourceManager.h>
+#include <script/ScriptResourceManager.h>
 #include <windriver/WinDriver.h>
 
 using namespace GCL;
@@ -40,15 +40,14 @@ using namespace GCL;
 GCLWorld *GCLApplication::mCurrentWorld=NULL;
 Renderer *GCLApplication::mRenderer = NULL;
 WinDriver *GCLApplication::mWinDriver = NULL;
-RenderObjectList GCLApplication::mRenderObjectList;
-RenderObject2DList GCLApplication::mRenderObject2DList;
-Text2DList GCLApplication::mText2DList;
+ActorList GCLApplication::mActorList;
 
 
 /*static */void GCLApplication::Initialize(const char *windowsTitle)
 {
 	TextureResourceManager::Initialize();
 	FontResourceManager::Initialize();
+	ScriptResourceManager::Initialize();
 	MeshResourceManager::Initialize();
 	GCLAssert(mRenderer == NULL);
     mWinDriver = new WinDriver(windowsTitle);
@@ -56,16 +55,15 @@ Text2DList GCLApplication::mText2DList;
 }
 /*static */void GCLApplication::Terminate()
 {
-    GCLAssert(mRenderObjectList.size() == 0);
-    GCLAssert(mRenderObject2DList.size() == 0);
-    GCLAssert(mText2DList.size() == 0);
-	GCLAssert(mRenderer);
+    GCLAssert(mActorList.size() == 0);
+ 	GCLAssert(mRenderer);
 	delete mRenderer;
 	mRenderer = NULL;
     GCLAssert(mWinDriver);
     delete mWinDriver;
     mWinDriver = NULL;
 	MeshResourceManager::Terminate();
+	ScriptResourceManager::Terminate();
 	FontResourceManager::Terminate();
 	TextureResourceManager::Terminate();
 }
@@ -74,21 +72,20 @@ Text2DList GCLApplication::mText2DList;
 void GCLApplication::Update()
 {
 	Input::ProcessInput();
-	for (size_t i=0; i<mRenderObject2DList.size(); ++i)
-	{
-		mRenderObject2DList[i]->Update();
-	}
+
 }
 void GCLApplication::Render()
 {
     GCLAssert(mWinDriver);
 	GCLAssert(mRenderer);
+	//perform actor culling against view frustom
+	RenderObjectList renderList;
+	//create list of render component
+	//pass it to renderer
 	mRenderer->PreRender();
-	mRenderer->Render(mRenderObjectList);
-	mRenderer->Render(mRenderObject2DList);
-	mRenderer->Render(mText2DList);
+	mRenderer->Render(renderList);
 	mRenderer->PostRender();
-    mWinDriver->SwapBuffer();
+	mWinDriver->SwapBuffer();
 }
 
 void GCLApplication::SetViewportCamera(Camera &camera)
@@ -96,48 +93,26 @@ void GCLApplication::SetViewportCamera(Camera &camera)
 	mRenderer->SetCamera(camera);
 }
 
-void GCLApplication::RegisterCustomRenderObject(RenderObject* newRenderObj)
+void GCLApplication::RegisterCustomRenderObject(Actor* newRenderObj)
 {
 	GCLAssert(newRenderObj);
-	mRenderObjectList.push_back(newRenderObj);
+	mActorList.push_back(newRenderObj);
 }
 
-void GCLApplication::RegisterRenderObject(GCLRenderObject* newRenderObj)
+void GCLApplication::RegisterRenderObject(Actor* newRenderObj)
 {
 	GCLAssert(newRenderObj);
-	mRenderObjectList.push_back(newRenderObj);
+	mActorList.push_back(newRenderObj);
 }
 
-void GCLApplication::ReleaseRenderObject(GCLRenderObject* renderObjToDelete)
+void GCLApplication::ReleaseRenderObject(Actor* renderObjToDelete)
 {
 	GCLAssert(renderObjToDelete);
-	RenderObjectList::iterator it = std::find(mRenderObjectList.begin(), mRenderObjectList.end(), renderObjToDelete);
-	GCLAssert(it != mRenderObjectList.end());
-	mRenderObjectList.erase(it);
+	auto it = std::find(mActorList.begin(), mActorList.end(), renderObjToDelete);
+	GCLAssert(it != mActorList.end());
+	mActorList.erase(it);
 }
-
-void GCLApplication::RegisterRenderObject2D(GCLRenderObject2D* newRenderObject)
-{
-	GCLAssert(newRenderObject);
-	mRenderObject2DList.push_back(newRenderObject);
-}
-
-void GCLApplication::ReleaseRenderObject2D(GCLRenderObject2D* renderObjectToDelete)
-{
-	GCLAssert(renderObjectToDelete);
-	RenderObject2DList::iterator it = std::find(mRenderObject2DList.begin(),
-												mRenderObject2DList.end(),
-												renderObjectToDelete);
-	GCLAssert(it != mRenderObject2DList.end());
-	mRenderObject2DList.erase(it);
-}
-
-void GCLApplication::RegisterText2D(GCLText2D* newText2D)
-{
-	GCLAssert(newText2D);
-	mText2DList.push_back(newText2D);
-}
-
+#if 0
 void GCLApplication::ReleaseText2D(GCLText2D* textToDelete)
 {
     GCLAssert(textToDelete);
@@ -147,13 +122,13 @@ void GCLApplication::ReleaseText2D(GCLText2D* textToDelete)
 	GCLAssert(it != mText2DList.end());
 	mText2DList.erase(it);
 }
+#endif
 
-
-bool GCLApplication::IsRegistered(const GCLRenderObject &obj)
+bool GCLApplication::IsRegistered(const Actor &obj)
 {
-	for (RenderObjectList::const_iterator it = mRenderObjectList.begin(); it !=mRenderObjectList.end(); ++it)
+	for (auto it = mActorList.begin(); it !=mActorList.end(); ++it)
 	{
-		const RenderObject* ro = *it;
+		const Actor* ro = *it;
 		if (ro == &obj)
 			return true;
 	}

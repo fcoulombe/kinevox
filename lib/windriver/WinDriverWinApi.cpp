@@ -19,7 +19,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
-#ifdef USE_WINAPI
+
 #include "windriver/WinDriver.h"
 
 #include <sstream>
@@ -196,4 +196,3 @@ namespace GCL
 		return (size_t)mpWinDriver->GetWindowsHandle();
 	}
 }
-#endif

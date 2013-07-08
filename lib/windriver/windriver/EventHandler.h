@@ -25,8 +25,11 @@
 #include <stdint.h>
 #include <list>
 #include <gcl/Assert.h>
+
 #ifdef OS_WIN32
 #include <windows.h>
+namespace GCL
+{
     enum KeyNames
     {
         GCL_ESCAPE = VK_ESCAPE ,
@@ -37,6 +40,8 @@
     };
 #else
 #error "TBD"
+namespace GCL
+{
 #endif
     class KeyListener;
     typedef std::list<KeyListener*> KeyListenerList;

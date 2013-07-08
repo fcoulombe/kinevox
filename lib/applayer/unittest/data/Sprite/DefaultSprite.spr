@@ -1,0 +1,10 @@
+gclsprite = {
+    width=64,
+    height=64,
+    frame_count="128",
+    textures = {
+        texture1 = "ExampleSprite1.tga",
+        texture2 ="ExampleSprite2.tga"
+    }
+    
+}

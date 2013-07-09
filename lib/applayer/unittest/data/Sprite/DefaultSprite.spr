@@ -2,9 +2,10 @@ gclsprite = {
     width=64,
     height=64,
     frame_count="128",
+    texture_count = 2,
     textures = {
-        texture1 = "ExampleSprite1.tga",
-        texture2 ="ExampleSprite2.tga"
+        texture0 = "ExampleSprite2.tga",
+        texture1 ="ExampleSprite1.tga"
     }
     
 }

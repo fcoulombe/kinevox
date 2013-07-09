@@ -1,18 +1,34 @@
 uniform mat4 ProjectionMatrix;
 uniform mat4 ModelViewMatrix;
+
 uniform int CurrentFrame;
-attribute vec4 InPosition;     
-attribute vec2 InTexCoord; 
-varying vec2 texcoord;  
-varying vec4 color;  
+uniform int FrameCount;
+uniform ivec2 Dimension;
+uniform ivec2 TextureSize;
+
+attribute vec4 InPosition;
+attribute vec2 InTexCoord;    
+
+varying vec2 texcoord;  	
+
 void main()          
 {                    
-#if ENABLE_FIX_PIPELINE 
-	gl_Position    = gl_ModelViewProjectionMatrix * gl_Vertex; 
-	gl_TexCoord[0] = gl_MultiTexCoord0; 
-#else 
-   gl_Position = ProjectionMatrix * ModelViewMatrix * InPosition; 
-	texcoord = InTexCoord.xy;
-#endif 
-	color = InNormal; //vec4(InTexCoord.x,InTexCoord.y, 0.0,1.0); 
+	int width = TextureSize.x;
+	int height = TextureSize.y;
+	int framePerWidth = width/Dimension.x;
+	int rowPerTexture = height/Dimension.y;
+
+	int whatRow = CurrentFrame/framePerWidth;
+	int whatCol = int(mod(CurrentFrame,framePerWidth));
+	int whatTexture = whatRow/rowPerTexture;
+	
+	whatRow = whatRow - (whatTexture*rowPerTexture);
+
+	float widthRatio = float(Dimension.x)/float(width);
+	float heightRatio = float(Dimension.y)/float(height);
+	
+	texcoord.x = (whatCol*widthRatio) + (widthRatio*InTexCoord.x);
+	texcoord.y = (1.0-whatRow*heightRatio) - (heightRatio*InTexCoord.y);
+	
+    gl_Position = ProjectionMatrix * ModelViewMatrix * InPosition; 
 }                           

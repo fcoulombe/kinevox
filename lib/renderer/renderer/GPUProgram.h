@@ -72,6 +72,9 @@ class Shader;
 	}
     void SetModelViewMatrix(const Matrix44 &m) { RenderPipe::SendCommand(new RenderCommandMatArg(GPUPROGRAM_SET_MODELVIEW, (void*)this, m));}
 	void SetUniform(const char *uniformName, int value) { RenderPipe::SendCommand(new RenderCommand3Arg(GPUPROGRAM_SET_UNIFORM_NUMBER, (void*)this, (void*)uniformName, (void*)value));}
+	void SetUniform(const char *uniformName, const Point2<float> &value) { RenderPipe::SendCommand(new RenderCommandVec2fArg(GPUPROGRAM_SET_UNIFORM_VEC2f, (void*)this, (void*)uniformName, value));}
+	void SetUniform(const char *uniformName, const Point2<int> &value) { RenderPipe::SendCommand(new RenderCommandVec2iArg(GPUPROGRAM_SET_UNIFORM_VEC2i, (void*)this, (void*)uniformName, value));}
+
 	void GetUniform(const char *unformName, Matrix44 &m44) const { m44 = RenderPipe::SendCommandSyncRet(new RenderCommand2Arg(GPUPROGRAM_GET_UNIFORM_MATRIX, (void*)this, (void*)unformName)).GetMatrix(); }
     void GetUniform(const char *unformName, int &ret) const { ret = RenderPipe::SendCommandSyncRet(new RenderCommand2Arg(GPUPROGRAM_GET_UNIFORM_NUMBER, (void*)this, (void*)unformName)).GetNumber();  }
     int GetAttributeLocation(const char *attributeName) const { return RenderPipe::SendCommandSyncRet(new RenderCommand2Arg(GPUPROGRAM_GET_ATTRIBUTE_LOCATION, (void*)this, (void*)attributeName)).GetNumber();   }

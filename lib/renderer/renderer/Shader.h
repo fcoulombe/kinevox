@@ -39,7 +39,10 @@ enum ShaderType
   public:
     Shader(const char *shaderSourcePath, ShaderType type)
 	{
-		RenderPipe::SendCommand(new RenderCommand3Arg(SHADER_CREATE, this, (void*)shaderSourcePath, (void*)type));
+		size_t fileNameLen = strlen(shaderSourcePath)+1;
+		char *xferbuffer = new char[fileNameLen];
+		strncpy(xferbuffer, shaderSourcePath, fileNameLen);
+		RenderPipe::SendCommand(new RenderCommand3Arg(SHADER_CREATE, this, (void*)xferbuffer, (void*)type));
 	}
     ~Shader() 
 	{

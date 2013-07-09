@@ -270,6 +270,27 @@ void RCGPUProgramSetModelView(RenderCommand *data, RenderData &renderData)
 	RenderCommandMatArg *data2 = static_cast<RenderCommandMatArg *>(data);
 	rd.mGPUProgramMap[data->mData]->SetModelViewMatrix(data2->mData2);
 }
+void RCGPUProgramSetUniformNumber(RenderCommand *data, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	RenderCommand3Arg *data2 = static_cast<RenderCommand3Arg *>(data);
+	rd.mGPUProgramMap[data->mData]->SetUniform((const char *)data2->mData2, (int)data2->mData3);
+}
+void RCGPUProgramSetUniformVec2i(RenderCommand *data, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	RenderCommandVec2iArg *data2 = static_cast<RenderCommandVec2iArg *>(data);
+	rd.mGPUProgramMap[data->mData]->SetUniform((const char *)data2->mData2, data2->mData3);
+}
+void RCGPUProgramSetUniformVec2f(RenderCommand *data, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	RenderCommandVec2fArg *data2 = static_cast<RenderCommandVec2fArg *>(data);
+	rd.mGPUProgramMap[data->mData]->SetUniform((const char *)data2->mData2, data2->mData3);
+}
 void RCGPUProgramGetUniformMatrix(RenderCommand *data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
@@ -307,6 +328,8 @@ void RCCreateShader(RenderCommand *data, RenderData &renderData)
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	RenderCommand3Arg *data3 = static_cast<RenderCommand3Arg *>(data);
 	rd.mShaderMap[data->mData] = new GLShader((const char *)data3->mData2, GLShader::GetShaderType((size_t)data3->mData3));
+	char *xferbuffer = (char*)data3->mData2;
+	delete [] xferbuffer;
 }
 
 void RCDestroyShader(RenderCommand *data, RenderData &renderData)
@@ -579,6 +602,9 @@ static RenderCommandFunction GLRenderCommandMap[] =
 	RCGPUProgramSetTextureSampler,//22
 	RCGPUProgramSetProjection,//23
 	RCGPUProgramSetModelView,//24
+	RCGPUProgramSetUniformNumber,
+	RCGPUProgramSetUniformVec2i,
+	RCGPUProgramSetUniformVec2f,
 	RCGPUProgramGetUniformMatrix,//25
 	RCGPUProgramGetUniformNumber,//26
 	RCGPUProgramGetAttributeLocation,//27

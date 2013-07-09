@@ -22,6 +22,7 @@
 
 #pragma once
 #include <3rdparty/OpenGL.h>
+#include <gcl/Point2.h>
 
 namespace GCL
 {
@@ -43,6 +44,8 @@ class GLTexture;
     void SetProjectionMatrix(const Matrix44 &m);
     void SetModelViewMatrix(const Matrix44 &m);
 	void SetUniform(const char *uniforName, int val);
+	void SetUniform(const char *uniforName, const Point2<int> &val);
+	void SetUniform(const char *uniforName, const Point2<float> &val);
     void GetUniform(const char *unformName, Matrix44 &m44) const;
     void GetUniform(const char *unformName, int &ret) const;
     int GetAttributeLocation(const char *attributeName) const;

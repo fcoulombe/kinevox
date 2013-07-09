@@ -58,6 +58,8 @@ enum RenderCommandType
 	GPUPROGRAM_SET_PROJECTION,//23,
 	GPUPROGRAM_SET_MODELVIEW,//24,
 	GPUPROGRAM_SET_UNIFORM_NUMBER,
+	GPUPROGRAM_SET_UNIFORM_VEC2i,
+	GPUPROGRAM_SET_UNIFORM_VEC2f,
 	GPUPROGRAM_GET_UNIFORM_MATRIX,//25,
 	GPUPROGRAM_GET_UNIFORM_NUMBER,//26,
 	GPUPROGRAM_GET_ATTRIBUTE_LOCATION,//27,
@@ -117,6 +119,7 @@ public:
 	}
 	Matrix44 mData2;
 };
+
 class RenderCommand2Arg : public RenderCommand
 {
 public:
@@ -127,6 +130,28 @@ public:
 	}
 	void *mData2;
 };
+
+class RenderCommandVec2fArg : public RenderCommand2Arg
+{
+public:
+	RenderCommandVec2fArg(RenderCommandType cmd, void *data, void *data2, const Point2<float> &data3)
+		:RenderCommand2Arg(cmd, data, data2)
+	{
+		mData3 = data3;
+	}
+	Point2<float> mData3;
+};
+class RenderCommandVec2iArg : public RenderCommand2Arg
+{
+public:
+	RenderCommandVec2iArg(RenderCommandType cmd, void *data, void *data2, const Point2<int> &data3)
+		:RenderCommand2Arg(cmd, data, data2)
+	{
+		mData3 = data3;
+	}
+	Point2<int> mData3;
+};
+
 class RenderCommand3Arg : public RenderCommand2Arg
 {
 public:

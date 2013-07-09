@@ -134,6 +134,20 @@ void GLGPUProgram::SetUniform(const char *uniforName, int val)
 	glUniform1i(uniformLoc,(GLint)val);glErrorCheck();
 }
 
+void GLGPUProgram::SetUniform(const char *uniforName, const Point2<int> &val)
+{
+	GCLAssert(mIsValid);
+	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
+	glUniform2iv(uniformLoc,1, (GLint*)&val);glErrorCheck();
+}
+
+void GLGPUProgram::SetUniform(const char *uniforName, const Point2<float> &val)
+{
+	GCLAssert(mIsValid);
+	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
+	glUniform2fv(uniformLoc,1, (GLfloat*)&val);glErrorCheck();
+}
+
 void GLGPUProgram::SetTextureSampler(const GLTexture &sampler)
 {
     #if ENABLE_SHADERS
@@ -175,7 +189,7 @@ int GLGPUProgram::GetAttributeLocation(const char *attributeName) const
     int ret=-1;
     #if ENABLE_SHADERS
 	ret =  (int)glGetAttribLocation(mProgramObject,attributeName);glErrorCheck();
-	GCLAssertMsg(ret!=-1, attributeName);
+	//GCLAssertMsg(ret!=-1, attributeName);
 #else
 	(void)attributeName;
 	#endif

@@ -64,28 +64,28 @@ public:
 			glEnableVertexAttribArray(loc.position);glErrorCheck();
 			glVertexAttribPointer(loc.position, 3, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToPosition());glErrorCheck();
 		}
-		else
+		/*else
 		{
 			glDisableVertexAttribArray(loc.position);glErrorCheck();
-		}
+		}*/
 		if (mType & eNORMAL)
 		{
 			glEnableVertexAttribArray(loc.normal);glErrorCheck();
 			glVertexAttribPointer(loc.normal, 3, GL_UNIT, GL_TRUE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal());glErrorCheck();
 		}
-		else
+		/*else
 		{
 			glDisableVertexAttribArray(loc.normal);glErrorCheck();
-		}
+		}*/
 		if (mType & eTEXTURE_COORD)
 		{
 			glEnableVertexAttribArray(loc.texCoord);glErrorCheck();
 			glVertexAttribPointer(loc.texCoord, 2, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
 		}
-		else
+		/*else
 		{
 			glDisableVertexAttribArray(loc.texCoord);glErrorCheck();
-		}
+		}*/
 #endif
 	}
 

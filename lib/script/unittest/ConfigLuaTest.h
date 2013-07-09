@@ -51,7 +51,8 @@ namespace ConfigLuaTest
         Assert_Test(testInt2 == 456);
 
 		PtrLuaTableIterator it = config.GetTableIterator("config.TableIterate");
-
+		const std::string tname = it->GetKey();
+		Assert_Test(tname == "TableIterate");
 		while (!it->End())
 		{
 			switch (it->GetType())
@@ -79,6 +80,8 @@ namespace ConfigLuaTest
 				{
 					PtrLuaTableIterator reit = it->GetTableIterator();
 				Assert_Test(!reit->End());
+				const std::string tableName = reit->GetKey();
+				Assert_Test(tableName == "SomeTable");
 				while (!reit->End())
 				{
 					++(*reit);

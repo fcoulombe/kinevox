@@ -44,6 +44,7 @@ namespace GCL
 		};
 
 		void operator++();
+		const std::string GetKey() const;
 		bool End() const { return mIsAtEnd; }
 		bool GetBool() const;
 		int GetInt() const;

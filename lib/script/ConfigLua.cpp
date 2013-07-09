@@ -94,7 +94,7 @@ const std::string ConfigLua::GetString(const char *key) const
 
 
 
-std::unique_ptr<GCL::LuaTableIterator> GCL::ConfigLua::GetTableIterator( const std::string &key ) 
+PtrLuaTableIterator GCL::ConfigLua::GetTableIterator( const std::string &key ) 
 {
 	return PtrLuaTableIterator(new GCL::LuaTableIterator(key, L, mResource->GetFileName().c_str()));
 }
@@ -130,6 +130,14 @@ GCL::Real GCL::LuaTableIterator::GetReal() const
 const std::string GCL::LuaTableIterator::GetString() const
 {
 	return std::string( lua_tostring(mL, -1));
+}
+
+
+const std::string GCL::LuaTableIterator::GetKey() const
+{
+	std::vector<std::string> explodedPath;
+	StringUtil::Explode(mTablePath, explodedPath, '.');
+	return (explodedPath.size()) ? explodedPath[explodedPath.size()-1] : std::string();
 }
 
 void GCL::LuaTableIterator::Next()

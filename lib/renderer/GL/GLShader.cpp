@@ -89,7 +89,7 @@ const char *DefaultVShaderStr = TextureVShaderStr;
 const char *DefaultFShaderStr = TextureFShaderStr;
 
 const char *SHADER_HEADER =
-		"#version 110	\n"
+		"#version 400	\n"
 		"#pragma optimize(off) \n"
 		"#pragma debug(on) \n"
 #if ENABLE_FIX_PIPELINE

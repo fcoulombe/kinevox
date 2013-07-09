@@ -38,7 +38,7 @@ int main(int argc, char ** argv)
 	 GCLApplicationCameraTest::Test();
 	 SpriteTest::Test();	 
 	 ActorTest::Test();
-		GCLRenderTargetTest::Test();
+		//GCLRenderTargetTest::Test();
 		//GCLText2DTest::Test();
        // GCLWorldTest::Test();
 		SUITE_TERMINATE

@@ -26,6 +26,7 @@
 
 #include "applayer/Actor.h"
 #include "applayer/GCLText2D.h"
+#include "applayer/Sprite.h"
 #include <gcl/Assert.h>
 #include <input/Input.h>
 #include <renderer/Renderer.h>
@@ -41,6 +42,7 @@ GCLWorld *GCLApplication::mCurrentWorld=NULL;
 Renderer *GCLApplication::mRenderer = NULL;
 WinDriver *GCLApplication::mWinDriver = NULL;
 ActorList GCLApplication::mActorList;
+SpriteList GCLApplication::mSpriteList;
 
 
 /*static */void GCLApplication::Initialize(const char *windowsTitle)
@@ -72,6 +74,10 @@ ActorList GCLApplication::mActorList;
 void GCLApplication::Update()
 {
 	Input::ProcessInput();
+	//for (size_t i=0; i<m2DRenderObjectList.size(); ++i)
+	//{
+	//	m2DRenderObjectList[i]->Update();
+//	}
 
 }
 void GCLApplication::Render()
@@ -84,6 +90,16 @@ void GCLApplication::Render()
 	//pass it to renderer
 	mRenderer->PreRender();
 	mRenderer->Render(renderList);
+	renderList.clear();
+	Matrix44 ortho;
+	ortho.SetOrtho(0.0,  (Real)mRenderer->GetViewPort().GetWidth(), (Real)mRenderer->GetViewPort().GetHeight(),0.0, -1.0, 1.0);
+	for (size_t i=0; i<mSpriteList.size(); ++i)
+	{
+		Sprite *tempSprite =mSpriteList[i];
+		tempSprite->Render(ortho);
+		//renderList.push_back(tempSprite->mObj);
+	}
+	//mRenderer->Render2D(mSpriteList);
 	mRenderer->PostRender();
 	mWinDriver->SwapBuffer();
 }
@@ -111,6 +127,13 @@ void GCLApplication::ReleaseRenderObject(Actor* renderObjToDelete)
 	auto it = std::find(mActorList.begin(), mActorList.end(), renderObjToDelete);
 	GCLAssert(it != mActorList.end());
 	mActorList.erase(it);
+}
+void GCLApplication::ReleaseSprite(Sprite* renderObjToDelete)
+{
+	GCLAssert(renderObjToDelete);
+	auto it = std::find(mSpriteList.begin(), mSpriteList.end(), renderObjToDelete);
+	GCLAssert(it != mSpriteList.end());
+	mSpriteList.erase(it);
 }
 #if 0
 void GCLApplication::ReleaseText2D(GCLText2D* textToDelete)

@@ -55,8 +55,9 @@ void Test()
 		obj.Play();
 
 		Assert_Test(obj.IsPlaying() == true);
-
+		//obj.Pause();
 		KINEVOX_TEST_LOOP_START
+			obj.Update();
 			GCLApplication::Update();
 			GCLApplication::Render();
 		KINEVOX_TEST_LOOP_END

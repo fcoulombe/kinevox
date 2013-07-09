@@ -36,12 +36,15 @@ struct SpriteDataHeader
 
 class RenderObject;
 class Texture;
+class Material;
+class Matrix44;
 class Sprite  
 {
 public:
 	Sprite(const char *filename="DefaultSprite");
 	~Sprite();
 
+	void Render(const Matrix44 &viewMatrix);
 	void Update();
 	void Play();
 	void Pause();
@@ -67,6 +70,7 @@ private:
 	bool mIsPlaying;
 	WorldPoint2 mScale;
 	RenderObject *mObj;
+	Material *mMaterial;
 };
 
 }

@@ -36,7 +36,10 @@ class GCLText2D;
 class Input;
 class WinDriver;
 class GCLWorld;
+class Sprite;
 typedef std::vector<Actor *> ActorList;
+
+typedef std::vector<Sprite *> SpriteList;
 class GCLApplication
 {
 public:
@@ -62,8 +65,12 @@ private:
 	friend class GCLRenderObject2D;
 	friend class GCLText2D;
     friend class GCLWorld;
+	friend class Sprite;
 	static void RegisterRenderObject(Actor* newRenderObject);
 	static void ReleaseRenderObject(Actor* renderObjectToDelete);
+
+	static void RegisterSprite(Sprite* newRenderObject) { mSpriteList.push_back(newRenderObject); }
+	static void ReleaseSprite(Sprite* renderObjectToDelete);
 
 	static void RegisterText2D(GCLText2D* newRenderText2d);
 	static void ReleaseText2D(GCLText2D* renderText2DToDelete);
@@ -76,6 +83,7 @@ private:
 
     static GCLWorld *mCurrentWorld;
 	static ActorList mActorList;
+	static SpriteList mSpriteList;
 };
 
 }

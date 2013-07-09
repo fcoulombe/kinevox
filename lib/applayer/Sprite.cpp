@@ -21,9 +21,12 @@
  */
 
 #include "applayer/Sprite.h"
+#include <sstream>
+#include "applayer/GCLApplication.h"
 #include <gcl/Assert.h>
 #include <gcl/File.h>
 
+#include <renderer/Material.h>
 #include <renderer/RenderObject.h>
 #include <renderer/Texture.h>
 
@@ -32,7 +35,10 @@
 using namespace GCL;
 Sprite::~Sprite()
 {
+
+	GCLApplication::ReleaseSprite(this);
 	delete mObj;
+	delete mMaterial;
 	for (size_t i=0; i<mTextureList.size(); ++i)
 	{
 		Texture *tempTexture = mTextureList[i];
@@ -48,6 +54,7 @@ Sprite::Sprite(const char *filename)
 
 {
 	LoadSprite(filename);
+	GCLApplication::RegisterSprite(this);
 }
 
 
@@ -61,10 +68,14 @@ void Sprite::LoadSprite(const char * filename)
 	mHeader.width = conf.GetInt("gclsprite.width");
 	mHeader.height = conf.GetInt("gclsprite.height");
 	mHeader.textureCount = conf.GetInt("gclsprite.texture_count");
-
+	std::stringstream fullTextureKey;
+	const std::string textureKey("gclsprite.textures.texture");
 	for (size_t i=0; i<mHeader.textureCount; ++i)
 	{
-		const std::string filename = conf.GetString("gclsprite.textures.texture" + i);
+		fullTextureKey.str("");
+		fullTextureKey << textureKey;
+		fullTextureKey << i;
+		const std::string filename = conf.GetString(fullTextureKey.str().c_str());
 		std::string fullTextureFileName(TEXTURE_PATH);
 		fullTextureFileName += filename;
 		Texture *texture = new Texture(fullTextureFileName.c_str());
@@ -73,23 +84,22 @@ void Sprite::LoadSprite(const char * filename)
 		GCLAssertMsg(mHeader.height <= texture->GetHeight(), std::string(filename) + ": You have a sprite that is bigger than your texture");
 
 		mTextureList.push_back(texture);
-
 	}
 
 	MeshReal halfWidth = MeshReal(mHeader.width/2.0);
 	MeshReal halfHeight = MeshReal(mHeader.height/2.0);
 
-	const   VertexP square[6] = {
-		{Point3<MeshReal>(-halfWidth, -halfHeight, 0.0)},
-		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0)},
-		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0)},
-		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0)},
-		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0)},
-		{Point3<MeshReal>(halfWidth, halfHeight, 0.0)}
+	const   VertexPT square[6] = {
+		{Point3<MeshReal>(-halfWidth, -halfHeight, 0.0),Point2<MeshReal>(0.0, 0.0)},
+		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0), Point2<MeshReal>(1.0, 0.0)},
+		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0), Point2<MeshReal>(0.0, 1.0)},
+		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0), Point2<MeshReal>(0.0, 1.0)},
+		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0), Point2<MeshReal>(1.0, 0.0)},
+		{Point3<MeshReal>(halfWidth, halfHeight, 0.0), Point2<MeshReal>(1.0, 1.0)}
 	};
 
-	static Material sSpriteMaterial("DefaultSprite");
-	mObj = new RenderObject(Matrix44::IDENTITY, sSpriteMaterial, square, 6);
+	mMaterial = new Material("DefaultSprite");
+	mObj = new RenderObject(Matrix44::IDENTITY, *mMaterial, square, 6);
 
 }
 
@@ -118,6 +128,24 @@ void Sprite::Update()
 		mCurrentFrame = 0;
 }
 
+
+void Sprite::Render(const Matrix44 &viewMatrix)
+{
+	const RenderObject *tempRenderObject = mObj;
+	const Material &tempMaterial = tempRenderObject->GetMaterial();
+	tempMaterial.Bind();
+	const Matrix44 &transform = tempRenderObject->GetTransform();
+	GPUProgram *tempProgram = tempMaterial.GetShader();
+	tempProgram->SetProjectionMatrix(viewMatrix);
+	tempProgram->SetModelViewMatrix(Matrix44::IDENTITY*transform);
+	tempProgram->SetUniform("CurrentFrame", (int)mCurrentFrame);
+	tempProgram->SetUniform("Dimension", Point2<int>(int(mHeader.width), int(mHeader.height)));
+	tempProgram->SetUniform("FrameCount", (int)mHeader.frameCount);
+	tempProgram->SetUniform("TextureSize", Point2<int>((int)mTextureList[0]->GetResourceWidth(), (int)mTextureList[0]->GetResourceHeight()));
+	tempProgram->SetTextureSampler(*mTextureList[0]);
+	mTextureList[0]->Bind();
+	tempRenderObject->GetVBO().Render();
+}
 #if 0
 void Sprite::Render() const
 {

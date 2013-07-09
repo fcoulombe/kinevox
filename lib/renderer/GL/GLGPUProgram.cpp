@@ -127,6 +127,13 @@ void GLGPUProgram::SetModelViewMatrix(const Matrix44 &m)
 #endif
 }
 
+void GLGPUProgram::SetUniform(const char *uniforName, int val)
+{
+	GCLAssert(mIsValid);
+	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
+	glUniform1i(uniformLoc,(GLint)val);glErrorCheck();
+}
+
 void GLGPUProgram::SetTextureSampler(const GLTexture &sampler)
 {
     #if ENABLE_SHADERS

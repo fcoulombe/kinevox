@@ -55,6 +55,12 @@ void Test()
 
 		Assert_Test(program.IsValid());
 
+		//set custom uniform
+		int testValue=56;
+		program.SetUniform("TestUniform", testValue);
+		program.GetUniform("TestUniform", testValue);
+		Assert_Test(testValue == 56);
+
 		//set matrix uniform test
 		Matrix44 proj;
 		proj.SetPerspective(45.0, 640.0/480.0,0.1,100.0);

@@ -42,6 +42,7 @@ class GLTexture;
     void SetTextureSampler(const GLTexture &sampler);
     void SetProjectionMatrix(const Matrix44 &m);
     void SetModelViewMatrix(const Matrix44 &m);
+	void SetUniform(const char *uniforName, int val);
     void GetUniform(const char *unformName, Matrix44 &m44) const;
     void GetUniform(const char *unformName, int &ret) const;
     int GetAttributeLocation(const char *attributeName) const;

@@ -61,7 +61,8 @@ struct ToolMaterialData
 		std::ofstream fp(filename.c_str());
 		std::cout <<"writing out: " << filename << std::endl;
 		GCLAssertMsg(fp.good(), filename);
-		fp << "shader: default" << std::endl;
+		fp << "vertex_shader: DefaultVertexShader" << std::endl;
+		fp << "frag_shader: DefaultFragmentShader" << std::endl;
         if (texName.length())
         {
 		    fp << "texture: data/Texture/" << texName<<std::endl;

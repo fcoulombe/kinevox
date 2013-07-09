@@ -75,9 +75,13 @@ void Material::LoadMaterial(const char *filename)
 
 	const size_t BUFFER_SIZE = 1024;
 	char buffer[BUFFER_SIZE];
-	char shader[BUFFER_SIZE];
+	char vshader[BUFFER_SIZE];
+	char fshader[BUFFER_SIZE];
 	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "shader: %s", shader);
+	sscanf(buffer, "vertex_shader: %s", vshader);
+
+	fp.getline(buffer, BUFFER_SIZE);
+	sscanf(buffer, "frag_shader: %s", fshader);
 
 	//shader: default
 	char texture[BUFFER_SIZE];
@@ -113,8 +117,8 @@ void Material::LoadMaterial(const char *filename)
 	fp.close();
 
 	mProgram = new GPUProgram();
-	mVertexShader = new Shader("DefaultVertexShader", VERTEX_SHADER);
-	mFragmentShader =  new Shader("DefaultFragmentShader", FRAGMENT_SHADER);
+	mVertexShader = new Shader(vshader, VERTEX_SHADER);
+	mFragmentShader =  new Shader(fshader, FRAGMENT_SHADER);
 	mProgram->AttachShader(*mVertexShader);
 	mProgram->AttachShader(*mFragmentShader);
 	mProgram->Link();

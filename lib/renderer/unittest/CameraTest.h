@@ -52,7 +52,7 @@ void Test()
 		Assert_Test(camera.GetFar()==100.0);
 
 		Assert_Test(Matrix44::IDENTITY == camera.GetTransform());
-		Assert_Test(Inverse(Matrix44::IDENTITY) == renderer.GetGLModelView());
+		Assert_Test(Inverse(Matrix44::IDENTITY) == renderer.GetModelView());
 
 		Matrix44 perspective;
 		perspective.SetPerspective( 45.0,640.0/480.0,0.1,100.0);

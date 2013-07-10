@@ -18,7 +18,7 @@ foreach(src ${scriptFiles})
 	add_custom_command(
 		OUTPUT ${DstFile}
 		COMMAND ${LUACOMPILER_EXE} -o ${DstFile} ${src} 
-		DEPENDS ${SrcFile} )
+		DEPENDS ${src} )
 	list(APPEND DstFiles ${DstFile})
 endforeach()
 SET(DATA_DEP ${DATA_DEP} ${DstFiles})

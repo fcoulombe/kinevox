@@ -89,7 +89,7 @@ const char *DefaultVShaderStr = TextureVShaderStr;
 const char *DefaultFShaderStr = TextureFShaderStr;
 
 const char *SHADER_HEADER =
-		"#version 400	\n"
+		"#version 150 core	\n"
 		"#pragma optimize(off) \n"
 		"#pragma debug(on) \n"
 #if ENABLE_FIX_PIPELINE
@@ -135,7 +135,7 @@ GLShader::~GLShader()
 GLuint GLShader::CompileShader(const char *shaderPath, GLenum type)
 {
 #if  ENABLE_SHADERS
-	const std::string fullFilename = std::string(GLSL_PATH) + std::string(shaderPath)+std::string(".glsl");
+	const std::string fullFilename = std::string(GLSL_PATH) + std::string(shaderPath)+std::string(".glsl3");
 	char *fileContent = LoadShader(fullFilename.c_str());
 
 

@@ -38,7 +38,7 @@
 #include "renderer/GL/GLShader.h"
 #include "renderer/GL/GLVertexBuffer.h"
 
-
+#include <GL/wglext.h>
 using namespace GCL;
 
 void GLRenderer::Init3DState()
@@ -94,10 +94,32 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 	int format = ChoosePixelFormat( mhDC, &pfd );
 	BOOL wglRet = SetPixelFormat( mhDC, format, &pfd );
 
-	// create the render context (RC)
-	mhRC = wglCreateContext( mhDC );
+	int attribs[] =
+	{
+		WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
+		WGL_CONTEXT_MINOR_VERSION_ARB, 2,
+		WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+		WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+		0
+	};
+	HGLRC tempContext = wglCreateContext(mhDC); 
+	wglMakeCurrent(mhDC,tempContext);
+	PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = NULL;
+	wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC) wglGetProcAddress("wglCreateContextAttribsARB");
+	if(wglCreateContextAttribsARB != NULL)
+	{
+		mhRC = wglCreateContextAttribsARB(mhDC,0, attribs);
+		wglMakeCurrent(NULL,NULL); 
+		wglDeleteContext(tempContext);
+		wglRet = wglMakeCurrent( mhDC, mhRC );
+	}
+	else
+	{
+		// fall back on normal context
+		mhRC = tempContext;
+	}
 	// make it the current render context
-	wglRet = wglMakeCurrent( mhDC, mhRC );
+	
 #if ENABLE_GLEW
 	glewExperimental=TRUE;
 	GLenum err = glewInit();

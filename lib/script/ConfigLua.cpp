@@ -135,9 +135,7 @@ const std::string GCL::LuaTableIterator::GetString() const
 
 const std::string GCL::LuaTableIterator::GetKey() const
 {
-	std::vector<std::string> explodedPath;
-	StringUtil::Explode(mTablePath, explodedPath, '.');
-	return (explodedPath.size()) ? explodedPath[explodedPath.size()-1] : std::string();
+	return std::string( lua_tostring(mL, -2));
 }
 
 void GCL::LuaTableIterator::Next()

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,16 +23,48 @@
 #include "applayer/Actor.h"
 #include "applayer/GCLApplication.h"
 
+#include <script/ConfigLua.h>
+
 using namespace GCL;
 
-Actor::Actor(const char *, const char *)
+Actor::Actor(const char *name, const char *archetype)
+	:mName(name),
+	mTransform(true)
 {
+	std::string archFile(ARCHETYPE_PATH);
+	archFile += archetype;
+	archFile += ".arch";
+	ConfigLua conf(archFile.c_str());
+	PtrLuaTableIterator it = conf.GetTableIterator("Archetype.Components");
+	while (!it->End())
+	{
+		const std::string componentName = it->GetKey();
+		PtrLuaTableIterator compIt = it->GetTableIterator();
+		std::pair<const char *, Component *> tempComponent = Component::CreateComponent(this, componentName, compIt );
+		mComponentList.insert(tempComponent);
+		(void)tempComponent;
+		++(*it);
+	}
+	//we need post init phase since some component depend on other but cannot 
+	//guarantee that they will be created at first init time
+	for (auto it = mComponentList.begin(); it != mComponentList.end(); ++it)
+	{
+		Component *tempComponent = it->second;
+		tempComponent->PostInit();
+	}
+
 	mParent = NULL;
 	GCLApplication::RegisterRenderObject(this);
 }
 
 Actor::~Actor()
 {
+	for (auto it = mComponentList.begin(); it != mComponentList.end(); ++it)
+	{
+		Component *tempComponent = it->second;
+		delete tempComponent;
+	}
+	mComponentList.clear();
 	if (mParent)
 	{
 		mParent->RemoveChild(this);

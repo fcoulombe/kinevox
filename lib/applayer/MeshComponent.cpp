@@ -20,44 +20,27 @@
  * THE SOFTWARE.
  */
 
-#pragma once
-#include <map>
-#include <string>
-#include <gcl/WorldUnit.h>
-#include <script/ConfigLua.h>
+#include "applayer/MeshComponent.h"
+#include "renderer/Mesh.h"
 
-namespace GCL
+using namespace GCL;
+
+ std::pair<const char *, Component *> MeshComponent::Create(Actor *parentActor,PtrLuaTableIterator &it)
 {
-	class Actor;
-class Component
+	return  std::pair<const char *, Component *>("MeshComponent", new MeshComponent(parentActor, it));
+}
+
+
+GCL::MeshComponent::MeshComponent(Actor *parentActor, PtrLuaTableIterator &it)
+	: Component(parentActor)
 {
-public:
-	Component(Actor *parentActor)
+	while (!it->End())
 	{
-		mParentActor = parentActor;
+		if (it->GetKey() == "filename")
+		{
+			const std::string meshPath = MESH_PATH + it->GetString();
+			mMesh = new Mesh(meshPath.c_str());
+		}
+		++(*it);
 	}
-
-	virtual ~Component()
-	{
-	}
-	//basically any component can perform render commands but 
-	//calling an empty virtual function is cheaper than calling posting a message
-	virtual void Render() {} 
-	virtual void Update(Real dt)=0;
-	virtual void PostInit() = 0;
-
-	virtual void ProcessEvent(size_t , void *) {}
-
-	typedef std::pair<const char *, Component *> (*ComponentCreation)(Actor *, PtrLuaTableIterator &);
-	
-	static void Register(const std::string &compName, ComponentCreation createFunc);
-	static std::pair<const char *, Component *> CreateComponent(Actor *parentActor, const std::string &componentName, PtrLuaTableIterator &it);
-private:
-	static std::map<std::string, ComponentCreation> mComponentCreationMap;
-protected:
-	Actor *mParentActor;
-
-};
-
-
 }

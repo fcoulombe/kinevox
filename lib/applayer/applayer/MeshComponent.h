@@ -21,43 +21,31 @@
  */
 
 #pragma once
-#include <map>
-#include <string>
-#include <gcl/WorldUnit.h>
-#include <script/ConfigLua.h>
+#include "applayer/Component.h"
+
 
 namespace GCL
 {
-	class Actor;
-class Component
+	class Mesh;
+class MeshComponent : public Component
 {
 public:
-	Component(Actor *parentActor)
+	MeshComponent(Actor *parentActor, PtrLuaTableIterator &it);
+
+	~MeshComponent()
+	{}
+	virtual void Update(Real )
 	{
-		mParentActor = parentActor;
 	}
-
-	virtual ~Component()
+	virtual void PostInit()
 	{
+
 	}
-	//basically any component can perform render commands but 
-	//calling an empty virtual function is cheaper than calling posting a message
-	virtual void Render() {} 
-	virtual void Update(Real dt)=0;
-	virtual void PostInit() = 0;
-
-	virtual void ProcessEvent(size_t , void *) {}
-
-	typedef std::pair<const char *, Component *> (*ComponentCreation)(Actor *, PtrLuaTableIterator &);
-	
-	static void Register(const std::string &compName, ComponentCreation createFunc);
-	static std::pair<const char *, Component *> CreateComponent(Actor *parentActor, const std::string &componentName, PtrLuaTableIterator &it);
+	static std::pair<const char *, Component *> Create(Actor *parentActor,PtrLuaTableIterator &it);
+	Mesh &GetMesh() { return *mMesh; }
 private:
-	static std::map<std::string, ComponentCreation> mComponentCreationMap;
-protected:
-	Actor *mParentActor;
+	Mesh *mMesh;
 
 };
-
 
 }

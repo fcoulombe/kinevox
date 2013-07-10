@@ -1,5 +1,11 @@
 Archetype = {
 	Name = "TestActor",
-	RenderComponent = {
+	Components = {
+		RenderComponent = {
+		},
+		MeshComponent = {
+			filename="ExampleMesh.mesh"
+		}
 	}
 }
+

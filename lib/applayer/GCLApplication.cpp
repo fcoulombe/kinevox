@@ -36,6 +36,11 @@
 #include <script/ScriptResourceManager.h>
 #include <windriver/WinDriver.h>
 
+
+//Components
+#include "applayer/Component.h"
+#include "applayer/RenderComponent.h"
+#include "applayer/MeshComponent.h"
 using namespace GCL;
 
 GCLWorld *GCLApplication::mCurrentWorld=NULL;
@@ -45,6 +50,11 @@ ActorList GCLApplication::mActorList;
 SpriteList GCLApplication::mSpriteList;
 
 
+void GCLApplication::InitializaAppLayerComponents()
+{
+	Component::Register("RenderComponent", RenderComponent::Create);
+	Component::Register("MeshComponent", MeshComponent::Create);
+}
 /*static */void GCLApplication::Initialize(const char *windowsTitle)
 {
 	TextureResourceManager::Initialize();
@@ -54,6 +64,7 @@ SpriteList GCLApplication::mSpriteList;
 	GCLAssert(mRenderer == NULL);
     mWinDriver = new WinDriver(windowsTitle);
 	mRenderer = new Renderer(mWinDriver->GetWindowsHandle());
+	InitializaAppLayerComponents();
 }
 /*static */void GCLApplication::Terminate()
 {
@@ -85,21 +96,20 @@ void GCLApplication::Render()
     GCLAssert(mWinDriver);
 	GCLAssert(mRenderer);
 	//perform actor culling against view frustom
-	RenderObjectList renderList;
-	//create list of render component
+
 	//pass it to renderer
 	mRenderer->PreRender();
-	mRenderer->Render(renderList);
-	renderList.clear();
-	Matrix44 ortho;
-	ortho.SetOrtho(0.0,  (Real)mRenderer->GetViewPort().GetWidth(), (Real)mRenderer->GetViewPort().GetHeight(),0.0, -1.0, 1.0);
+	for (size_t i=0; i<mActorList.size(); ++i)
+	{
+		mActorList[i]->Render();
+	}
+	//mRenderer->Render(renderList);
+	mRenderer->SetOrtho();
 	for (size_t i=0; i<mSpriteList.size(); ++i)
 	{
 		Sprite *tempSprite =mSpriteList[i];
-		tempSprite->Render(ortho);
-		//renderList.push_back(tempSprite->mObj);
+		tempSprite->Render();
 	}
-	//mRenderer->Render2D(mSpriteList);
 	mRenderer->PostRender();
 	mWinDriver->SwapBuffer();
 }

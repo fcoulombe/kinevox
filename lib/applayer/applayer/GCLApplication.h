@@ -84,6 +84,8 @@ private:
     static GCLWorld *mCurrentWorld;
 	static ActorList mActorList;
 	static SpriteList mSpriteList;
+
+	static void InitializaAppLayerComponents();
 };
 
 }

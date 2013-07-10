@@ -21,23 +21,27 @@
  */
 
 #pragma once
+#include "applayer/Component.h"
 
 namespace GCL
 {
+	class RenderObject;
 class RenderComponent : public Component
 {
 public:
-	RenderComponent()
-	{}
+	RenderComponent(Actor *parentActor, PtrLuaTableIterator &it);
 
 	~RenderComponent()
 	{}
-	virtual void Update(Real dt)
+	virtual void Update(Real )
 	{
 	}
-
+	virtual void Render();
+	virtual void ProcessEvent(size_t event, void *arg);
+	virtual void PostInit();
+	static std::pair<const char *, Component *> Create(Actor *parentActor, PtrLuaTableIterator &it);
 private:
-
+	RenderObject *mObj;
 };
 
 }

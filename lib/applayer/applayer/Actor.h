@@ -29,6 +29,10 @@
 
 namespace GCL
 {
+	enum ActorEvent
+	{
+		AE_REGISTER_RENDER_OBJECT
+	};
 class Actor
 {
 public:
@@ -40,11 +44,19 @@ public:
 
 	void Update(Real dt)
 	{
-		for (size_t i=0; i<mComponentList.size(); ++i)
+		for (auto it = mComponentList.begin(); it != mComponentList.end(); ++it)
 		{
-			mComponentList[i]->Update(dt);
+			Component *tempComponent = it->second;
+			tempComponent->Update(dt);
 		}
-
+	}
+	void Render()
+	{
+		for (auto it = mComponentList.begin(); it != mComponentList.end(); ++it)
+		{
+			Component *tempComponent = it->second;
+			tempComponent->Render();
+		}
 	}
 	const Matrix44 &GetTransform() const {return mTransform; }
 	void SetTransform(const Matrix44 &transform) {mTransform = transform; }
@@ -68,11 +80,23 @@ public:
 	{
 		mTransform.SetPosition(position);
 	}
+	Component *GetComponent(const char *componentName) { return mComponentList[componentName]; }
+
+	void SendEvent(size_t event, void *arg)
+	{
+		for (auto it = mComponentList.begin(); it != mComponentList.end(); ++it)
+		{
+			Component *tempComponent = it->second;
+			tempComponent->ProcessEvent(event, arg);
+		}
+	}
 private:
-	std::vector<Component*> mComponentList;
+	typedef std::map<const char *, Component*> ComponentMap;
+	ComponentMap mComponentList;
 	Matrix44 mTransform;
 	Actor *mParent;
 	std::list<Actor*> mChilds;
+	std::string mName;
 };
 
 }

@@ -20,44 +20,18 @@
  * THE SOFTWARE.
  */
 
-#pragma once
-#include <map>
-#include <string>
-#include <gcl/WorldUnit.h>
-#include <script/ConfigLua.h>
+#include "applayer/Component.h"
 
-namespace GCL
+using namespace GCL;
+
+std::map<std::string, Component::ComponentCreation> Component::mComponentCreationMap;
+
+
+void Component::Register(const std::string &compName, ComponentCreation createFunc)
 {
-	class Actor;
-class Component
+	mComponentCreationMap[compName] = createFunc;
+}
+std::pair<const char *, Component *> Component::CreateComponent(Actor *parentActor, const std::string &componentName, PtrLuaTableIterator &it)
 {
-public:
-	Component(Actor *parentActor)
-	{
-		mParentActor = parentActor;
-	}
-
-	virtual ~Component()
-	{
-	}
-	//basically any component can perform render commands but 
-	//calling an empty virtual function is cheaper than calling posting a message
-	virtual void Render() {} 
-	virtual void Update(Real dt)=0;
-	virtual void PostInit() = 0;
-
-	virtual void ProcessEvent(size_t , void *) {}
-
-	typedef std::pair<const char *, Component *> (*ComponentCreation)(Actor *, PtrLuaTableIterator &);
-	
-	static void Register(const std::string &compName, ComponentCreation createFunc);
-	static std::pair<const char *, Component *> CreateComponent(Actor *parentActor, const std::string &componentName, PtrLuaTableIterator &it);
-private:
-	static std::map<std::string, ComponentCreation> mComponentCreationMap;
-protected:
-	Actor *mParentActor;
-
-};
-
-
+	return Component::mComponentCreationMap[componentName](parentActor, it); 
 }

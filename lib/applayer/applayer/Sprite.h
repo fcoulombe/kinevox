@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <gcl/Point3.h>
+#include <gcl/Matrix44.h>
 namespace GCL
 {
 struct SpriteDataHeader
@@ -44,7 +45,7 @@ public:
 	Sprite(const char *filename="DefaultSprite");
 	~Sprite();
 
-	void Render(const Matrix44 &viewMatrix);
+	void Render();
 	void Update();
 	void Play();
 	void Pause();
@@ -71,6 +72,7 @@ private:
 	WorldPoint2 mScale;
 	RenderObject *mObj;
 	Material *mMaterial;
+	Matrix44 mTransform;
 };
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,8 @@ Sprite::~Sprite()
 Sprite::Sprite(const char *filename)
 : mCurrentFrame(0),
   mIsPlaying(false),
-  mScale(1.0, 1.0)
+  mScale(1.0, 1.0),
+  mTransform(true)
 
 {
 	LoadSprite(filename);
@@ -99,7 +100,7 @@ void Sprite::LoadSprite(const char * filename)
 	};
 
 	mMaterial = new Material("DefaultSprite");
-	mObj = new RenderObject(Matrix44::IDENTITY, *mMaterial, square, 6);
+	mObj = new RenderObject( *mMaterial, square, 6);
 
 }
 
@@ -129,15 +130,15 @@ void Sprite::Update()
 }
 
 
-void Sprite::Render(const Matrix44 &viewMatrix)
+void Sprite::Render()
 {
 	const RenderObject *tempRenderObject = mObj;
 	const Material &tempMaterial = tempRenderObject->GetMaterial();
 	tempMaterial.Bind();
-	const Matrix44 &transform = tempRenderObject->GetTransform();
+	const Matrix44 &transform = mTransform;
 	GPUProgram *tempProgram = tempMaterial.GetShader();
-	tempProgram->SetProjectionMatrix(viewMatrix);
-	tempProgram->SetModelViewMatrix(Matrix44::IDENTITY*transform);
+	tempProgram->SetProjectionMatrix();
+	tempProgram->SetModelViewMatrix(transform);
 	tempProgram->SetUniform("CurrentFrame", (int)mCurrentFrame);
 	tempProgram->SetUniform("Dimension", Point2<int>(int(mHeader.width), int(mHeader.height)));
 	tempProgram->SetUniform("FrameCount", (int)mHeader.frameCount);
@@ -207,10 +208,10 @@ void Sprite::Render() const
 
 void GCL::Sprite::SetPosition( const WorldPoint3 &position )
 {
-	mObj->SetPosition(position);
+	mTransform.SetPosition(position);
 }
 
 const WorldPoint3 & GCL::Sprite::GetPosition() const
 {
-	return *(const WorldPoint3 *)&mObj->GetTransform().GetPosition();
+	return *(const WorldPoint3 *)&mTransform.GetPosition();
 }

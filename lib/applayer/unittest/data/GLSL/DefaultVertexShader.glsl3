@@ -1,0 +1,15 @@
+uniform mat4 ProjectionMatrix;
+uniform mat4 ModelViewMatrix;
+uniform int TestUniform;
+in vec4 InPosition;   
+in vec4 InNormal;   
+in vec2 InTexCoord; 
+out vec2 texcoord;  
+out vec4 color;
+void main()          
+{                    
+    gl_Position = ProjectionMatrix * ModelViewMatrix * InPosition; 
+
+	texcoord = InTexCoord.xy;
+	color = InNormal*float(TestUniform); //vec4(InTexCoord.x,InTexCoord.y, 0.0,1.0); 
+}                           

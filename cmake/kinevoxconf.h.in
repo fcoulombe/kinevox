@@ -33,5 +33,6 @@
 #define CONFIG_PATH DATA_PATH"Conf/"
 #define RLSL_PATH DATA_PATH"RLSL/"
 #define GLSL_PATH DATA_PATH"GLSL/"
+#define ARCHETYPE_PATH DATA_PATH"Archetype/"
 
 

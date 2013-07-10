@@ -73,7 +73,6 @@ void Test()
 		//query uniform fail test
 
 		std::stringstream s;
-#if !ENABLE_FIX_PIPELINE
 
 		//query pro0jection matrix test
 		Matrix44 proj2;
@@ -88,7 +87,6 @@ void Test()
 		s.str("");
 		s<<std::endl<<modelView2<<std::endl<<"=="<<std::endl<<modelView;
 		AssertMsg_Test(modelView2==modelView, s.str().c_str());
-#endif
 
 
 		Texture tex(TEXTURE_PATH"mushroomtga.tga");
@@ -103,9 +101,6 @@ void Test()
 
 
 		//attribute
-
-
-#if !ENABLE_FIX_PIPELINE
 		enum AttributePositions
 		{
 		  ATTRIB_POSITION=0,
@@ -129,9 +124,6 @@ void Test()
 		s.str("");
 		s<<loc<<" == ATTRIB_TEXTURE_COORD";
 		AssertMsg_Test(loc == ATTRIB_TEXTURE_COORD, s.str().c_str());
-
-
-#endif
 
 		renderer.PreRender();
 		//renderer.Render(RenderObjectList());

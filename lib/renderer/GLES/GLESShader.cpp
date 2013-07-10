@@ -29,81 +29,13 @@
 
 using namespace GCL;
 
-const char *PositionVShaderStr =
-		"uniform mat4 ProjectionMatrix;\n"
-		"uniform mat4 ModelViewMatrix;\n"
-		"attribute vec4 InPosition;   \n"
-		"void main()                 \n"
-		"{                           \n"
-		"   gl_Position = ProjectionMatrix * ModelViewMatrix * InPosition; \n"
-		"}                           \n";
-
-
-const char *PositionFShaderStr =
-		"//precision mediump float;                   \n"
-		"void main()                                \n"
-		"{                                          \n"
-		"  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); \n"
-		"}                                          \n";
-
-const char *TextureVShaderStr =
-		"uniform mat4 ProjectionMatrix;\n"
-		"uniform mat4 ModelViewMatrix;\n"
-		"attribute vec4 InPosition;   \n"
-		"attribute vec4 InNormal;   \n"
-		"attribute vec2 InTexCoord;   \n"
-		"varying vec2 texcoord;  \n"
-		"varying vec4 color;  \n"
-		"void main()                 \n"
-		"{                           \n"
-		"#ifdef ENABLE_FIX_PIPELINE \n"
-		"	gl_Position    = gl_ModelViewProjectionMatrix * gl_Vertex; \n"
-		"	gl_TexCoord[0] = gl_MultiTexCoord0; \n"
-		"#else \n"
-		"   gl_Position = ProjectionMatrix * ModelViewMatrix * InPosition; \n"
-		"	texcoord = InTexCoord.xy;\n"
-		"#endif \n"
-        "	color = InNormal; \n" //vec4(InTexCoord.x,InTexCoord.y, 0.0,1.0); \n"
-		"}                           \n";
-
-const char *TextureFShaderStr =
-		"//uniform float fade_factor;	\n"
-		"uniform sampler2D texture; 	\n"
-		"varying vec2 texcoord;	\n"
-		"varying vec4 color;	\n"
-		"void main() \n"
-		"{\n"
-		"#ifdef ENABLE_FIX_PIPELINE \n"
-		"	gl_FragColor = texture2D( texture, gl_TexCoord[0].st ); \n"
-		"#else \n"
-		"	gl_FragColor = texture2D(texture, texcoord);\n"
-		"#endif \n"
-		"//gl_FragColor = color;\n"
-		"}\n";
-
-const char *DefaultVShaderStr = TextureVShaderStr;
-const char *DefaultFShaderStr = TextureFShaderStr;
 
 const char *SHADER_HEADER =
 		"#version 110	\n"
 		"#pragma optimize(off) \n"
 		"#pragma debug(on) \n"
-#ifdef ENABLE_FIX_PIPELINE
-		"#define ENABLE_FIX_PIPELINE \n"
-#endif
 		"\n";
-const char* pszFragShader = "\
-                      void main (void)\
-                      {\
-                      gl_FragColor = vec4(1.0, 1.0, 0.66 ,1.0);\
-                      }";
-const char* pszVertShader = "\
-                      attribute highp vec4	myVertex;\
-                      uniform mediump mat4	myPMVMatrix;\
-                      void main(void)\
-                      {\
-                      gl_Position = myPMVMatrix * myVertex;\
-                      }";
+
 GLESShader::GLESShader()
 :mIsValid (false)
 {

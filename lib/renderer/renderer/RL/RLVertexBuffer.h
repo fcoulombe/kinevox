@@ -28,7 +28,7 @@
 
 namespace GCL
 {
-    struct AttribLocations
+    struct RLAttribLocations
     {
         RLint position;
         RLint texCoord;
@@ -49,7 +49,7 @@ public:
 		rlBindBuffer(RL_ARRAY_BUFFER, mVertexBufferId);
 		rlBufferData(RL_ARRAY_BUFFER, sizeof(VertexType)*count, (void*)vertexArray, mBufferType);
 	}
-    void BindShaderLoc(const AttribLocations &loc)
+    void BindShaderLoc(const RLAttribLocations &loc)
     {
         if (VertexType::GetComponentType() & ePOSITION)
         {

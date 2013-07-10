@@ -49,10 +49,6 @@ void GLESRenderer::Init3DState()
 	glDepthFunc(GL_LESS); glErrorCheck();
 	glEnable(GL_DEPTH_TEST); glErrorCheck();
 	glDisable(GL_BLEND); glErrorCheck();
-#if ENABLE_FIX_PIPELINE
-    glShadeModel(GL_FLAT); glErrorCheck();
-	glDisable(GL_ALPHA_TEST); glErrorCheck();
-#endif
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
 	
 	glEnable(GL_TEXTURE_2D); glErrorCheck();
@@ -263,13 +259,11 @@ void GLESRenderer::Render(const RenderObject2DList &renderObjectList)
 {
     Matrix44 ortho;
     ortho.SetOrtho(0.0, (Real)mViewPort.GetHeight(), (Real)mViewPort.GetWidth(), 0.0, -1.0, 1.0);
-#ifdef ENABLE_FIX_PIPELINE
-    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
-#else
+
     Shader shader;
     shader.Bind();
     SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
-#endif
+
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
@@ -300,13 +294,11 @@ void GLESRenderer::Render(const Text2DList &renderObjectList)
 {
     Matrix44 ortho;
     ortho.SetOrtho(0.0, (Real)mViewPort.GetHeight(), (Real)mViewPort.GetWidth(), 0.0, -1.0, 1.0);
-#ifdef ENABLE_FIX_PIPELINE
-    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
-#else
+
     Shader shader;
     shader.Bind();
     SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
-#endif
+
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
@@ -365,19 +357,9 @@ void GLESRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &mod
 {
 	Matrix44 f = modelView*transform;
 
-#if ENABLE_FIX_PIPELINE
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrix(reinterpret_cast<const GLreal*>(&projection));
-
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrix(reinterpret_cast<const GLreal*>(&f));
-	(void)shader;
-#else
 	if (shader)
 	{
 		shader->SetProjectionMatrix(projection);
 		shader->SetModelViewMatrix(f);
 	}
-#endif
 }

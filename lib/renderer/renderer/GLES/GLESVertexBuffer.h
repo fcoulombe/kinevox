@@ -49,24 +49,6 @@ public:
 	}
 	void PreRender()
 	{
-#if ENABLE_FIX_PIPELINE
-		if (VertexType::GetComponentType() & ePOSITION)
-		{
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glVertexPointer(3, GL_UNIT, sizeof(VertexType), (char*)NULL+VertexType::OffsetToPosition()); glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eNORMAL)
-		{
-			glEnableClientState(GL_NORMAL_ARRAY);
-			glNormalPointer(GL_UNIT, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal()); glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eTEXTURE_COORD)
-		{
-			glClientActiveTexture(GL_TEXTURE0);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			glTexCoordPointer(2, GL_UNIT, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
-		}
-#else
 		if (VertexType::GetComponentType() & ePOSITION)
 		{
             glEnableVertexAttribArray(ATTRIB_POSITION);glErrorCheck();
@@ -82,7 +64,6 @@ public:
 			glEnableVertexAttribArray(ATTRIB_TEXTURE_COORD);glErrorCheck();
 			glVertexAttribPointer(ATTRIB_TEXTURE_COORD, 2, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
 		}
-#endif
 	}
 
 	void Render(int mode = GL_TRIANGLES)
@@ -94,21 +75,7 @@ public:
 
 	void PostRender()
 	{
-#if ENABLE_FIX_PIPELINE
-		if (VertexType::GetComponentType() & ePOSITION)
-		{
-			glDisableClientState(GL_VERTEX_ARRAY);
-		}
-		if (VertexType::GetComponentType() & eNORMAL)
-		{
-			glDisableClientState(GL_NORMAL_ARRAY);
-		}
-		if (VertexType::GetComponentType() & eTEXTURE_COORD)
-		{
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		}
 
-#else
 		if (VertexType::GetComponentType() & ePOSITION)
 		{
 			glDisableVertexAttribArray(ATTRIB_POSITION);glErrorCheck();
@@ -121,7 +88,6 @@ public:
 		{
 			glDisableVertexAttribArray(ATTRIB_TEXTURE_COORD);glErrorCheck();
 		}
-#endif
 	}
 
 	bool IsValid() const { return mVertexBufferId!=(GLuint)-1; }

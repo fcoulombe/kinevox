@@ -33,70 +33,11 @@ const GLenum GLShader::GLShaderType[] =
 	GL_FRAGMENT_SHADER,
 	GL_GEOMETRY_SHADER
 };
-const char *PositionVShaderStr =
-		"uniform mat4 ProjectionMatrix;\n"
-		"uniform mat4 ModelViewMatrix;\n"
-		"attribute vec4 InPosition;   \n"
-		"void main()                 \n"
-		"{                           \n"
-		"   gl_Position = ProjectionMatrix * ModelViewMatrix * InPosition; \n"
-		"}                           \n";
-
-
-const char *PositionFShaderStr =
-		"//precision mediump float;                   \n"
-		"void main()                                \n"
-		"{                                          \n"
-		"  gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); \n"
-		"}                                          \n";
-
-const char *TextureVShaderStr =
-		"uniform mat4 ProjectionMatrix;\n"
-		"uniform mat4 ModelViewMatrix;\n"
-		"attribute vec4 InPosition;   \n"
-		"attribute vec4 InNormal;   \n"
-		"attribute vec2 InTexCoord;   \n"
-		"varying vec2 texcoord;  \n"
-		"varying vec4 color;  \n"
-		"void main()                 \n"
-		"{                           \n"
-		"#if ENABLE_FIX_PIPELINE \n"
-		"	gl_Position    = gl_ModelViewProjectionMatrix * gl_Vertex; \n"
-		"	gl_TexCoord[0] = gl_MultiTexCoord0; \n"
-		"#else \n"
-		"   gl_Position = ProjectionMatrix * ModelViewMatrix * InPosition; \n"
-		"	texcoord = InTexCoord.xy;\n"
-		"#endif \n"
-        "	color = InNormal; \n" //vec4(InTexCoord.x,InTexCoord.y, 0.0,1.0); \n"
-		"}                           \n";
-
-const char *TextureFShaderStr =
-		"//uniform float fade_factor;	\n"
-		"uniform sampler2D texture; 	\n"
-		"varying vec2 texcoord;	\n"
-		"varying vec4 color;	\n"
-		"void main() \n"
-		"{\n"
-		"#if ENABLE_FIX_PIPELINE \n"
-		"	gl_FragColor = texture2D( texture, gl_TexCoord[0].st ); \n"
-		"#else \n"
-		"	gl_FragColor = texture2D(texture, texcoord);\n"
-		"#endif \n"
-		"//gl_FragColor = color;\n"
-		"}\n";
-
-const char *DefaultVShaderStr = TextureVShaderStr;
-const char *DefaultFShaderStr = TextureFShaderStr;
 
 const char *SHADER_HEADER =
 		"#version 150 core	\n"
 		"#pragma optimize(off) \n"
 		"#pragma debug(on) \n"
-#if ENABLE_FIX_PIPELINE
-		"#define ENABLE_FIX_PIPELINE 1\n"
-#else
-		"#define ENABLE_FIX_PIPELINE 0\n"
-#endif
 		"\n";
 
 namespace
@@ -135,7 +76,11 @@ GLShader::~GLShader()
 GLuint GLShader::CompileShader(const char *shaderPath, GLenum type)
 {
 #if  ENABLE_SHADERS
+#if USE_OPENGL3
 	const std::string fullFilename = std::string(GLSL_PATH) + std::string(shaderPath)+std::string(".glsl3");
+#else
+	const std::string fullFilename = std::string(GLSL_PATH) + std::string(shaderPath)+std::string(".glsl");
+#endif
 	char *fileContent = LoadShader(fullFilename.c_str());
 
 

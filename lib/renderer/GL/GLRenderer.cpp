@@ -52,11 +52,7 @@ void GLRenderer::Init3DState()
 	glDepthFunc(GL_LESS); glErrorCheck();
 	glEnable(GL_DEPTH_TEST); glErrorCheck();
 	glDisable(GL_BLEND); glErrorCheck();
-#if ENABLE_FIX_PIPELINE
-    glShadeModel(GL_FLAT); glErrorCheck();
-	glDisable(GL_ALPHA_TEST); glErrorCheck();
-	glEnable(GL_TEXTURE_2D); glErrorCheck();
-#endif
+
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
 	
 
@@ -93,7 +89,10 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 	pfd.iLayerType = PFD_MAIN_PLANE;
 	int format = ChoosePixelFormat( mhDC, &pfd );
 	BOOL wglRet = SetPixelFormat( mhDC, format, &pfd );
+	HGLRC tempContext = wglCreateContext(mhDC); 
+	wglRet = wglMakeCurrent(mhDC,tempContext);
 
+#if USE_OPENGL3
 	int attribs[] =
 	{
 		WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
@@ -102,8 +101,7 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 		WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
 		0
 	};
-	HGLRC tempContext = wglCreateContext(mhDC); 
-	wglMakeCurrent(mhDC,tempContext);
+
 	PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = NULL;
 	wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC) wglGetProcAddress("wglCreateContextAttribsARB");
 	if(wglCreateContextAttribsARB != NULL)
@@ -114,6 +112,7 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 		wglRet = wglMakeCurrent( mhDC, mhRC );
 	}
 	else
+#endif
 	{
 		// fall back on normal context
 		mhRC = tempContext;

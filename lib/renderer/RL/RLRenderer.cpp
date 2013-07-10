@@ -133,13 +133,6 @@ void RLRenderer::Render(const RenderObjectList &renderObjectList)
 
 	const Matrix44 &projection = mCamera->GetProjection();
     const Matrix44 &modelView = mCamera->GetModelView();
-#ifdef ENABLE_FIX_PIPELINE
-	glMatrixMode(GL_PROJECTION);
-	glLoadMatrix(reinterpret_cast<const GLreal*>(&projection)); glErrorCheck();
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrix(reinterpret_cast<const GLreal*>(&modelView));
-#endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
@@ -219,13 +212,9 @@ void RLRenderer::Render(const RenderObject2DList &renderObjectList)
 #if 0
     Matrix44 ortho;
     ortho.SetOrtho(0.0, (Real)viewportHeight, (Real)viewportWidth, 0.0, -1.0, 1.0);
-#ifdef ENABLE_FIX_PIPELINE
-    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
-#else
     Shader shader;
     shader.Bind();
     SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
-#endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{
@@ -258,13 +247,10 @@ void RLRenderer::Render(const Text2DList &renderObjectList)
 #if 0
     Matrix44 ortho;
     ortho.SetOrtho(0.0, (Real)viewportHeight, (Real)viewportWidth, 0.0, -1.0, 1.0);
-#ifdef ENABLE_FIX_PIPELINE
-    SetTransform(ortho, Matrix44::IDENTITY, Matrix44::IDENTITY);
-#else
+
     Shader shader;
     shader.Bind();
     SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
-#endif
 
 	for (size_t i=0;  i<renderObjectList.size(); ++i)
 	{

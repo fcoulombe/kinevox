@@ -37,28 +37,12 @@ public:
 	GLVertexArrayObject(const VertexType *) //argument is to make the template happy.
 	{
 		mType = VertexType::GetComponentType();
-#if ENABLE_FIX_PIPELINE
-		(void)loc;
-		mVertexSize = sizeof(VertexType);
-		
-		if (mType & ePOSITION)
-			mOffsetList.push_back(VertexType::OffsetToPosition());
-		if (mType & eNORMAL)
-			mOffsetList.push_back(VertexType::OffsetToNormal());
-		if (mType & eTEXTURE_COORD)
-			mOffsetList.push_back(VertexType::OffsetToTextureCoordinate());
-
-#else
 		glGenVertexArrays(1, &mVao); glErrorCheck();
 		glBindVertexArray(mVao); glErrorCheck();
-
-#endif
 	}
 	template<typename VertexType>
 	void PostInit(const VertexType *, const AttribLocations &loc)
 	{
-		#if !ENABLE_FIX_PIPELINE
-
 		if (mType & ePOSITION)
 		{
 			glEnableVertexAttribArray(loc.position);glErrorCheck();
@@ -86,79 +70,35 @@ public:
 		{
 			glDisableVertexAttribArray(loc.texCoord);glErrorCheck();
 		}*/
-#endif
 	}
 
 
 	~GLVertexArrayObject()
 	{
-#if !ENABLE_FIX_PIPELINE
 		glDeleteVertexArrays(1, &mVao);glErrorCheck();
-#endif
 	}
 	void Bind()
 	{
-#if ENABLE_FIX_PIPELINE
-		size_t i=0;
-		if (mType & ePOSITION)
-		{
-			glEnableClientState(GL_VERTEX_ARRAY);
-			glVertexPointer(3, GL_UNIT, mVertexSize, (char*)NULL+mOffsetList[i++]); glErrorCheck();
-		}
-		if (mType & eNORMAL)
-		{
-			glEnableClientState(GL_NORMAL_ARRAY);
-			glNormalPointer(GL_UNIT, mVertexSize, (char*)NULL+mOffsetList[i++]); glErrorCheck();
-		}
-		if (mType & eTEXTURE_COORD)
-		{
-			glClientActiveTexture(GL_TEXTURE0);
-			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-			glTexCoordPointer(2, GL_UNIT, mVertexSize, (char*)NULL+mOffsetList[i++]);glErrorCheck();
-		}
-#else
 		 glBindVertexArray(mVao);glErrorCheck();
-#endif
 	}
 
 
 	void UnBind()
 	{
-#if ENABLE_FIX_PIPELINE
-		if (mType & ePOSITION)
-		{
-			glDisableClientState(GL_VERTEX_ARRAY);
-		}
-		if (mType & eNORMAL)
-		{
-			glDisableClientState(GL_NORMAL_ARRAY);
-		}
-		if (mType & eTEXTURE_COORD)
-		{
-			glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-		}
-#else
 		 glBindVertexArray(0);glErrorCheck();
-#endif
 	}
 
 	bool IsValid() const
 	{
-#if ENABLE_FIX_PIPELINE
-		return true;
-#else
 		return (glIsVertexArray(mVao) == GL_TRUE);
-#endif
-		}
+	}
 
 private:
 	uint32_t mType;
 	size_t mVertexSize;
-#if ENABLE_FIX_PIPELINE
-	std::vector<size_t> mOffsetList;
-#else
+
 	GLuint mVao;
-#endif
+
 
 };
 

@@ -67,21 +67,8 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
     GCLAssertMsg(ret, "eglInitialize() failed.");
     ret = eglBindAPI(EGL_OPENGL_ES_API); 
 
-#if defined(ES1)
-    EGLint pi32ConfigAttribs[128];
-    int i = 0;
-    pi32ConfigAttribs[i++] = EGL_RED_SIZE;
-    pi32ConfigAttribs[i++] = 5;
-    pi32ConfigAttribs[i++] = EGL_GREEN_SIZE;
-    pi32ConfigAttribs[i++] = 6;
-    pi32ConfigAttribs[i++] = EGL_BLUE_SIZE;
-    pi32ConfigAttribs[i++] = 5;
-    pi32ConfigAttribs[i++] = EGL_ALPHA_SIZE;
-    pi32ConfigAttribs[i++] = 0;
-    pi32ConfigAttribs[i++] = EGL_SURFACE_TYPE;
-    pi32ConfigAttribs[i++] = EGL_WINDOW_BIT;
-    pi32ConfigAttribs[i++] = EGL_NONE;
-#elif defined(ES2)
+
+#if defined(ES2)
     const EGLint pi32ConfigAttribs[] =
     {
         EGL_LEVEL,				0,
@@ -106,9 +93,8 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
 	}
 
 
-#if defined(ES1)
-    EGLint *ai32ContextAttribs=NULL;
-#elif defined(ES2)
+
+#if defined(ES2)
 	EGLint ai32ContextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE };
 #else
 #error "TBD"
@@ -127,7 +113,7 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
 	mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
 	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
 	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
-#if !defined(ES1) && !defined(OS_WIN32)
+#if !defined(OS_WIN32)
 	const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);glErrorCheck();
 	mShadingLanguageVersion = std::string(ver);
 #endif

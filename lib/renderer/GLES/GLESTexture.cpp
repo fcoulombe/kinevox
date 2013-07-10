@@ -54,12 +54,7 @@ void GLESTexture::Initialize(const PixelBuffer &data )
 
     GCLAssert(BytesPerPixel[data.mBytesPerPixel-1]<= GL_RGBA);
 
-#if defined(ES1)
-    glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[data.mBytesPerPixel-1],
-        (GLsizei)data.mWidth, (GLsizei)data.mHeight, 0,BytesPerPixel[data.mBytesPerPixel-1],
-        GL_UNSIGNED_BYTE, data.mPixels);glErrorCheck();
-    mPBO = new PixelBufferHAL(data);
-#else
+
     glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[data.mBytesPerPixel-1],
         (GLsizei)data.mWidth, (GLsizei)data.mHeight, 0,BytesPerPixel[data.mBytesPerPixel-1],
         GL_UNSIGNED_BYTE, NULL);glErrorCheck();
@@ -76,7 +71,6 @@ void GLESTexture::Initialize(const PixelBuffer &data )
         mPBO->UnBind();
     }
     glGenerateMipmap(GL_TEXTURE_2D);glErrorCheck();
-#endif
     
 }
 

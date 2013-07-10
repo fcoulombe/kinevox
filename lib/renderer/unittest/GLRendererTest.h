@@ -51,7 +51,7 @@ void Test()
 		std::cout << ext[i] << std::endl;;
 	}
 
-#if defined(ES1) || defined(ES2)
+#if  defined(ES2)
 #ifdef OS_IPHONE
     Assert_Test(renderer.IsExtensionSupported("GL_OES_framebuffer_object"));
 #endif

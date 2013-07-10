@@ -33,7 +33,7 @@ namespace GCL
 GCLINLINE void DrawCube(const WorldPoint3 &position, Real size)
 {
 	const Real halfSize = size/2;
-#if !defined(ES1) && !defined(ES2)
+#if  !defined(ES2)
 	glBegin(GL_QUADS);
 	//front face
 	glVertex3d(position.x-halfSize, position.y-halfSize, position.z+halfSize);

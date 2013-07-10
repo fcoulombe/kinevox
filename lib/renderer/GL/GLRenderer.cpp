@@ -135,10 +135,8 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 	mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
 	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
 	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
-#if !defined(ES1)
 	const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);glErrorCheck();
 	mShadingLanguageVersion = std::string(ver);
-#endif
 	char delim = ' ';
 #if 0
 	

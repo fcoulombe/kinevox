@@ -43,7 +43,6 @@ GLESShader::GLESShader()
 	//vbuffer += DefaultVShaderStr;
 	std::string fbuffer(pszFragShader);
 	//fbuffer += DefaultFShaderStr;
-#if ENABLE_SHADERS
 	GLuint vertexShader = CompileShader(vbuffer.c_str(), GL_VERTEX_SHADER);
 	GLuint fragmentShader = CompileShader(fbuffer.c_str(), GL_FRAGMENT_SHADER);
 
@@ -72,24 +71,20 @@ GLESShader::GLESShader()
 		glDeleteProgram(mProgramObject);glErrorCheck();
 		mIsValid = false;
 	}
-#endif
+
 	return;
 }
 
 GLESShader::~GLESShader()
 {
-#if ENABLE_SHADERS
     if (mIsValid)
         glDeleteProgram(mProgramObject);glErrorCheck();
-#endif
 }
 
 void GLESShader::Bind()
 {
-#if ENABLE_SHADERS
 	GCLAssert(mIsValid);
 	glUseProgram(mProgramObject);glErrorCheck();
-#endif
 }
 
 
@@ -97,8 +92,6 @@ GLuint GLESShader::CompileShader(const char *shaderSrc, GLenum type)
 {
     
 	GLuint shader=0;
-#if  ENABLE_SHADERS
-	
 
 	// Create the shader object
 	shader = glCreateShader(type); glErrorCheck();
@@ -134,16 +127,12 @@ GLuint GLESShader::CompileShader(const char *shaderSrc, GLenum type)
 		glDeleteShader(shader);glErrorCheck();
 		return 0;
 	}
-#else
-	(void)type;
-	(void)shaderSrc;
-#endif
+
 	return shader;
 }
 
 void GLESShader::PrintInfoLog(GLuint p)
 {
-#if ENABLE_SHADERS
 	GLint infoLen = 0;
 	glGetProgramiv(p, GL_INFO_LOG_LENGTH, &infoLen);glErrorCheck();
 	if(infoLen > 1)
@@ -153,9 +142,6 @@ void GLESShader::PrintInfoLog(GLuint p)
 		std::cerr << "Error linking program:\n%s" << infoLog << std::endl;
 		delete [] infoLog;
 	}
-#else
-	(void)p;
-#endif
 
 }
 
@@ -164,80 +150,52 @@ void GLESShader::PrintInfoLog(GLuint p)
 
 void GLESShader::SetProjectionMatrix(const Matrix44 &m)
 {
-#if ENABLE_SHADERS
 	GCLAssert(mIsValid);
 	GLint projectionMatrixLoc = glGetUniformLocation(mProgramObject,"ProjectionMatrix");glErrorCheck();
 	Matrix44f mf(m);
 	glUniformMatrix4fv(projectionMatrixLoc,1,false,(const GLfloat*)&mf);glErrorCheck();
-#else
-	(void)m;
-#endif
 }
 void GLESShader::SetModelViewMatrix(const Matrix44 &m)
 {
-#if ENABLE_SHADERS
 	GCLAssert(mIsValid);
 	GLint modelviewMatrixLoc = glGetUniformLocation(mProgramObject,"ModelViewMatrix");glErrorCheck();
 	Matrix44f mm(m);
 	glUniformMatrix4fv(modelviewMatrixLoc,1,false,(const GLfloat*)&mm);glErrorCheck();
-#else
-	(void)m;
-#endif
 }
 
 
 
 void GLESShader::SetTextureSampler(const GLESTexture &sampler)
 {
-    #if ENABLE_SHADERS
 	GLint textureLoc = glGetUniformLocation(mProgramObject,"texture");glErrorCheck();
 	glUniform1i(textureLoc, sampler.GetTextureUnit());glErrorCheck();
-#else
-	(void)sampler;
-#endif
 }
 
 void GLESShader::GetUniform(const char *uniformName, Matrix44 &m44) const
 {
-    #if ENABLE_SHADERS
 	GLfloat mf[16];
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
 	glGetUniformfv(	mProgramObject,uniformLoc,mf);glErrorCheck();
 	m44 = Matrix44((const float *)mf);
-#else
-	(void)uniformName;
-	(void)m44;
-#endif
 }
 void GLESShader::GetUniform(const char *uniformName, int &sampler) const
 {
-    #if ENABLE_SHADERS
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
 	glGetUniformiv(mProgramObject,uniformLoc,&sampler);glErrorCheck();
-#else
-	(void)uniformName;
-	(void)sampler;
-#endif
 }
 int GLESShader::GetAttributeLocation(const char *attributeName) const
 {
     int ret=-1;
-    #if ENABLE_SHADERS
 	ret =  (int)glGetAttribLocation(mProgramObject,attributeName);glErrorCheck();
 	GCLAssertMsg(ret!=-1, attributeName);
-#else
-	(void)attributeName;
-	#endif
 
 	return ret;
 }
 void GLESShader::ResetDefault()
 {
-#if ENABLE_SHADERS
 	glUseProgram(0);glErrorCheck();
-#endif
 }

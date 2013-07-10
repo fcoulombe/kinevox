@@ -88,7 +88,7 @@ const uint8_t *GLTexture::GetPixelBufferFromVRAM() const
 
 const uint8_t *GLTexture::GetTextureFromVRAM() const
 {
-#if !defined(ES1) && !defined(ES2)
+#if  !defined(ES2)
     Bind();
     GLint width, height, format;
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);

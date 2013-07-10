@@ -57,25 +57,19 @@ namespace
 GLShader::GLShader(const char *shaderSourcePath, GLenum type)
 :mIsValid (false)
 {
-#if ENABLE_SHADERS
 	mShaderObject = CompileShader(shaderSourcePath, type);
-
-#endif
 	return;
 }
 
 GLShader::~GLShader()
 {
-#if ENABLE_SHADERS
     if (mIsValid)
         glDeleteShader(mShaderObject);glErrorCheck();
-#endif
 }
 
 
 GLuint GLShader::CompileShader(const char *shaderPath, GLenum type)
 {
-#if  ENABLE_SHADERS
 #if USE_OPENGL3
 	const std::string fullFilename = std::string(GLSL_PATH) + std::string(shaderPath)+std::string(".glsl3");
 #else
@@ -119,17 +113,11 @@ GLuint GLShader::CompileShader(const char *shaderPath, GLenum type)
 		return 0;
 	}
 
-
-#else
-	(void)type;
-	(void)shaderSrc;
-#endif
 	return shader;
 }
 
 void GLShader::PrintInfoLog(GLuint p)
 {
-#if ENABLE_SHADERS
 	GLint infoLen = 0;
 	glGetProgramiv(p, GL_INFO_LOG_LENGTH, &infoLen);glErrorCheck();
 	if(infoLen > 1)
@@ -139,10 +127,6 @@ void GLShader::PrintInfoLog(GLuint p)
 		std::cerr << "Error linking program:\n%s" << infoLog << std::endl;
 		delete [] infoLog;
 	}
-#else
-	(void)p;
-#endif
-
 }
 
 

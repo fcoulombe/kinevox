@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +22,38 @@
 
 #pragma once
 #include <3rdparty/OpenGL.h>
+#include <gcl/Point2.h>
 
 namespace GCL
 {
-
-  class GLESShader
+class Matrix44;
+class GLESShader;
+class GLESTexture;
+  class GLESGPUProgram
   {
   public:
-	GLESShader(const char *shaderSourcePath, GLenum type);
-    ~GLESShader();
+	GLESGPUProgram();
+
+    ~GLESGPUProgram();
+    void Bind();
+    void AttachShader(const GLESShader &shader);
+    void Link();
     bool IsValid() const { return mIsValid; }
-    static GLenum GetShaderType(size_t type) { return GLShaderType[type]; }
+
+    void SetTextureSampler(const GLESTexture &sampler);
+    void SetProjectionMatrix(const Matrix44 &m);
+    void SetModelViewMatrix(const Matrix44 &m);
+	void SetUniform(const char *uniforName, int val);
+	void SetUniform(const char *uniforName, const Point2<int> &val);
+	void SetUniform(const char *uniforName, const Point2<float> &val);
+    void GetUniform(const char *unformName, Matrix44 &m44) const;
+    void GetUniform(const char *unformName, int &ret) const;
+    int GetAttributeLocation(const char *attributeName) const;
+
+    static void ResetDefault();
   private:
     void PrintInfoLog(GLuint );
-	friend class GLESGPUProgram;
-    GLuint CompileShader(const char *shaderSrc, GLenum type);
-
-    GLuint mShaderObject;
+    GLuint mProgramObject;
     bool mIsValid;
-	static const GLenum GLShaderType[];
   };
 }

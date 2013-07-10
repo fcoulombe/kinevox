@@ -53,7 +53,7 @@ public:
 
 	void PushData(size_t width, size_t height, size_t bytesPerPixel, const uint8_t *pixels)
 	{
-		glBufferData(GL_PIXEL_UNPACK_BUFFER, bytesPerPixel*width*height, NULL, GL_STREAM_DRAW);glErrorCheck();
+		glBufferData(GL_PIXEL_UNPACK_BUFFER, bytesPerPixel*width*height, NULL, mBufferType);glErrorCheck();
         if (pixels)
         {
             uint8_t * pPixelsPBO = static_cast<uint8_t *>(glMapBufferARB(GL_PIXEL_UNPACK_BUFFER, GL_WRITE_ONLY));glErrorCheck();

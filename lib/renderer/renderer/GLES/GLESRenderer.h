@@ -29,8 +29,7 @@
 #include <vector>
 
 #include <3rdparty/OpenGL.h>
-#include <gcl/Config.h>
-#include "renderer/Camera.h"
+#include <gcl/Matrix44.h>
 #include "renderer/ViewPort.h"
 
 namespace GCL
@@ -38,11 +37,11 @@ namespace GCL
     class RenderObject;
     class RenderObject2D;
     class Text2D;
-    typedef std::vector<const RenderObject*> RenderObjectList;
+	class Camera;
+    
     typedef std::vector<RenderObject2D*> RenderObject2DList;
     typedef std::vector<Text2D*> Text2DList;
-typedef std::vector<std::string> ExtensionList;
-class Shader;
+class GLESGPUProgram;
 class GLESRenderer
 {
 public:
@@ -51,11 +50,6 @@ public:
 	bool Update();
 	void PreRender();
 	void PostRender();
-	void Render(const RenderObjectList &renderObjectList);
-	void Render(const RenderObject2DList &spriteList);
-	void Render(const Text2DList &text2DList);
-
-	void SetCamera(Camera &camera) { mCamera = &camera; }
 
 	struct RenderState
 	{
@@ -63,46 +57,70 @@ public:
 	};
 	RenderState mCurrentRenderState;
 
-    const ViewPort &GetViewPort() const { return mViewPort; }
 	const std::string &GetVendor() const { return mVendor; }
 	const std::string &GetVersion() const { return mVersion; }
 	const std::string &GetRenderer() const { return mRenderer; }
 	const std::string &GetShadingLanguageVersion() const { return mShadingLanguageVersion; }
 	const std::string &GetGlewVersion() const { return mGlewVersion; }
-	const ExtensionList &GetExtensions() const { return mExtensions; }
+	const std::vector<std::string> &GetExtensions() const { return mExtensions; }
 
 	bool IsExtensionSupported(const std::string &ext) const
 	{
-		ExtensionList::const_iterator b = mExtensions.begin();
-		ExtensionList::const_iterator e = mExtensions.end();
-		ExtensionList::const_iterator r =  std::find(b, e, ext);
+		std::vector<std::string>::const_iterator b = mExtensions.begin();
+		std::vector<std::string>::const_iterator e = mExtensions.end();
+		std::vector<std::string>::const_iterator r =  std::find(b, e, ext);
 
 		bool res = r != mExtensions.end();
 		return res;
 	}
+	bool IsGlewExtensionSupported(const std::string &) const
+	{
+		GCLAssert(false && "unsupported");
+		return false;
+	}
 
-	//the shader is when we want to set the project and
-	//modelview*trasnform as uniform
-	static void SetTransform( const Matrix44 &projection,
-								const Matrix44 &modelView,
-								const Matrix44 &transform,
-								Shader *shader=NULL);
 
 	static Matrix44 GetGLProjection();
 	static Matrix44 GetGLModelView();
-
+	const Matrix44 &GetProjection() const { return mProjection; }
+	const Matrix44 &GetModelView() const { return mModelView; }
+	void SwapBuffer();
+	void SetViewPort(const ViewPort &viewport)
+	{
+		mViewPort = viewport;
+	}
+	void SetProjection(const Matrix44 &projection)
+	{
+		mProjection = projection;
+	}
+	void SetProjection(const Camera *camera);
+	void SetOrtho()
+	{
+		mProjection.SetOrtho(0.0,  (Real)mViewPort.GetWidth(), (Real)mViewPort.GetHeight(),0.0, -1.0, 1.0);
+		mModelView.SetIdentity();
+	}
+	void SetModelView(const Matrix44 &modelView)
+	{
+		mModelView = modelView;
+	}
 private:
 	void Init3DState();
-    ViewPort mViewPort;
-	Camera *mCamera;
-
+   
 	std::string mVendor,
 				mVersion,
 				mRenderer,
 				mShadingLanguageVersion,
 				mGlewVersion;
 
-	ExtensionList mExtensions;
+	std::vector<std::string> mExtensions;
+	ViewPort mViewPort;
+	Matrix44 mProjection;
+	Matrix44 mModelView;
+	Real mFov, mAspect, mNear, mFar;
+
+	HWND mhWnd;
+	HDC mhDC;
+	HGLRC mhRC;
 
 
     EGLDisplay			eglDisplay;

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2013 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,25 +21,14 @@
  */
 
 #pragma once
-#include <3rdparty/OpenGL.h>
+#include "renderer/RenderThread.h"
 
 namespace GCL
 {
-
-  class GLESShader
-  {
-  public:
-	GLESShader(const char *shaderSourcePath, GLenum type);
-    ~GLESShader();
-    bool IsValid() const { return mIsValid; }
-    static GLenum GetShaderType(size_t type) { return GLShaderType[type]; }
-  private:
-    void PrintInfoLog(GLuint );
-	friend class GLESGPUProgram;
-    GLuint CompileShader(const char *shaderSrc, GLenum type);
-
-    GLuint mShaderObject;
-    bool mIsValid;
-	static const GLenum GLShaderType[];
-  };
+class GLESRenderThread : public RenderThread
+{
+public:
+	GLESRenderThread();
+	~GLESRenderThread();
+};
 }

@@ -23,7 +23,8 @@
 #pragma once
 #include <3rdparty/OpenGL.h>
 #include <gcl/Macro.h>
-#include "renderer/PixelBufferHAL.h"
+#include <gcl/PixelBuffer.h>
+#include "renderer/GLES/GLESPixelBufferHAL.h"
 
 namespace GCL
 {
@@ -36,7 +37,6 @@ public:
 	: mTextureId((GLuint)-1),
 	  mTextureUnit((GLuint)0)
 	{
-        mPBO = NULL;
         Initialize(imageData);
     }
 	~GLESTexture();
@@ -48,9 +48,23 @@ public:
 		//mPBO->Bind();
 	}
 
-	size_t GetWidth() const { return mPBO->mWidth; }
-	size_t GetHeight() const { return mPBO->mHeight; }
-    size_t GetBytesPerPixel() const { return mPBO->mBytesPerPixel; }
+	size_t GetWidth() const 
+	{
+		GCLAssert(false && "unsupported");
+		return  0; 
+	}
+	size_t GetHeight() const 
+	{ 
+
+		GCLAssert(false && "unsupported");
+		return  (size_t)0; 
+	}
+    size_t GetBytesPerPixel() const 
+	{ 
+
+		GCLAssert(false && "unsupported");
+		return 0;
+	}
 	void Initialize(const PixelBuffer &imageData);
 	bool IsValid() const { return (int)mTextureId!=-1; }
 
@@ -62,7 +76,7 @@ public:
 private:
 	GLuint mTextureId;
 	GLuint mTextureUnit;
-	PixelBufferHAL *mPBO;
+	GLESPixelBufferHAL *mPBO;
 };
 
 

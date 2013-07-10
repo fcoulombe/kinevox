@@ -23,7 +23,8 @@
 
 #include "renderer/RenderPipe.h"
 #include "renderer/RenderCmd.h"
-#include "renderer/GL/GLRenderThread.h"
+#include "rendererconf.h"
+#include GFXAPI_RenderThread_H
 using namespace GCL;
 
 bool RenderPipe::mIsInitialized = false;
@@ -59,7 +60,7 @@ void GCL::RenderPipe::Initialize()
 	GCLAssert(!mIsInitialized);
 	mIsInitialized = true;
 	mRetMsg = NULL;
-	mRenderThreads.push_back(new GLRenderThread());
+	mRenderThreads.push_back(new IRenderThread());
 	if (mRenderThreads[0]->IsThreaded())
 		mRenderThreads[0]->Start();
 }

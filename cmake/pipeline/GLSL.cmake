@@ -1,6 +1,6 @@
 SET(OUT_GLSL_DIR ${CMAKE_CURRENT_BINARY_DIR}/data/GLSL/)
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/data/GLSL/)
-file(GLOB glslFiles ${dataPath}/*.glsl)
+file(GLOB glslFiles ${dataPath}/*.glsl3)
 foreach(src ${glslFiles})
 	STRING(REPLACE ${dataPath} ${OUT_GLSL_DIR} DstFile ${src})
 	add_custom_command(

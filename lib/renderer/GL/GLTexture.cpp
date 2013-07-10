@@ -51,12 +51,7 @@ void GLTexture::Initialize(const PixelBuffer &data )
 
     GCLAssert(BytesPerPixel[data.mBytesPerPixel-1]<= GL_RGBA);
 
-#if 0
-    glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[data.mBytesPerPixel-1],
-        data.mWidth, data.mHeight, 0,BytesPerPixel[data.mBytesPerPixel-1],
-        GL_UNSIGNED_BYTE, data.mPixels);glErrorCheck();
-    glGenerateMipmap(GL_TEXTURE_2D);  //Generate mipmaps now!!!
-#else
+
     glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[data.mBytesPerPixel-1],
         (GLsizei)data.mWidth, (GLsizei)data.mHeight, 0,BytesPerPixel[data.mBytesPerPixel-1],
         GL_UNSIGNED_BYTE, NULL);glErrorCheck();
@@ -73,7 +68,6 @@ void GLTexture::Initialize(const PixelBuffer &data )
         mPBO->UnBind();
     }
     glGenerateMipmap(GL_TEXTURE_2D);glErrorCheck();
-#endif
 }
 
 
@@ -88,7 +82,6 @@ const uint8_t *GLTexture::GetPixelBufferFromVRAM() const
 
 const uint8_t *GLTexture::GetTextureFromVRAM() const
 {
-#if  !defined(ES2)
     Bind();
     GLint width, height, format;
     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
@@ -106,10 +99,6 @@ const uint8_t *GLTexture::GetTextureFromVRAM() const
 		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	glErrorCheck();
     return data;
-#else
-    GCLAssert(false && "unsupported");
-    return NULL;
-#endif
 }
 
 

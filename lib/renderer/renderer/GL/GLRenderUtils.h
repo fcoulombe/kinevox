@@ -23,9 +23,8 @@
 #pragma once
 
 #include <iostream>
-#include <3rdparty/OpenGL.h>
 #include <gcl/Assert.h>
-#include <gcl/Point3.h>
+#include <renderer/VertexBuffer.h>
 
 namespace GCL
 {
@@ -33,51 +32,46 @@ namespace GCL
 GCLINLINE void DrawCube(const WorldPoint3 &position, Real size)
 {
 	const Real halfSize = size/2;
-#if  !defined(ES2)
-	glBegin(GL_QUADS);
+    VertexP posData[24];
 	//front face
-	glVertex3d(position.x-halfSize, position.y-halfSize, position.z+halfSize);
-	glVertex3d(position.x+halfSize, position.y-halfSize, position.z+halfSize);
-	glVertex3d(position.x+halfSize, position.y+halfSize, position.z+halfSize);
-	glVertex3d(position.x-halfSize, position.y+halfSize, position.z+halfSize);
+    posData[0].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y-halfSize), MeshReal(position.z+halfSize));
+	posData[1].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y-halfSize), MeshReal(position.z+halfSize));
+	posData[2].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y+halfSize), MeshReal(position.z+halfSize));
+	posData[3].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y+halfSize), MeshReal(position.z+halfSize));
 
 	//backface
-	glVertex3d(position.x-halfSize, position.y-halfSize, position.z-halfSize);
-	glVertex3d(position.x+halfSize, position.y-halfSize, position.z-halfSize);
-	glVertex3d(position.x+halfSize, position.y+halfSize, position.z-halfSize);
-	glVertex3d(position.x-halfSize, position.y+halfSize, position.z-halfSize);
+	posData[4].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y-halfSize), MeshReal(position.z-halfSize));
+	posData[5].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y-halfSize), MeshReal(position.z-halfSize));
+	posData[6].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y+halfSize), MeshReal(position.z-halfSize));
+	posData[7].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y+halfSize), MeshReal(position.z-halfSize));
 
 	//bot face
-	glVertex3d(position.x-halfSize, position.y-halfSize, position.z+halfSize);
-	glVertex3d(position.x+halfSize, position.y-halfSize, position.z+halfSize);
-	glVertex3d(position.x+halfSize, position.y-halfSize, position.z-halfSize);
-	glVertex3d(position.x-halfSize, position.y-halfSize, position.z-halfSize);
+	posData[8].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y-halfSize), MeshReal(position.z+halfSize));
+	posData[9].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y-halfSize), MeshReal(position.z+halfSize));
+	posData[10].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y-halfSize), MeshReal(position.z-halfSize));
+	posData[11].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y-halfSize), MeshReal(position.z-halfSize));
 
 	//top face
-	glVertex3d(position.x-halfSize, position.y+halfSize, position.z+halfSize);
-	glVertex3d(position.x+halfSize, position.y+halfSize, position.z+halfSize);
-	glVertex3d(position.x+halfSize, position.y+halfSize, position.z-halfSize);
-	glVertex3d(position.x-halfSize, position.y+halfSize, position.z-halfSize);
+	posData[12].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y+halfSize), MeshReal(position.z+halfSize));
+	posData[13].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y+halfSize),MeshReal( position.z+halfSize));
+	posData[14].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y+halfSize), MeshReal(position.z-halfSize));
+	posData[15].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y+halfSize), MeshReal(position.z-halfSize));
 
 	//left face
-	glVertex3d(position.x-halfSize, position.y+halfSize, position.z+halfSize);
-	glVertex3d(position.x-halfSize, position.y+halfSize, position.z-halfSize);
-	glVertex3d(position.x-halfSize, position.y-halfSize, position.z-halfSize);
-	glVertex3d(position.x-halfSize, position.y-halfSize, position.z+halfSize);
+	posData[16].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y+halfSize), MeshReal(position.z+halfSize));
+	posData[17].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y+halfSize), MeshReal(position.z-halfSize));
+	posData[18].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y-halfSize), MeshReal(position.z-halfSize));
+	posData[19].position = Point3<MeshReal>(MeshReal(position.x-halfSize), MeshReal(position.y-halfSize), MeshReal(position.z+halfSize));
 
 	//right face
-	glVertex3d(position.x+halfSize, position.y+halfSize, position.z+halfSize);
-	glVertex3d(position.x+halfSize, position.y+halfSize, position.z-halfSize);
-	glVertex3d(position.x+halfSize, position.y-halfSize, position.z-halfSize);
-	glVertex3d(position.x+halfSize, position.y-halfSize, position.z+halfSize);
-	glEnd();
-#else
-    
-    GCLAssertMsg(false, "TBD");
-    
-#endif
-	glErrorCheck();
-
+	posData[20].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y+halfSize), MeshReal(position.z+halfSize));
+	posData[21].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y+halfSize), MeshReal(position.z-halfSize));
+	posData[22].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y-halfSize), MeshReal(position.z-halfSize));
+	posData[23].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y-halfSize), MeshReal(position.z+halfSize));
+    VertexBuffer<VertexP> buffer(posData, 24);
+    buffer.PreRender();
+    buffer.Render();
+    buffer.PostRender();
 }
 
 GCLINLINE void WriteCube(WorldPoint3* cubeData, const WorldPoint3 &position, Real size)

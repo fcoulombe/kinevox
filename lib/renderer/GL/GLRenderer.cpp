@@ -56,7 +56,6 @@ void GLRenderer::Init3DState()
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
 	
 
-	//glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); glErrorCheck();
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
 }
 
@@ -138,12 +137,7 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 	const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);glErrorCheck();
 	mShadingLanguageVersion = std::string(ver);
 	char delim = ' ';
-#if 0
-	
-	const char *ex = (const char *) glGetString(GL_EXTENSIONS);
-	std::string extString(ex);
-	mExtensions = StringUtil::Explode(extString, delim); glErrorCheck();
-#else
+
 	GLint n, i;
 	glGetIntegerv(GL_NUM_EXTENSIONS, &n);glErrorCheck();
 	std::string extString;
@@ -155,7 +149,6 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 	}
 	
 	StringUtil::Explode(extString, mExtensions ,delim); 
-#endif
 
 
 }

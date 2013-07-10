@@ -66,9 +66,9 @@ class Shader;
 		return loc;
 	}
     void SetTextureSampler(const Texture &sampler) { RenderPipe::SendCommand(new RenderCommand2Arg(GPUPROGRAM_SET_TEXTURE_SAMPLER, (void*)this, (void*)&sampler)); }
-    void SetProjectionMatrix(const Matrix44 &m) 
+    void SetProjectionMatrix() 
 	{ 
-		RenderPipe::SendCommand(new RenderCommandMatArg(GPUPROGRAM_SET_PROJECTION, (void*)this, m));  
+		RenderPipe::SendCommand(new RenderCommand(GPUPROGRAM_SET_PROJECTION, (void*)this));  
 	}
     void SetModelViewMatrix(const Matrix44 &m) { RenderPipe::SendCommand(new RenderCommandMatArg(GPUPROGRAM_SET_MODELVIEW, (void*)this, m));}
 	void SetUniform(const char *uniformName, int value) { RenderPipe::SendCommand(new RenderCommand3Arg(GPUPROGRAM_SET_UNIFORM_NUMBER, (void*)this, (void*)uniformName, (void*)value));}

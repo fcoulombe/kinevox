@@ -52,7 +52,7 @@ void Test()
 		RenderBuffer target(width, height);;
 		target.Bind();
 		renderer.PreRender();
-		renderer.Render(RenderObjectList());
+		//renderer.Render(RenderObjectList());
 		renderer.PostRender();
         winDriver.SwapBuffer();
 	}
@@ -66,10 +66,8 @@ void Test()
 		target.Bind();
 
 	    SquareRenderObject obj;
-	    RenderObjectList renderObjectList;
-	    renderObjectList.push_back(obj.GetRenderObject());
 		renderer.PreRender();
-		renderer.Render(renderObjectList);
+		obj.Render();
 		renderer.PostRender();
 	}
 

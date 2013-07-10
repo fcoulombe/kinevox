@@ -37,6 +37,7 @@ namespace GCL
     class RenderObject;
     class RenderObject2D;
     class Text2D;
+	class Camera;
     
     typedef std::vector<RenderObject2D*> RenderObject2DList;
     typedef std::vector<Text2D*> Text2DList;
@@ -49,11 +50,7 @@ public:
 	bool Update();
 	void PreRender();
 	void PostRender();
-#if 0
-	void Render(const RenderObjectList &renderObjectList);
-	void Render(const RenderObject2DList &spriteList);
-	void Render(const Text2DList &text2DList);
-#endif
+
 	struct RenderState
 	{
 		void SetTextureEnabled(bool isEnabled);
@@ -81,15 +78,11 @@ public:
 		return (glewGetExtension(ext.c_str())) ? true : false;
 	}
 
-	//the shader is when we want to set the project and
-	//modelview*trasnform as uniform
-	static void SetTransform( const Matrix44 &projection,
-								const Matrix44 &modelView,
-								const Matrix44 &transform,
-								GLGPUProgram *shader=NULL);
 
 	static Matrix44 GetGLProjection();
 	static Matrix44 GetGLModelView();
+	const Matrix44 &GetProjection() const { return mProjection; }
+	const Matrix44 &GetModelView() const { return mModelView; }
 	void SwapBuffer();
 	void SetViewPort(const ViewPort &viewport)
 	{
@@ -98,6 +91,12 @@ public:
 	void SetProjection(const Matrix44 &projection)
 	{
 		mProjection = projection;
+	}
+	void SetProjection(const Camera *camera);
+	void SetOrtho()
+	{
+		mProjection.SetOrtho(0.0,  (Real)mViewPort.GetWidth(), (Real)mViewPort.GetHeight(),0.0, -1.0, 1.0);
+		mModelView.SetIdentity();
 	}
 	void SetModelView(const Matrix44 &modelView)
 	{
@@ -116,6 +115,7 @@ private:
 	ViewPort mViewPort;
 	Matrix44 mProjection;
 	Matrix44 mModelView;
+	Real mFov, mAspect, mNear, mFar;
 
 	HWND mhWnd;
 	HDC mhDC;

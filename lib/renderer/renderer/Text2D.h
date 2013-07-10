@@ -22,6 +22,7 @@
 #pragma once
 
 #include <cstdlib>
+#include <gcl/Matrix44.h>
 #include <gcl/Point3.h>
 #include "renderer/Texture.h"
 #include "renderer/TTFFont.h"
@@ -41,15 +42,15 @@ public:
 	void Update()
 	{
 	}
-
+	void Render();
 	void SetVisible(bool isVisible = true) { mIsVisible = isVisible; }
 	bool IsVisible() const { return mIsVisible; }
 
 	size_t GetWidth() const { GCLAssert(mTexture);return mTexture->GetWidth(); }
 	size_t GetHeight() const { GCLAssert(mTexture);return mTexture->GetHeight(); }
 
-	void SetPosition(const WorldPoint3 &position)  	{mObj->SetPosition(position);	}
-	const WorldPoint3 &GetPosition() const { return *(const WorldPoint3 *)&mObj->GetTransform().GetPosition(); }
+	void SetPosition(const WorldPoint3 &position)  	{mTransform.SetPosition(position);	}
+	const WorldPoint3 &GetPosition() const { return *(const WorldPoint3 *)&mTransform.GetPosition(); }
 
 	void SetScale(const WorldPoint2 &scale) { mScale = scale; }
 	const WorldPoint2 &GetScale() const { return mScale; }
@@ -57,6 +58,7 @@ public:
 	void Save(const char *filename) { mTexture->Save(filename);}
 	operator RenderObject *() { return mObj; }
 protected:
+	Matrix44 mTransform;
 	TTFFont mFont;
 	Texture *mTexture;
 	RenderObject *mObj;

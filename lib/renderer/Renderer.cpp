@@ -25,39 +25,6 @@
 
 using namespace GCL;
 
-void GCL::Renderer::Render( const RenderObjectList &renderObjectList )
-{
-	mCamera->Update();
-	for (size_t i=0;  i<renderObjectList.size(); ++i)
-	{
-		const RenderObject *tempRenderObject = renderObjectList[i];
-		const Material &tempMaterial = tempRenderObject->GetMaterial();
-		tempMaterial.Bind();
-		const Matrix44 &transform = tempRenderObject->GetTransform();
-		GPUProgram *tempProgram = tempMaterial.GetShader();
-		tempProgram->SetProjectionMatrix(mCamera->GetProjection());
-		tempProgram->SetModelViewMatrix(mCamera->GetModelView()*transform);
-		tempRenderObject->GetVBO().Render();
-	}
-	//RenderPipe::SendCommand(new RenderCommand(RENDERER_RENDER, &renderObjectList));
-}
-void GCL::Renderer::Render2D( const RenderObjectList &renderObjectList )
-{
-	Matrix44 ortho;
-	ortho.SetOrtho(0.0, (Real)mViewPort.GetHeight(), (Real)mViewPort.GetWidth(), 0.0, -1.0, 1.0);
-	for (size_t i=0;  i<renderObjectList.size(); ++i)
-	{
-		const RenderObject *tempRenderObject = renderObjectList[i];
-		const Material &tempMaterial = tempRenderObject->GetMaterial();
-		tempMaterial.Bind();
-		const Matrix44 &transform = tempRenderObject->GetTransform();
-		GPUProgram *tempProgram = tempMaterial.GetShader();
-		tempProgram->SetProjectionMatrix(ortho);
-		tempProgram->SetModelViewMatrix(Matrix44::IDENTITY*transform);
-		tempRenderObject->GetVBO().Render();
-	}
-	//RenderPipe::SendCommand(new RenderCommand(RENDERER_RENDER, &renderObjectList));
-}
 
 template<typename VertexType>
 void DrawNormals(const VertexData &data)

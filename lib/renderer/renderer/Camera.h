@@ -41,13 +41,17 @@ public:
 	void Update();
 
 	const Matrix44 &GetTransform() const { return mCameraMatrix; }
-	const Matrix44 &GetModelView() const { return mModelViewMatrix; }
-	const Matrix44 &GetProjection() const { return mProjectionMatrix; }
+	Real GetFov() const { return mFov; }
+	Real GetAspectRatio() const { return mAspect; }
+	Real GetNear() const { return mNear; }
+	Real GetFar() const { return mFar; }
+	//const Matrix44 &GetModelView() const { return mModelViewMatrix; }
+	//const Matrix44 &GetProjection() const { return mProjectionMatrix; }
 	static Camera &DefaultCamera();
 private:
 	Matrix44 mCameraMatrix;
-	Matrix44 mModelViewMatrix;
-	Matrix44 mProjectionMatrix;
+	//Matrix44 mModelViewMatrix;
+	//Matrix44 mProjectionMatrix;
 	Real mFov, mAspect, mNear, mFar;
 };
 }

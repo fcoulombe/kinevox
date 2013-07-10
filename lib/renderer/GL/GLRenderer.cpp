@@ -29,11 +29,12 @@
 #include <gcl/Assert.h>
 #include <gcl/StringUtil.h>
 
-#include "renderer/GL/GLRenderUtils.h"
+#include "renderer/Camera.h"
 #include "renderer/Material.h"
 #include "renderer/RenderObject.h"
 #include "renderer/Text2D.h"
 #include "renderer/GL/GLGPUProgram.h"
+#include "renderer/GL/GLRenderUtils.h"
 #include "renderer/GL/GLShader.h"
 #include "renderer/GL/GLVertexBuffer.h"
 
@@ -64,7 +65,14 @@ void GLRenderer::Init3DState()
 }
 
 GLRenderer::GLRenderer(size_t windowsHandle)
+	:   mFov(45.0),
+	mAspect(640.0/480.0),
+	mNear(0.1),
+	mFar(100.0),
+	mModelView(true)
 {
+	mProjection.SetPerspective(mFov,mAspect,mNear,mFar);
+	
 	// remember the window handle (HWND)
 	mhWnd = (HWND)windowsHandle;
 
@@ -223,4 +231,10 @@ Matrix44 GLRenderer::GetGLModelView()
 void GLRenderer::SwapBuffer()
 {
 	SwapBuffers( mhDC );
+}
+
+void GCL::GLRenderer::SetProjection( const Camera *camera )
+{
+	mProjection.SetPerspective(camera->GetFov(),camera->GetAspectRatio(),camera->GetNear(),camera->GetFar());
+	mModelView= Inverse(camera->GetTransform());
 }

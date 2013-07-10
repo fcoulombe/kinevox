@@ -62,12 +62,13 @@ void Test()
 		Assert_Test(testValue == 56);
 
 		//set matrix uniform test
-		Matrix44 proj;
-		proj.SetPerspective(45.0, 640.0/480.0,0.1,100.0);
+		Camera cam;
+		cam.Update();
+
 		Matrix44 modelView;
 		modelView.SetRotationX(90.0);
 		program.SetModelViewMatrix(modelView);
-		program.SetProjectionMatrix(proj);
+		program.SetProjectionMatrix();
 
 		//query uniform fail test
 
@@ -78,8 +79,8 @@ void Test()
 		Matrix44 proj2;
 		program.GetUniform("ProjectionMatrix", proj2);
 		s.str("");
-		s<<std::endl<<proj2<<std::endl<<"=="<<std::endl<<proj;
-		AssertMsg_Test(proj2==proj, s.str().c_str());
+		s<<std::endl<<proj2<<std::endl<<"=="<<std::endl<<renderer.GetProjection();
+		AssertMsg_Test(proj2==renderer.GetProjection(), s.str().c_str());
 
 		//query modelview matrix test
 		Matrix44 modelView2;
@@ -133,7 +134,7 @@ void Test()
 #endif
 
 		renderer.PreRender();
-		renderer.Render(RenderObjectList());
+		//renderer.Render(RenderObjectList());
 		renderer.PostRender();
 		GPUProgram::ResetDefault();
 	}
@@ -145,12 +146,9 @@ void Test()
 		const WorldPoint3 position(0.0,0.0, -10.0);
 		obj.SetPosition(position);
 
-		RenderObjectList renderList;
-		renderList.push_back(obj.GetRenderObject());
-
 		KINEVOX_TEST_LOOP_START
 			renderer.PreRender();
-			renderer.Render(renderList);
+			obj.Render();
 			renderer.PostRender();
 			winDriver.SwapBuffer();
 		KINEVOX_TEST_LOOP_END

@@ -170,14 +170,27 @@ void RCIsGlewExtensionSupported(RenderCommand *data, RenderData &renderData)
 void RCGetGLProjection(RenderCommand *, RenderData &)
 {
 	LOG_RENDER_CMD
-	//const GLRenderData &rd = static_cast<const GLRenderData&>(renderData);
-	const Matrix44 &vendor = GLRenderer::GetGLProjection();
+	const Matrix44 vendor = GLRenderer::GetGLProjection();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
 void RCGetGLModelView(RenderCommand *, RenderData &)
 {
 	LOG_RENDER_CMD
-	const Matrix44 &vendor = GLRenderer::GetGLModelView();
+	const Matrix44 vendor = GLRenderer::GetGLModelView();
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+void RCGetProjection(RenderCommand *, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+		const GLRenderData &rd = static_cast<const GLRenderData&>(renderData);
+		const Matrix44 &vendor = rd.mRenderer->GetProjection();
+	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
+}
+void RCGetModelView(RenderCommand *, RenderData &renderData)
+{
+	LOG_RENDER_CMD
+		const GLRenderData &rd = static_cast<const GLRenderData&>(renderData);
+		const Matrix44 &vendor = rd.mRenderer->GetModelView();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
 
@@ -190,19 +203,21 @@ void RCSetViewport(RenderCommand *data, RenderData &renderData)
 	uint8_t *xferbuffer = (uint8_t *)data->mData;
 	delete [] xferbuffer;
 }
-void RCSetProjection(RenderCommand *data, RenderData &renderData)
+
+void RCSetCamera(RenderCommand *data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	const Matrix44 *viewport = (const Matrix44 *)data->mData; 
-	rd.mRenderer->SetProjection(*viewport);
+	const Camera *cam = (const Camera *)data->mData; 
+	rd.mRenderer->SetProjection(cam);
+	uint8_t *xferbuffer = (uint8_t *)data->mData;
+	delete [] xferbuffer;
 }
-void RCSetModelView(RenderCommand *data, RenderData &renderData)
+void RCSetOrtho(RenderCommand *, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	const Matrix44 *viewport = (const Matrix44 *)data->mData; 
-	rd.mRenderer->SetModelView(*viewport);
+	rd.mRenderer->SetOrtho();
 }
 void RCCreateGPUProgram(RenderCommand *data, RenderData &renderData)
 {
@@ -260,15 +275,16 @@ void RCGPUProgramSetProjection(RenderCommand *data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommandMatArg *data2 = static_cast<RenderCommandMatArg *>(data);
-	rd.mGPUProgramMap[data->mData]->SetProjectionMatrix(data2->mData2);
+	const Matrix44 &proj = rd.mRenderer->GetProjection();
+	rd.mGPUProgramMap[data->mData]->SetProjectionMatrix(proj);
 }
 void RCGPUProgramSetModelView(RenderCommand *data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+	const Matrix44 &modelview = rd.mRenderer->GetModelView();
 	RenderCommandMatArg *data2 = static_cast<RenderCommandMatArg *>(data);
-	rd.mGPUProgramMap[data->mData]->SetModelViewMatrix(data2->mData2);
+	rd.mGPUProgramMap[data->mData]->SetModelViewMatrix(modelview*data2->mData2);
 }
 void RCGPUProgramSetUniformNumber(RenderCommand *data, RenderData &renderData)
 {
@@ -590,9 +606,11 @@ static RenderCommandFunction GLRenderCommandMap[] =
 	RCIsGlewExtensionSupported,//10
 	RCGetGLProjection,//11
 	RCGetGLModelView,//12
+	RCGetModelView,//12
+	RCGetProjection,//11
 	RCSetViewport,//13
-	RCSetProjection,//14
-	RCSetModelView,//15
+	RCSetCamera,//14
+	RCSetOrtho,//15
 	RCCreateGPUProgram,//16
 	RCDestroyGPUProgram,//17
 	RCBindGPUProgram,//18

@@ -60,20 +60,20 @@ void Test()
 		WinDriver winDriver("GeomUtilTest");
 		Renderer renderer(winDriver.GetWindowsHandle());
 
-        RenderObjectList objList;
+        std::vector<RenderObjectHelper *> objList;
 		CubeRenderObject cube;
         cube.SetPosition(3.0,0.0,-8.0);
         cube.SetEnableDrawNormals();
-		objList.push_back(cube.GetRenderObject());
+		objList.push_back(&cube);
         SphereRenderObject sphere;
         sphere.SetPosition(1,0.0,-8.0);
-        objList.push_back(sphere.GetRenderObject());
+        objList.push_back(&sphere);
         PlaneRenderObject plane;
         plane.SetPosition(-1,0.0,-8.0);
-        objList.push_back(plane.GetRenderObject());
+        objList.push_back(&plane);
         CircleRenderObject circle;
         circle.SetPosition(-3.0,0.0,-8.0);
-        objList.push_back(circle.GetRenderObject());
+        objList.push_back(&circle);
 
 
 		try
@@ -86,7 +86,8 @@ void Test()
             sphere.SetOrientation(0.0,rot,0.0);
             plane.SetOrientation(0.0,rot,0.0);
             renderer.PreRender();
-            renderer.Render(objList);
+			for (size_t i=0; i<objList.size(); ++i)
+				objList[i]->Render();
             renderer.PostRender();
             winDriver.SwapBuffer();
             KINEVOX_TEST_LOOP_END

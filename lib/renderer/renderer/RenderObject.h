@@ -83,9 +83,8 @@ class RenderObject
 {
 public:
 	template<typename VertexType>
-	RenderObject( const Matrix44 &transform, Material &material, const VertexType *vertexArray, size_t count)
-	:  mTransform(transform),
-	mVBO(vertexArray, count, material.GetShader()->GetShaderLocations()),
+	RenderObject( Material &material, const VertexType *vertexArray, size_t count)
+	:  mVBO(vertexArray, count, material.GetShader()->GetShaderLocations()),
 	mIsDrawNormals(false)
 	{
 		mMaterial = (&material);
@@ -95,6 +94,8 @@ public:
 	const Material &GetMaterial() const { return *mMaterial; }
 	Material &GetMaterial() { return *mMaterial; }
 	const VertexBuffer &GetVBO() const { return mVBO; }
+	
+#if 0
 	const Matrix44 &GetTransform() const {return mTransform; }
 	void SetTransform(const Matrix44 &transform) {mTransform = transform; }
 
@@ -114,11 +115,11 @@ public:
 	void SetPosition(Real x, Real y,Real z)
 	{ SetPosition(WorldPoint3(x,y,z));	}
 	void SetPosition(const WorldPoint3 &position){ 	mTransform.SetPosition(position);	}
-
+#endif
     void SetEnableDrawNormals(bool isDrawingNormals = true) { mIsDrawNormals = isDrawingNormals; }
     bool IsDrawingNormals() const { return mIsDrawNormals; }
 protected:
-	Matrix44 mTransform;
+	//Matrix44 mTransform;
 	Material *mMaterial;
 	VertexBuffer mVBO;
     bool mIsDrawNormals;

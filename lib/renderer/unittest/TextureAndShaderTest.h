@@ -65,13 +65,14 @@ void Test()
 		obj2.SetPosition(position2);
 		obj2.GetMaterial().SetTexture(TEXTURE_PATH"HappyFish.tga");
 
-		RenderObjectList renderObjectList;
-		renderObjectList.push_back(obj1.GetRenderObject());
+		std::vector<RenderObjectHelper *> objList;
+		objList.push_back(&obj1);
 
-		renderObjectList.push_back(obj2.GetRenderObject());
+		objList.push_back(&obj2);
         KINEVOX_TEST_LOOP_START
 		renderer.PreRender();
-		renderer.Render(renderObjectList);
+		for (size_t i=0; i<objList.size(); ++i)
+			objList[i]->Render();
 		renderer.PostRender();
         winDriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END

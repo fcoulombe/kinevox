@@ -66,7 +66,7 @@ void Test()
 			FrameBuffer frameBuffer(texture, depthRenderBuffer);
 			frameBuffer.Bind();
 			renderer.PreRender();
-			renderer.Render(RenderObjectList());
+
 			renderer.PostRender();
             winDriver.SwapBuffer();
 			FrameBuffer::ResetDefault();
@@ -103,7 +103,7 @@ void Test()
             KINEVOX_TEST_LOOP_START
                 frameBuffer.Bind();
 			renderer.PreRender();
-			renderer.Render(renderObjectList);
+			obj.Render();
 			renderer.PostRender();
             winDriver.SwapBuffer();
 			FrameBuffer::ResetDefault();

@@ -34,7 +34,8 @@ class MeshRenderObject
 {
 public:
 	MeshRenderObject()
-	 : mMesh(MESH_PATH"ExampleMesh.mesh")
+	 : mMesh(MESH_PATH"ExampleMesh.mesh"),
+	 mTransform(true)
 	{
         VertexData data;
 		data.mVertexCount =mMesh.GetVertexCount(0);
@@ -44,13 +45,13 @@ public:
 		switch ((size_t)mMesh.GetVertexType())
 		{
 		case ePOSITION:
-			obj = new RenderObject(Matrix44::IDENTITY, mMesh.GetMaterial(), (const VertexP*)mMesh.GetVertexData(0), mMesh.GetVertexCount(0));
+			obj = new RenderObject(mMesh.GetMaterial(), (const VertexP*)mMesh.GetVertexData(0), mMesh.GetVertexCount(0));
 			break;
 		case ePOSITION|eNORMAL:
-			obj = new RenderObject(Matrix44::IDENTITY, mMesh.GetMaterial(), (const VertexPN*)mMesh.GetVertexData(0), mMesh.GetVertexCount(0));
+			obj = new RenderObject(mMesh.GetMaterial(), (const VertexPN*)mMesh.GetVertexData(0), mMesh.GetVertexCount(0));
 			break;
 		case ePOSITION|eNORMAL|eTEXTURE_COORD:
-			obj = new RenderObject(Matrix44::IDENTITY, mMesh.GetMaterial(), (const VertexPNT*)mMesh.GetVertexData(0), mMesh.GetVertexCount(0));
+			obj = new RenderObject(mMesh.GetMaterial(), (const VertexPNT*)mMesh.GetVertexData(0), mMesh.GetVertexCount(0));
 			break;
 		default:
 			GCLAssert(false);
@@ -60,11 +61,35 @@ public:
 	{
 		delete obj;
 	}
-	void SetPosition(Real x, Real y, Real z) { obj->SetPosition(x,y,z); }
+	void Render()
+	{
+		const RenderObject *tempRenderObject = obj;
+		const Material &tempMaterial = tempRenderObject->GetMaterial();
+		tempMaterial.Bind();
+		const Matrix44 &transform = mTransform;
+		GPUProgram *tempProgram = tempMaterial.GetShader();
+		tempProgram->SetProjectionMatrix();
+		tempProgram->SetModelViewMatrix(transform);
+		tempRenderObject->GetVBO().Render();
+	}
+	void SetPosition(Real x, Real y, Real z) { mTransform.SetPosition(x,y,z); }
 
-	void SetOrientation(Real x, Real y, Real z) { obj->SetOrientation(x,y,z); }
+	void SetOrientation(Real x, Real y, Real z) 
+	{
+		const WorldPoint4 backupPosition = mTransform[3];
+		Matrix44 xRot;
+		xRot.SetRotationX(x);
+		Matrix44 yRot;
+		yRot.SetRotationY(y);
+		Matrix44 zRot;
+		zRot.SetRotationZ(z);
+		mTransform = xRot * yRot;// * zRot;
+
+		mTransform.SetPosition(backupPosition);
+	}
 	RenderObject *GetObj() { return obj; }
 private:
+	Matrix44 mTransform;
 	Mesh mMesh;
 	RenderObject *obj;
 	VertexDataList mVertexData;
@@ -101,16 +126,14 @@ void Test()
 	{
 		MeshRenderObject myMesh;
         myMesh.SetPosition(0.0,0.0,-10.0);
-		RenderObjectList renderList;
-		renderList.push_back(myMesh.GetObj());
-        Real rot = 0.0;
+		Real rot = 0.0;
         KINEVOX_TEST_LOOP_START
             rot+=0.001;
-        myMesh.SetOrientation(0.0,rot,0.0);
+		myMesh.SetOrientation(0.0,rot,0.0);
 		renderer.PreRender();
-		renderer.Render(renderList);
+		myMesh.Render();
 		renderer.PostRender();
-        windriver.SwapBuffer();
+		windriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END
 	}
 

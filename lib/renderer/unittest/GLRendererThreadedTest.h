@@ -107,7 +107,7 @@ void Test()
 			std::cout <<"update"<<std::endl;
 			//flush command buffer to render thread and activate it.
 			renderer.PreRender();
-			renderer.Render(RenderObjectList());
+			//renderer.Render(RenderObjectList());
 			renderer.PostRender();
 			ThreadManager::ReThrowException();
 

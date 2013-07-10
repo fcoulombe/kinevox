@@ -27,7 +27,8 @@ using namespace GCL;
 GCL::Text2D::Text2D( const char *text ) 
 	: mIsVisible(true),
 	mFont(FONT_PATH"FreeMono.ttf"),
-	mMaterial("Default")
+	mMaterial("Default"),
+	mTransform(true)
 {
 	PixelBuffer buffer;
 	mFont.BlitText(buffer, text, 18, 100, 100);
@@ -43,7 +44,19 @@ GCL::Text2D::Text2D( const char *text )
 		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0)},
 		{Point3<MeshReal>(halfWidth, halfHeight, 0.0)}
 	};
-	mObj = new RenderObject(Matrix44::IDENTITY, mMaterial, square, 6);
+	mObj = new RenderObject(mMaterial, square, 6);
+}
+
+void GCL::Text2D::Render()
+{
+	const RenderObject *tempRenderObject = mObj;
+	const Material &tempMaterial = tempRenderObject->GetMaterial();
+	tempMaterial.Bind();
+	const Matrix44 &transform = mTransform;
+	GPUProgram *tempProgram = tempMaterial.GetShader();
+	tempProgram->SetProjectionMatrix();
+	tempProgram->SetModelViewMatrix(transform);
+	tempRenderObject->GetVBO().Render();
 }
 
 

@@ -46,14 +46,19 @@ void Test()
 	std::stringstream s;
 	//camera projection equal Matrix44::Projection
 	{
+		Assert_Test(camera.GetFov() == 45.0);
+		Assert_Test(camera.GetAspectRatio() == (640.0/480.0));
+		Assert_Test(camera.GetNear()==0.1);
+		Assert_Test(camera.GetFar()==100.0);
+
 		Assert_Test(Matrix44::IDENTITY == camera.GetTransform());
-		Assert_Test(Inverse(Matrix44::IDENTITY) == camera.GetModelView());
+		Assert_Test(Inverse(Matrix44::IDENTITY) == renderer.GetGLModelView());
 
 		Matrix44 perspective;
 		perspective.SetPerspective( 45.0,640.0/480.0,0.1,100.0);
 		s.str("");
-		s <<std::setprecision(16)<< std::endl<<perspective << std::endl << "==" << std::endl << camera.GetProjection();
-		AssertMsg_Test(perspective==camera.GetProjection(), s.str().c_str());
+		s <<std::setprecision(16)<< std::endl<<perspective << std::endl << "==" << std::endl << renderer.GetProjection();
+		AssertMsg_Test(perspective==renderer.GetProjection(), s.str().c_str());
 	}
 
 
@@ -79,7 +84,7 @@ void Test()
 
 		camera.Update();
 		renderer.PreRender();
-		renderer.Render(RenderObjectList());
+
 		renderer.PostRender();
 		winDriver.SwapBuffer();
 	KINEVOX_TEST_LOOP_END

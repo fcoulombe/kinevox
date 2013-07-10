@@ -39,30 +39,59 @@ static const   VertexPNT square[6] = {
 class RenderObjectHelper
 {
 public:
+	RenderObjectHelper(const Matrix44 &transform)
+		: mTransform(transform)
+	{}
 	virtual ~RenderObjectHelper()
 	{
 		delete obj;
 	}
-	RenderObject *GetRenderObject() { return obj; }
-	void SetTransform(const Matrix44 &transform) {obj->SetTransform(transform); }
 
-	void SetOrientation(Real x,Real y,Real z) {	obj->SetOrientation(x,y,z);	}
+	void Render()
+	{
+		const RenderObject *tempRenderObject = obj;
+		const Material &tempMaterial = tempRenderObject->GetMaterial();
+		tempMaterial.Bind();
+		const Matrix44 &transform = mTransform;
+		GPUProgram *tempProgram = tempMaterial.GetShader();
+		tempProgram->SetProjectionMatrix();
+		tempProgram->SetModelViewMatrix(transform);
+		tempRenderObject->GetVBO().Render();
+	}
+	RenderObject *GetRenderObject() { return obj; }
+	void SetTransform(const Matrix44 &transform) {mTransform = transform; }
+
+	void SetOrientation(Real x,Real y,Real z) 
+	{	
+		const WorldPoint4 backupPosition = mTransform[3];
+		Matrix44 xRot;
+		xRot.SetRotationX(x);
+		Matrix44 yRot;
+		yRot.SetRotationY(y);
+		Matrix44 zRot;
+		zRot.SetRotationZ(z);
+		mTransform = xRot * yRot;// * zRot;
+
+		mTransform.SetPosition(backupPosition);
+	}
 	void SetPosition(Real x, Real y,Real z)
-	{ obj->SetPosition(x,y,z);	}
-	void SetPosition(const WorldPoint3 &position)  { obj->SetPosition(position); }
-	const Matrix44 &GetTransform() const {return obj->GetTransform(); }
+	{ mTransform.SetPosition(x,y,z);	}
+	void SetPosition(const WorldPoint3 &position)  { mTransform.SetPosition(position); }
+	const Matrix44 &GetTransform() const {return mTransform; }
 	Material &GetMaterial() const { return obj->GetMaterial(); }
 	void SetEnableDrawNormals(bool enableDrawNormals=true) { obj->SetEnableDrawNormals(enableDrawNormals); }
 protected:
 	RenderObject *obj;
 	Material material;
+	Matrix44 mTransform;
 };
 class SquareRenderObject : public RenderObjectHelper
 {
 public:
 	SquareRenderObject( const Matrix44 &transform = Matrix44(true))
+		: RenderObjectHelper(transform)
 	{
-		obj = new RenderObject( transform, material, square, 6);
+		obj = new RenderObject( material, square, 6);
     }
 };
 
@@ -71,6 +100,7 @@ class SphereRenderObject : public RenderObjectHelper
 {
 public:
     SphereRenderObject(const Matrix44 &transform= Matrix44(true))
+				: RenderObjectHelper(transform)
     {
         std::vector<WorldPoint3 > v;
         GeomUtil::MakeMeshSphere(v, 1.0);
@@ -79,7 +109,7 @@ public:
         {
             vertex.push_back(Point3<MeshReal>(v[0]));
         }
-		obj = new RenderObject(transform, material, (const VertexP*)vertex.data(), vertex.size());
+		obj = new RenderObject(material, (const VertexP*)vertex.data(), vertex.size());
     }
 };
 
@@ -88,6 +118,7 @@ class CircleRenderObject : public RenderObjectHelper
 {
 public:
     CircleRenderObject(const Matrix44 &transform= Matrix44(true))
+				: RenderObjectHelper(transform)
     {
         std::vector<WorldPoint3 > v;
         GeomUtil::MakeMeshCircle(v, 1.0);
@@ -97,7 +128,7 @@ public:
             vertex.push_back(Point3<MeshReal>(v[0]));
         }
 
-		obj = new RenderObject( transform, material,(const VertexP*)vertex.data(), vertex.size() );
+		obj = new RenderObject( material,(const VertexP*)vertex.data(), vertex.size() );
     }
 };
 
@@ -105,6 +136,7 @@ class PlaneRenderObject : public RenderObjectHelper
 {
 public:
     PlaneRenderObject(const Matrix44 &transform= Matrix44(true))
+				: RenderObjectHelper(transform)
     {
         std::vector<WorldPoint3> points;
         std::vector<WorldPoint2> uvs;
@@ -117,7 +149,7 @@ public:
             v.textureCoordinate = uvs[i];
             vertex.push_back(v);
         }
-		obj = new RenderObject( transform, material, (const VertexPT*)vertex.data(), vertex.size() );
+		obj = new RenderObject( material, (const VertexPT*)vertex.data(), vertex.size() );
     }
 
 };
@@ -126,6 +158,7 @@ class CubeRenderObject : public RenderObjectHelper
 {
 public:
     CubeRenderObject( const Matrix44 &transform= Matrix44(true))
+				: RenderObjectHelper(transform)
     {
         std::vector<WorldPoint3> points;
         std::vector<WorldPoint3> normals;
@@ -141,7 +174,7 @@ public:
             vertex.push_back(v);
         }
         VertexPNT *positions =  (VertexPNT *)(vertex.data());
-		obj = new RenderObject( transform, material, positions, vertex.size() );
+		obj = new RenderObject( material, positions, vertex.size() );
     }
 
 };

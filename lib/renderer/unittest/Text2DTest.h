@@ -63,12 +63,12 @@ void Test()
 		obj.SetScale(kScaleTest);
 		Assert_Test(obj.GetScale() == kScaleTest);
 
-		RenderObjectList objList;
-		objList.push_back(obj);
+
         KINEVOX_TEST_LOOP_START
         obj.Update();
         renderer.PreRender();
-		renderer.Render2D(objList);
+		renderer.SetOrtho();
+		obj.Render();
 		renderer.PostRender();
 		winDriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END

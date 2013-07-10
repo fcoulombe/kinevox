@@ -59,8 +59,7 @@ namespace GCL
 		RenderPipe::SendCommand(new RenderCommand(RENDERER_POSTRENDER));
 		RenderPipe::SendCommand(new RenderCommand(SWAP_BUFFER));
 	}
-	void Render(const RenderObjectList &renderObjectList);
-	void Render2D( const RenderObjectList &renderObjectList );
+
 	void SetCamera(Camera &camera)
 	{
 		mCamera = &camera;
@@ -78,6 +77,13 @@ namespace GCL
 	const std::vector<std::string> GetExtensions() const { return  RenderPipe::SendCommandSyncRet(new RenderCommand(RENDERER_GET_EXTENSIONS)).GetStringList();  }
 	bool IsExtensionSupported(const std::string &ext) const { return RenderPipe::SendCommandSyncRet(new RenderCommand(RENDERER_GET_IS_EXTENSION_SUPPORTED, (void*)&ext)).GetBool(); }
 	bool IsGlewExtensionSupported(const std::string &ext) const { return RenderPipe::SendCommandSyncRet(new RenderCommand(RENDERER_GET_IS_GLEW_EXTENSION_SUPPORTED, (void*)&ext)).GetBool(); }
+
+	void SetOrtho()
+	{
+		RenderPipe::SendCommand(new RenderCommand(RENDERER_SET_ORTHO));
+	}
+	Matrix44 GetProjection() {return RenderPipe::SendCommandSyncRet(new RenderCommand(RENDERER_GET_PROJECTION)).GetMatrix(); }
+	Matrix44 GetModelView() {return RenderPipe::SendCommandSyncRet(new RenderCommand(RENDERER_GET_MODELVIEW)).GetMatrix();}
 
 	static Matrix44 GetGLProjection() {return RenderPipe::SendCommandSyncRet(new RenderCommand(RENDERER_GET_GL_PROJECTION)).GetMatrix(); }
 	static Matrix44 GetGLModelView() {return RenderPipe::SendCommandSyncRet(new RenderCommand(RENDERER_GET_GL_MODELVIEW)).GetMatrix();}

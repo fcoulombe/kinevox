@@ -48,11 +48,11 @@ Camera::Camera()
 
 void Camera::Update()
 {
-	mProjectionMatrix.SetPerspective(mFov,mAspect,mNear,mFar);
-	mModelViewMatrix = Inverse(mCameraMatrix);
-	RenderPipe::SendCommand(new RenderCommand(RENDERER_SET_PROJECTION, &mProjectionMatrix));
-	RenderPipe::SendCommand(new RenderCommand(RENDERER_SET_MODELVIEW, &mProjectionMatrix));
-
+	//mProjectionMatrix.SetPerspective(mFov,mAspect,mNear,mFar);
+	//mModelViewMatrix = Inverse(mCameraMatrix);
+	uint8_t *xferbuffer = new uint8_t[sizeof(Camera)];
+	memcpy(xferbuffer, this, sizeof(Camera));
+	RenderPipe::SendCommand(new RenderCommand(RENDERER_SET_CAMERA, xferbuffer));
 }
 
 

@@ -42,8 +42,8 @@ void Test()
 		Renderer renderer(winDriver.GetWindowsHandle());
 
 		SquareRenderObject obj;
-		RenderObjectList objList;
-		objList.push_back(obj.GetRenderObject());
+		std::vector<RenderObjectHelper *> objList;
+		objList.push_back(&obj);
 
 		std::stringstream s;
 		//test initial transform is identity
@@ -117,7 +117,7 @@ void Test()
         rot+=0.001;
         obj.SetOrientation(0.0,rot,0.0);
 		renderer.PreRender();
-		renderer.Render(objList);
+		obj.Render();
 		renderer.PostRender();
 		winDriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END

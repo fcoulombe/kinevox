@@ -86,6 +86,8 @@ namespace ConfigLuaTest
 				}
 				break;
 				}
+			default:
+				break;
 			}
 			++(*it);
 		}

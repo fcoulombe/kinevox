@@ -117,9 +117,11 @@ private:
 	Matrix44 mModelView;
 	Real mFov, mAspect, mNear, mFar;
 
+#if OS_WIN32
 	HWND mhWnd;
 	HDC mhDC;
 	HGLRC mhRC;
+#endif
 
 };
 }

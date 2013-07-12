@@ -139,10 +139,10 @@ void Sprite::Render()
 	GPUProgram *tempProgram = tempMaterial.GetShader();
 	tempProgram->SetProjectionMatrix();
 	tempProgram->SetModelViewMatrix(transform);
-	tempProgram->SetUniform("CurrentFrame", (int)mCurrentFrame);
-	tempProgram->SetUniform("Dimension", Point2<int>(int(mHeader.width), int(mHeader.height)));
-	tempProgram->SetUniform("FrameCount", (int)mHeader.frameCount);
-	tempProgram->SetUniform("TextureSize", Point2<int>((int)mTextureList[0]->GetResourceWidth(), (int)mTextureList[0]->GetResourceHeight()));
+	tempProgram->SetUniform("CurrentFrame", (long)mCurrentFrame);
+	tempProgram->SetUniform("Dimension", Point2<long>(long(mHeader.width), long(mHeader.height)));
+	tempProgram->SetUniform("FrameCount", (long)mHeader.frameCount);
+	tempProgram->SetUniform("TextureSize", Point2<long>((int)mTextureList[0]->GetResourceWidth(), (int)mTextureList[0]->GetResourceHeight()));
 	tempProgram->SetTextureSampler(*mTextureList[0]);
 	mTextureList[0]->Bind();
 	tempRenderObject->GetVBO().Render();

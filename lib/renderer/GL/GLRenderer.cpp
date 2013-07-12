@@ -38,7 +38,9 @@
 #include "renderer/GL/GLShader.h"
 #include "renderer/GL/GLVertexBuffer.h"
 
+#ifdef OS_WIN32
 #include <GL/wglext.h>
+#endif
 using namespace GCL;
 
 void GLRenderer::Init3DState()
@@ -61,14 +63,15 @@ void GLRenderer::Init3DState()
 }
 
 GLRenderer::GLRenderer(size_t windowsHandle)
-	:   mFov(45.0),
+	:   mModelView(true),
+			mFov(45.0),
 	mAspect(640.0/480.0),
 	mNear(0.1),
-	mFar(100.0),
-	mModelView(true)
+	mFar(100.0)
 {
 	mProjection.SetPerspective(mFov,mAspect,mNear,mFar);
 	
+#ifdef OS_WIN32
 	// remember the window handle (HWND)
 	mhWnd = (HWND)windowsHandle;
 
@@ -118,9 +121,11 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 		mhRC = tempContext;
 	}
 	// make it the current render context
-	
+#else
+	(void)windowsHandle;
+#endif
 #if ENABLE_GLEW
-	glewExperimental=TRUE;
+	glewExperimental=1;
 	GLenum err = glewInit();
 	GCLAssertMsg(GLEW_OK == err, (const char *)glewGetErrorString(err));
 	mGlewVersion = std::string((const char*)glewGetString(GLEW_VERSION));
@@ -162,9 +167,11 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 GLRenderer::~GLRenderer()
 {
 	mExtensions.clear();
+#ifdef OS_WIN32
 	wglMakeCurrent( NULL, NULL );
 	wglDeleteContext( mhRC );
 	ReleaseDC( mhWnd, mhDC );
+#endif
 }
 
 bool GLRenderer::Update()
@@ -249,7 +256,9 @@ Matrix44 GLRenderer::GetGLModelView()
 
 void GLRenderer::SwapBuffer()
 {
+#ifdef OS_WIN32
 	SwapBuffers( mhDC );
+#endif
 }
 
 void GCL::GLRenderer::SetProjection( const Camera *camera )

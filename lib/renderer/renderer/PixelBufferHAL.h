@@ -73,12 +73,12 @@ public:
 	{
 		uint8_t *xferBuffer = new uint8_t[mWidth * mHeight*mBytesPerPixel];
 		memcpy(xferBuffer, mPixels, mWidth * mHeight*mBytesPerPixel);
-		RenderPipe::SendCommand(new RenderCommand5Arg(PBO_PUSH, this, (void*)mWidth, (void*)mHeight, (void*)mBytesPerPixel, xferBuffer));
+		RenderPipe::SendCommand(new RenderCommand5Arg(PBO_PUSH, this, (void*)mWidth, (void*)mHeight, (void*)(long)mBytesPerPixel, xferBuffer));
 	}
 	uint8_t *PullData()
 	{
 		delete [] mPixels;
-		mPixels= (uint8_t *)RenderPipe::SendCommandSyncRet(new RenderCommand4Arg(PBO_PULL, (void*)this, (void*)mWidth, (void*)mHeight, (void*)mBytesPerPixel)).GetPointer();
+		mPixels= (uint8_t *)RenderPipe::SendCommandSyncRet(new RenderCommand4Arg(PBO_PULL, (void*)this, (void*)mWidth, (void*)mHeight, (void*)(long)mBytesPerPixel)).GetPointer();
 		return mPixels;
 	}
 	bool IsValid() const 

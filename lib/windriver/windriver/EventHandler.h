@@ -38,6 +38,18 @@ namespace GCL
         GCL_LEFT = VK_LEFT,
         GCL_RIGHT = VK_RIGHT
     };
+#elif defined(OS_LINUX)
+#include <X11/keysym.h>
+    namespace GCL
+    {
+    enum KeyNames
+    {
+        GCL_ESCAPE = XK_Escape ,
+        GCL_UP = XK_Up,
+        GCL_DOWN = XK_Down,
+        GCL_LEFT = XK_Left,
+        GCL_RIGHT = XK_Right
+    };
 #else
 #error "TBD"
 namespace GCL

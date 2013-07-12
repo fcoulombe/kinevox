@@ -80,7 +80,10 @@ namespace GCL
 					break;
 
 				case LUA_TBOOLEAN:  /* booleans */
-					std::cout << lua_toboolean(L, i) ? "true" : "false";
+					if (lua_toboolean(L, i)!=0)
+						std::cout << "true";
+					else
+						std::cout << "false";
 					break;
 
 				case LUA_TNUMBER:  /* numbers */

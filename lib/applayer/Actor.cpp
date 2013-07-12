@@ -21,6 +21,8 @@
  */
 
 #include "applayer/Actor.h"
+#include <algorithm>
+
 #include "applayer/GCLApplication.h"
 
 #include <script/ConfigLua.h>
@@ -28,8 +30,8 @@
 using namespace GCL;
 
 Actor::Actor(const char *name, const char *archetype)
-	:mName(name),
-	mTransform(true)
+	: mTransform(true),
+	  mName(name)
 {
 	std::string archFile(ARCHETYPE_PATH);
 	archFile += archetype;

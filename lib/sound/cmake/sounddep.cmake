@@ -1,1 +1,1 @@
-SET(DEPENDENCIES gcl openal ogg vorbis)
+SET(DEPENDENCIES gcl gclopenal gclogg gclvorbis)

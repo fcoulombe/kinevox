@@ -1,1 +1,1 @@
-SET(DEPENDENCIES gcl glext)
+SET(DEPENDENCIES gcl gclopengl)

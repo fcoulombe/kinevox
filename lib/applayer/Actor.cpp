@@ -42,7 +42,7 @@ Actor::Actor(const char *name, const char *archetype)
 	{
 		const std::string componentName = it->GetKey();
 		PtrLuaTableIterator compIt = it->GetTableIterator();
-		std::pair<const char *, Component *> tempComponent = Component::CreateComponent(this, componentName, compIt );
+		std::pair<std::string, Component *> tempComponent = Component::CreateComponent(this, componentName, compIt );
 		mComponentList.insert(tempComponent);
 		(void)tempComponent;
 		++(*it);

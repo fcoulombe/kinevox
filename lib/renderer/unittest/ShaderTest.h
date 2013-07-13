@@ -109,20 +109,20 @@ void Test()
 		//attribute position query test
 		int loc = program.GetAttributeLocation("InPosition");
 		s.str("");
-		s<<loc<<" == ATTRIB_POSITION";
-		AssertMsg_Test(loc == ATTRIB_POSITION, s.str().c_str());
+		s<<loc<<" != -1";
+		AssertMsg_Test(loc != -1, s.str().c_str());
 
         //attribute normal query test
         loc = program.GetAttributeLocation("InNormal");
         s.str("");
-        s<<loc<<" == ATTRIB_NORMAL";
-        AssertMsg_Test(loc == ATTRIB_NORMAL, s.str().c_str());
+        s<<loc<<" != -1";
+        AssertMsg_Test(loc != -1, s.str().c_str());
 
 		//attribute texcoord query test
 		loc = program.GetAttributeLocation("InTexCoord");
 		s.str("");
-		s<<loc<<" == ATTRIB_TEXTURE_COORD";
-		AssertMsg_Test(loc == ATTRIB_TEXTURE_COORD, s.str().c_str());
+		s<<loc<<" != -1";
+		AssertMsg_Test(loc != -1, s.str().c_str());
 
 		renderer.PreRender();
 		//renderer.Render(RenderObjectList());

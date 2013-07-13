@@ -31,7 +31,9 @@
 #include <3rdparty/OpenGL.h>
 #include <gcl/Matrix44.h>
 #include "renderer/ViewPort.h"
-
+#if defined(OS_LINUX)
+#include <GL/glx.h>
+#endif
 namespace GCL
 {
     class RenderObject;
@@ -117,10 +119,18 @@ private:
 	Matrix44 mModelView;
 	Real mFov, mAspect, mNear, mFar;
 
-#if OS_WIN32
+	void InitWGL(size_t windowsHandle);
+	void InitGLX(size_t windowsHandle);
+#if defined(OS_WIN32)
+
 	HWND mhWnd;
 	HDC mhDC;
 	HGLRC mhRC;
+#elif defined(OS_LINUX)
+	Display *mDisplay;
+	Window mWin;
+	GLXContext mCtx;
+	Colormap mCmap;
 #endif
 
 };

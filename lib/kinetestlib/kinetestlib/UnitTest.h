@@ -76,7 +76,7 @@ public:
 	const size_t TICKS_PER_SECOND = 60;\
 const size_t SKIP_TICKS = 1000 / TICKS_PER_SECOND;\
 const int MAX_FRAMESKIP = 5;\
-size_t next_game_tick = Time::GetTickMs();\
+size_t next_game_tick = Time::GetTickMs()-1; \
 int loops;\
 while(i<2 || kineTestKeyListener.mIsLooping)\
 {\

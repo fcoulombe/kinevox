@@ -34,7 +34,7 @@ public:
 	{
 		glGenRenderbuffers(1, &mRenderBufferId); glErrorCheck();
 		glBindRenderbuffer(GL_RENDERBUFFER, mRenderBufferId);glErrorCheck();
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, (GLsizei)width, (GLsizei)height);glErrorCheck();
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, (GLsizei)width, (GLsizei)height);glErrorCheck();
 		glBindRenderbuffer(GL_RENDERBUFFER, 0); glErrorCheck();
 	}
 	~GLESRenderBuffer()

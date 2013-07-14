@@ -68,10 +68,9 @@ GCLINLINE void DrawCube(const WorldPoint3 &position, Real size)
 	posData[21].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y+halfSize), MeshReal(position.z-halfSize));
 	posData[22].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y-halfSize), MeshReal(position.z-halfSize));
 	posData[23].position = Point3<MeshReal>(MeshReal(position.x+halfSize), MeshReal(position.y-halfSize), MeshReal(position.z+halfSize));
-    VertexBuffer<VertexP> buffer(posData, 24);
-    buffer.PreRender();
-    buffer.Render();
-    buffer.PostRender();
+//    VertexBuffer buffer(posData, 24);
+  //  buffer.Render();
+   
 }
 
 GCLINLINE void WriteCube(WorldPoint3* cubeData, const WorldPoint3 &position, Real size)

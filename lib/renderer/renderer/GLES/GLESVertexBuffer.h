@@ -22,24 +22,31 @@
 
 #pragma once
 #include <3rdparty/OpenGL.h>
-#include "renderer/ShaderAttributeDefaultLocations.h"
 #include "renderer/Vertex.h"
+#include "renderer/GLES/GLESVertexArrayObject.h"
 
 
 namespace GCL
 {
-
-template<typename VertexType>
+	const GLint GLVertexBufferMode[] = 
+	{
+		GL_TRIANGLES,
+		GL_LINES,
+		GL_TRIANGLE_STRIP
+	};
 class GLESVertexBuffer
 {
 public:
-	GLESVertexBuffer(const VertexType *vertexArray, size_t count)
+	template<typename VertexType>
+	GLESVertexBuffer(const VertexType *vertexArray, size_t count, const AttribLocations &loc)
 	: mBufferType(GL_STATIC_DRAW),
-	  mVertexCount(count)
+	  mVertexCount(count),
+	  mVao(vertexArray)
 	{
 		glGenBuffers(1, &mVertexBufferId);glErrorCheck();
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);glErrorCheck();
-		glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)(sizeof(VertexType)*count), (const GLvoid*)vertexArray, mBufferType);glErrorCheck();
+		mVao.PostInit(vertexArray, loc);
+		glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(sizeof(VertexType)*count), (GLvoid*)vertexArray, mBufferType);glErrorCheck();
 	}
 
 
@@ -47,55 +54,46 @@ public:
 	{
 		glDeleteBuffers(1, &mVertexBufferId);glErrorCheck();
 	}
-	void PreRender()
-	{
-		if (VertexType::GetComponentType() & ePOSITION)
-		{
-            glEnableVertexAttribArray(ATTRIB_POSITION);glErrorCheck();
-			glVertexAttribPointer(ATTRIB_POSITION, 3, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToPosition());glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eNORMAL)
-		{
-            glEnableVertexAttribArray(ATTRIB_NORMAL);glErrorCheck();
-            glVertexAttribPointer(ATTRIB_NORMAL, 3, GL_UNIT, GL_TRUE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal());glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eTEXTURE_COORD)
-		{
-			glEnableVertexAttribArray(ATTRIB_TEXTURE_COORD);glErrorCheck();
-			glVertexAttribPointer(ATTRIB_TEXTURE_COORD, 2, GL_UNIT, GL_FALSE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToTextureCoordinate());glErrorCheck();
-		}
-	}
 
 	void Render(int mode = GL_TRIANGLES)
 	{
-		PreRender();
+		mVao.Bind();
 		glDrawArrays((GLenum)mode, 0, (GLsizei)mVertexCount);glErrorCheck();
-		PostRender();
-	}
-
-	void PostRender()
-	{
-
-		if (VertexType::GetComponentType() & ePOSITION)
-		{
-			glDisableVertexAttribArray(ATTRIB_POSITION);glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eNORMAL)
-		{
-			glDisableVertexAttribArray(ATTRIB_NORMAL);glErrorCheck();
-		}
-		if (VertexType::GetComponentType() & eTEXTURE_COORD)
-		{
-			glDisableVertexAttribArray(ATTRIB_TEXTURE_COORD);glErrorCheck();
-		}
+		mVao.UnBind();
 	}
 
 	bool IsValid() const { return mVertexBufferId!=(GLuint)-1; }
 
+	static GLint GetRenderMode(size_t mode)
+	{
+		GCLAssert(mode<sizeof(GLVertexBufferMode)/sizeof(GLint));
+		return GLVertexBufferMode[mode];
+	}
+	static GLESVertexBuffer *CreateVBO(size_t type, const void *vertexArray, size_t count, const AttribLocations &loc)
+	{
+		switch (type)
+		{
+		case ePOSITION:
+			return new GLESVertexBuffer((const VertexP *)vertexArray, count, loc);
+			break;
+		case ePOSITION|eNORMAL:
+			return new GLESVertexBuffer((const VertexPN *)vertexArray, count, loc);
+			break;
+		case ePOSITION|eNORMAL|eTEXTURE_COORD:
+			return new GLESVertexBuffer((const VertexPNT *)vertexArray, count, loc);
+			break;
+		case ePOSITION|eTEXTURE_COORD:
+			return new GLESVertexBuffer((const VertexPT *)vertexArray, count, loc);
+			break;
+		default:
+			GCLAssert(false);
+		}
+	}
 private:
 	GLuint mVertexBufferId;
 	GLuint mBufferType;
 	size_t mVertexCount;
+	GLESVertexArrayObject mVao;
 };
 
 }

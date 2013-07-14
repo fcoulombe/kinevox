@@ -25,42 +25,147 @@
 
 #include <sstream>
 
+#include <3rdparty/OpenGL.h>
 #include <gcl/Assert.h>
 #include <gcl/StringUtil.h>
 
-#include "renderer/GLES/GLESRenderUtils.h"
+#include "renderer/Camera.h"
 #include "renderer/Material.h"
 #include "renderer/RenderObject.h"
-#include "renderer/RenderObject2D.h"
 #include "renderer/Text2D.h"
-#include "renderer/Shader.h"
-#include "renderer/VertexBuffer.h"
-
+#include "renderer/GLES/GLESGPUProgram.h"
+#include "renderer/GLES/GLESRenderUtils.h"
+#include "renderer/GLES/GLESShader.h"
+#include "renderer/GLES/GLESVertexBuffer.h"
 
 using namespace GCL;
 
 void GLESRenderer::Init3DState()
 {
-
-    glViewport(0,0,(GLsizei)mViewPort.GetWidth(),(GLsizei)mViewPort.GetHeight()); glErrorCheck();
+	glErrorCheck();
+    glViewport(0,0,(GLsizei)mViewPort.GetWidth(),(GLsizei)mViewPort.GetHeight()); 
+	glErrorCheck();
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); glErrorCheck();
 	glClearDepth(1.0); glErrorCheck();
-	glDepthMask(GL_TRUE); glErrorCheck();
-	glDepthFunc(GL_LESS); glErrorCheck();
-	glEnable(GL_DEPTH_TEST); glErrorCheck();
-	glDisable(GL_BLEND); glErrorCheck();
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
 	
-	glEnable(GL_TEXTURE_2D); glErrorCheck();
+	glDepthMask(GL_TRUE); glErrorCheck();
+	
+	glDepthFunc(GL_LESS); glErrorCheck();
+	
+//	glEnable(GL_DEPTH_TEST); glErrorCheck();
+	
+	//glDisable(GL_BLEND); glErrorCheck();
+
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
 }
 
-GLESRenderer::GLESRenderer(size_t windowsHandle)
+void eglErrorCheck()
 {
+	/*
+		eglGetError returns the last error that has happened using egl,
+		not the status of the last called function. The user has to
+		check after every single egl call or at least once every frame.
+	*/
+	EGLint iErr = eglGetError();
+	std::string errorString = "";
+	switch (iErr)
+	{
+	case EGL_SUCCESS:
+		return;
+	//case EGL_NO_CONTEXT:
+	//	errorString = "is returned if creation of the context fails.";
+	//	break;
+	case EGL_BAD_MATCH:
+		errorString = "is generated if the current rendering API is EGL_NONE (this can only arise in an EGL implementation which does not support OpenGL ES, prior to the first call to eglBindAPI).";
+		errorString += "\nor\n";
+		errorString += "is generated if the server context state for share_context exists in an address space which cannot be shared with the newly created context, if share_context was created on a different display than the one referenced by config, or if the contexts are otherwise incompatible.";
+		break;
+	case EGL_BAD_DISPLAY:
+		errorString = "is generated if display is not an EGL display connection.";
+		break;
+	case EGL_NOT_INITIALIZED:
+		errorString = "is generated if display has not been initialized.";
+		break;
+	case EGL_BAD_CONFIG:
+		errorString = "is generated if config is not an EGL frame buffer configuration, or does not support the current rendering API. This includes requesting creation of an OpenGL ES 1.x context when the EGL_RENDERABLE_TYPE attribute of config does not contain EGL_OPENGL_ES_BIT, or creation of an OpenGL ES 2.x context when the attribute does not contain EGL_OPENGL_ES2_BIT.";
+		break;
+	case EGL_BAD_CONTEXT:
+		errorString = "is generated if share_context is not an EGL rendering context of the same client API type as the newly created context and is not EGL_NO_CONTEXT.";
+		break;
+	case EGL_BAD_ATTRIBUTE:
+		errorString = "is generated if attrib_list contains an invalid context attribute or if an attribute is not recognized or out of range. Note that attribute EGL_CONTEXT_CLIENT_VERSION is only valid when the current rendering API is EGL_OPENGL_ES_API.";
+		break;
+	case EGL_BAD_ALLOC:
+		errorString = "is generated if there are not enough resources to allocate the new context.";
+		break;
+	default:
+		errorString = "Not SureWhat Happened";
+	}
+	
+	GCLAssertMsg(false, errorString.c_str());
+
+}
+
+void GLESRenderer::InitWin(size_t windowsHandle)
+{
+#ifdef OS_WIN32
     HDC hDC = GetDC((HWND)windowsHandle);
     GCLAssertMsg(hDC, "Failed to create the device context");
     eglDisplay = eglGetDisplay(hDC);
     if(eglDisplay == EGL_NO_DISPLAY)
         eglDisplay = eglGetDisplay((EGLNativeDisplayType) EGL_DEFAULT_DISPLAY);
+#else
+    (void)windowsHandle;
+#endif
+}
+void GLESRenderer::InitLinux(size_t windowsHandle)
+{
+#ifdef OS_LINUX
+	Display*			x11Display	= mDisplay = (Display*)windowsHandle;
+	long x11Screen  = XDefaultScreen( x11Display );
+
+	// Gets the window parameters
+	Window	sRootWindow = RootWindow(x11Display, x11Screen);
+	int i32Depth = DefaultDepth(x11Display, x11Screen);
+	x11Visual = new XVisualInfo;
+	XMatchVisualInfo( x11Display, x11Screen, i32Depth, TrueColor, x11Visual);
+	GCLAssertMsg (x11Visual, "Unable to acquire visual");
+
+    mCmap = XCreateColormap( x11Display, sRootWindow, x11Visual->visual, AllocNone );
+    XSetWindowAttributes	sWA;
+
+    sWA.colormap = mCmap;
+
+    // Add to these for handling other events
+    sWA.event_mask = StructureNotifyMask | ExposureMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask;
+    unsigned int ui32Mask = CWBackPixel | CWBorderPixel | CWEventMask | CWColormap;
+	int i32Width  = (int)mViewPort.GetWidth()  < XDisplayWidth(x11Display, x11Screen) ? (int)mViewPort.GetWidth() : XDisplayWidth(x11Display, x11Screen);
+	int i32Height = (int)mViewPort.GetHeight() < XDisplayHeight(x11Display,x11Screen) ? (int)mViewPort.GetHeight(): XDisplayHeight(x11Display,x11Screen);
+
+	// Creates the X11 window
+    mWin = XCreateWindow( x11Display, RootWindow(x11Display, x11Screen), 0, 0, i32Width, i32Height,
+								 0, CopyFromParent, InputOutput, CopyFromParent, ui32Mask, &sWA);
+	XMapWindow(x11Display, mWin);
+	XFlush(x11Display);
+
+
+	eglDisplay = eglGetDisplay((EGLNativeDisplayType)x11Display);
+
+	eglWindow = (EGLNativeWindowType)mWin;
+#else
+	(void)windowsHandle;
+#endif
+
+}
+GLESRenderer::GLESRenderer(size_t windowsHandle)
+	:   mModelView(true),
+		mFov(45.0),
+	mAspect(640.0/480.0),
+	mNear(0.1),
+	mFar(100.0)
+{
+	InitWin(windowsHandle);
+	InitLinux(windowsHandle);
 
     EGLint iMajorVersion, iMinorVersion;
     EGLBoolean ret = eglInitialize(eglDisplay, &iMajorVersion, &iMinorVersion);
@@ -69,7 +174,7 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
 
 
 #if defined(ES2)
-    const EGLint pi32ConfigAttribs[] =
+   /* const EGLint pi32ConfigAttribs[] =
     {
         EGL_LEVEL,				0,
         EGL_SURFACE_TYPE,		EGL_WINDOW_BIT,
@@ -77,7 +182,14 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
         EGL_NATIVE_RENDERABLE,	EGL_FALSE,
         EGL_DEPTH_SIZE,			EGL_DONT_CARE,
         EGL_NONE
-    };
+    };*/
+	EGLint pi32ConfigAttribs[5];
+	pi32ConfigAttribs[0] = EGL_SURFACE_TYPE;
+	pi32ConfigAttribs[1] = EGL_WINDOW_BIT;
+	pi32ConfigAttribs[2] = EGL_RENDERABLE_TYPE;
+	pi32ConfigAttribs[3] = EGL_OPENGL_ES2_BIT;
+	pi32ConfigAttribs[4] = EGL_NONE;
+
 #elif defined(ES3)
 #error "TBD"
 #endif
@@ -89,7 +201,7 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
     if (eglSurface == EGL_NO_SURFACE)
     {    
         eglGetError(); // Clear error
-        eglSurface = eglCreateWindowSurface(eglDisplay, eglConfig, NULL, NULL);
+        eglSurface = eglCreateWindowSurface(eglDisplay, eglConfig, (EGLNativeWindowType)NULL, NULL);
 	}
 
 
@@ -100,26 +212,23 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
 #error "TBD"
 #endif
     eglContext = eglCreateContext(eglDisplay, eglConfig, NULL, ai32ContextAttribs);
-	glErrorCheck();
+	eglErrorCheck();
 
 	eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
-	glErrorCheck();
+	eglErrorCheck();
 
-    mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
+	int i32Values;
+	eglGetConfigAttrib(eglDisplay, eglConfig, EGL_DEPTH_SIZE , &i32Values);
 
-	mCamera=&Camera::DefaultCamera();
 	Init3DState();
-
 	mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
 	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
 	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
-#if !defined(OS_WIN32)
 	const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);glErrorCheck();
 	mShadingLanguageVersion = std::string(ver);
-#endif
 	char delim = ' ';
 	std::string extString((const char *) glGetString(GL_EXTENSIONS));
-	mExtensions = StringUtil::Explode(extString, delim); glErrorCheck();
+	StringUtil::Explode(extString,mExtensions, delim); glErrorCheck();
 
 #if ENABLE_GLEW
 	GLenum err = glewInit();
@@ -131,9 +240,24 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
 #else
 	mGlewVersion  = std::string("Unused");
 #endif
+
 }
 GLESRenderer::~GLESRenderer()
 {
+	eglMakeCurrent(eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) ;
+	eglTerminate(eglDisplay);
+
+#ifdef OS_WIN32
+	ReleaseDC( mhWnd, mhDC );
+#elif defined(OS_LINUX)
+	if (mWin)
+		XDestroyWindow(mDisplay, mWin);
+    if (mCmap)
+    	XFreeColormap( mDisplay, mCmap);
+
+    delete x11Visual;
+
+#endif
 }
 
 bool GLESRenderer::Update()
@@ -151,165 +275,6 @@ void GLESRenderer::PostRender()
 {
 }
 
-template<typename VertexType>
-void DrawNormals(const VertexData &data)
-{
-    std::vector<Point3<MeshReal> > normalLines;
-    const VertexType *vertexData = (const VertexType *)(data.mVertexData); 
-    for (size_t i=0; i<data.mVertexCount; ++i)
-    {
-        const VertexType &vertex = vertexData[i];
-        normalLines.push_back(vertex.position);
-        normalLines.push_back(vertex.position + (vertex.normal*0.5));
-    }
-    const VertexP *pos = (const VertexP *)(normalLines.data());
-    VertexData lineData(pos, normalLines.size(), VertexP::GetComponentType());
-    VertexBuffer<VertexP> buffer((const VertexP *)lineData.mVertexData, lineData.mVertexCount);
-    buffer.Render(GL_LINES);
-
-}
-void GLESRenderer::Render(const RenderObjectList &renderObjectList)
-{
-	mCamera->Update();
-
-	const Matrix44 &projection = mCamera->GetProjection();
-    const Matrix44 &modelView = mCamera->GetModelView();
-
-	for (size_t i=0;  i<renderObjectList.size(); ++i)
-	{
-#if 0
-		glPushMatrix();glErrorCheck();
-		glTranslatef(0.0,0.0,-10.0);
-
-		glBegin (GL_TRIANGLE_STRIP);
-		glTexCoord2f (0.0, 0.0);
-		glVertex3f (-0.5, -0.5, 0.0);
-		glTexCoord2f (1.0, 0.0);
-		glVertex3f (0.5, -0.5, 0.0);
-		glTexCoord2f (0.0, 1.0);
-		glVertex3f (-0.5, 0.5, 0.0);
-		glTexCoord2f (1.0, 1.0);
-		glVertex3f (0.5, 0.5, 0.0);
-		glEnd ();
-		glPopMatrix();glErrorCheck();
-#else
-        const RenderObject *tempRenderObject = renderObjectList[i];
-		const Material &tempMaterial = tempRenderObject->GetMaterial();
-		tempMaterial.Bind();
-
-		const Matrix44 &transform = tempRenderObject->GetTransform();
-		SetTransform(projection, modelView, transform, tempMaterial.GetShader());
-
-		//FC: can sort by component type
-		const VertexDataList &dataList = tempRenderObject->GetVertexData();
-        for (size_t j=0; j<dataList.size(); ++j)
-        {
-            const VertexData &data = dataList[j]; 
-            switch (data.mVertexType)
-            {
-            case ePOSITION:
-                {
-                    VertexBuffer<VertexP> buffer((const VertexP *)data.mVertexData, data.mVertexCount);
-                    buffer.Render();
-                }
-                break;
-            case ePOSITION|eNORMAL:
-                {
-                    VertexBuffer<VertexPN> buffer((const VertexPN *)data.mVertexData, data.mVertexCount);
-                    buffer.Render();
-                    if (tempRenderObject->IsDrawingNormals())
-                        DrawNormals<VertexPN>(data);
-                }
-                break;
-            case ePOSITION|eTEXTURE_COORD:
-                {
-                    VertexBuffer<VertexPT> buffer((const VertexPT *)data.mVertexData, data.mVertexCount);
-                    buffer.Render();
-                }
-                break;
-            case ePOSITION|eNORMAL|eTEXTURE_COORD:
-                {
-                    VertexBuffer<VertexPNT> buffer((const VertexPNT *)data.mVertexData, data.mVertexCount);
-                    buffer.Render();
-                    if (tempRenderObject->IsDrawingNormals())
-                        DrawNormals<VertexPNT>(data);
-                }
-                break;
-            }
-        }
-#endif
-	}
-}
-
-void GLESRenderer::Render(const RenderObject2DList &renderObjectList)
-{
-    Matrix44 ortho;
-    ortho.SetOrtho(0.0, (Real)mViewPort.GetHeight(), (Real)mViewPort.GetWidth(), 0.0, -1.0, 1.0);
-
-    Shader shader;
-    shader.Bind();
-    SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
-
-
-	for (size_t i=0;  i<renderObjectList.size(); ++i)
-	{
-#if 0
-		glPushMatrix();glErrorCheck();
-		glTranslatef(0.0,0.0,0.0);
-
-		glBegin (GL_TRIANGLE_STRIP);
-		glTexCoord2f (0.0, 0.0);
-		glVertex3f (-5.0, -5.0, 0.0);
-		glTexCoord2f (1.0, 0.0);
-		glVertex3f (5.0, -5.0, 0.0);
-		glTexCoord2f (0.0, 1.0);
-		glVertex3f (-5.0, 5.0, 0.0);
-		glTexCoord2f (1.0, 1.0);
-		glVertex3f (5.0, 5.0, 0.0);
-		glEnd ();
-		glPopMatrix();glErrorCheck();
-#else
-		//glPushMatrix();glErrorCheck();
-		renderObjectList[i]->Render();
-		//glPopMatrix();glErrorCheck();
-#endif
-	}
-}
-
-void GLESRenderer::Render(const Text2DList &renderObjectList)
-{
-    Matrix44 ortho;
-    ortho.SetOrtho(0.0, (Real)mViewPort.GetHeight(), (Real)mViewPort.GetWidth(), 0.0, -1.0, 1.0);
-
-    Shader shader;
-    shader.Bind();
-    SetTransform(proj, Matrix44::IDENTITY, Matrix44::IDENTITY, &shader);
-
-
-	for (size_t i=0;  i<renderObjectList.size(); ++i)
-	{
-#if 0
-		glPushMatrix();glErrorCheck();
-		glTranslatef(0.0,0.0,0.0);
-
-		glBegin (GL_TRIANGLE_STRIP);
-		glTexCoord2f (0.0, 0.0);
-		glVertex3f (-5.0, -5.0, 0.0);
-		glTexCoord2f (1.0, 0.0);
-		glVertex3f (5.0, -5.0, 0.0);
-		glTexCoord2f (0.0, 1.0);
-		glVertex3f (-5.0, 5.0, 0.0);
-		glTexCoord2f (1.0, 1.0);
-		glVertex3f (5.0, 5.0, 0.0);
-		glEnd ();
-		glPopMatrix();glErrorCheck();
-#else
-		//glPushMatrix();glErrorCheck();
-		renderObjectList[i]->Render();
-		//glPopMatrix();glErrorCheck();
-#endif
-	}
-}
 
 void GLESRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 {
@@ -338,14 +303,13 @@ Matrix44 GLESRenderer::GetGLModelView()
 	return modelViewMatrixd;
 }
 
-
-void GLESRenderer::SetTransform( const Matrix44 &projection, const Matrix44 &modelView, const Matrix44 &transform, Shader *shader)
+void GLESRenderer::SwapBuffer()
 {
-	Matrix44 f = modelView*transform;
+	eglSwapBuffers(eglDisplay, eglSurface);
+}
 
-	if (shader)
-	{
-		shader->SetProjectionMatrix(projection);
-		shader->SetModelViewMatrix(f);
-	}
+void GCL::GLESRenderer::SetProjection( const Camera *camera )
+{
+	mProjection.SetPerspective(camera->GetFov(),camera->GetAspectRatio(),camera->GetNear(),camera->GetFar());
+	mModelView= Inverse(camera->GetTransform());
 }

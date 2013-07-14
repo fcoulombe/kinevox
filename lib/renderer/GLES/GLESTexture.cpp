@@ -20,7 +20,7 @@
 * THE SOFTWARE.
 */
 
-#include "renderer/Texture.h"
+#include "renderer/GLES/GLESTexture.h"
 
 #include <cstring>
 #include <stdint.h>
@@ -36,10 +36,9 @@ using namespace GCL;
 GLESTexture::~GLESTexture()
 {
     glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
+	delete mPBO;
     glDeleteTextures(1, &mTextureId); glErrorCheck();
 }
-
-
 
 void GLESTexture::Initialize(const PixelBuffer &data )
 {
@@ -52,6 +51,7 @@ void GLESTexture::Initialize(const PixelBuffer &data )
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);glErrorCheck();
     glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);glErrorCheck();
 
+
     GCLAssert(BytesPerPixel[data.mBytesPerPixel-1]<= GL_RGBA);
 
 
@@ -59,19 +59,19 @@ void GLESTexture::Initialize(const PixelBuffer &data )
         (GLsizei)data.mWidth, (GLsizei)data.mHeight, 0,BytesPerPixel[data.mBytesPerPixel-1],
         GL_UNSIGNED_BYTE, NULL);glErrorCheck();
 
-    mPBO = new PixelBufferHAL(data);
+    mPBO = new GLESPixelBufferHAL();
     if (data.mPixels)
     {
         mPBO->Bind();
-        mPBO->PushData();
+        mPBO->PushData(data.mWidth, data.mHeight, data.mBytesPerPixel, data.mPixels);
         //push from pbo to texture
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)mPBO->mWidth,
-            (GLsizei)mPBO->mHeight, BytesPerPixel[mPBO->mBytesPerPixel-1],
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)data.mWidth,
+            (GLsizei)data.mHeight, BytesPerPixel[data.mBytesPerPixel-1],
             GL_UNSIGNED_BYTE, 0);glErrorCheck();
         mPBO->UnBind();
+        glErrorCheck();
     }
     glGenerateMipmap(GL_TEXTURE_2D);glErrorCheck();
-    
 }
 
 
@@ -79,7 +79,7 @@ void GLESTexture::Initialize(const PixelBuffer &data )
 const uint8_t *GLESTexture::GetPixelBufferFromVRAM() const
 {
     mPBO->Bind();
-    uint8_t *buffer = mPBO->PullData();
+    uint8_t *buffer = mPBO->PullData(GetWidth(), GetHeight(), GetBytesPerPixel());
     mPBO->UnBind();
     return buffer;
 }

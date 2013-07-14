@@ -76,12 +76,12 @@ public:
 	const size_t TICKS_PER_SECOND = 60;\
 const size_t SKIP_TICKS = 1000 / TICKS_PER_SECOND;\
 const int MAX_FRAMESKIP = 5;\
-size_t next_game_tick = Time::GetTickMs()-1; \
+size_t next_game_tick = GCL::Time::GetTickMs()-1; \
 int loops;\
 while(i<2 || kineTestKeyListener.mIsLooping)\
 {\
 			loops = 0;\
-			while(Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP) \
+			while(GCL::Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP) \
 {\
 \
 

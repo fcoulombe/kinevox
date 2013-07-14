@@ -46,8 +46,8 @@ public:
 	void SetVisible(bool isVisible = true) { mIsVisible = isVisible; }
 	bool IsVisible() const { return mIsVisible; }
 
-	size_t GetWidth() const { GCLAssert(mTexture);return mTexture->GetWidth(); }
-	size_t GetHeight() const { GCLAssert(mTexture);return mTexture->GetHeight(); }
+	size_t GetWidth() const { return buffer.mWidth; }
+	size_t GetHeight() const { return buffer.mHeight; }
 
 	void SetPosition(const WorldPoint3 &position)  	{mTransform.SetPosition(position);	}
 	const WorldPoint3 &GetPosition() const { return *(const WorldPoint3 *)&mTransform.GetPosition(); }
@@ -65,5 +65,6 @@ protected:
 	bool mIsVisible;
 	Material mMaterial;
 	WorldPoint2 mScale;
+	PixelBuffer buffer;
 };
 }

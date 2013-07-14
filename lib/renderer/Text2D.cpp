@@ -31,7 +31,7 @@ GCL::Text2D::Text2D( const char *text )
 	  mMaterial("Default")
 
 {
-	PixelBuffer buffer;
+
 	mFont.BlitText(buffer, text, 18, 100, 100);
 	mTexture = new Texture(buffer);
 

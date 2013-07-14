@@ -81,8 +81,8 @@ void Sprite::LoadSprite(const char * filename)
 		fullTextureFileName += filename;
 		Texture *texture = new Texture(fullTextureFileName.c_str());
 
-		GCLAssertMsg(mHeader.width <= texture->GetWidth(), std::string(filename) + ": You have a sprite that is bigger than your texture");
-		GCLAssertMsg(mHeader.height <= texture->GetHeight(), std::string(filename) + ": You have a sprite that is bigger than your texture");
+		GCLAssertMsg(mHeader.width <= texture->GetResourceWidth(), std::string(filename) + ": You have a sprite that is bigger than your texture");
+		GCLAssertMsg(mHeader.height <= texture->GetResourceHeight(), std::string(filename) + ": You have a sprite that is bigger than your texture");
 
 		mTextureList.push_back(texture);
 	}

@@ -32,7 +32,7 @@ namespace GLRendererTest
     void Test();
 void Test()
 {
-	TEST_START
+	KINEVOX_TEST_START
     WinDriver winDriver("GLRendererTest");
 	{
 	Renderer renderer(winDriver.GetWindowsHandle());
@@ -56,7 +56,7 @@ void Test()
     Assert_Test(renderer.IsExtensionSupported("GL_OES_framebuffer_object"));
 #endif
     Assert_Test(renderer.IsExtensionSupported("GL_OES_vertex_array_object"));
-    Assert_Test(renderer.IsExtensionSupported("GL_IMG_texture_compression_pvrtc"));
+    //Assert_Test(renderer.IsExtensionSupported("GL_IMG_texture_compression_pvrtc"));
 #else
 	//Assert_Test(renderer.IsExtensionSupported("GL_ARB_multitexture"));
 	Assert_Test(renderer.IsExtensionSupported("GL_ARB_pixel_buffer_object"));
@@ -96,6 +96,14 @@ void Test()
     Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_texture_compression"));
     Assert_Test(renderer.IsGlewExtensionSupported("GL_EXT_framebuffer_object"));
 #endif
+	KINEVOX_TEST_LOOP_START
+
+		renderer.PreRender();
+
+		renderer.PostRender();
+		winDriver.SwapBuffer();
+	KINEVOX_TEST_LOOP_END
 	}
+
 }
 }

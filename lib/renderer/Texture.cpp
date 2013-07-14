@@ -103,12 +103,16 @@ bool Texture::LoadTexture(const char *filename)
 //TODO: push this in the texture resource
 void Texture::Save(const char *filename)
 {
+#ifdef ES2
+	(void)filename;
+#else
 	std::string name(filename);
 	std::string nameResource(filename);
 	nameResource += "res.tga";
 	const uint8_t *buffer = GetTextureFromVRAM();
 	PixelBuffer::SaveTga(name.c_str(), GetWidth(), GetHeight(), GetBytesPerPixel(),buffer);
 	delete [] buffer;
+#endif
 }
 
 

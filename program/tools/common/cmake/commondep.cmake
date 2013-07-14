@@ -1,1 +1,1 @@
-SET(DEPENDENCIES gcl collada freetype)
+SET(DEPENDENCIES gcl gclcollada gclfreetype)

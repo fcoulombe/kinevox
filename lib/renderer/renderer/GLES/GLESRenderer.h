@@ -118,9 +118,21 @@ private:
 	Matrix44 mModelView;
 	Real mFov, mAspect, mNear, mFar;
 
+	void InitWin(size_t windowsHandle);
+
+	void InitLinux(size_t windowsHandle);
+#ifdef OS_WIN32
 	HWND mhWnd;
 	HDC mhDC;
 	HGLRC mhRC;
+#elif defined(OS_LINUX)
+	Display *mDisplay;
+	Window mWin;
+	Colormap mCmap;
+	XVisualInfo *x11Visual;
+#else
+#error "TBD"
+#endif
 
 
     EGLDisplay			eglDisplay;

@@ -37,7 +37,7 @@ namespace GCL
   struct VertexP
   {
     Point3<MeshReal> position;
-    static uint32_t GetComponentType()  { return ePOSITION; }
+    static size_t GetComponentType()  { return ePOSITION; }
     static size_t OffsetToPosition() { return 0; }
     static size_t OffsetToTextureCoordinate() { GCLAssert(false); return 0; }
     static size_t OffsetToNormal() { GCLAssert(false);return 0; }
@@ -47,7 +47,7 @@ namespace GCL
   {
     Point3<MeshReal> position;
     Point2<MeshReal> textureCoordinate;
-    static uint32_t GetComponentType() { return ePOSITION|eTEXTURE_COORD; }
+    static size_t GetComponentType() { return ePOSITION|eTEXTURE_COORD; }
     static size_t OffsetToPosition() { return 0; }
     static size_t OffsetToTextureCoordinate() { return sizeof(Point3<MeshReal>); }
     static size_t OffsetToNormal() { GCLAssert(false);return 0; }
@@ -59,7 +59,7 @@ namespace GCL
     Point3<MeshReal> position;
     Point3<MeshReal> normal;
     Point2<MeshReal> textureCoordinate;
-    static uint32_t GetComponentType()  { return ePOSITION|eNORMAL|eTEXTURE_COORD; }
+    static size_t GetComponentType()  { return ePOSITION|eNORMAL|eTEXTURE_COORD; }
     static size_t OffsetToPosition() { return 0; }
     static size_t OffsetToNormal() { return sizeof(Point3<MeshReal>); }
     static size_t OffsetToTextureCoordinate() { return sizeof(Point3<MeshReal>)+sizeof(Point3<MeshReal>); }
@@ -69,7 +69,7 @@ namespace GCL
   {
     Point3<MeshReal> position;
     Point3<MeshReal> normal;
-    static uint32_t GetComponentType()  { return ePOSITION|eNORMAL; }
+    static size_t GetComponentType()  { return ePOSITION|eNORMAL; }
     static size_t OffsetToPosition() { return 0; }
     static size_t OffsetToNormal() { return sizeof(Point3<MeshReal>); }
     static size_t OffsetToTextureCoordinate() { GCLAssert(false); return 0; }

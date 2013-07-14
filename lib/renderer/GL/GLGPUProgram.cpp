@@ -102,14 +102,14 @@ void GLGPUProgram::SetModelViewMatrix(const Matrix44 &m)
 	glUniformMatrix4fv(modelviewMatrixLoc,1,false,(const GLfloat*)&mm);glErrorCheck();
 }
 
-void GLGPUProgram::SetUniform(const char *uniforName, int val)
+void GLGPUProgram::SetUniform(const char *uniforName, long val)
 {
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
 	glUniform1i(uniformLoc,(GLint)val);glErrorCheck();
 }
 
-void GLGPUProgram::SetUniform(const char *uniforName, const Point2<int> &val)
+void GLGPUProgram::SetUniform(const char *uniforName, const Point2<long> &val)
 {
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
@@ -138,17 +138,17 @@ void GLGPUProgram::GetUniform(const char *uniformName, Matrix44 &m44) const
 	glGetUniformfv(	mProgramObject,uniformLoc,mf);glErrorCheck();
 	m44 = Matrix44((const float *)mf);
 }
-void GLGPUProgram::GetUniform(const char *uniformName, int &sampler) const
+void GLGPUProgram::GetUniform(const char *uniformName, long &sampler) const
 {
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
-	glGetUniformiv(mProgramObject,uniformLoc,&sampler);glErrorCheck();
+	glGetUniformiv(mProgramObject,uniformLoc,(GLint*)&sampler);glErrorCheck();
 }
-int GLGPUProgram::GetAttributeLocation(const char *attributeName) const
+long GLGPUProgram::GetAttributeLocation(const char *attributeName) const
 {
-    int ret=-1;
-	ret =  (int)glGetAttribLocation(mProgramObject,attributeName);glErrorCheck();
+    long ret=-1;
+	ret =  (long)glGetAttribLocation(mProgramObject,attributeName);glErrorCheck();
 	//GCLAssertMsg(ret!=-1, attributeName);
 	return ret;
 }

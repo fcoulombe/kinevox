@@ -291,7 +291,7 @@ void RCGPUProgramSetUniformNumber(RenderCommand *data, RenderData &renderData)
 	LOG_RENDER_CMD
 		GLESRenderData &rd = static_cast<GLESRenderData&>(renderData);
 	RenderCommand3Arg *data2 = static_cast<RenderCommand3Arg *>(data);
-	rd.mGPUProgramMap[data->mData]->SetUniform((const char *)data2->mData2, (int)data2->mData3);
+	rd.mGPUProgramMap[data->mData]->SetUniform((const char *)data2->mData2, (long)data2->mData3);
 }
 void RCGPUProgramSetUniformVec2i(RenderCommand *data, RenderData &renderData)
 {
@@ -320,7 +320,7 @@ void RCGPUProgramGetUniformNumber(RenderCommand *data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLESRenderData &rd = static_cast<GLESRenderData&>(renderData);
-	int ret;
+	long ret;
 	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
 	rd.mGPUProgramMap[data->mData]->GetUniform((const char *)data2->mData2, ret);
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
@@ -330,7 +330,7 @@ void RCGPUProgramGetAttributeLocation(RenderCommand *data, RenderData &renderDat
 	LOG_RENDER_CMD
 		GLESRenderData &rd = static_cast<GLESRenderData&>(renderData);
 	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
-	int ret  =	rd.mGPUProgramMap[data->mData]->GetAttributeLocation((const char *)data2->mData2);
+	long ret  =	rd.mGPUProgramMap[data->mData]->GetAttributeLocation((const char *)data2->mData2);
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
 void RCGPUProgramResetDefault(RenderCommand *, RenderData &)
@@ -402,21 +402,21 @@ void RCTextureGetWidth(RenderCommand *data, RenderData &renderData)
 	LOG_RENDER_CMD
 		GLESRenderData &rd = static_cast<GLESRenderData&>(renderData);
 	size_t ret = rd.mTextureMap[data->mData]->GetWidth();
-	RenderPipe::SendReturnMessage(new ReturnMessage((int)ret));
+	RenderPipe::SendReturnMessage(new ReturnMessage((long)ret));
 }
 void RCTextureGetHeight(RenderCommand *data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLESRenderData &rd = static_cast<GLESRenderData&>(renderData);
 	size_t ret = rd.mTextureMap[data->mData]->GetHeight();
-	RenderPipe::SendReturnMessage(new ReturnMessage((int)ret));
+	RenderPipe::SendReturnMessage(new ReturnMessage((long)ret));
 }
 void RCTextureGetBPP(RenderCommand *data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLESRenderData &rd = static_cast<GLESRenderData&>(renderData);
 	size_t ret = rd.mTextureMap[data->mData]->GetBytesPerPixel();
-	RenderPipe::SendReturnMessage(new ReturnMessage((int)ret));
+	RenderPipe::SendReturnMessage(new ReturnMessage((long)ret));
 }
 void RCTextureGetTextureFromVRAM(RenderCommand *data, RenderData &renderData)
 {
@@ -524,7 +524,7 @@ void RCVBORender(RenderCommand *data, RenderData &renderData)
 	LOG_RENDER_CMD
 		GLESRenderData &rd = static_cast<GLESRenderData&>(renderData);
 	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
-	rd.mVBOMap[data2->mData]->Render(GLESVertexBuffer::GetRenderMode((int)data2->mData2));
+	rd.mVBOMap[data2->mData]->Render(GLESVertexBuffer::GetRenderMode((size_t)data2->mData2));
 
 }
 void RCIsVBOValid(RenderCommand *data, RenderData &renderData)
@@ -674,3 +674,4 @@ GCL::GLESRenderThread::~GLESRenderThread()
 		Join();
 	delete mRenderData;
 }
+

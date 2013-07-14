@@ -146,12 +146,12 @@ public:
 class RenderCommandVec2iArg : public RenderCommand2Arg
 {
 public:
-	RenderCommandVec2iArg(RenderCommandType cmd, void *data, void *data2, const Point2<int> &data3)
+	RenderCommandVec2iArg(RenderCommandType cmd, void *data, void *data2, const Point2<long> &data3)
 		:RenderCommand2Arg(cmd, data, data2)
 	{
 		mData3 = data3;
 	}
-	Point2<int> mData3;
+	Point2<long> mData3;
 };
 
 class RenderCommand3Arg : public RenderCommand2Arg
@@ -213,7 +213,7 @@ public:
 		mType = RMT_BOOL;
 		mData = (data) ? (void*)1 : (void*)0;
 	}
-	ReturnMessage(int data)
+	ReturnMessage(long data)
 	{
 		mType = RMT_NUMBER;
 		mData = (void*)(data) ;
@@ -248,13 +248,13 @@ public:
 	{
 		return *(Matrix44*)(mData);
 	}
-	const bool GetBool() const
+	bool GetBool() const
 	{
 		return (mData) ? true : false;
 	}
-	const int GetNumber() const
+	long GetNumber() const
 	{
-		return (int)(mData);
+		return (long)(mData);
 	}
 	const void* GetPointer() const
 	{

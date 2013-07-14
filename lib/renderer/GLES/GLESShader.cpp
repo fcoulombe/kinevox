@@ -35,7 +35,7 @@ const GLenum GLESShader::GLShaderType[] =
 };
 
 const char *SHADER_HEADER =
-		"#version 110	\n"
+		"#version 100	\n"
 		"#pragma optimize(off) \n"
 		"#pragma debug(on) \n"
 		"\n";
@@ -70,8 +70,7 @@ GLESShader::~GLESShader()
 
 GLuint GLESShader::CompileShader(const char *shaderPath, GLenum type)
 {
-
-	const std::string fullFilename = std::string(GLSL_PATH) + std::string(shaderPath)+std::string(".glsl");
+	const std::string fullFilename = std::string(GLSL_PATH) + std::string(shaderPath)+std::string(".glsles");
 	char *fileContent = LoadShader(fullFilename.c_str());
 
 

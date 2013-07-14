@@ -39,9 +39,9 @@ class GLESVertexBuffer
 public:
 	template<typename VertexType>
 	GLESVertexBuffer(const VertexType *vertexArray, size_t count, const AttribLocations &loc)
-	: mVao(vertexArray),
-	mBufferType(GL_STATIC_DRAW),
-	  mVertexCount(count)
+	: mBufferType(GL_STATIC_DRAW),
+	  mVertexCount(count),
+	  mVao(vertexArray)
 	{
 		glGenBuffers(1, &mVertexBufferId);glErrorCheck();
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);glErrorCheck();
@@ -64,7 +64,7 @@ public:
 
 	bool IsValid() const { return mVertexBufferId!=(GLuint)-1; }
 
-	static int GetRenderMode(int mode)
+	static GLint GetRenderMode(size_t mode)
 	{
 		GCLAssert(mode<sizeof(GLVertexBufferMode)/sizeof(GLint));
 		return GLVertexBufferMode[mode];

@@ -92,14 +92,14 @@ void Test()
 	const size_t SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 	const int MAX_FRAMESKIP = 5;
 
-	size_t next_game_tick = Time::GetTickMs();
+	size_t next_game_tick = GCL::Time::GetTickMs();
 	int loops;
 
 	bool game_is_running = true;
 	while( game_is_running )
 	{
 		loops = 0;
-		while(Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP) 
+		while(GCL::Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP)
 		{
 			//perform logic at 60fps
 			//obj.Update();

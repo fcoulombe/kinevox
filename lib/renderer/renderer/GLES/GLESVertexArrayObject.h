@@ -52,7 +52,7 @@ public:
 		{
 			glDisableVertexAttribArray(loc.position);glErrorCheck();
 		}*/
-		if (mType & eNORMAL)
+		if (mType & eNORMAL && loc.normal !=-1)
 		{
 			glEnableVertexAttribArray(loc.normal);glErrorCheck();
 			glVertexAttribPointer(loc.normal, 3, GL_UNIT, GL_TRUE, sizeof(VertexType), (char*)NULL+VertexType::OffsetToNormal());glErrorCheck();

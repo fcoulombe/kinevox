@@ -51,6 +51,7 @@ void GLESRenderer::Init3DState()
 	glDepthMask(GL_TRUE); glErrorCheck();
 	
 	glDepthFunc(GL_LESS); glErrorCheck();
+
 	
 //	glEnable(GL_DEPTH_TEST); glErrorCheck();
 	
@@ -72,9 +73,9 @@ void eglErrorCheck()
 	{
 	case EGL_SUCCESS:
 		return;
-	case EGL_NO_CONTEXT: 
-		errorString = "is returned if creation of the context fails.";
-		break;
+	//case EGL_NO_CONTEXT:
+	//	errorString = "is returned if creation of the context fails.";
+	//	break;
 	case EGL_BAD_MATCH:
 		errorString = "is generated if the current rendering API is EGL_NONE (this can only arise in an EGL implementation which does not support OpenGL ES, prior to the first call to eglBindAPI).";
 		errorString += "\nor\n";
@@ -105,18 +106,67 @@ void eglErrorCheck()
 	GCLAssertMsg(false, errorString.c_str());
 
 }
-GLESRenderer::GLESRenderer(size_t windowsHandle)
-	:   mFov(45.0),
-	mAspect(640.0/480.0),
-	mNear(0.1),
-	mFar(100.0),
-	mModelView(true)
+
+void GLESRenderer::InitWin(size_t windowsHandle)
 {
+#ifdef OS_WIN32
     HDC hDC = GetDC((HWND)windowsHandle);
     GCLAssertMsg(hDC, "Failed to create the device context");
     eglDisplay = eglGetDisplay(hDC);
     if(eglDisplay == EGL_NO_DISPLAY)
         eglDisplay = eglGetDisplay((EGLNativeDisplayType) EGL_DEFAULT_DISPLAY);
+#else
+    (void)windowsHandle;
+#endif
+}
+void GLESRenderer::InitLinux(size_t windowsHandle)
+{
+#ifdef OS_LINUX
+	Display*			x11Display	= mDisplay = (Display*)windowsHandle;
+	long x11Screen  = XDefaultScreen( x11Display );
+
+	// Gets the window parameters
+	Window	sRootWindow = RootWindow(x11Display, x11Screen);
+	int i32Depth = DefaultDepth(x11Display, x11Screen);
+	x11Visual = new XVisualInfo;
+	XMatchVisualInfo( x11Display, x11Screen, i32Depth, TrueColor, x11Visual);
+	GCLAssertMsg (x11Visual, "Unable to acquire visual");
+
+    mCmap = XCreateColormap( x11Display, sRootWindow, x11Visual->visual, AllocNone );
+    XSetWindowAttributes	sWA;
+
+    sWA.colormap = mCmap;
+
+    // Add to these for handling other events
+    sWA.event_mask = StructureNotifyMask | ExposureMask | ButtonPressMask | ButtonReleaseMask | KeyPressMask | KeyReleaseMask;
+    unsigned int ui32Mask = CWBackPixel | CWBorderPixel | CWEventMask | CWColormap;
+	int i32Width  = (int)mViewPort.GetWidth()  < XDisplayWidth(x11Display, x11Screen) ? (int)mViewPort.GetWidth() : XDisplayWidth(x11Display, x11Screen);
+	int i32Height = (int)mViewPort.GetHeight() < XDisplayHeight(x11Display,x11Screen) ? (int)mViewPort.GetHeight(): XDisplayHeight(x11Display,x11Screen);
+
+	// Creates the X11 window
+    mWin = XCreateWindow( x11Display, RootWindow(x11Display, x11Screen), 0, 0, i32Width, i32Height,
+								 0, CopyFromParent, InputOutput, CopyFromParent, ui32Mask, &sWA);
+	XMapWindow(x11Display, mWin);
+	XFlush(x11Display);
+
+
+	eglDisplay = eglGetDisplay((EGLNativeDisplayType)x11Display);
+
+	eglWindow = (EGLNativeWindowType)mWin;
+#else
+	(void)windowsHandle;
+#endif
+
+}
+GLESRenderer::GLESRenderer(size_t windowsHandle)
+	:   mModelView(true),
+		mFov(45.0),
+	mAspect(640.0/480.0),
+	mNear(0.1),
+	mFar(100.0)
+{
+	InitWin(windowsHandle);
+	InitLinux(windowsHandle);
 
     EGLint iMajorVersion, iMinorVersion;
     EGLBoolean ret = eglInitialize(eglDisplay, &iMajorVersion, &iMinorVersion);
@@ -125,7 +175,7 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
 
 
 #if defined(ES2)
-    const EGLint pi32ConfigAttribs[] =
+   /* const EGLint pi32ConfigAttribs[] =
     {
         EGL_LEVEL,				0,
         EGL_SURFACE_TYPE,		EGL_WINDOW_BIT,
@@ -133,7 +183,14 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
         EGL_NATIVE_RENDERABLE,	EGL_FALSE,
         EGL_DEPTH_SIZE,			EGL_DONT_CARE,
         EGL_NONE
-    };
+    };*/
+	EGLint pi32ConfigAttribs[5];
+	pi32ConfigAttribs[0] = EGL_SURFACE_TYPE;
+	pi32ConfigAttribs[1] = EGL_WINDOW_BIT;
+	pi32ConfigAttribs[2] = EGL_RENDERABLE_TYPE;
+	pi32ConfigAttribs[3] = EGL_OPENGL_ES2_BIT;
+	pi32ConfigAttribs[4] = EGL_NONE;
+
 #elif defined(ES3)
 #error "TBD"
 #endif
@@ -145,7 +202,7 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
     if (eglSurface == EGL_NO_SURFACE)
     {    
         eglGetError(); // Clear error
-        eglSurface = eglCreateWindowSurface(eglDisplay, eglConfig, NULL, NULL);
+        eglSurface = eglCreateWindowSurface(eglDisplay, eglConfig, (EGLNativeWindowType)NULL, NULL);
 	}
 
 
@@ -188,6 +245,20 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
 }
 GLESRenderer::~GLESRenderer()
 {
+	eglMakeCurrent(eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) ;
+	eglTerminate(eglDisplay);
+
+#ifdef OS_WIN32
+	ReleaseDC( mhWnd, mhDC );
+#elif defined(OS_LINUX)
+	if (mWin)
+		XDestroyWindow(mDisplay, mWin);
+    if (mCmap)
+    	XFreeColormap( mDisplay, mCmap);
+
+    delete x11Visual;
+
+#endif
 }
 
 bool GLESRenderer::Update()

@@ -50,6 +50,30 @@ void Test()
 	{
 		Texture texture(TEXTURE_PATH"mario_fire.png");
 		texture.Bind();
+#ifdef ES2
+		try
+		{
+			texture.GetWidth();
+			Assert_Test(false);
+		}
+		catch(...)
+		{}
+		try
+		{
+			texture.GetHeight();
+			Assert_Test(false);
+		}
+		catch(...)
+		{}
+		try
+		{
+			texture.GetBytesPerPixel();
+			Assert_Test(false);
+		}
+		catch(...)
+		{}
+
+#else
 		s.str("");
 		s<<texture.GetWidth() << " == " << 256 << std::endl;
 		AssertMsg_Test(texture.GetWidth() == 256, s.str().c_str());
@@ -59,6 +83,7 @@ void Test()
 		s.str("");
 		s<<texture.GetBytesPerPixel() << " == " << 4 << std::endl;
 		AssertMsg_Test(texture.GetBytesPerPixel() == 4, s.str().c_str());
+#endif
 		
 		s.str("");
 		s<<texture.GetResourceWidth() << " == " << 256 << std::endl;
@@ -72,6 +97,7 @@ void Test()
 #ifndef OS_IPHONE
 		texture.Save("PNGTextureTest.tga");
 #endif
+
 		//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 
 	}
@@ -80,12 +106,10 @@ void Test()
 	{
 		Texture texture(TEXTURE_PATH"mushroomtga.tga");
 		texture.Bind();
-		Assert_Test(texture.GetWidth() == 512);
-		Assert_Test(texture.GetHeight() == 512);
+		Assert_Test(texture.GetResourceWidth() == 512);
+		Assert_Test(texture.GetResourceHeight() == 512);
 
-#ifndef OS_IPHONE
 		texture.Save("RGBATextureTest.tga");
-#endif
 		//Assert_Test(CompareImages("RenderTargetTest.tga", "refRenderTargetTest.tga"));
 	}
 
@@ -94,9 +118,7 @@ void Test()
 		Texture texture(TEXTURE_PATH"HappyFish.tga");
 		texture.Bind();
 
-#ifndef OS_IPHONE
 		texture.Save("RGBTextureTest.tga");
-#endif
 	}
 
     //rgb
@@ -104,9 +126,7 @@ void Test()
         Texture texture(TEXTURE_PATH"nonsquare.tga");
         texture.Bind();
 
-#ifndef OS_IPHONE
         texture.Save("NonSquareTextureTest.tga");
-#endif
     }
 
 	//Pixel Buffer Texture
@@ -119,10 +139,7 @@ void Test()
 		Texture testTexture(buffer);
 		testTexture.Bind();
 
-#ifndef OS_IPHONE
 		testTexture.Save("PixelBufferTextureTest.tga");
-#endif
-
 	}
 	FontResourceManager::Terminate();
 	TextureResourceManager::Terminate();

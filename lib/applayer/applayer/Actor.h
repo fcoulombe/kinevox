@@ -24,6 +24,7 @@
 
 #include <vector>
 #include <list>
+#include <gcl/Assert.h>
 #include <gcl/Matrix44.h>
 #include "applayer/Component.h"
 
@@ -80,7 +81,11 @@ public:
 	{
 		mTransform.SetPosition(position);
 	}
-	Component *GetComponent(const char *componentName) { return mComponentList[componentName]; }
+	Component *GetComponent(const std::string &componentName)
+	{
+		Component *tempComp = mComponentList[componentName];
+		GCLAssert(tempComp);
+		return tempComp; }
 
 	void SendEvent(size_t event, void *arg)
 	{
@@ -91,7 +96,7 @@ public:
 		}
 	}
 private:
-	typedef std::map<const char *, Component*> ComponentMap;
+	typedef std::map<std::string, Component*> ComponentMap;
 	ComponentMap mComponentList;
 	Matrix44 mTransform;
 	Actor *mParent;

@@ -34,8 +34,9 @@ class MeshRenderObject
 {
 public:
 	MeshRenderObject()
-	 : mMesh(MESH_PATH"ExampleMesh.mesh"),
-	 mTransform(true)
+	 : mTransform(true),
+	   mMesh(MESH_PATH"ExampleMesh.mesh")
+
 	{
         VertexData data;
 		data.mVertexCount =mMesh.GetVertexCount(0);

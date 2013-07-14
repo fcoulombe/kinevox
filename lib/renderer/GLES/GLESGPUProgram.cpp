@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2013 by Francois Coulombe
  *
@@ -102,14 +103,14 @@ void GLESGPUProgram::SetModelViewMatrix(const Matrix44 &m)
 	glUniformMatrix4fv(modelviewMatrixLoc,1,false,(const GLfloat*)&mm);glErrorCheck();
 }
 
-void GLESGPUProgram::SetUniform(const char *uniforName, int val)
+void GLESGPUProgram::SetUniform(const char *uniforName, long val)
 {
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
 	glUniform1i(uniformLoc,(GLint)val);glErrorCheck();
 }
 
-void GLESGPUProgram::SetUniform(const char *uniforName, const Point2<int> &val)
+void GLESGPUProgram::SetUniform(const char *uniforName, const Point2<long> &val)
 {
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
@@ -138,12 +139,12 @@ void GLESGPUProgram::GetUniform(const char *uniformName, Matrix44 &m44) const
 	glGetUniformfv(	mProgramObject,uniformLoc,mf);glErrorCheck();
 	m44 = Matrix44((const float *)mf);
 }
-void GLESGPUProgram::GetUniform(const char *uniformName, int &sampler) const
+void GLESGPUProgram::GetUniform(const char *uniformName, long &sampler) const
 {
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
-	glGetUniformiv(mProgramObject,uniformLoc,&sampler);glErrorCheck();
+	glGetUniformiv(mProgramObject,uniformLoc,(GLint*)&sampler);glErrorCheck();
 }
 int GLESGPUProgram::GetAttributeLocation(const char *attributeName) const
 {
@@ -156,3 +157,4 @@ void GLESGPUProgram::ResetDefault()
 {
 	glUseProgram(0);glErrorCheck();
 }
+

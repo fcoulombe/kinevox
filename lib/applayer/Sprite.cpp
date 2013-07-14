@@ -81,8 +81,8 @@ void Sprite::LoadSprite(const char * filename)
 		fullTextureFileName += filename;
 		Texture *texture = new Texture(fullTextureFileName.c_str());
 
-		GCLAssertMsg(mHeader.width <= texture->GetWidth(), std::string(filename) + ": You have a sprite that is bigger than your texture");
-		GCLAssertMsg(mHeader.height <= texture->GetHeight(), std::string(filename) + ": You have a sprite that is bigger than your texture");
+		GCLAssertMsg(mHeader.width <= texture->GetResourceWidth(), std::string(filename) + ": You have a sprite that is bigger than your texture");
+		GCLAssertMsg(mHeader.height <= texture->GetResourceHeight(), std::string(filename) + ": You have a sprite that is bigger than your texture");
 
 		mTextureList.push_back(texture);
 	}
@@ -139,10 +139,10 @@ void Sprite::Render()
 	GPUProgram *tempProgram = tempMaterial.GetShader();
 	tempProgram->SetProjectionMatrix();
 	tempProgram->SetModelViewMatrix(transform);
-	tempProgram->SetUniform("CurrentFrame", (int)mCurrentFrame);
-	tempProgram->SetUniform("Dimension", Point2<int>(int(mHeader.width), int(mHeader.height)));
-	tempProgram->SetUniform("FrameCount", (int)mHeader.frameCount);
-	tempProgram->SetUniform("TextureSize", Point2<int>((int)mTextureList[0]->GetResourceWidth(), (int)mTextureList[0]->GetResourceHeight()));
+	tempProgram->SetUniform("CurrentFrame", (long)mCurrentFrame);
+	tempProgram->SetUniform("Dimension", Point2<long>(long(mHeader.width), long(mHeader.height)));
+	tempProgram->SetUniform("FrameCount", (long)mHeader.frameCount);
+	tempProgram->SetUniform("TextureSize", Point2<long>((int)mTextureList[0]->GetResourceWidth(), (int)mTextureList[0]->GetResourceHeight()));
 	tempProgram->SetTextureSampler(*mTextureList[0]);
 	mTextureList[0]->Bind();
 	tempRenderObject->GetVBO().Render();

@@ -69,6 +69,7 @@ void GLESTexture::Initialize(const PixelBuffer &data )
             (GLsizei)data.mHeight, BytesPerPixel[data.mBytesPerPixel-1],
             GL_UNSIGNED_BYTE, 0);glErrorCheck();
         mPBO->UnBind();
+        glErrorCheck();
     }
     glGenerateMipmap(GL_TEXTURE_2D);glErrorCheck();
 }

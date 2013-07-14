@@ -60,7 +60,11 @@ void Test()
 			buffer[i].mColor.z =0;
 		}
 		PixelBufferHAL pb(buffer, 64, 64);
+#if !defined(ES2)
 		Assert_Test(pb.IsValid());
+#else
+		Assert_Test(!pb.IsValid()); //pbo are not supported on es2 so this can't return true
+#endif
 		pb.Bind();
 		pb.PushData();
 		pb.UnBind();
@@ -75,7 +79,9 @@ void Test()
 		pb.Bind();
 		pb.PushData();
 		pb.PullData();
+#if !defined(ES2)
 		PixelBuffer::SaveTga("PBOTest.tga", pb.mWidth, pb.mHeight, pb.mBytesPerPixel, pb.mPixels);
+#endif
 	}
 }
 }

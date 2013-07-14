@@ -25,12 +25,13 @@
 using namespace GCL;
 
 GCL::Text2D::Text2D( const char *text ) 
-	: mIsVisible(true),
-	mFont(FONT_PATH"FreeMono.ttf"),
-	mMaterial("Default"),
-	mTransform(true)
+	: mTransform(true),
+	  mFont(FONT_PATH"FreeMono.ttf"),
+	  mIsVisible(true),
+	  mMaterial("Default")
+
 {
-	PixelBuffer buffer;
+
 	mFont.BlitText(buffer, text, 18, 100, 100);
 	mTexture = new Texture(buffer);
 

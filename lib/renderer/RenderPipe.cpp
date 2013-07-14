@@ -25,6 +25,7 @@
 #include "renderer/RenderCmd.h"
 #include "rendererconf.h"
 #include GFXAPI_RenderThread_H
+
 using namespace GCL;
 
 bool RenderPipe::mIsInitialized = false;

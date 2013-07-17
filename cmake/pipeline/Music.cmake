@@ -1,9 +1,9 @@
 SET(OUT_MUSIC_DIR ${CMAKE_CURRENT_BINARY_DIR}/data/Music/)
 file(MAKE_DIRECTORY ${OUT_MUSIC_DIR})
 file(GLOB musicFiles ${dataPath}*.mp3)
-SET(LAME_EXE ${PROJECT_SOURCE_DIR}/3rdParty/lame/lame.exe)
+SET(LAME_EXE ${PROJECT_SOURCE_DIR}/3rdParty/binaries/${CMAKE_SYSTEM_NAME}${CMAKE_CXX_COMPILER_ID}32bit/usr/bin/lame.exe)
 
-SET(OGGENC_EXE ${PROJECT_SOURCE_DIR}/3rdParty/ogg/bin/oggenc.exe)
+SET(OGGENC_EXE ${PROJECT_SOURCE_DIR}/3rdParty/binaries/${CMAKE_SYSTEM_NAME}${CMAKE_CXX_COMPILER_ID}32bit/usr/bin/oggenc.exe)
 
 foreach(src ${musicFiles})
 	get_filename_component(SrcExt ${src} EXT)

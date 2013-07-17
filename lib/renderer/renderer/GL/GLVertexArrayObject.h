@@ -36,7 +36,7 @@ public:
 	template<typename VertexType>
 	GLVertexArrayObject(const VertexType *) //argument is to make the template happy.
 	{
-		mType = VertexType::GetComponentType();
+		mType = (uint32_t)VertexType::GetComponentType();
 		glGenVertexArrays(1, &mVao); glErrorCheck();
 		glBindVertexArray(mVao); glErrorCheck();
 	}

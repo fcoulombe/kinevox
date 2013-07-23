@@ -2,9 +2,7 @@ bin
 build*
 gclbuildscript
 lib/gcl
-3rdParty/fbx/obj
-3rdParty/fbx/include
-3rdParty/fbx/lib
+3rdParty
 site_scons
 *.idb
 *.pdb

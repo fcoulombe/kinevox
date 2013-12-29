@@ -62,6 +62,9 @@ public:
 	const WorldPoint2 &GetScale() const { return mScale; }
 	bool IsPlaying() const { return mIsPlaying; }
 	operator RenderObject *() { return mObj; }
+
+	void SetVisible(bool isVisible = true) { mIsVisible = isVisible; }
+	bool IsVisible() const { return mIsVisible; }
 private:
 	void LoadSprite(const char *filename);
 	std::vector<Texture*> mTextureList;
@@ -73,6 +76,7 @@ private:
 	RenderObject *mObj;
 	Material *mMaterial;
 	Matrix44 mTransform;
+	bool mIsVisible;
 };
 
 }

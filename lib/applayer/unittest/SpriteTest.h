@@ -55,6 +55,10 @@ void Test()
 		obj.Play();
 
 		Assert_Test(obj.IsPlaying() == true);
+		obj.SetVisible(false);
+		Assert_Test(obj.IsVisible() == false);
+		obj.SetVisible();
+		Assert_Test(obj.IsVisible() == true);
 		//obj.Pause();
 		KINEVOX_TEST_LOOP_START
 			obj.Update();

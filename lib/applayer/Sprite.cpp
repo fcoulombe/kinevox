@@ -51,7 +51,8 @@ Sprite::Sprite(const char *filename)
 : mCurrentFrame(0),
   mIsPlaying(false),
   mScale(1.0, 1.0),
-  mTransform(true)
+  mTransform(true),
+  mIsVisible(true)
 
 {
 	LoadSprite(filename);
@@ -132,6 +133,8 @@ void Sprite::Update()
 
 void Sprite::Render()
 {
+	if (!IsVisible())
+		return;
 	const RenderObject *tempRenderObject = mObj;
 	const Material &tempMaterial = tempRenderObject->GetMaterial();
 	tempMaterial.Bind();

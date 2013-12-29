@@ -111,9 +111,10 @@ void GLGPUProgram::SetUniform(const char *uniforName, long val)
 
 void GLGPUProgram::SetUniform(const char *uniforName, const Point2<long> &val)
 {
+	//std::cout << "SetUniform: " << uniforName << " " << val << std::endl;
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
-	glUniform2iv(uniformLoc,1, (GLint*)&val);glErrorCheck();
+	glUniform2i(uniformLoc, val.x, val.y);glErrorCheck();
 }
 
 void GLGPUProgram::SetUniform(const char *uniforName, const Point2<float> &val)

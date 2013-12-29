@@ -5,7 +5,7 @@ gclsprite = {
     texture_count = 2,
     textures = {
         texture0 = "ExampleSprite2.tga",
-        texture1 ="ExampleSprite1.tga"
+        texture1 = "ExampleSprite1.tga"
     }
     
 }

@@ -64,7 +64,7 @@ struct GLRenderData : public RenderData
 	PBOMap mPBOMap;
 };
 
-#define IS_LOGGING_RENDER_COMMAND 0
+#define IS_LOGGING_RENDER_COMMAND 1
 #if IS_LOGGING_RENDER_COMMAND
 #define LOG_RENDER_CMD std::cout << __FUNCTION__ << std::endl;
 #else
@@ -223,7 +223,6 @@ void RCCreateGPUProgram(RenderCommand *data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	
 	rd.mGPUProgramMap[data->mData] = new GLGPUProgram();
 }
 void RCDestroyGPUProgram(RenderCommand *data, RenderData &renderData)
@@ -240,6 +239,7 @@ void RCBindGPUProgram(RenderCommand *data, RenderData &renderData)
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	rd.mGPUProgramMap[data->mData]->Bind();
 }
 void RCAttachShader(RenderCommand *data, RenderData &renderData)
@@ -247,6 +247,8 @@ void RCAttachShader(RenderCommand *data, RenderData &renderData)
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
+
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	rd.mGPUProgramMap[data->mData]->AttachShader(*rd.mShaderMap[data2->mData2]);
 }
 void RCLinkGPUProgram(RenderCommand *data, RenderData &renderData)
@@ -254,12 +256,15 @@ void RCLinkGPUProgram(RenderCommand *data, RenderData &renderData)
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	rd.mGPUProgramMap[data->mData]->Link();
 }
 void RCIsGPUProgramValid(RenderCommand *data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
+
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	bool vendor = rd.mGPUProgramMap[data->mData]->IsValid();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
@@ -268,6 +273,8 @@ void RCGPUProgramSetTextureSampler(RenderCommand *data, RenderData &renderData)
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
+
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	rd.mGPUProgramMap[data->mData]->SetTextureSampler(*rd.mTextureMap[data2->mData2]);
 }
 
@@ -276,6 +283,8 @@ void RCGPUProgramSetProjection(RenderCommand *data, RenderData &renderData)
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	const Matrix44 &proj = rd.mRenderer->GetProjection();
+
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	rd.mGPUProgramMap[data->mData]->SetProjectionMatrix(proj);
 }
 void RCGPUProgramSetModelView(RenderCommand *data, RenderData &renderData)
@@ -284,6 +293,8 @@ void RCGPUProgramSetModelView(RenderCommand *data, RenderData &renderData)
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	const Matrix44 &modelview = rd.mRenderer->GetModelView();
 	RenderCommandMatArg *data2 = static_cast<RenderCommandMatArg *>(data);
+
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	rd.mGPUProgramMap[data->mData]->SetModelViewMatrix(modelview*data2->mData2);
 }
 void RCGPUProgramSetUniformNumber(RenderCommand *data, RenderData &renderData)
@@ -291,6 +302,8 @@ void RCGPUProgramSetUniformNumber(RenderCommand *data, RenderData &renderData)
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	RenderCommand3Arg *data2 = static_cast<RenderCommand3Arg *>(data);
+
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	rd.mGPUProgramMap[data->mData]->SetUniform((const char *)data2->mData2, (long)data2->mData3);
 }
 void RCGPUProgramSetUniformVec2i(RenderCommand *data, RenderData &renderData)
@@ -298,6 +311,8 @@ void RCGPUProgramSetUniformVec2i(RenderCommand *data, RenderData &renderData)
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	RenderCommandVec2iArg *data2 = static_cast<RenderCommandVec2iArg *>(data);
+
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	rd.mGPUProgramMap[data->mData]->SetUniform((const char *)data2->mData2, data2->mData3);
 }
 void RCGPUProgramSetUniformVec2f(RenderCommand *data, RenderData &renderData)
@@ -305,6 +320,8 @@ void RCGPUProgramSetUniformVec2f(RenderCommand *data, RenderData &renderData)
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	RenderCommandVec2fArg *data2 = static_cast<RenderCommandVec2fArg *>(data);
+
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	rd.mGPUProgramMap[data->mData]->SetUniform((const char *)data2->mData2, data2->mData3);
 }
 void RCGPUProgramGetUniformMatrix(RenderCommand *data, RenderData &renderData)
@@ -313,6 +330,8 @@ void RCGPUProgramGetUniformMatrix(RenderCommand *data, RenderData &renderData)
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	Matrix44 ret;
 	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
+
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	rd.mGPUProgramMap[data->mData]->GetUniform((const char *)data2->mData2, ret);
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
@@ -322,6 +341,8 @@ void RCGPUProgramGetUniformNumber(RenderCommand *data, RenderData &renderData)
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	long ret;
 	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
+
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	rd.mGPUProgramMap[data->mData]->GetUniform((const char *)data2->mData2, ret);
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
@@ -330,6 +351,8 @@ void RCGPUProgramGetAttributeLocation(RenderCommand *data, RenderData &renderDat
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
+
+	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
 	long ret  =	rd.mGPUProgramMap[data->mData]->GetAttributeLocation((const char *)data2->mData2);
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }

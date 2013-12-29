@@ -19,33 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include <iostream>
+#pragma once
+#include <sstream>
 
-#include <kinetestlib/UnitTest.h>
+#include <gcl/UnitTest.h>
+#include <applayer/Actor.h>
+#include <applayer/GCLApplication.h>
 
-#include "GCLApplicationTest.h"
-#include "ActorTest.h"
-#include "SpriteTest.h"
-#include "SpriteComponentTest.h"
-#include "ScriptComponentTest.h"
-#include "GCLApplicationCameraTest.h"
-#include "GCLRenderTargetTest.h"
-//#include "GCLText2DTest.h"
-//#include "GCLWorldTest.h"
 
-int main(int argc, char ** argv)
+using namespace GCL;
+namespace ScriptComponentTest
 {
-	 SUITE_INIT(argc, argv)
-	 GCLApplicationTest::Test();
-	 GCLApplicationCameraTest::Test();
-	 SpriteTest::Test();	 
-	 ActorTest::Test();
-	 SpriteComponentTest::Test();
-	 ScriptComponentTest::Test();
-		//GCLRenderTargetTest::Test();
-		//GCLText2DTest::Test();
-       // GCLWorldTest::Test();
-		SUITE_TERMINATE
 
-	return 0;
+void Test()
+{
+	KINEVOX_TEST_START
+	GCLApplication::Initialize("ScriptComponentTest");
+	{
+	Actor actor("TestScriptedActor", "TestScriptedActor");
+
+	actor.SetPosition(0.0,0.0,-10.0);
+	Camera cam;
+	KINEVOX_TEST_LOOP_START
+		cam.Update();
+		GCLApplication::Update();
+		GCLApplication::Render();
+	KINEVOX_TEST_LOOP_END
+	}
+	GCLApplication::Terminate();
+}
 }

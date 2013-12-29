@@ -1,0 +1,9 @@
+Archetype = {
+	Name = "TestSprite",
+	Components = {
+		SpriteComponent = {
+		sprite = "DefaultSprite"
+		}
+	}
+}
+

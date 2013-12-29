@@ -55,6 +55,7 @@ public:
 	size_t GetHeight() const { return mHeader.height; }
 	size_t GetFrameCount() const { return mHeader.frameCount; }
 
+	void SetTransform(const Matrix44 &transform) { mTransform = transform; }
 	void SetPosition(const WorldPoint3 &position);
 	const WorldPoint3 &GetPosition() const;
 

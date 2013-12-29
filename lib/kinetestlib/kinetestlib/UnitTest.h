@@ -90,8 +90,8 @@ while(i<2 || kineTestKeyListener.mIsLooping)\
 ThreadManager::ReThrowException();\
 	next_game_tick += SKIP_TICKS;\
 loops++;\
+++i;\
 }\
-	++i;\
 }\
 }\
 \

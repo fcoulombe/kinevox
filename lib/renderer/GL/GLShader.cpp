@@ -35,7 +35,7 @@ const GLenum GLShader::GLShaderType[] =
 };
 
 const char *SHADER_HEADER =
-		"#version 140 \n"
+		"#version 130 \n"
 		"#pragma optimize(off) \n"
 		"#pragma debug(on) \n"
 		"\n";

@@ -21,7 +21,7 @@
  */
 
 #include "applayer/Component.h"
-
+#include <gcl/Assert.h>
 using namespace GCL;
 
 std::map<std::string, Component::ComponentCreation> Component::mComponentCreationMap;
@@ -33,5 +33,6 @@ void Component::Register(const std::string &compName, ComponentCreation createFu
 }
 std::pair<const char *, Component *> Component::CreateComponent(Actor *parentActor, const std::string &componentName, PtrLuaTableIterator &it)
 {
+	GCLAssertMsg(Component::mComponentCreationMap.find(componentName) != Component::mComponentCreationMap.end(), componentName);
 	return Component::mComponentCreationMap[componentName](parentActor, it); 
 }

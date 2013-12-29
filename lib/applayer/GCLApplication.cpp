@@ -41,6 +41,8 @@
 #include "applayer/Component.h"
 #include "applayer/RenderComponent.h"
 #include "applayer/MeshComponent.h"
+#include "applayer/SpriteComponent.h"
+#include "applayer/ScriptComponent.h"
 using namespace GCL;
 
 GCLWorld *GCLApplication::mCurrentWorld=NULL;
@@ -49,11 +51,16 @@ WinDriver *GCLApplication::mWinDriver = NULL;
 ActorList GCLApplication::mActorList;
 SpriteList GCLApplication::mSpriteList;
 
+#define REGISTER_COMPONENT_FACTOR(name) \
+	Component::Register(#name, \
+		[](Actor *parentActor,PtrLuaTableIterator &it){return  std::pair<const char *, Component *>(#name, new name(parentActor, it));});
 
 void GCLApplication::InitializaAppLayerComponents()
 {
-	Component::Register("RenderComponent", RenderComponent::Create);
-	Component::Register("MeshComponent", MeshComponent::Create);
+	REGISTER_COMPONENT_FACTOR(MeshComponent);
+	REGISTER_COMPONENT_FACTOR(RenderComponent);
+	REGISTER_COMPONENT_FACTOR(SpriteComponent);
+	REGISTER_COMPONENT_FACTOR(ScriptComponent);
 }
 /*static */void GCLApplication::Initialize(const char *windowsTitle)
 {

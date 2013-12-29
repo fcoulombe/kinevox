@@ -24,15 +24,11 @@
 
 #include "applayer/Actor.h"
 #include "applayer/MeshComponent.h"
-#include "renderer/Mesh.h"
-#include "renderer/RenderObject.h"
+#include <renderer/Mesh.h>
+#include <renderer/RenderObject.h>
 
 using namespace GCL;
 
-std::pair<const char *, Component *> RenderComponent::Create(Actor *parentActor, PtrLuaTableIterator &it)
-{
-	return std::pair<const char *, Component *>("RenderComponent", new RenderComponent(parentActor, it));
-}
 
 GCL::RenderComponent::RenderComponent(Actor *parentActor, PtrLuaTableIterator &)
 	: Component(parentActor)

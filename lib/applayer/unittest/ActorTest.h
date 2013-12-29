@@ -37,6 +37,7 @@ void Test()
 	GCLApplication::Initialize("ActorTest");
 	{
 	Actor actor("TestActor", "TestActor");
+
 	actor.SetPosition(0.0,0.0,-10.0);
 	Camera cam;
 	KINEVOX_TEST_LOOP_START

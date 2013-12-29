@@ -41,7 +41,6 @@ public:
 	{
 
 	}
-	static std::pair<const char *, Component *> Create(Actor *parentActor,PtrLuaTableIterator &it);
 	Mesh &GetMesh() { return *mMesh; }
 private:
 	Mesh *mMesh;

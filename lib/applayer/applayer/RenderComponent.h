@@ -39,7 +39,6 @@ public:
 	virtual void Render();
 	virtual void ProcessEvent(size_t event, void *arg);
 	virtual void PostInit();
-	static std::pair<const char *, Component *> Create(Actor *parentActor, PtrLuaTableIterator &it);
 private:
 	RenderObject *mObj;
 };

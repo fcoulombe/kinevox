@@ -25,10 +25,6 @@
 
 using namespace GCL;
 
- std::pair<const char *, Component *> MeshComponent::Create(Actor *parentActor,PtrLuaTableIterator &it)
-{
-	return  std::pair<const char *, Component *>("MeshComponent", new MeshComponent(parentActor, it));
-}
 
 
 GCL::MeshComponent::MeshComponent(Actor *parentActor, PtrLuaTableIterator &it)

@@ -111,12 +111,13 @@ void Test()
 		s.str("");
 		s<<loc<<" != -1";
 		AssertMsg_Test(loc != -1, s.str().c_str());
-
+#ifndef ES2
         //attribute normal query test
         loc = program.GetAttributeLocation("InNormal");
         s.str("");
         s<<loc<<" != -1";
         AssertMsg_Test(loc != -1, s.str().c_str());
+#endif
 
 		//attribute texcoord query test
 		loc = program.GetAttributeLocation("InTexCoord");

@@ -31,8 +31,7 @@ class SpriteComponent : public Component
 public:
 	SpriteComponent(Actor *parentActor, PtrLuaTableIterator &it);
 
-	~SpriteComponent()
-	{}
+	~SpriteComponent();
 	virtual void Update(Real );
 	virtual void Render();
 	virtual void ProcessEvent(size_t event, void *arg);

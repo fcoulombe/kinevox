@@ -28,6 +28,10 @@
 
 using namespace GCL;
 
+SpriteComponent::~SpriteComponent()
+{
+	delete mSprite;
+}
 
 GCL::SpriteComponent::SpriteComponent(Actor *parentActor, PtrLuaTableIterator &it)
 	: Component(parentActor)

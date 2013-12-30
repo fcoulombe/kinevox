@@ -60,10 +60,12 @@ ScriptResource::~ScriptResource()
 }
 
 
-void ScriptResource::ExecuteFunction(const char *functionName) const
+void ScriptResource::ExecuteFunction(const char *functionName, void *obj) const
 {
-    LuaState &L = ScriptResourceManager::Instance().GetLuaState(); 
+    LuaState &L = ScriptResourceManager::Instance().GetLuaState();
     lua_getfield(L, LUA_REGISTRYINDEX, mFilename.c_str());
+    lua_pushinteger(L, (lua_Integer)obj);
+    lua_setglobal(L,"KINEVOS_ACTOR_ID");
     lua_getfield(L, -1, functionName);
     if (!lua_isnil(L, lua_gettop(L)))
     {

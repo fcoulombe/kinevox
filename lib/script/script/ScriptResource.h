@@ -32,7 +32,7 @@ class ScriptResource : public Resource
 public:
 	ScriptResource(const char *scriptFileName);
 	~ScriptResource();
-    void ExecuteFunction(const char *functionName) const;
+    void ExecuteFunction(const char *functionName, void *obj = (void*)-1) const;
     const std::string &GetFileName() const { return mFilename; }
 private:
 	ScriptResource() {}

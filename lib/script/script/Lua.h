@@ -23,12 +23,14 @@
 #pragma once
 
 #include <iostream>
+#include <sstream>
 extern "C"
 {
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
 }
+#include <gcl/Assert.h>
 namespace GCL
 {
     class LuaState
@@ -53,14 +55,18 @@ namespace GCL
         }
 
         // implicitly act as a lua_State pointer
-        inline operator lua_State*() {
+        inline operator lua_State*()
+        		{
             return L;
         }
         void ReportLuaErrors( const int status)
         {
-            if ( status!=0 ) {
-                std::cerr << lua_tostring(L, -1) << std::endl;
+            if ( status!=0 )
+            {
+                std::stringstream err;
+                err<< std::endl << lua_tostring(L, -1) ;
                 lua_pop(L, 1); // remove error message
+                GCLAssertMsg(false, err.str().c_str());
             }
         }
 

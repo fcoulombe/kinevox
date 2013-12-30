@@ -31,8 +31,7 @@ class ScriptComponent : public Component
 public:
 	ScriptComponent(Actor *parentActor, PtrLuaTableIterator &it);
 
-	~ScriptComponent()
-	{}
+	~ScriptComponent();
 	virtual void Update(Real );
 	virtual void Render();
 	virtual void ProcessEvent(size_t event, void *arg);

@@ -27,6 +27,7 @@
 #include "applayer/Actor.h"
 #include "applayer/GCLText2D.h"
 #include "applayer/Sprite.h"
+#include "applayer/ScriptApi.h"
 #include <gcl/Assert.h>
 #include <input/Input.h>
 #include <renderer/Renderer.h>
@@ -48,6 +49,7 @@ using namespace GCL;
 GCLWorld *GCLApplication::mCurrentWorld=NULL;
 Renderer *GCLApplication::mRenderer = NULL;
 WinDriver *GCLApplication::mWinDriver = NULL;
+ScriptApi *GCLApplication::mScriptApi = NULL;
 ActorList GCLApplication::mActorList;
 SpriteList GCLApplication::mSpriteList;
 
@@ -71,10 +73,12 @@ void GCLApplication::InitializaAppLayerComponents()
 	GCLAssert(mRenderer == NULL);
     mWinDriver = new WinDriver(windowsTitle);
 	mRenderer = new Renderer(mWinDriver->GetWindowsHandle());
+	mScriptApi = new ScriptApi();
 	InitializaAppLayerComponents();
 }
 /*static */void GCLApplication::Terminate()
 {
+	delete mScriptApi;
     GCLAssert(mActorList.size() == 0);
  	GCLAssert(mRenderer);
 	delete mRenderer;

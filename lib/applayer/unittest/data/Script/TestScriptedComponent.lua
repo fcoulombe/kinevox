@@ -1,5 +1,15 @@
 
+function Initialize()
+    kinevox.Log("TestInit")
+    s = 1
+end
+
 function Logic()
-    kinevox.FunctionToExpose()
-    FunctionToExpose()
+    s = s+s
+    kinevox.Log("TestLog"..s)
+end
+
+
+function Terminate()
+    kinevox.Log("TestTerminate")
 end

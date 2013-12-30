@@ -42,6 +42,7 @@ void Test()
 	Camera cam;
 	KINEVOX_TEST_LOOP_START
 		cam.Update();
+		actor.Update(1.0);
 		GCLApplication::Update();
 		GCLApplication::Render();
 	KINEVOX_TEST_LOOP_END

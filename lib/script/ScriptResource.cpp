@@ -65,6 +65,14 @@ void ScriptResource::ExecuteFunction(const char *functionName) const
     LuaState &L = ScriptResourceManager::Instance().GetLuaState(); 
     lua_getfield(L, LUA_REGISTRYINDEX, mFilename.c_str());
     lua_getfield(L, -1, functionName);
-    int s = lua_pcall(L, 0, 0, 0);     
-    L.ReportLuaErrors(s);
+    if (!lua_isnil(L, lua_gettop(L)))
+    {
+    	int s = lua_pcall(L, 0, 0, 0);
+    	L.ReportLuaErrors(s);
+    }
+    else
+    {
+    	lua_pop(L, 1);
+    }
+    lua_pop(L, 1);
 }

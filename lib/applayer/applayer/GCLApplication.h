@@ -37,6 +37,7 @@ class Input;
 class WinDriver;
 class GCLWorld;
 class Sprite;
+class ScriptApi;
 typedef std::vector<Actor *> ActorList;
 
 typedef std::vector<Sprite *> SpriteList;
@@ -84,6 +85,8 @@ private:
     static GCLWorld *mCurrentWorld;
 	static ActorList mActorList;
 	static SpriteList mSpriteList;
+
+	static ScriptApi *mScriptApi;
 
 	static void InitializaAppLayerComponents();
 };

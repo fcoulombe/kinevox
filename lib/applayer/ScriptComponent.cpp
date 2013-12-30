@@ -46,9 +46,14 @@ GCL::ScriptComponent::ScriptComponent(Actor *parentActor, PtrLuaTableIterator &i
 		}
 		++(*it);
 	}
+	mScriptResource->ExecuteFunction("Initialize");
 }
 
-
+ScriptComponent::~ScriptComponent()
+{
+	mScriptResource->ExecuteFunction("Terminate");
+	ScriptResourceManager::Instance().ReleaseResource(mScriptResource);
+}
 
 void GCL::ScriptComponent::ProcessEvent( size_t , void * )
 {
@@ -57,6 +62,7 @@ void GCL::ScriptComponent::ProcessEvent( size_t , void * )
 
 void ScriptComponent::Update(Real )
 {
+	mScriptResource->ExecuteFunction("Logic");
 }
 
 void GCL::ScriptComponent::Render()

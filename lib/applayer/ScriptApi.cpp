@@ -35,24 +35,24 @@ int KLog(lua_State * L)
 	return 1;
 }
 
-int KGetScreenWidth(lua_State * L)
+int KGetScreenSize(lua_State * L)
 {
-	int width = Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
-	lua_pushinteger(L, width);
-	return 1;
-}
+	lua_newtable(L);
 
-int KGetScreenHeight(lua_State * L)
-{
 	int height = Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT");
-	lua_pushinteger(L, height);
+	lua_pushnumber(L,1);
+	lua_pushinteger(L,height);
+	lua_settable(L,-3);
+	int width = Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
+	lua_pushnumber(L,0);
+	lua_pushinteger(L,width);
+	lua_settable(L,-3);
 	return 1;
 }
 
 static const luaL_Reg kinevoxExposedFunc[] = {
 		{ "Log", KLog },
-		{ "GetScreenWidth", KGetScreenWidth},
-		{ "GetScreenHeight", KGetScreenHeight},
+		{ "GetScreenSize", KGetScreenSize},
 		{ NULL, NULL } };
 int luaopen_kinevoxLib(lua_State * L) {
 	luaL_newlib(L, kinevoxExposedFunc);

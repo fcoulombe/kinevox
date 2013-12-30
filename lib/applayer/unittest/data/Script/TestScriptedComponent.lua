@@ -1,19 +1,19 @@
 
 function Initialize()
-    SCREEN_WIDTH = kinevox.GetScreenWidth()
-    SCREEN_HEIGHT  = kinevox.GetScreenHeight()
-    assert(SCREEN_WIDTH==640)
-    assert(SCREEN_HEIGHT==480)
-    kinevox.Log("TestInit")
-    s = 1
+  SCREEN_SIZE = kinevox.GetScreenSize()
+  kinevox.Log("TestInit"..SCREEN_SIZE[0].." "..SCREEN_SIZE[1])
+  assert(SCREEN_SIZE[0]==640)
+  assert(SCREEN_SIZE[1]==480)
+  kinevox.Log("TestInit")
+  s = 1
 end
 
 function Logic()
-    s = s+s
-    kinevox.Log("TestLog"..s)
+  s = s+s
+  kinevox.Log("TestLog"..s)
 end
 
 
 function Terminate()
-    kinevox.Log("TestTerminate")
+  kinevox.Log("TestTerminate")
 end

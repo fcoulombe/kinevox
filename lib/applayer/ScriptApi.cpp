@@ -21,17 +21,45 @@
  */
 
 #include "applayer/ScriptApi.h"
+#include "applayer/Actor.h"
 #include <script/ScriptResourceManager.h>
 #include <script/Lua.h>
 #include <gcl/Config.h>
 
 using namespace GCL;
 
-int KLog(lua_State * /*L*/);
+long GetObjectId(lua_State * L)
+{
+	lua_getglobal(L,"KINEVOS_ACTOR_ID");
+	long objectid = lua_tointeger(L, lua_gettop(L));
+	lua_pop(L, 1);
+	return objectid;
+}
+
 int KLog(lua_State * L)
 {
 	const char *str = lua_tostring(L, 1);
 	std::cout << "[Script] " << str << std::endl;
+	return 1;
+}
+int KGetPosition(lua_State * L)
+{
+	long objectid = GetObjectId(L);
+
+	const Actor *actor = (const Actor *)objectid;
+	const WorldPoint3 &pos = actor->GetPosition();
+	lua_newtable(L);
+
+	lua_pushnumber(L,0);
+	lua_pushinteger(L,pos.x);
+	lua_settable(L,-3);
+	lua_pushnumber(L,1);
+	lua_pushinteger(L,pos.y);
+	lua_settable(L,-3);
+	lua_pushnumber(L,2);
+	lua_pushinteger(L,pos.z);
+	lua_settable(L,-3);
+
 	return 1;
 }
 
@@ -52,6 +80,7 @@ int KGetScreenSize(lua_State * L)
 
 static const luaL_Reg kinevoxExposedFunc[] = {
 		{ "Log", KLog },
+		{ "GetPosition", KGetPosition},
 		{ "GetScreenSize", KGetScreenSize},
 		{ NULL, NULL } };
 int luaopen_kinevoxLib(lua_State * L) {

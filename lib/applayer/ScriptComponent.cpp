@@ -33,6 +33,7 @@ using namespace GCL;
 GCL::ScriptComponent::ScriptComponent(Actor *parentActor, PtrLuaTableIterator &it)
 	: Component(parentActor)
 {
+	ScriptResourceManager &scriptManager = ScriptResourceManager::Instance();
 	while (!it->End())
 	{
 		if (it->GetKey() == "filename")
@@ -40,18 +41,21 @@ GCL::ScriptComponent::ScriptComponent(Actor *parentActor, PtrLuaTableIterator &i
 			const std::string filename =  it->GetString();
 			std::stringstream s;
 			s<<SCRIPT_PATH<<filename<<".luac";
-			const Resource *resource = ScriptResourceManager::Instance().LoadResource(s.str().c_str());
+			const Resource *resource = scriptManager.LoadResource(s.str().c_str());
 			const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
 			mScriptResource = luaResource;
 		}
 		++(*it);
 	}
-	mScriptResource->ExecuteFunction("Initialize");
+	//scriptManager.ExposeFunction("GetPosition", std::bind(&ScriptComponent::GetPosition, this, std::placeholders::_1 ));
+
+	mScriptResource->ExecuteFunction("Initialize", mParentActor);
 }
+
 
 ScriptComponent::~ScriptComponent()
 {
-	mScriptResource->ExecuteFunction("Terminate");
+	mScriptResource->ExecuteFunction("Terminate", mParentActor);
 	ScriptResourceManager::Instance().ReleaseResource(mScriptResource);
 }
 
@@ -62,7 +66,7 @@ void GCL::ScriptComponent::ProcessEvent( size_t , void * )
 
 void ScriptComponent::Update(Real )
 {
-	mScriptResource->ExecuteFunction("Logic");
+	mScriptResource->ExecuteFunction("Logic", mParentActor);
 }
 
 void GCL::ScriptComponent::Render()

@@ -23,6 +23,7 @@
 #include "applayer/ScriptApi.h"
 #include <script/ScriptResourceManager.h>
 #include <script/Lua.h>
+#include <gcl/Config.h>
 
 using namespace GCL;
 
@@ -30,22 +31,35 @@ int KLog(lua_State * /*L*/);
 int KLog(lua_State * L)
 {
 	const char *str = lua_tostring(L, 1);
-    std::cout << "[Script] " << str<<std::endl;
-    return 1;
+	std::cout << "[Script] " << str << std::endl;
+	return 1;
 }
 
-
-static const luaL_Reg kinevoxExposedFunc [] = {
-    {"Log",KLog},
-    {NULL, NULL}
-};
-int luaopen_kinevoxLib(lua_State * L )
+int KGetScreenWidth(lua_State * L)
 {
-    luaL_newlib (L, kinevoxExposedFunc);
-    return 1;
+	int width = Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
+	lua_pushinteger(L, width);
+	return 1;
 }
 
-ScriptApi::ScriptApi()
+int KGetScreenHeight(lua_State * L)
 {
-   ScriptResourceManager::Instance().ExposeModule("kinevox", luaopen_kinevoxLib);
+	int height = Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT");
+	lua_pushinteger(L, height);
+	return 1;
+}
+
+static const luaL_Reg kinevoxExposedFunc[] = {
+		{ "Log", KLog },
+		{ "GetScreenWidth", KGetScreenWidth},
+		{ "GetScreenHeight", KGetScreenHeight},
+		{ NULL, NULL } };
+int luaopen_kinevoxLib(lua_State * L) {
+	luaL_newlib(L, kinevoxExposedFunc);
+	return 1;
+}
+
+ScriptApi::ScriptApi() {
+	ScriptResourceManager::Instance().ExposeModule("kinevox",
+			luaopen_kinevoxLib);
 }

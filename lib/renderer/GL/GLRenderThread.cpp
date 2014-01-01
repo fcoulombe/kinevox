@@ -64,7 +64,7 @@ struct GLRenderData : public RenderData
 	PBOMap mPBOMap;
 };
 
-#define IS_LOGGING_RENDER_COMMAND 1
+#define IS_LOGGING_RENDER_COMMAND 0
 #if IS_LOGGING_RENDER_COMMAND
 #define LOG_RENDER_CMD std::cout << __FUNCTION__ << std::endl;
 #else

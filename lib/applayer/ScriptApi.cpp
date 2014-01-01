@@ -62,6 +62,20 @@ int KGetPosition(lua_State * L)
 
 	return 1;
 }
+int KSetPosition(lua_State * L)
+{
+	long objectid = GetObjectId(L);
+
+	Actor *actor = (Actor *)objectid;
+
+	Real x = lua_tonumber(L, 1);
+	Real y = lua_tonumber(L, 2);
+	Real z = lua_tonumber(L, 3);
+	actor->SetPosition(x, y, z);
+
+
+	return 1;
+}
 
 int KGetScreenSize(lua_State * L)
 {
@@ -80,15 +94,27 @@ int KGetScreenSize(lua_State * L)
 
 static const luaL_Reg kinevoxExposedFunc[] = {
 		{ "Log", KLog },
-		{ "GetPosition", KGetPosition},
 		{ "GetScreenSize", KGetScreenSize},
 		{ NULL, NULL } };
-int luaopen_kinevoxLib(lua_State * L) {
+
+static const luaL_Reg objectExposedFunc[] = {
+		{ "GetPosition", KGetPosition},
+		{ "SetPosition", KSetPosition},
+		{ NULL, NULL } };
+int luaopen_kinevoxLib(lua_State * L)
+{
 	luaL_newlib(L, kinevoxExposedFunc);
 	return 1;
 }
+int luaopen_objectLib(lua_State * L)
+{
+	luaL_newlib(L, objectExposedFunc);
+	return 1;
+}
 
-ScriptApi::ScriptApi() {
-	ScriptResourceManager::Instance().ExposeModule("kinevox",
-			luaopen_kinevoxLib);
+ScriptApi::ScriptApi()
+{
+	ScriptResourceManager::Instance().ExposeModule("kinevox",luaopen_kinevoxLib);
+	ScriptResourceManager::Instance().ExposeModule("object",luaopen_objectLib);
+
 }

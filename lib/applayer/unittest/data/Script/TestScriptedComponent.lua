@@ -6,7 +6,7 @@ function Initialize()
   assert(SCREEN_SIZE[1]==480)
   kinevox.Log("TestInit")
   s = 1
-  pos = kinevox.GetPosition()
+  pos = object.GetPosition()
   kinevox.Log("position: "..pos[0].." "..pos[1].." "..pos[2])
   
 end
@@ -15,7 +15,9 @@ function Logic()
   s = s+s
   kinevox.Log("TestLog"..s)
   
-  pos = kinevox.GetPosition()
+  object.SetPosition(10,20)
+  pos = object.GetPosition()
+  assert(pos[0] == 10 and pos[1] == 20)
   kinevox.Log("position: "..pos[0].." "..pos[1].." "..pos[2])
 end
 

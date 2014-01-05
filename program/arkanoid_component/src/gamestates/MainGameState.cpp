@@ -83,7 +83,7 @@ MainGameState::MainGameState()
 }
 bool MainGameState::Update(Real dt)
 {
-	std::cout << "MainGameState";
+	//std::cout << "MainGameState";
 	for (size_t i=0; i<NUM_ROW*NUM_COL; ++i)
 	{
 		blocks[i]->Update(dt);

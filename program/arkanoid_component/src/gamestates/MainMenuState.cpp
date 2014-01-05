@@ -39,7 +39,7 @@ MainMenuState::MainMenuState()
 }
 bool MainMenuState::Update(Real dt)
 {
-	std::cout << "Main Menu" << std::endl;
+	//std::cout << "Main Menu" << std::endl;
 	menu.Update();
 	if (Input::IsKeyUp(GCL_ENTER))
 	{

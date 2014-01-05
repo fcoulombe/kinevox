@@ -30,7 +30,8 @@ using namespace GCL;
 using namespace Arkanoid;
 SplashState::SplashState()
 : GameState("Splash"),
-  splash("Splash")
+  splash("Splash"),
+  timeSpent(0.)
 {
 	splash.SetPosition(WorldPoint3(320,240,0));
 }

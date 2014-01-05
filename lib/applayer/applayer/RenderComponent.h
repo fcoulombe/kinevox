@@ -31,8 +31,7 @@ class RenderComponent : public Component
 public:
 	RenderComponent(Actor *parentActor, PtrLuaTableIterator &it);
 
-	~RenderComponent()
-	{}
+	~RenderComponent();
 	virtual void Update(Real )
 	{
 	}

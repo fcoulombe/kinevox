@@ -32,8 +32,7 @@ class MeshComponent : public Component
 public:
 	MeshComponent(Actor *parentActor, PtrLuaTableIterator &it);
 
-	~MeshComponent()
-	{}
+	~MeshComponent();
 	virtual void Update(Real )
 	{
 	}

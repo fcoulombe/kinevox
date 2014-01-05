@@ -40,3 +40,8 @@ GCL::MeshComponent::MeshComponent(Actor *parentActor, PtrLuaTableIterator &it)
 		++(*it);
 	}
 }
+
+GCL::MeshComponent::~MeshComponent()
+{
+	delete mMesh;
+}

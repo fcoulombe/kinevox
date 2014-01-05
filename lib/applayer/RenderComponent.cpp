@@ -33,7 +33,12 @@ using namespace GCL;
 GCL::RenderComponent::RenderComponent(Actor *parentActor, PtrLuaTableIterator &)
 	: Component(parentActor)
 {
+	mObj = nullptr;
+}
 
+RenderComponent::~RenderComponent()
+{
+	delete mObj;
 }
 
 void GCL::RenderComponent::PostInit()

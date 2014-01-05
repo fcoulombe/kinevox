@@ -59,7 +59,10 @@ public:
 	static void Update(Real dt)
 	{
 		if (mStates.size())
-			mStates.top()->Update(dt);
+		{
+			GameStatePtr temp = mStates.top();
+			temp->Update(dt);
+		}
 	}
 	static const std::string &GetCurrentStateName() { GCLAssert(!mStates.empty()); return mStates.top()->GetStateName(); }
 private:

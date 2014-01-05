@@ -25,46 +25,15 @@
 #include <gcl/UnitTest.h>
 #include <applayer/Actor.h>
 #include <applayer/GameState.h>
+#include <applayer/GameStateManager.h>
 #include <applayer/GCLApplication.h>
 
-#include <stack>
 
 
 using namespace GCL;
 namespace GameStateTest
 {
-class GameStateManager
-{
-public:
-	void ChangeToState(GameStatePtr state)
-	{
-		CleanStates();
-		mStates.push(state);
-	}
-	void PushState(GameStatePtr state)
-	{
-		mStates.push(state);
-	}
-	void PopState()
-	{
-		mStates.pop();
-	}
-	void CleanStates()
-	{
-		while (!mStates.empty())
-			mStates.pop();
-	}
 
-	void Update(Real dt)
-	{
-		if (mStates.size())
-			mStates.top()->Update(dt);
-	}
-	const std::string &GetCurrentStateName() const { GCLAssert(!mStates.empty()); return mStates.top()->GetStateName(); }
-private:
-	std::stack<GameStatePtr> mStates;
-};
-GameStateManager stateManager;
 bool hasBeenInMainMenuState=false;
 bool hasBeenInConfigState=false;
 bool  hasBeenInMainGameState=false;
@@ -92,8 +61,8 @@ public:
 	bool Update(Real dt)
 	{
 		hasBeenInConfigState = true;
-		stateManager.PopState();
 		GameState::Update(dt);
+		GameStateManager::PopState();
 		return true;
 	}
 };
@@ -134,9 +103,9 @@ public:
 	{
 		hasBeenInMainMenuState = true;
 		if(mFrameCount == 0)
-			stateManager.PushState(std::make_shared<ConfigState>());
+			GameStateManager::PushState(std::make_shared<ConfigState>());
 		else if (mFrameCount == 1)
-			stateManager.ChangeToState(std::make_shared<MainGameState>());
+			GameStateManager::ChangeToState(std::make_shared<MainGameState>());
 		++mFrameCount;
 		GameState::Update(dt);
 		return true;
@@ -154,7 +123,7 @@ public:
 	bool Update(Real dt)
 	{
 		hasBeenInSplashState = true;
-		stateManager.ChangeToState(std::make_shared<MainMenuState>());
+		GameStateManager::ChangeToState(std::make_shared<MainMenuState>());
 		GameState::Update(dt);
 		return true;
 	}
@@ -166,18 +135,16 @@ void Test()
 	KINEVOX_TEST_START
 	GCLApplication::Initialize("GameStateTest");
 	{
-		stateManager.ChangeToState(std::make_shared<SplashState>());
-		Assert_Test(stateManager.GetCurrentStateName() == "Splash");
+		GameStateManager::ChangeToState(std::make_shared<SplashState>());
+		Assert_Test(GameStateManager::GetCurrentStateName() == "Splash");
 
 
 		//KINEVOX_TEST_LOOP_START
 		for (size_t i=0; i<20; ++i)
 		{
-			stateManager.Update(1.0);
 			GCLApplication::Update();
 			GCLApplication::Render();
 		}
-		stateManager.CleanStates();
 		Assert_Test(hasBeenInMainMenuState);
 		Assert_Test(hasBeenInConfigState);
 		Assert_Test(hasBeenInMainGameState);

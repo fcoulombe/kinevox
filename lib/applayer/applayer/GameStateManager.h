@@ -22,59 +22,48 @@
 
 #pragma once
 
-#include <deque>
-#include <memory>
-#include <string>
-
-#include <gcl/Assert.h>
-#include <gcl/WorldUnit.h>
-
-
+#include "applayer/GameState.h"
+#include <stack>
 namespace GCL
 {
-class GameState;
-typedef std::shared_ptr<GameState> GameStatePtr;
-class GameState
+class GameStateManager
 {
 public:
-	GameState(const std::string &name)
-: mName(name)
+	static void Initialize()
 	{
 
 	}
-	virtual ~GameState()
+	static void Terminate()
 	{
+		CleanStates();
+	}
+	static void ChangeToState(GameStatePtr state)
+	{
+		CleanStates();
+		mStates.push(state);
+	}
+	static void PushState(GameStatePtr state)
+	{
+		mStates.push(state);
+	}
+	static void PopState()
+	{
+		mStates.pop();
+	}
+	static void CleanStates()
+	{
+		while (!mStates.empty())
+			mStates.pop();
+	}
 
-	}
-	void PushChildState(GameStatePtr state)
+	static void Update(Real dt)
 	{
-		mChildStates.push_back(state);
+		if (mStates.size())
+			mStates.top()->Update(dt);
 	}
-	void PopChildState()
-	{
-		mChildStates.pop_back();
-	}
-	virtual bool Update(Real dt)
-	{
-		for (ChildGameStateList::iterator it = mChildStates.begin(); it != mChildStates.end();)
-		{
-			if (!(*it)->Update(dt))
-			{
-				it = mChildStates.erase(it);
-			}
-			else
-				++it;
-		}
-		return true;
-	}
-	const std::string &GetStateName()
-	{
-		return mName;
-	}
+	static const std::string &GetCurrentStateName() { GCLAssert(!mStates.empty()); return mStates.top()->GetStateName(); }
 private:
-	typedef std::deque<GameStatePtr> ChildGameStateList;
-	ChildGameStateList mChildStates;
-	std::string mName;
-};
+	static std::stack<GameStatePtr> mStates;
 
+};
 }

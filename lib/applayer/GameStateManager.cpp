@@ -20,61 +20,7 @@
  * THE SOFTWARE.
  */
 
-#pragma once
+#include "applayer/GameStateManager.h"
+using namespace GCL;
 
-#include <deque>
-#include <memory>
-#include <string>
-
-#include <gcl/Assert.h>
-#include <gcl/WorldUnit.h>
-
-
-namespace GCL
-{
-class GameState;
-typedef std::shared_ptr<GameState> GameStatePtr;
-class GameState
-{
-public:
-	GameState(const std::string &name)
-: mName(name)
-	{
-
-	}
-	virtual ~GameState()
-	{
-
-	}
-	void PushChildState(GameStatePtr state)
-	{
-		mChildStates.push_back(state);
-	}
-	void PopChildState()
-	{
-		mChildStates.pop_back();
-	}
-	virtual bool Update(Real dt)
-	{
-		for (ChildGameStateList::iterator it = mChildStates.begin(); it != mChildStates.end();)
-		{
-			if (!(*it)->Update(dt))
-			{
-				it = mChildStates.erase(it);
-			}
-			else
-				++it;
-		}
-		return true;
-	}
-	const std::string &GetStateName()
-	{
-		return mName;
-	}
-private:
-	typedef std::deque<GameStatePtr> ChildGameStateList;
-	ChildGameStateList mChildStates;
-	std::string mName;
-};
-
-}
+std::stack<GameStatePtr> GameStateManager::mStates;

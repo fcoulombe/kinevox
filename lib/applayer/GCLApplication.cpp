@@ -26,6 +26,7 @@
 
 #include "applayer/Actor.h"
 #include "applayer/GCLText2D.h"
+#include "applayer/GameStateManager.h"
 #include "applayer/Sprite.h"
 #include "applayer/ScriptApi.h"
 #include <gcl/Assert.h>
@@ -75,9 +76,12 @@ void GCLApplication::InitializaAppLayerComponents()
 	mRenderer = new Renderer(mWinDriver->GetWindowsHandle());
 	mScriptApi = new ScriptApi();
 	InitializaAppLayerComponents();
+	GameStateManager::Initialize();
 }
 /*static */void GCLApplication::Terminate()
 {
+	GameStateManager::Terminate();
+
 	delete mScriptApi;
     GCLAssert(mActorList.size() == 0);
  	GCLAssert(mRenderer);
@@ -100,6 +104,7 @@ void GCLApplication::Update()
 	//{
 	//	m2DRenderObjectList[i]->Update();
 //	}
+	GameStateManager::Update(1.0);
 
 }
 void GCLApplication::Render()

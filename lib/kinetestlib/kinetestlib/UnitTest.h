@@ -71,14 +71,14 @@ public:
 #define KINEVOX_TEST_LOOP_START \
     {\
     KineTestKeyListener kineTestKeyListener;\
-    size_t i=0;\
+    size_t iteration=0;\
 	kineTestKeyListener.mIsLooping = testCounter.mIsInteractive;\
 	const size_t TICKS_PER_SECOND = 60;\
 const size_t SKIP_TICKS = 1000 / TICKS_PER_SECOND;\
 const int MAX_FRAMESKIP = 5;\
 size_t next_game_tick = GCL::Time::GetTickMs()-1; \
 int loops;\
-while(i<2 || kineTestKeyListener.mIsLooping)\
+while(iteration<2 || kineTestKeyListener.mIsLooping)\
 {\
 			loops = 0;\
 			while(GCL::Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP) \
@@ -90,7 +90,7 @@ while(i<2 || kineTestKeyListener.mIsLooping)\
 ThreadManager::ReThrowException();\
 	next_game_tick += SKIP_TICKS;\
 loops++;\
-++i;\
+++iteration;\
 }\
 }\
 }\

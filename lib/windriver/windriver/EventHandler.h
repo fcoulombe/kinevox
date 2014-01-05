@@ -36,7 +36,8 @@ namespace GCL
         GCL_UP = VK_UP,
         GCL_DOWN = VK_DOWN,
         GCL_LEFT = VK_LEFT,
-        GCL_RIGHT = VK_RIGHT
+        GCL_RIGHT = VK_RIGHT,
+        GCL_ENTER = VK_RETURN
     };
 #elif defined(OS_LINUX)
 #include <X11/keysym.h>
@@ -48,7 +49,8 @@ namespace GCL
         GCL_UP = XK_Up,
         GCL_DOWN = XK_Down,
         GCL_LEFT = XK_Left,
-        GCL_RIGHT = XK_Right
+        GCL_RIGHT = XK_Right,
+        GCL_ENTER = XK_Return
     };
 #else
 #error "TBD"

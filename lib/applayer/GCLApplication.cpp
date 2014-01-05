@@ -81,10 +81,11 @@ void GCLApplication::InitializaAppLayerComponents()
 }
 /*static */void GCLApplication::Terminate()
 {
+	Input::Terminate();
 	GameStateManager::Terminate();
 
 	delete mScriptApi;
-    GCLAssert(mActorList.size() == 0);
+    GCLAssertMsg(mActorList.size() == 0, "You still have some actors hanging around");
  	GCLAssert(mRenderer);
 	delete mRenderer;
 	mRenderer = NULL;
@@ -106,7 +107,7 @@ void GCLApplication::Update()
 	//	m2DRenderObjectList[i]->Update();
 //	}
 	GameStateManager::Update(1.0);
-
+	ScriptResourceManager::Instance().Update();
 	ThreadManager::ReThrowException();
 }
 void GCLApplication::Render()

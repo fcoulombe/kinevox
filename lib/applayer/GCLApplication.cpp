@@ -30,6 +30,7 @@
 #include "applayer/Sprite.h"
 #include "applayer/ScriptApi.h"
 #include <gcl/Assert.h>
+#include <gcl/ThreadManager.h>
 #include <input/Input.h>
 #include <renderer/Renderer.h>
 #include <renderer/FontResourceManager.h>
@@ -106,6 +107,7 @@ void GCLApplication::Update()
 //	}
 	GameStateManager::Update(1.0);
 
+	ThreadManager::ReThrowException();
 }
 void GCLApplication::Render()
 {

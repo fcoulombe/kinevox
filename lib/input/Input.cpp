@@ -63,7 +63,7 @@ public:
     size_t smMouseY;
 };
 
-InputKeyListener *keyListener;
+InputKeyListener *keyListener = nullptr;
 
 void Input::ProcessInput()
 {
@@ -93,6 +93,12 @@ bool Input::IsKeyUp(uint32_t key)
         keyListener = new InputKeyListener();
     return keyListener->smKeys[key];
 }
+
+void Input::Terminate()
+{
+	delete keyListener;
+}
+
 #else
 namespace
 {

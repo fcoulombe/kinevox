@@ -42,6 +42,7 @@ public:
 	static bool IsLMouseDown();
 	static size_t GetMouseX();
 	static size_t GetMouseY();
+	static void Terminate();
 private:
 
 };

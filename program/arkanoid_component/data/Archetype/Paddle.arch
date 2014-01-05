@@ -1,0 +1,9 @@
+Archetype = {
+	Name = "Paddle",
+	Components = {
+        SpriteComponent = {
+        sprite = "Paddle"
+        }
+	}
+}
+

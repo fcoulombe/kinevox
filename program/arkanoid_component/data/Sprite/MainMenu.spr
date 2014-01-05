@@ -1,0 +1,10 @@
+gclsprite = {
+    width=640,
+    height=480,
+    frame_count="1",
+    texture_count = 1,
+    textures = {
+        texture0 = "mainmenu.png"
+    }
+    
+}

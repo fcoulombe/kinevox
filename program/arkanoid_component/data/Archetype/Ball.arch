@@ -1,0 +1,12 @@
+Archetype = {
+	Name = "Ball",
+	Components = {
+		SpriteComponent = {
+		sprite = "Ball"
+		},
+		ScriptComponent = {
+		  filename = "Ball"
+		}
+	}
+}
+

@@ -1,0 +1,10 @@
+gclsprite = {
+    width=32,
+    height=32,
+    frame_count="1",
+    texture_count = 1,
+    textures = {
+        texture0 = "ball.tga"
+    }
+    
+}

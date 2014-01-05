@@ -22,7 +22,9 @@
 
 #include <iostream>
 #include <sstream>
-
+#ifdef USE_VLD
+#include <vld.h>
+#endif
 #include <gcl/Assert.h>
 
 #include "CameraTest.h"

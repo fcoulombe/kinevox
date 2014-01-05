@@ -1,6 +1,10 @@
 cmake_minimum_required (VERSION 2.8)
 project (kinevox)
 
+if(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
+    option(ENABLE_VLD "enable visual leak detector if installed" ON)
+endif()
+
 option(USE_OPENRL "Enables Open Ray Tracing Library. SDK from caustic must be installed" OFF)
 
 SET(GFXAPI_TO_USE "OpenGL3" CACHE STRING "library to use for graphics")

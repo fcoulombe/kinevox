@@ -18,8 +18,11 @@
 * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
-*/#include <iostream>
-
+*/
+#include <iostream>
+#ifdef USE_VLD
+#include <vld.h>
+#endif
 #include "LuaTest.h"
 #include "ScriptTest.h"
 #include "ScriptResourceTest.h"

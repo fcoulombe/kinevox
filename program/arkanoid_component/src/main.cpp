@@ -22,7 +22,9 @@
 
 #include <cstdlib>
 #include <sstream>
-
+#ifdef USE_VLD
+#include <vld.h>
+#endif
 #include <applayer/GCLApplication.h>
 #include <applayer/GameStateManager.h>
 #include <gcl/Time.h>

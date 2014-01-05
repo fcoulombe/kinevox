@@ -22,7 +22,9 @@
 
 #include <iostream>
 #include <sstream>
-
+#ifdef USE_VLD
+#include <vld.h>
+#endif
 #include <gcl/Exception.h>
 
 #include "InputTest.h"

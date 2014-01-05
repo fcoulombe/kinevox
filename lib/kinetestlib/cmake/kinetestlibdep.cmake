@@ -1,1 +1,1 @@
-SET(DEPENDENCIES windriver)
+SET(DEPENDENCIES windriver gclvld)

@@ -20,7 +20,9 @@
  * THE SOFTWARE.
  */
 #include <iostream>
-
+#ifdef USE_VLD
+#include <vld.h>
+#endif
 #include <kinetestlib/UnitTest.h>
 
 #include "GCLApplicationTest.h"

@@ -49,6 +49,18 @@ static const Real Y_RATIO = (Real)VIEWPORT_HEIGHT / (Real)BASE_Y_RESOLUTION;
 static const WorldPoint3 START_POSITION(640.0*X_RATIO, 700.0*Y_RATIO, 0.0);
 static const WorldPoint3 BALL_INITIAL_VELOCITY(-6.0, -3.0, 0.0);
 
+MainGameState::~MainGameState()
+{
+	for (size_t i=0; i<blocks.size(); ++i)
+	{
+		delete blocks[i];
+	}
+	blocks.clear();
+
+	delete paddle;
+	delete ball;
+}
+
 MainGameState::MainGameState()
 :GameState("MainGame")
 {
@@ -79,7 +91,7 @@ MainGameState::MainGameState()
 	ball = new Actor("Ball", "Ball");
 	paddle->SetPosition(START_POSITION);
 
-	ball->SetPosition(START_POSITION);
+	ball->SetPosition(START_POSITION+WorldPoint3(100,0,0));
 }
 bool MainGameState::Update(Real dt)
 {

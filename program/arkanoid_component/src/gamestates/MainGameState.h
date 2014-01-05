@@ -37,6 +37,7 @@ class MainGameState: public GCL::GameState
 {
 public:
 	MainGameState();
+	~MainGameState();
 	bool Update(GCL::Real dt);
 
 private:

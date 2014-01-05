@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,35 +19,58 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include <iostream>
 
-#include <kinetestlib/UnitTest.h>
+#pragma once
 
-#include "GCLApplicationTest.h"
-#include "ActorTest.h"
-#include "GameStateTest.h"
-#include "SpriteTest.h"
-#include "SpriteComponentTest.h"
-#include "ScriptComponentTest.h"
-#include "GCLApplicationCameraTest.h"
-#include "GCLRenderTargetTest.h"
-//#include "GCLText2DTest.h"
-//#include "GCLWorldTest.h"
+#include <deque>
+#include <memory>
+#include <string>
 
-int main(int argc, char ** argv)
+namespace GCL
 {
-	 SUITE_INIT(argc, argv)
-	 GCLApplicationTest::Test();
-	 GCLApplicationCameraTest::Test();
-	 SpriteTest::Test();	 
-	 ActorTest::Test();
-	 SpriteComponentTest::Test();
-	 ScriptComponentTest::Test();
-	 GameStateTest::Test();
-		//GCLRenderTargetTest::Test();
-		//GCLText2DTest::Test();
-       // GCLWorldTest::Test();
-		SUITE_TERMINATE
+class GameState;
+typedef std::shared_ptr<GameState> GameStatePtr;
+class GameState
+{
+public:
+	GameState(const std::string &name)
+: mName(name)
+	{
 
-	return 0;
+	}
+	virtual ~GameState()
+	{
+
+	}
+	void PushChildState(GameStatePtr state)
+	{
+		mChildStates.push_back(state);
+	}
+	void PopChildState()
+	{
+		mChildStates.pop_back();
+	}
+	virtual bool Update(Real dt)
+	{
+		for (ChildGameStateList::iterator it = mChildStates.begin(); it != mChildStates.end();)
+		{
+			if (!(*it)->Update(dt))
+			{
+				it = mChildStates.erase(it);
+			}
+			else
+				++it;
+		}
+		return true;
+	}
+	const std::string &GetStateName()
+	{
+		return mName;
+	}
+private:
+	typedef std::deque<GameStatePtr> ChildGameStateList;
+	ChildGameStateList mChildStates;
+	std::string mName;
+};
+
 }

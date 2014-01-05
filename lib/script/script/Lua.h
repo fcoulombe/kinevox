@@ -109,5 +109,10 @@ namespace GCL
         {
            StackDump(L);
         }
+
+		void RunGarbageCollection()
+		{
+			lua_gc(L, LUA_GCSTEP, 1);
+		}
     };
 }

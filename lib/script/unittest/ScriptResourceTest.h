@@ -44,6 +44,7 @@ namespace ScriptResourceTest
 
             ScriptResourceManager::Instance().ReleaseResource(resource);
             ScriptResourceManager::Instance().ReleaseResource(resource2);
+			ScriptResourceManager::Instance().Update(); //gc
         }
         ScriptResourceManager::Terminate();
     }

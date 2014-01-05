@@ -53,6 +53,8 @@ namespace GCL
 
     void ExposeModule(const char *libName, scriptFunction constructor) const;
     void ExposeFunction(const char *funcName, scriptFunction func) const;
+
+	void Update();
   private:
     static ScriptResourceManager *smpInstance;
     LuaState *mLuaState;

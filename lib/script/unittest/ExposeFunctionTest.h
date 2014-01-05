@@ -63,6 +63,7 @@ namespace ExposeFunctionTest
 
             luaResource->ExecuteFunction("Logic");
             ScriptResourceManager::Instance().ReleaseResource(resource);
+			ScriptResourceManager::Instance().Update(); //gc
         }
 
         ScriptResourceManager::Terminate();

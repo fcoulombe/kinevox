@@ -62,3 +62,9 @@ void ScriptResourceManager::ExposeFunction(const char *funcName, scriptFunction 
     luaL_setfuncs(*mLuaState, f, 0);
     lua_pop(*mLuaState, 1);
 }
+
+
+void ScriptResourceManager::Update()
+{
+	mLuaState->RunGarbageCollection();
+}

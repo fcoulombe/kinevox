@@ -28,10 +28,10 @@
 
 using namespace GCL;
 
-long GetObjectId(lua_State * L)
+size_t GetObjectId(lua_State * L)
 {
 	lua_getglobal(L,"KINEVOS_ACTOR_ID");
-	long objectid = lua_tointeger(L, lua_gettop(L));
+	size_t objectid = lua_tointeger(L, lua_gettop(L));
 	lua_pop(L, 1);
 	return objectid;
 }
@@ -44,27 +44,27 @@ int KLog(lua_State * L)
 }
 int KGetPosition(lua_State * L)
 {
-	long objectid = GetObjectId(L);
+	size_t objectid = GetObjectId(L);
 
 	const Actor *actor = (const Actor *)objectid;
 	const WorldPoint3 &pos = actor->GetPosition();
 	lua_newtable(L);
 
-	lua_pushnumber(L,0);
-	lua_pushinteger(L,pos.x);
+	lua_pushinteger(L,0);
+	lua_pushnumber(L,pos.x);
 	lua_settable(L,-3);
-	lua_pushnumber(L,1);
-	lua_pushinteger(L,pos.y);
+	lua_pushinteger(L,1);
+	lua_pushnumber(L,pos.y);
 	lua_settable(L,-3);
-	lua_pushnumber(L,2);
-	lua_pushinteger(L,pos.z);
+	lua_pushinteger(L,2);
+	lua_pushnumber(L,pos.z);
 	lua_settable(L,-3);
 
 	return 1;
 }
 int KSetPosition(lua_State * L)
 {
-	long objectid = GetObjectId(L);
+	size_t objectid = GetObjectId(L);
 
 	Actor *actor = (Actor *)objectid;
 

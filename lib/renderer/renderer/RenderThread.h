@@ -35,6 +35,8 @@ public:
 	virtual ~RenderThread();
 	template<class T>
 	void SendCommand(const T &cmd);
+	template<class T>
+	void SendCommandSync(const T &cmd);
 
 	//returns false if we disbale multithreading
 	bool IsThreaded() const { return mIsThreaded; }
@@ -52,6 +54,20 @@ void GCL::RenderThread::SendCommand(const T &cmd )
 	if (IsThreaded())
 	{
 		mCommandQueue.SendCommandAsync([=](){
+			mRenderCommandMap[cmd.mCmd](cmd, *mRenderData);
+		});
+	}
+	else
+	{
+		mRenderCommandMap[cmd.mCmd](cmd, *mRenderData);
+	}
+}
+template<class T>
+void GCL::RenderThread::SendCommandSync(const T &cmd )
+{
+	if (IsThreaded())
+	{
+		mCommandQueue.SendCommandSync([=](){
 			mRenderCommandMap[cmd.mCmd](cmd, *mRenderData);
 		});
 	}

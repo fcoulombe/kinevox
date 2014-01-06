@@ -22,10 +22,7 @@
 
 #pragma once
 #include <vector>
-#include <gcl/Thread.h>
-#include <gcl/Mutex.h>
-#include <gcl/Semaphore.h>
-
+#include <gcl/Assert.h>
 #include "renderer/RenderThread.h"
 
 #define ENABLE_RENDER_THREAD 1
@@ -68,9 +65,8 @@ const GCL::ReturnMessage &GCL::RenderPipe::SendCommandSyncRet(const T &cmd )
 		delete mRetMsg;
 		mRetMsg = NULL;
 	}
-	mRenderThreads[0]->SendCommand(cmd);
-	while (!mRetMsg)
-		Thread::YieldThread();
+	mRenderThreads[0]->SendCommandSync(cmd);
+	GCLAssert(mRetMsg);
 	return *mRetMsg;
 }
 }

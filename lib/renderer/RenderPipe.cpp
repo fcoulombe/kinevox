@@ -32,24 +32,9 @@ bool RenderPipe::mIsInitialized = false;
 std::vector<RenderThread *> RenderPipe::mRenderThreads;
 ReturnMessage *RenderPipe::mRetMsg=NULL;
 
-void GCL::RenderPipe::SendCommand( RenderCommand *cmd )
-{
-	//if threaded, the thread processes the command otherwise it's the pipe itself
-	mRenderThreads[0]->SendCommand(cmd);
-}
 
-const GCL::ReturnMessage &GCL::RenderPipe::SendCommandSyncRet( RenderCommand *cmd )
-{
-	if (mRetMsg)
-	{
-		delete mRetMsg;
-		mRetMsg = NULL;
-	}
-	mRenderThreads[0]->SendCommand(cmd);
-	while (!mRetMsg)
-		Thread::YieldThread();
-	return *mRetMsg;
-}
+
+
 
 void GCL::RenderPipe::SendReturnMessage( ReturnMessage *retMsg )
 {
@@ -62,8 +47,8 @@ void GCL::RenderPipe::Initialize()
 	mIsInitialized = true;
 	mRetMsg = NULL;
 	mRenderThreads.push_back(new IRenderThread());
-	if (mRenderThreads[0]->IsThreaded())
-		mRenderThreads[0]->Start();
+	//if (mRenderThreads[0]->IsThreaded())
+		//mRenderThreads[0]->Start();
 }
 
 void GCL::RenderPipe::Terminate()

@@ -42,20 +42,20 @@ public:
 	void Save(const char *filename);
 
 
-	void Bind() const { RenderPipe::SendCommand(new RenderCommand(TEXTURE_BIND, (void*)this));}
-	bool IsValid() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_TEXTURE_VALID, (void*)this)).GetBool();}
+	void Bind() const { RenderPipe::SendCommand(RenderCommand(TEXTURE_BIND, (void*)this));}
+	bool IsValid() const { return RenderPipe::SendCommandSyncRet(RenderCommand(IS_TEXTURE_VALID, (void*)this)).GetBool();}
 	
 	size_t GetResourceWidth() const;
 	size_t GetResourceHeight() const;
 	size_t GetResourceBytesPerPixel() const;
 
-	size_t GetWidth() const { return (size_t)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_WIDTH, (void*)this)).GetNumber(); }
-	size_t GetHeight() const { return (size_t)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_HEIGHT, (void*)this)).GetNumber();  }
-    size_t GetBytesPerPixel() const { return (size_t)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_BPP, (void*)this)).GetNumber();  }
+	size_t GetWidth() const { return (size_t)RenderPipe::SendCommandSyncRet(RenderCommand(TEXTURE_GET_WIDTH, (void*)this)).GetNumber(); }
+	size_t GetHeight() const { return (size_t)RenderPipe::SendCommandSyncRet(RenderCommand(TEXTURE_GET_HEIGHT, (void*)this)).GetNumber();  }
+    size_t GetBytesPerPixel() const { return (size_t)RenderPipe::SendCommandSyncRet(RenderCommand(TEXTURE_GET_BPP, (void*)this)).GetNumber();  }
 
 
-    const uint8_t *GetTextureFromVRAM() const { return (const uint8_t *)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_TEXTURE_FROM_VRAM, (void*)this)).GetPointer();  }
-    const uint8_t *GetPixelBufferFromVRAM() const { return (const uint8_t *)RenderPipe::SendCommandSyncRet(new RenderCommand(TEXTURE_GET_PIXELBUFFER_FROM_VRAM, (void*)this)).GetPointer();}
+    const uint8_t *GetTextureFromVRAM() const { return (const uint8_t *)RenderPipe::SendCommandSyncRet(RenderCommand(TEXTURE_GET_TEXTURE_FROM_VRAM, (void*)this)).GetPointer();  }
+    const uint8_t *GetPixelBufferFromVRAM() const { return (const uint8_t *)RenderPipe::SendCommandSyncRet(RenderCommand(TEXTURE_GET_PIXELBUFFER_FROM_VRAM, (void*)this)).GetPointer();}
 private:
 	void Create(const PixelBuffer &buffer);
 	const TextureResource *mTextureResource;

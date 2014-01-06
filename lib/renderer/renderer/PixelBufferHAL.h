@@ -35,12 +35,12 @@ public:
 	PixelBufferHAL()
 	: PixelBuffer()
 	{
-		RenderPipe::SendCommand(new RenderCommand(PBO_CREATE, this));
+		RenderPipe::SendCommand(RenderCommand(PBO_CREATE, this));
 	}
 	PixelBufferHAL(const PixelBuffer &buffer)
 	:	PixelBuffer(buffer)
 	{
-		RenderPipe::SendCommand(new RenderCommand(PBO_CREATE, this));
+		RenderPipe::SendCommand(RenderCommand(PBO_CREATE, this));
 	}
 
 #if 1
@@ -48,42 +48,42 @@ public:
 	PixelBufferHAL(const PixelType *pixelArray, size_t width, size_t height)
 	: PixelBuffer(pixelArray, width, height)
 	  {
-		RenderPipe::SendCommand(new RenderCommand(PBO_CREATE, this));
+		RenderPipe::SendCommand(RenderCommand(PBO_CREATE, this));
 		Bind();
-		RenderPipe::SendCommand(new RenderCommand5Arg(PBO_PUSH, this, (void*)width, (void*)height, (void*)PixelType::OffsetToNext(), 0));
+		RenderPipe::SendCommand(RenderCommand5Arg(PBO_PUSH, this, (void*)width, (void*)height, (void*)PixelType::OffsetToNext(), 0));
 		UnBind();
 	  }
 #endif
 
 	~PixelBufferHAL()
 	{
-		RenderPipe::SendCommand(new RenderCommand(PBO_DESTROY, this));
+		RenderPipe::SendCommand(RenderCommand(PBO_DESTROY, this));
 	}
 
 	void UnBind()
 	{
-		RenderPipe::SendCommand(new RenderCommand(PBO_UNBIND, this));
+		RenderPipe::SendCommand(RenderCommand(PBO_UNBIND, this));
 	}
 	void Bind()
 	{
-		RenderPipe::SendCommand(new RenderCommand(PBO_BIND, this));
+		RenderPipe::SendCommand(RenderCommand(PBO_BIND, this));
 	}
 
 	void PushData()
 	{
 		uint8_t *xferBuffer = new uint8_t[mWidth * mHeight*mBytesPerPixel];
 		memcpy(xferBuffer, mPixels, mWidth * mHeight*mBytesPerPixel);
-		RenderPipe::SendCommand(new RenderCommand5Arg(PBO_PUSH, this, (void*)mWidth, (void*)mHeight, (void*)(long)mBytesPerPixel, xferBuffer));
+		RenderPipe::SendCommand(RenderCommand5Arg(PBO_PUSH, this, (void*)mWidth, (void*)mHeight, (void*)(long)mBytesPerPixel, xferBuffer));
 	}
 	uint8_t *PullData()
 	{
 		delete [] mPixels;
-		mPixels= (uint8_t *)RenderPipe::SendCommandSyncRet(new RenderCommand4Arg(PBO_PULL, (void*)this, (void*)mWidth, (void*)mHeight, (void*)(long)mBytesPerPixel)).GetPointer();
+		mPixels= (uint8_t *)RenderPipe::SendCommandSyncRet(RenderCommand4Arg(PBO_PULL, (void*)this, (void*)mWidth, (void*)mHeight, (void*)(long)mBytesPerPixel)).GetPointer();
 		return mPixels;
 	}
 	bool IsValid() const 
     { 
-		 return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_PBO_VALID, (void*)this)).GetBool();
+		 return RenderPipe::SendCommandSyncRet(RenderCommand(IS_PBO_VALID, (void*)this)).GetBool();
     }
 
 private:

@@ -36,23 +36,23 @@ class FrameBuffer
 public:
 	FrameBuffer(const Texture & texture, const RenderBuffer & depthBuffer)
 	{
-		RenderPipe::SendCommand(new RenderCommand3Arg(FRAMEBUFFER_CREATE, this, (void*)&texture, (void*)&depthBuffer));
+		RenderPipe::SendCommand(RenderCommand3Arg(FRAMEBUFFER_CREATE, this, (void*)&texture, (void*)&depthBuffer));
 	}
 	~FrameBuffer()
 	{
-		RenderPipe::SendCommand(new RenderCommand(FRAMEBUFFER_DESTROY, this));
+		RenderPipe::SendCommand(RenderCommand(FRAMEBUFFER_DESTROY, this));
 	}
 	void Bind()
 	{
-		RenderPipe::SendCommand(new RenderCommand(FRAMEBUFFER_BIND, this));
+		RenderPipe::SendCommand(RenderCommand(FRAMEBUFFER_BIND, this));
 	}
 	static void ResetDefault()
 	{
 
-		RenderPipe::SendCommand(new RenderCommand(FRAMEBUFFER_RESETDEFAULT));
+		RenderPipe::SendCommand(RenderCommand(FRAMEBUFFER_RESETDEFAULT));
 	}
 
-	bool IsValid() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_FRAMEBUFFER_VALID, (void*)this)).GetBool(); }
+	bool IsValid() const { return RenderPipe::SendCommandSyncRet(RenderCommand(IS_FRAMEBUFFER_VALID, (void*)this)).GetBool(); }
 
 	void Save(const char * /*filename*/) { GCLAssert(false && "TBD"); }
 private:

@@ -33,7 +33,7 @@ using namespace GCL;
 
 Texture::~Texture()
 {
-	RenderPipe::SendCommand(new RenderCommand(TEXTURE_DESTROY, this));
+	RenderPipe::SendCommand(RenderCommand(TEXTURE_DESTROY, this));
 	if (mTextureResource)
 		TextureResourceManager::Instance().ReleaseResource(mTextureResource);
 }
@@ -86,7 +86,7 @@ Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
 void Texture::Create(const PixelBuffer &buffer)
 {
 	PixelBuffer *xferBuffer = new PixelBuffer(buffer);
-	RenderPipe::SendCommand(new RenderCommand2Arg(TEXTURE_CREATE, this, xferBuffer));
+	RenderPipe::SendCommand(RenderCommand2Arg(TEXTURE_CREATE, this, xferBuffer));
 }
 
 

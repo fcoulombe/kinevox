@@ -42,13 +42,13 @@ enum ShaderType
 		size_t fileNameLen = strlen(shaderSourcePath)+1;
 		char *xferbuffer = new char[fileNameLen];
 		strncpy(xferbuffer, shaderSourcePath, fileNameLen);
-		RenderPipe::SendCommand(new RenderCommand3Arg(SHADER_CREATE, this, (void*)xferbuffer, (void*)type));
+		RenderPipe::SendCommand(RenderCommand3Arg(SHADER_CREATE, this, (void*)xferbuffer, (void*)type));
 	}
     ~Shader() 
 	{
-		RenderPipe::SendCommand(new RenderCommand(SHADER_DESTROY, this));
+		RenderPipe::SendCommand(RenderCommand(SHADER_DESTROY, this));
 	}
-    bool IsValid() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_SHADER_VALID, (void*)this)).GetBool(); }
+    bool IsValid() const { return RenderPipe::SendCommandSyncRet(RenderCommand(IS_SHADER_VALID, (void*)this)).GetBool(); }
 
 private:
 	

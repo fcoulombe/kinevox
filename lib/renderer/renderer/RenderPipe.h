@@ -26,6 +26,8 @@
 #include <gcl/Mutex.h>
 #include <gcl/Semaphore.h>
 
+#include "renderer/RenderThread.h"
+
 #define ENABLE_RENDER_THREAD 1
 
 namespace GCL
@@ -39,10 +41,12 @@ public:
 	static void Initialize();
 	static void Terminate();
 
-	static void SendCommand(RenderCommand *cmd);
+	template<class T>
+	static void SendCommand(const T &cmd);
 
 	//must pass command that actually return a value. otherwise this will stall
-	static const ReturnMessage &SendCommandSyncRet(RenderCommand *cmd);
+	template<class T>
+	static const ReturnMessage &SendCommandSyncRet(const T &cmd);
 	static void SendReturnMessage(ReturnMessage *retMsg);
 
 private:
@@ -50,4 +54,23 @@ private:
 	static ReturnMessage *mRetMsg;
 	static bool mIsInitialized;
 };
+template<class T>
+void GCL::RenderPipe::SendCommand(const T &cmd )
+{
+	//if threaded, the thread processes the command otherwise it's the pipe itself
+	mRenderThreads[0]->SendCommand(cmd);
+}
+template<class T>
+const GCL::ReturnMessage &GCL::RenderPipe::SendCommandSyncRet(const T &cmd )
+{
+	if (mRetMsg)
+	{
+		delete mRetMsg;
+		mRetMsg = NULL;
+	}
+	mRenderThreads[0]->SendCommand(cmd);
+	while (!mRetMsg)
+		Thread::YieldThread();
+	return *mRetMsg;
+}
 }

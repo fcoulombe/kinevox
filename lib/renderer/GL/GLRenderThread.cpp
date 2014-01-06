@@ -70,43 +70,43 @@ struct GLRenderData : public RenderData
 #else
 #define LOG_RENDER_CMD 
 #endif
-void RCSwapBuffer(RenderCommand *, RenderData &renderData)
+void RCSwapBuffer(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	rd.mRenderer->SwapBuffer();
 }
-void RCCreateRenderer(RenderCommand *handle, RenderData &renderData)
+void RCCreateRenderer(const RenderCommand &handle, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	rd.mRenderer = new GLRenderer((size_t)handle->mData);
+	rd.mRenderer = new GLRenderer((size_t)handle.mData);
 }
-void RCDestroyRenderer(RenderCommand *, RenderData &renderData)
+void RCDestroyRenderer(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	delete rd.mRenderer ;
 }
-void RCRendererPreRender(RenderCommand *, RenderData &renderData)
+void RCRendererPreRender(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	rd.mRenderer->PreRender();
 }
-void RCRendererPostRender(RenderCommand *, RenderData &renderData)
+void RCRendererPostRender(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	rd.mRenderer->PostRender();
 }
-void RCRendererRender(RenderCommand *, RenderData &)
+void RCRendererRender(const RenderCommand &, RenderData &)
 {
 	LOG_RENDER_CMD
 	//	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	//rd.mRenderer->Render(*(const RenderObjectList *)data->mData);
 }
-void RCGetVendor(RenderCommand *, RenderData &renderData)
+void RCGetVendor(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
@@ -114,14 +114,14 @@ void RCGetVendor(RenderCommand *, RenderData &renderData)
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
 
-void RCGetVersion(RenderCommand *, RenderData &renderData)
+void RCGetVersion(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	const std::string &vendor = rd.mRenderer->GetVersion();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
-void RCGetRenderer(RenderCommand *, RenderData &renderData)
+void RCGetRenderer(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
@@ -129,64 +129,64 @@ void RCGetRenderer(RenderCommand *, RenderData &renderData)
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
 
-void RCGetShadingLanguageVersion(RenderCommand *, RenderData &renderData)
+void RCGetShadingLanguageVersion(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	const std::string &vendor = rd.mRenderer->GetShadingLanguageVersion();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
-void RCGetGlewVersion(RenderCommand *, RenderData &renderData)
+void RCGetGlewVersion(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	const std::string &vendor = rd.mRenderer->GetGlewVersion();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
-void RCGetExtensions(RenderCommand *, RenderData &renderData)
+void RCGetExtensions(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	const std::vector<std::string> &vendor = rd.mRenderer->GetExtensions();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
-void RCIsExtensionSupported(RenderCommand *data, RenderData &renderData)
+void RCIsExtensionSupported(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
-	const std::string *ext = (const std::string *)data->mData;
+	const std::string *ext = (const std::string *)data.mData;
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	bool vendor = rd.mRenderer->IsExtensionSupported(*ext);
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
-void RCIsGlewExtensionSupported(RenderCommand *data, RenderData &renderData)
+void RCIsGlewExtensionSupported(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
-	const std::string *ext = (const std::string *)data->mData;
+	const std::string *ext = (const std::string *)data.mData;
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	bool vendor = rd.mRenderer->IsGlewExtensionSupported(*ext);
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
 
-void RCGetGLProjection(RenderCommand *, RenderData &)
+void RCGetGLProjection(const RenderCommand &, RenderData &)
 {
 	LOG_RENDER_CMD
 	const Matrix44 vendor = GLRenderer::GetGLProjection();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
-void RCGetGLModelView(RenderCommand *, RenderData &)
+void RCGetGLModelView(const RenderCommand &, RenderData &)
 {
 	LOG_RENDER_CMD
 	const Matrix44 vendor = GLRenderer::GetGLModelView();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
-void RCGetProjection(RenderCommand *, RenderData &renderData)
+void RCGetProjection(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		const GLRenderData &rd = static_cast<const GLRenderData&>(renderData);
 		const Matrix44 &vendor = rd.mRenderer->GetProjection();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
-void RCGetModelView(RenderCommand *, RenderData &renderData)
+void RCGetModelView(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		const GLRenderData &rd = static_cast<const GLRenderData&>(renderData);
@@ -194,338 +194,338 @@ void RCGetModelView(RenderCommand *, RenderData &renderData)
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
 
-void RCSetViewport(RenderCommand *data, RenderData &renderData)
+void RCSetViewport(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	const ViewPort *viewport = (const ViewPort *)data->mData; 
+	const ViewPort *viewport = (const ViewPort *)data.mData; 
 	rd.mRenderer->SetViewPort(*viewport);
-	uint8_t *xferbuffer = (uint8_t *)data->mData;
+	uint8_t *xferbuffer = (uint8_t *)data.mData;
 	delete [] xferbuffer;
 }
 
-void RCSetCamera(RenderCommand *data, RenderData &renderData)
+void RCSetCamera(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	const Camera *cam = (const Camera *)data->mData; 
+	const Camera *cam = (const Camera *)data.mData; 
 	rd.mRenderer->SetProjection(cam);
-	uint8_t *xferbuffer = (uint8_t *)data->mData;
+	uint8_t *xferbuffer = (uint8_t *)data.mData;
 	delete [] xferbuffer;
 }
-void RCSetOrtho(RenderCommand *, RenderData &renderData)
+void RCSetOrtho(const RenderCommand &, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	rd.mRenderer->SetOrtho();
 }
-void RCCreateGPUProgram(RenderCommand *data, RenderData &renderData)
+void RCCreateGPUProgram(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	rd.mGPUProgramMap[data->mData] = new GLGPUProgram();
+	rd.mGPUProgramMap[data.mData] = new GLGPUProgram();
 }
-void RCDestroyGPUProgram(RenderCommand *data, RenderData &renderData)
+void RCDestroyGPUProgram(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	GPUProgramMap::iterator it = rd.mGPUProgramMap.find(data->mData);
+	GPUProgramMap::iterator it = rd.mGPUProgramMap.find(data.mData);
 	GCLAssert(it != rd.mGPUProgramMap.end());
-	delete rd.mGPUProgramMap[data->mData];
+	delete rd.mGPUProgramMap[data.mData];
 	rd.mGPUProgramMap.erase(it);
 }
-void RCBindGPUProgram(RenderCommand *data, RenderData &renderData)
+void RCBindGPUProgram(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data->mData]->Bind();
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	rd.mGPUProgramMap[data.mData]->Bind();
 }
-void RCAttachShader(RenderCommand *data, RenderData &renderData)
+void RCAttachShader(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
+	const RenderCommand2Arg &data2 = static_cast<const RenderCommand2Arg &>(data);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data->mData]->AttachShader(*rd.mShaderMap[data2->mData2]);
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	rd.mGPUProgramMap[data.mData]->AttachShader(*rd.mShaderMap[data2.mData2]);
 }
-void RCLinkGPUProgram(RenderCommand *data, RenderData &renderData)
+void RCLinkGPUProgram(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data->mData]->Link();
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	rd.mGPUProgramMap[data.mData]->Link();
 }
-void RCIsGPUProgramValid(RenderCommand *data, RenderData &renderData)
+void RCIsGPUProgramValid(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 	GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	bool vendor = rd.mGPUProgramMap[data->mData]->IsValid();
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	bool vendor = rd.mGPUProgramMap[data.mData]->IsValid();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
-void RCGPUProgramSetTextureSampler(RenderCommand *data, RenderData &renderData)
+void RCGPUProgramSetTextureSampler(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
+	const RenderCommand2Arg *data2 = static_cast<const RenderCommand2Arg *>(&data);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data->mData]->SetTextureSampler(*rd.mTextureMap[data2->mData2]);
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	rd.mGPUProgramMap[data.mData]->SetTextureSampler(*rd.mTextureMap[data2->mData2]);
 }
 
-void RCGPUProgramSetProjection(RenderCommand *data, RenderData &renderData)
+void RCGPUProgramSetProjection(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	const Matrix44 &proj = rd.mRenderer->GetProjection();
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data->mData]->SetProjectionMatrix(proj);
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	rd.mGPUProgramMap[data.mData]->SetProjectionMatrix(proj);
 }
-void RCGPUProgramSetModelView(RenderCommand *data, RenderData &renderData)
+void RCGPUProgramSetModelView(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	const Matrix44 &modelview = rd.mRenderer->GetModelView();
-	RenderCommandMatArg *data2 = static_cast<RenderCommandMatArg *>(data);
+	const RenderCommandMatArg *data2 = static_cast<const RenderCommandMatArg *>(&data);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data->mData]->SetModelViewMatrix(modelview*data2->mData2);
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	rd.mGPUProgramMap[data.mData]->SetModelViewMatrix(modelview*data2->mData2);
 }
-void RCGPUProgramSetUniformNumber(RenderCommand *data, RenderData &renderData)
+void RCGPUProgramSetUniformNumber(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand3Arg *data2 = static_cast<RenderCommand3Arg *>(data);
+	const RenderCommand3Arg *data2 = static_cast<const RenderCommand3Arg *>(&data);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data->mData]->SetUniform((const char *)data2->mData2, (long)data2->mData3);
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	rd.mGPUProgramMap[data.mData]->SetUniform((const char *)data2->mData2, (long)data2->mData3);
 }
-void RCGPUProgramSetUniformVec2i(RenderCommand *data, RenderData &renderData)
+void RCGPUProgramSetUniformVec2i(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommandVec2iArg *data2 = static_cast<RenderCommandVec2iArg *>(data);
+	const RenderCommandVec2iArg *data2 = static_cast<const RenderCommandVec2iArg *>(&data);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data->mData]->SetUniform((const char *)data2->mData2, data2->mData3);
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	rd.mGPUProgramMap[data.mData]->SetUniform((const char *)data2->mData2, data2->mData3);
 }
-void RCGPUProgramSetUniformVec2f(RenderCommand *data, RenderData &renderData)
+void RCGPUProgramSetUniformVec2f(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommandVec2fArg *data2 = static_cast<RenderCommandVec2fArg *>(data);
+	const RenderCommandVec2fArg *data2 = static_cast<const RenderCommandVec2fArg *>(&data);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data->mData]->SetUniform((const char *)data2->mData2, data2->mData3);
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	rd.mGPUProgramMap[data.mData]->SetUniform((const char *)data2->mData2, data2->mData3);
 }
-void RCGPUProgramGetUniformMatrix(RenderCommand *data, RenderData &renderData)
+void RCGPUProgramGetUniformMatrix(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	Matrix44 ret;
-	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
+	const RenderCommand2Arg *data2 = static_cast<const RenderCommand2Arg *>(&data);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data->mData]->GetUniform((const char *)data2->mData2, ret);
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	rd.mGPUProgramMap[data.mData]->GetUniform((const char *)data2->mData2, ret);
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
-void RCGPUProgramGetUniformNumber(RenderCommand *data, RenderData &renderData)
+void RCGPUProgramGetUniformNumber(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 	long ret;
-	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
+	const RenderCommand2Arg *data2 = static_cast<const RenderCommand2Arg *>(&data);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data->mData]->GetUniform((const char *)data2->mData2, ret);
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	rd.mGPUProgramMap[data.mData]->GetUniform((const char *)data2->mData2, ret);
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
-void RCGPUProgramGetAttributeLocation(RenderCommand *data, RenderData &renderData)
+void RCGPUProgramGetAttributeLocation(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
+	const RenderCommand2Arg *data2 = static_cast<const RenderCommand2Arg *>(&data);
 
-	GCLAssert(rd.mGPUProgramMap.find(data->mData) != rd.mGPUProgramMap.end());
-	long ret  =	rd.mGPUProgramMap[data->mData]->GetAttributeLocation((const char *)data2->mData2);
+	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
+	long ret  =	rd.mGPUProgramMap[data.mData]->GetAttributeLocation((const char *)data2->mData2);
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
-void RCGPUProgramResetDefault(RenderCommand *, RenderData &)
+void RCGPUProgramResetDefault(const RenderCommand &, RenderData &)
 {
 	LOG_RENDER_CMD
 	GLGPUProgram::ResetDefault();
 }
-void RCCreateShader(RenderCommand *data, RenderData &renderData)
+void RCCreateShader(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand3Arg *data3 = static_cast<RenderCommand3Arg *>(data);
-	rd.mShaderMap[data->mData] = new GLShader((const char *)data3->mData2, GLShader::GetShaderType((size_t)data3->mData3));
+	const RenderCommand3Arg *data3 = static_cast<const RenderCommand3Arg *>(&data);
+	rd.mShaderMap[data.mData] = new GLShader((const char *)data3->mData2, GLShader::GetShaderType((size_t)data3->mData3));
 	char *xferbuffer = (char*)data3->mData2;
 	delete [] xferbuffer;
 }
 
-void RCDestroyShader(RenderCommand *data, RenderData &renderData)
+void RCDestroyShader(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	ShaderMap::iterator it = rd.mShaderMap.find(data->mData);
+	ShaderMap::iterator it = rd.mShaderMap.find(data.mData);
 	GCLAssert(it != rd.mShaderMap.end());
-	delete rd.mShaderMap[data->mData];
+	delete rd.mShaderMap[data.mData];
 	rd.mShaderMap.erase(it);
 }
-void RCIsShaderValid(RenderCommand *data, RenderData &renderData)
+void RCIsShaderValid(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	bool vendor = rd.mShaderMap[data->mData]->IsValid();
+	bool vendor = rd.mShaderMap[data.mData]->IsValid();
 	RenderPipe::SendReturnMessage(new ReturnMessage(vendor));
 }
 
-void RCDestroyTexture(RenderCommand *data, RenderData &renderData)
+void RCDestroyTexture(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	TextureMap::iterator it = rd.mTextureMap.find(data->mData);
+	TextureMap::iterator it = rd.mTextureMap.find(data.mData);
 	GCLAssert(it != rd.mTextureMap.end());
-	delete rd.mTextureMap[data->mData];
+	delete rd.mTextureMap[data.mData];
 	rd.mTextureMap.erase(it);
 }
-void RCCreateTexture(RenderCommand *data, RenderData &renderData)
+void RCCreateTexture(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
-	rd.mTextureMap[data->mData] = new GLTexture(*(const PixelBuffer *)data2->mData2);
+	const RenderCommand2Arg *data2 = static_cast<const RenderCommand2Arg *>(&data);
+	rd.mTextureMap[data.mData] = new GLTexture(*(const PixelBuffer *)data2->mData2);
 	PixelBuffer *xferbuffer = (PixelBuffer *)data2->mData2;
 	delete xferbuffer;
 }
-void RCBindTexture(RenderCommand *data, RenderData &renderData)
+void RCBindTexture(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 
-	rd.mTextureMap[data->mData]->Bind();
+	rd.mTextureMap[data.mData]->Bind();
 }
-void RCIsTextureValid(RenderCommand *data, RenderData &renderData)
+void RCIsTextureValid(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	bool ret = rd.mTextureMap[data->mData]->IsValid();
+	bool ret = rd.mTextureMap[data.mData]->IsValid();
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
-void RCTextureGetWidth(RenderCommand *data, RenderData &renderData)
+void RCTextureGetWidth(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	size_t ret = rd.mTextureMap[data->mData]->GetWidth();
+	size_t ret = rd.mTextureMap[data.mData]->GetWidth();
 	RenderPipe::SendReturnMessage(new ReturnMessage((long)ret));
 }
-void RCTextureGetHeight(RenderCommand *data, RenderData &renderData)
+void RCTextureGetHeight(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	size_t ret = rd.mTextureMap[data->mData]->GetHeight();
+	size_t ret = rd.mTextureMap[data.mData]->GetHeight();
 	RenderPipe::SendReturnMessage(new ReturnMessage((long)ret));
 }
-void RCTextureGetBPP(RenderCommand *data, RenderData &renderData)
+void RCTextureGetBPP(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	size_t ret = rd.mTextureMap[data->mData]->GetBytesPerPixel();
+	size_t ret = rd.mTextureMap[data.mData]->GetBytesPerPixel();
 	RenderPipe::SendReturnMessage(new ReturnMessage((long)ret));
 }
-void RCTextureGetTextureFromVRAM(RenderCommand *data, RenderData &renderData)
+void RCTextureGetTextureFromVRAM(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	const uint8_t* ret = rd.mTextureMap[data->mData]->GetTextureFromVRAM();
+	const uint8_t* ret = rd.mTextureMap[data.mData]->GetTextureFromVRAM();
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
-void RCTextureGetPixelBufferFromVRAM(RenderCommand *data, RenderData &renderData)
+void RCTextureGetPixelBufferFromVRAM(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	const uint8_t* ret = rd.mTextureMap[data->mData]->GetPixelBufferFromVRAM();
+	const uint8_t* ret = rd.mTextureMap[data.mData]->GetPixelBufferFromVRAM();
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
 
-void RCCreateFrameBuffer(RenderCommand *data, RenderData &renderData)
+void RCCreateFrameBuffer(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand3Arg *data3 = static_cast<RenderCommand3Arg *>(data);
-	rd.mFrameBufferMap[data->mData] = new GLFrameBuffer(*rd.mTextureMap[data3->mData2], *rd.mRenderBufferMap[data3->mData3]);
+	const RenderCommand3Arg *data3 = static_cast<const RenderCommand3Arg *>(&data);
+	rd.mFrameBufferMap[data.mData] = new GLFrameBuffer(*rd.mTextureMap[data3->mData2], *rd.mRenderBufferMap[data3->mData3]);
 }
-void RCDestroyFrameBuffer(RenderCommand *data, RenderData &renderData)
+void RCDestroyFrameBuffer(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	FrameBufferMap::iterator it = rd.mFrameBufferMap.find(data->mData);
+	FrameBufferMap::iterator it = rd.mFrameBufferMap.find(data.mData);
 	GCLAssert(it != rd.mFrameBufferMap.end());
-	delete rd.mFrameBufferMap[data->mData];
+	delete rd.mFrameBufferMap[data.mData];
 	rd.mFrameBufferMap.erase(it);
 }
-void RCBindFrameBuffer(RenderCommand *data, RenderData &renderData)
+void RCBindFrameBuffer(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 
-	rd.mFrameBufferMap[data->mData]->Bind();
+	rd.mFrameBufferMap[data.mData]->Bind();
 }
-void RCIsFrameBufferValid(RenderCommand *data, RenderData &renderData)
+void RCIsFrameBufferValid(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	bool ret = rd.mFrameBufferMap[data->mData]->IsValid();
+	bool ret = rd.mFrameBufferMap[data.mData]->IsValid();
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
-void FrameBufferResetDefault(RenderCommand *, RenderData &)
+void FrameBufferResetDefault(const RenderCommand &, RenderData &)
 {
 	LOG_RENDER_CMD
 		GLFrameBuffer::ResetDefault();
 }
-void RCCreateRenderBuffer(RenderCommand *data, RenderData &renderData)
+void RCCreateRenderBuffer(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand3Arg *data3 = static_cast<RenderCommand3Arg *>(data);
-	rd.mRenderBufferMap[data->mData] = new GLRenderBuffer((size_t)data3->mData2, (size_t)data3->mData3);
+	const RenderCommand3Arg *data3 = static_cast<const RenderCommand3Arg *>(&data);
+	rd.mRenderBufferMap[data.mData] = new GLRenderBuffer((size_t)data3->mData2, (size_t)data3->mData3);
 }
-void RCDestroyRenderBuffer(RenderCommand *data, RenderData &renderData)
+void RCDestroyRenderBuffer(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderBufferMap::iterator it = rd.mRenderBufferMap.find(data->mData);
+	RenderBufferMap::iterator it = rd.mRenderBufferMap.find(data.mData);
 	GCLAssert(it != rd.mRenderBufferMap.end());
-	delete rd.mRenderBufferMap[data->mData];
+	delete rd.mRenderBufferMap[data.mData];
 	rd.mRenderBufferMap.erase(it);
 }
-void RCBindRenderBuffer(RenderCommand *data, RenderData &renderData)
+void RCBindRenderBuffer(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 
-	rd.mRenderBufferMap[data->mData]->Bind();
+	rd.mRenderBufferMap[data.mData]->Bind();
 }
-void RCIsRenderBufferValid(RenderCommand *data, RenderData &renderData)
+void RCIsRenderBufferValid(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	bool ret = rd.mRenderBufferMap[data->mData]->IsValid();
+	bool ret = rd.mRenderBufferMap[data.mData]->IsValid();
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
-void RCCreateVBO(RenderCommand *data, RenderData &renderData)
+void RCCreateVBO(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand5Arg *data5 = static_cast<RenderCommand5Arg *>(data);
+	const RenderCommand5Arg *data5 = static_cast<const RenderCommand5Arg *>(&data);
 
 	rd.mVBOMap[data5->mData] = GLVertexBuffer::CreateVBO((size_t)data5->mData2, data5->mData3, (size_t)data5->mData4, *(const AttribLocations *)data5->mData5);
 	uint8_t *xferBuffer = (uint8_t *)data5->mData3;
@@ -533,82 +533,82 @@ void RCCreateVBO(RenderCommand *data, RenderData &renderData)
 	xferBuffer = (uint8_t *)data5->mData5;
 	delete [] xferBuffer;
 }
-void RCDestroyVBO(RenderCommand *data, RenderData &renderData)
+void RCDestroyVBO(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	VBOMap::iterator it = rd.mVBOMap.find(data->mData);
+	VBOMap::iterator it = rd.mVBOMap.find(data.mData);
 	GCLAssert(it != rd.mVBOMap.end());
-	delete rd.mVBOMap[data->mData];
+	delete rd.mVBOMap[data.mData];
 	rd.mVBOMap.erase(it);
 }
-void RCVBORender(RenderCommand *data, RenderData &renderData)
+void RCVBORender(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand2Arg *data2 = static_cast<RenderCommand2Arg *>(data);
+	const RenderCommand2Arg *data2 = static_cast<const RenderCommand2Arg *>(&data);
 	rd.mVBOMap[data2->mData]->Render(GLVertexBuffer::GetRenderMode((size_t)data2->mData2));
 
 }
-void RCIsVBOValid(RenderCommand *data, RenderData &renderData)
+void RCIsVBOValid(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	bool ret = rd.mVBOMap[data->mData]->IsValid();
+	bool ret = rd.mVBOMap[data.mData]->IsValid();
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
 
-void RCCreatePBO(RenderCommand *data, RenderData &renderData)
+void RCCreatePBO(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	rd.mPBOMap[data->mData] = new GLPixelBufferHAL();
+	rd.mPBOMap[data.mData] = new GLPixelBufferHAL();
 }
-void RCDestroyPBO(RenderCommand *data, RenderData &renderData)
+void RCDestroyPBO(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	PBOMap::iterator it = rd.mPBOMap.find(data->mData);
+	PBOMap::iterator it = rd.mPBOMap.find(data.mData);
 	GCLAssert(it != rd.mPBOMap.end());
-	delete rd.mPBOMap[data->mData];
+	delete rd.mPBOMap[data.mData];
 	rd.mPBOMap.erase(it);
 }
-void RCPBOUnBind(RenderCommand *data, RenderData &renderData)
+void RCPBOUnBind(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	rd.mPBOMap[data->mData]->UnBind();
+	rd.mPBOMap[data.mData]->UnBind();
 }
-void RCPBOBind(RenderCommand *data, RenderData &renderData)
+void RCPBOBind(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	rd.mPBOMap[data->mData]->Bind();
+	rd.mPBOMap[data.mData]->Bind();
 }
-void RCPBOPush(RenderCommand *data, RenderData &renderData)
+void RCPBOPush(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand5Arg *data5 = static_cast<RenderCommand5Arg *>(data);
+	const RenderCommand5Arg *data5 = static_cast<const RenderCommand5Arg *>(&data);
 
-	rd.mPBOMap[data->mData]->PushData((size_t)data5->mData2, (size_t)data5->mData3, (size_t)data5->mData4, (const uint8_t *)data5->mData5);
+	rd.mPBOMap[data.mData]->PushData((size_t)data5->mData2, (size_t)data5->mData3, (size_t)data5->mData4, (const uint8_t *)data5->mData5);
 	uint8_t *xferbuffer = (uint8_t *)data5->mData5;
 	delete [] xferbuffer;
 }
-void RCPBOPull(RenderCommand *data, RenderData &renderData)
+void RCPBOPull(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	RenderCommand4Arg *data4 = static_cast<RenderCommand4Arg *>(data);
-	uint8_t *ret = rd.mPBOMap[data->mData]->PullData((size_t)data4->mData2, (size_t)data4->mData3, (size_t)data4->mData4);
+	const RenderCommand4Arg *data4 = static_cast<const RenderCommand4Arg *>(&data);
+	uint8_t *ret = rd.mPBOMap[data.mData]->PullData((size_t)data4->mData2, (size_t)data4->mData3, (size_t)data4->mData4);
 
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
-void RCIsPBOValid(RenderCommand *data, RenderData &renderData)
+void RCIsPBOValid(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	bool ret = rd.mPBOMap[data->mData]->IsValid();
+	bool ret = rd.mPBOMap[data.mData]->IsValid();
 	RenderPipe::SendReturnMessage(new ReturnMessage(ret));
 }
 static RenderCommandFunction GLRenderCommandMap[] =
@@ -691,9 +691,10 @@ GCL::GLRenderThread::GLRenderThread()
 
 GCL::GLRenderThread::~GLRenderThread()
 {
-	mIsRunning = false;
-	mRunMutex.Notify();
-	if (IsJoinable())
-		Join();
+	mCommandQueue.Flush();
+	//mIsRunning = false;
+	//mRunMutex.Notify();
+	//if (IsJoinable())
+	//	Join();
 	delete mRenderData;
 }

@@ -193,7 +193,7 @@ struct RenderData
 	virtual ~RenderData(){}
 	size_t pad;
 };
-typedef void (*RenderCommandFunction)(RenderCommand *, RenderData &);
+typedef void (*RenderCommandFunction)(const RenderCommand &, RenderData &);
 
 class ReturnMessage
 {

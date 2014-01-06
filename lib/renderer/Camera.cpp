@@ -52,7 +52,7 @@ void Camera::Update()
 	//mModelViewMatrix = Inverse(mCameraMatrix);
 	uint8_t *xferbuffer = new uint8_t[sizeof(Camera)];
 	memcpy(xferbuffer, this, sizeof(Camera));
-	RenderPipe::SendCommand(new RenderCommand(RENDERER_SET_CAMERA, xferbuffer));
+	RenderPipe::SendCommand(RenderCommand(RENDERER_SET_CAMERA, xferbuffer));
 }
 
 

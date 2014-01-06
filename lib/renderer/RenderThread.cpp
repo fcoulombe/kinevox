@@ -26,54 +26,15 @@
 
 using namespace GCL;
 
-void GCL::RenderThread::Run()
-{
-	while (mIsRunning || !mCommandList.empty())
-	{
-		mRunMutex.Wait();
-		//std::cout <<"render"<<std::endl;
-		RenderCommand* cmd =nullptr;
-		mMutex.Lock();
-		if (!mCommandList.empty())
-		{
-			cmd = mCommandList.front();
-			mCommandList.pop();
-		}
-		mMutex.Unlock();
-		if (cmd)
-		{
-			GCLAssert(cmd->mCmd<RenderCommandMax);
-			mRenderCommandMap[cmd->mCmd](cmd, *mRenderData);
-			delete cmd;
-		}
-	}
-}
 
 GCL::RenderThread::~RenderThread()
 {
-	mIsRunning = false;
-	mRunMutex.Notify();
-	if (IsJoinable())
-		Join();
+
 }
 
-void GCL::RenderThread::SendCommand( RenderCommand *cmd )
-{
-	if (IsThreaded())
-	{
-		mMutex.Lock();
-		mCommandList.push(cmd);
-		mMutex.Unlock();
-		mRunMutex.Notify();
-	}
-	else
-	{
-		mRenderCommandMap[cmd->mCmd](cmd, *mRenderData);
-		delete cmd;
-	}
-}
 
 GCL::RenderThread::RenderThread()
+	:mCommandQueue("RenderThread")
 {
 	if (Config::Instance().GetInt("IS_RENDERER_THREDED"))
 		mIsThreaded = true;

@@ -22,35 +22,43 @@
 
 #pragma once
 #include <iostream>
-#include <queue>
 #include <gcl/Assert.h>
-#include <gcl/Thread.h>
-#include <gcl/Mutex.h>
-#include <gcl/Semaphore.h>
+#include <gcl/WorkerThread.h>
 #include "renderer/RenderCmd.h"
 namespace GCL
 {
 struct RenderData;
-class RenderThread : public Thread
+class RenderThread 
 {
 public:
 	RenderThread();
 	virtual ~RenderThread();
-	void SendCommand(RenderCommand *cmd);
+	template<class T>
+	void SendCommand(const T &cmd);
 
 	//returns false if we disbale multithreading
 	bool IsThreaded() const { return mIsThreaded; }
-private:
-	void Run();
-	std::queue<RenderCommand*> mCommandList;
 	
-	Mutex mMutex;
 protected:
-	Semaphore mRunMutex;
 	RenderCommandFunction *mRenderCommandMap; //vtable for render commands. configured by child class
 	RenderData *mRenderData; //holds client side render data
 	bool mIsThreaded;
+	WorkerThread mCommandQueue;
 };
 
+template<class T>
+void GCL::RenderThread::SendCommand(const T &cmd )
+{
+	if (IsThreaded())
+	{
+		mCommandQueue.SendCommandAsync([=](){
+			mRenderCommandMap[cmd.mCmd](cmd, *mRenderData);
+		});
+	}
+	else
+	{
+		mRenderCommandMap[cmd.mCmd](cmd, *mRenderData);
+	}
+}
 
 }

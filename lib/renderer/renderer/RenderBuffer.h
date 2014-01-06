@@ -47,15 +47,15 @@ class RenderBuffer
 public:
 	RenderBuffer(size_t width, size_t height)
 	{
-		RenderPipe::SendCommand(new RenderCommand3Arg(RENDERBUFFER_CREATE, (void*)this, (void*)width, (void*)height));
+		RenderPipe::SendCommand(RenderCommand3Arg(RENDERBUFFER_CREATE, (void*)this, (void*)width, (void*)height));
 	}
 	~RenderBuffer()
 	{
-		RenderPipe::SendCommand(new RenderCommand(RENDERBUFFER_DESTROY, (void*)this));
+		RenderPipe::SendCommand(RenderCommand(RENDERBUFFER_DESTROY, (void*)this));
 	}
-	void Bind() { RenderPipe::SendCommand(new RenderCommand(RENDERBUFFER_BIND, (void*)this)); }
+	void Bind() { RenderPipe::SendCommand(RenderCommand(RENDERBUFFER_BIND, (void*)this)); }
 
-	bool IsValid() const {  return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_RENDERBUFFER_VALID, (void*)this)).GetBool(); }
+	bool IsValid() const {  return RenderPipe::SendCommandSyncRet(RenderCommand(IS_RENDERBUFFER_VALID, (void*)this)).GetBool(); }
 
 	void Save(const char * /*filename*/) { GCLAssert(false && "TBD"); }
 

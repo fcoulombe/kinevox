@@ -44,19 +44,19 @@ public:
 		memcpy(xferBuffer, vertexArray, count*sizeof(VertexType));
 		uint8_t *xferBuffer2 = new uint8_t[sizeof(AttribLocations)];
 		memcpy(xferBuffer2, &loc, sizeof(AttribLocations));
-		RenderPipe::SendCommand(new RenderCommand5Arg(VBO_CREATE, (void*)this, (void*)VertexType::GetComponentType(), (void*)xferBuffer, (void*)count, (void*)xferBuffer2));
+		RenderPipe::SendCommand(RenderCommand5Arg(VBO_CREATE, (void*)this, (void*)VertexType::GetComponentType(), (void*)xferBuffer, (void*)count, (void*)xferBuffer2));
 	}
 	~VertexBuffer()
 	{
-		RenderPipe::SendCommand(new RenderCommand(VBO_DESTROY, (void*)this));
+		RenderPipe::SendCommand(RenderCommand(VBO_DESTROY, (void*)this));
 	}
 
 	void Render(VertexBufferMode mode=VBM_TRIANGLES) const
 	{
-		RenderPipe::SendCommand(new RenderCommand2Arg(VBO_RENDER, (void*)this, (void*)mode));
+		RenderPipe::SendCommand(RenderCommand2Arg(VBO_RENDER, (void*)this, (void*)mode));
 	}
 
-	bool IsValid() const { return RenderPipe::SendCommandSyncRet(new RenderCommand(IS_VBO_VALID, (void*)this)).GetBool(); }
+	bool IsValid() const { return RenderPipe::SendCommandSyncRet(RenderCommand(IS_VBO_VALID, (void*)this)).GetBool(); }
 
 private:
 };

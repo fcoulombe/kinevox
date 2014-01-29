@@ -93,10 +93,17 @@ bool Input::IsKeyUp(uint32_t key)
         keyListener = new InputKeyListener();
     return keyListener->smKeys[key];
 }
+bool Input::IsKeyDown(uint32_t key)
+{
+	if (!keyListener)
+		keyListener = new InputKeyListener();
+	return keyListener->smKeys[key];
+}
 
 void Input::Terminate()
 {
 	delete keyListener;
+	keyListener = nullptr;
 }
 
 #else

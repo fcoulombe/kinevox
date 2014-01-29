@@ -39,6 +39,7 @@ public:
 	static const Rect<int> &ProcessSelection();
 	static void ProcessInput();
 	static bool IsKeyUp(uint32_t key);
+	static bool IsKeyDown(uint32_t key);
 	static bool IsLMouseDown();
 	static size_t GetMouseX();
 	static size_t GetMouseY();

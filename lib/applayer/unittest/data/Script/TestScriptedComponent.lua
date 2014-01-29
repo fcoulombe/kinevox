@@ -19,6 +19,10 @@ function Logic()
   pos = object.GetPosition()
   assert(pos[0] == 10 and pos[1] == 20)
   kinevox.Log("position: "..pos[0].." "..pos[1].." "..pos[2])
+  local isKeyDown = false
+  if input.IsKeyDown(GCL_RIGHT) then
+    isKeyDown = true
+  end
 end
 
 

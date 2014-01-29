@@ -22,11 +22,41 @@
 
 #include "applayer/ScriptApi.h"
 #include "applayer/Actor.h"
+#include <gcl/Config.h>
 #include <script/ScriptResourceManager.h>
 #include <script/Lua.h>
-#include <gcl/Config.h>
+#include <input/Input.h>
 
 using namespace GCL;
+
+int KIsKeyUp(lua_State * L)
+{
+	lua_Integer key = lua_tointeger(L, 1);
+	if (Input::IsKeyUp((uint32_t)key))
+	{
+		lua_pushboolean(L, 1);
+	}
+	else
+	{
+		lua_pushboolean(L, 0);
+	}
+
+	return 1;
+}
+int KIsKeyDown(lua_State * L)
+{
+	lua_Integer key = lua_tointeger(L, 1);
+	if (Input::IsKeyDown((uint32_t)key))
+	{
+		lua_pushboolean(L, 1);
+	}
+	else
+	{
+		lua_pushboolean(L, 0);
+	}
+
+	return 1;
+}
 
 size_t GetObjectId(lua_State * L)
 {
@@ -101,6 +131,11 @@ static const luaL_Reg objectExposedFunc[] = {
 		{ "GetPosition", KGetPosition},
 		{ "SetPosition", KSetPosition},
 		{ NULL, NULL } };
+
+static const luaL_Reg inputExposedFunc[] = {
+	{ "IsKeyDown", KIsKeyDown},
+	{ "IsKeyUp", KIsKeyUp},
+	{ NULL, NULL } };
 int luaopen_kinevoxLib(lua_State * L)
 {
 	luaL_newlib(L, kinevoxExposedFunc);
@@ -111,10 +146,26 @@ int luaopen_objectLib(lua_State * L)
 	luaL_newlib(L, objectExposedFunc);
 	return 1;
 }
+#define REGISTER_GLOBAL_KEY(key) 	lua_pushinteger(L, key);lua_setglobal(L,#key);
+int luaopen_inputLib(lua_State * L)
+{
+	luaL_newlib(L, inputExposedFunc);
+	REGISTER_GLOBAL_KEY(GCL_ESCAPE);
+	REGISTER_GLOBAL_KEY(GCL_UP);
+	REGISTER_GLOBAL_KEY(GCL_DOWN);
+	REGISTER_GLOBAL_KEY(GCL_LEFT);
+	REGISTER_GLOBAL_KEY(GCL_RIGHT);
+	//lua_pushinteger(L, GCL_ESCAPE);
+	//lua_setglobal(L,"GCL_ESCAPE");
+	return 1;
+}
+
+
 
 ScriptApi::ScriptApi()
 {
 	ScriptResourceManager::Instance().ExposeModule("kinevox",luaopen_kinevoxLib);
 	ScriptResourceManager::Instance().ExposeModule("object",luaopen_objectLib);
+	ScriptResourceManager::Instance().ExposeModule("input",luaopen_inputLib);
 
 }

@@ -72,6 +72,7 @@ public:
 	MainGameState()
 :GameState("MainGame"),
  actor("TestActor", "TestActor")
+	, mFramecount(0)
 {
 		actor.SetPosition(0.0,0.0,-10.0);
 }

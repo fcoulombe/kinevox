@@ -148,8 +148,7 @@ void GLGPUProgram::GetUniform(const char *uniformName, long &sampler) const
 }
 long GLGPUProgram::GetAttributeLocation(const char *attributeName) const
 {
-    long ret=-1;
-	ret =  (long)glGetAttribLocation(mProgramObject,attributeName);glErrorCheck();
+    long ret=  (long)glGetAttribLocation(mProgramObject,attributeName);glErrorCheck();
 	//GCLAssertMsg(ret!=-1, attributeName);
 	return ret;
 }

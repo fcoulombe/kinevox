@@ -12,3 +12,4 @@ ENDIF()
 file(GLOB ${ProjectName}_src "${ProjectName}/*.h" "*.cpp" "lua-5.2.1/src/*.c")
 
 add_library(${ProjectName} ${${ProjectName}_src})
+SET_TARGET_PROPERTIES( ${ProjectName} PROPERTIES FOLDER Lib)

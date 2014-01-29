@@ -97,3 +97,5 @@ configure_file (
   )
 include_directories("${PROJECT_BINARY_DIR}")
 include_directories("${PROJECT_SOURCE_DIR}/3rdParty/include")
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)

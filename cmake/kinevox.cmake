@@ -69,6 +69,7 @@ macro(Test ProjectName)
 	add_test (NAME ${ProjectName}_run WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}  COMMAND ${ProjectName}  )
 	set_tests_properties (${ProjectName}_run  PROPERTIES FAIL_REGULAR_EXPRESSION "FAILED")
 	add_dependencies(build_and_test ${ProjectName})
+    SET_TARGET_PROPERTIES( ${ProjectName} PROPERTIES FOLDER Test)
 endmacro()
 
 

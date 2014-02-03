@@ -25,6 +25,7 @@
 #include <gcl/Matrix44.h>
 
 #include "renderer/GL/GLShader.h"
+#include "renderer/GL/GLShaderResource.h"
 #include "renderer/GL/GLTexture.h"
 
 using namespace GCL;
@@ -51,7 +52,7 @@ void GLGPUProgram::Bind()
 
 void GLGPUProgram::AttachShader(const GLShader &shader)
 {
-    glAttachShader(mProgramObject, shader.mShaderObject);glErrorCheck();
+    glAttachShader(mProgramObject, shader.mGPUResource->GetShaderObject());glErrorCheck();
 }
 
 void GLGPUProgram::Link()

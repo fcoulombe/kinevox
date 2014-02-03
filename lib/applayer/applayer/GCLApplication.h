@@ -58,6 +58,7 @@ public:
     GCLEXPORT static WinDriver *GetWinDriver() { return mWinDriver; }
 	GCLEXPORT static void RegisterCustomRenderObject(Actor* newRenderObject);
 
+	GCLEXPORT static void InitializaAppLayerComponents();
 private:
 	GCLApplication();
 	~GCLApplication();
@@ -88,7 +89,6 @@ private:
 
 	static ScriptApi *mScriptApi;
 
-	static void InitializaAppLayerComponents();
 };
 
 }

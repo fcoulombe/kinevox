@@ -26,6 +26,8 @@
 #include <sstream>
 
 #include <gcl/Assert.h>
+#include <gcl/Config.h>
+#include <gcl/StringUtil.h>
 #include "renderer/GPUProgram.h"
 #include "renderer/Shader.h"
 #include "renderer/Texture.h"
@@ -66,7 +68,22 @@ void Material::LoadMaterial(const char *filename)
 		delete mTexture;
 		mTexture=NULL;
 	}
-	const std::string fullFileName(std::string(MATERIAL_PATH) + std::string(filename) + std::string(".material"));
+	std::string fullFileName(std::string(MATERIAL_PATH) + std::string(filename) + std::string(".material"));
+	std::vector<std::string> resourcePathList;
+	if (Config::Instance().HasString("RESOURCE_PATH"))
+	{
+		const std::string &resourcePaths = Config::Instance().GetString("RESOURCE_PATH");
+		StringUtil::Explode(resourcePaths, resourcePathList, ';');
+	}
+	for (size_t i=0; i<resourcePathList.size(); ++i)
+	{
+		std::string fullPath = resourcePathList[i] + "/" + fullFileName;
+		if (GCLFile::Exists(fullPath.c_str()))
+		{
+			fullFileName = fullPath;
+			break;
+		}
+	}
 	std::ifstream fp(fullFileName.c_str());
 	std::stringstream s;
 	s << "Failed loading the file: " << fullFileName;

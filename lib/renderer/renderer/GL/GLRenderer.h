@@ -36,12 +36,9 @@
 #endif
 namespace GCL
 {
-    class RenderObject;
-    class RenderObject2D;
     class Text2D;
 	class Camera;
     
-    typedef std::vector<RenderObject2D*> RenderObject2DList;
     typedef std::vector<Text2D*> Text2DList;
 class GLGPUProgram;
 class GLRenderer

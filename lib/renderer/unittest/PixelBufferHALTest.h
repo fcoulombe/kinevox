@@ -34,6 +34,8 @@ void Test()
 {
 	TEST_START
 
+	ShaderResourceManager::Initialize();
+	{
 	WinDriver winDriver("PixelBufferHALTest");
 	Renderer renderer(winDriver.GetWindowsHandle());
 
@@ -83,5 +85,8 @@ void Test()
 		PixelBuffer::SaveTga("PBOTest.tga", pb.mWidth, pb.mHeight, pb.mBytesPerPixel, pb.mPixels);
 #endif
 	}
+	}
+
+	ShaderResourceManager::Terminate();
 }
 }

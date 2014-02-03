@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,45 +19,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 #pragma once
-
-#include <kinetestlib/UnitTest.h>
-#include <renderer/GeomUtilHelper.h>
-#include <renderer/Material.h>
-
-using namespace GCL;
-namespace RenderObjectWithMaterialTest
+#include <string>
+namespace GCL
 {
-void Test();
-void Test()
-{
-	KINEVOX_TEST_START
 
-		ShaderResourceManager::Initialize();
-	TextureResourceManager::Initialize();
+	class GPUResource
 	{
-		WinDriver winDriver("RenderObjectWithMaterialTest");
-		Renderer renderer(winDriver.GetWindowsHandle());
+	public:
+		GPUResource(): mRefCount(1) {}
+		virtual ~GPUResource() {}
+		size_t mRefCount;
 
-		SquareRenderObject obj;
-		RenderObjectList objList;
+	};
 
-		objList.push_back(obj.GetRenderObject());
 
-		Material material("Default");
-		material.Bind();
-        obj.SetPosition(0.0,0.0,-10.0);
-        Real rot = 0.0;
-        KINEVOX_TEST_LOOP_START
-        rot+=0.001;
-        obj.SetOrientation(0.0,rot,0.0);
-		renderer.PreRender();
-		obj.Render();
-		renderer.PostRender();
-		winDriver.SwapBuffer();
-        KINEVOX_TEST_LOOP_END
-	}
-	TextureResourceManager::Terminate();
-	ShaderResourceManager::Terminate();
-}
 }

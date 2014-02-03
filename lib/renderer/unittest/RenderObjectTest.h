@@ -36,6 +36,7 @@ void Test();
 void Test()
 {
 	KINEVOX_TEST_START
+		ShaderResourceManager::Initialize();
 	TextureResourceManager::Initialize();
 	{
 		WinDriver winDriver("RenderObjectTest");
@@ -123,6 +124,7 @@ void Test()
         KINEVOX_TEST_LOOP_END
 	}
 	TextureResourceManager::Terminate();
+	ShaderResourceManager::Terminate();
 
 
 }

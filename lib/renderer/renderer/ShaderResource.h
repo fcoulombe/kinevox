@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,45 +19,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 #pragma once
+#include <gcl/Resource.h>
 
-#include <kinetestlib/UnitTest.h>
-#include <renderer/GeomUtilHelper.h>
-#include <renderer/Material.h>
-
-using namespace GCL;
-namespace RenderObjectWithMaterialTest
+namespace GCL
 {
-void Test();
-void Test()
-{
-	KINEVOX_TEST_START
-
-		ShaderResourceManager::Initialize();
-	TextureResourceManager::Initialize();
+	enum ShaderType
 	{
-		WinDriver winDriver("RenderObjectWithMaterialTest");
-		Renderer renderer(winDriver.GetWindowsHandle());
+		VERTEX_SHADER=0,
+		FRAGMENT_SHADER=1,
+		GEOMETRY_SHADER=2
+	};
+	class ShaderResource : public Resource
+	{
+	public:
 
-		SquareRenderObject obj;
-		RenderObjectList objList;
+		ShaderResource(const char *textureName);
+		~ShaderResource();
 
-		objList.push_back(obj.GetRenderObject());
+		static const ShaderResource EmptyShader;
+		const char *GetShaderSource() const { return mShaderSource; }
+		const std::string &GetFilename() const { return mShaderFileName; }
 
-		Material material("Default");
-		material.Bind();
-        obj.SetPosition(0.0,0.0,-10.0);
-        Real rot = 0.0;
-        KINEVOX_TEST_LOOP_START
-        rot+=0.001;
-        obj.SetOrientation(0.0,rot,0.0);
-		renderer.PreRender();
-		obj.Render();
-		renderer.PostRender();
-		winDriver.SwapBuffer();
-        KINEVOX_TEST_LOOP_END
-	}
-	TextureResourceManager::Terminate();
-	ShaderResourceManager::Terminate();
-}
+		void SetShaderType(ShaderType type) const { mType = type; }
+		ShaderType GetShaderType() const { return mType; }
+	private:
+		ShaderResource() {}
+		char *mShaderSource;
+		std::string mShaderFileName;
+		mutable ShaderType mType;
+	};
 }

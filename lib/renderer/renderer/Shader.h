@@ -24,33 +24,37 @@
 
 #include "renderer/RenderCmd.h"
 #include "renderer/RenderPipe.h"
+#include "renderer/ShaderResource.h"
+#include "renderer/ShaderResourceManager.h"
 namespace GCL
 {
 
-enum ShaderType
-{
-	VERTEX_SHADER=0,
-	FRAGMENT_SHADER=1,
-	GEOMETRY_SHADER=2
-};
+
 
   class Shader
   {
   public:
     Shader(const char *shaderSourcePath, ShaderType type)
 	{
-		size_t fileNameLen = strlen(shaderSourcePath)+1;
-		char *xferbuffer = new char[fileNameLen];
-		strncpy(xferbuffer, shaderSourcePath, fileNameLen);
-		RenderPipe::SendCommand(RenderCommand3Arg(SHADER_CREATE, this, (void*)xferbuffer, (void*)type));
+#if USE_OPENGL3
+		const std::string shaderFileName = std::string(GLSL_PATH) + std::string(shaderSourcePath)+std::string(".glsl3");
+#else
+		const std::string shaderFileName = std::string(GLSL_PATH) + std::string(shaderSourcePath)+std::string(".glsl");
+#endif
+		const Resource *tempResource = ShaderResourceManager::Instance().LoadResource(shaderFileName.c_str());
+		mResource = static_cast<const ShaderResource*>(tempResource);
+		mResource->SetShaderType(type);
+		RenderPipe::SendCommand(RenderCommand2Arg(SHADER_CREATE, this, (void*)mResource));
 	}
     ~Shader() 
 	{
-		RenderPipe::SendCommand(RenderCommand(SHADER_DESTROY, this));
+		RenderPipe::SendCommandSync(RenderCommand(SHADER_DESTROY, this));
+		ShaderResourceManager::Instance().ReleaseResource(mResource);
 	}
     bool IsValid() const { return RenderPipe::SendCommandSyncRet(RenderCommand(IS_SHADER_VALID, (void*)this)).GetBool(); }
 
 private:
+	const ShaderResource *mResource;
 	
   };
 }

@@ -21,25 +21,22 @@
  */
 
 #pragma once
-#include <3rdparty/OpenGL.h>
+#include "renderer/GL/GLShaderResource.h"
 
 namespace GCL
 {
-
+	class ShaderResource;
+	class GLShaderResource;
   class GLShader
   {
   public:
-	GLShader(const char *shaderSourcePath, GLenum type);
+	GLShader(const ShaderResource *shaderSourcePath);
     ~GLShader();
-    bool IsValid() const { return mIsValid; }
-    static GLenum GetShaderType(size_t type) { return GLShaderType[type]; }
+	bool IsValid() const { return mGPUResource->IsValid(); }
   private:
-    void PrintInfoLog(GLuint );
-	friend class GLGPUProgram;
-    GLuint CompileShader(const char *shaderSrc, GLenum type);
+	  const GLShaderResource *mGPUResource;
 
-    GLuint mShaderObject;
-    bool mIsValid;
-	static const GLenum GLShaderType[];
+	friend class GLGPUProgram;
+
   };
 }

@@ -40,43 +40,6 @@ using namespace GCL;
 
 namespace GLRendererThreadedTest
 { 
-#if 0
-	class ThreadedVertexBuffer
-	{
-
-	};
-	class ThreadedTexture
-	{
-
-	};
-	class ThreadedShader
-	{
-
-	};
-	class ThreadedVAO
-	{
-
-	};
-	class ThreadedRenderObject2D
-	{
-	public:
-		Matrix33 mTransform;
-	};
-	class ThreadedSprite : public ThreadedRenderObject2D
-	{
-	public:
-
-	};
-	class MyRenderObject2D : public RenderObject2D
-	{
-	public:
-		MyRenderObject2D()
-			: RenderObject2D("TestObject", "DefaultSprite") //identity
-		{}
-	private:
-	};
-#endif
-
     void Test();
 void Test()
 {
@@ -84,9 +47,6 @@ void Test()
     
 	WinDriver winDriver("GLRendererThreadedTest");
 	Renderer renderer(winDriver.GetWindowsHandle());
-	//MyRenderObject2D obj;
-	//RenderObject2DList objList;
-	//objList.push_back(&obj);
 
 	const size_t TICKS_PER_SECOND = 30;
 	const size_t SKIP_TICKS = 1000 / TICKS_PER_SECOND;

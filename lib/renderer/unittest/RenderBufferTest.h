@@ -43,6 +43,7 @@ bool CompareImages(const char * /*filename1*/, const char * /*filename2*/)
 void Test()
 {
 	TEST_START
+		ShaderResourceManager::Initialize();
 	TextureResourceManager::Initialize();
 	{
         WinDriver winDriver("RenderBufferTest");
@@ -72,5 +73,6 @@ void Test()
 	}
 
 	TextureResourceManager::Terminate();
+	ShaderResourceManager::Terminate();
 }
 }

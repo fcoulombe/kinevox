@@ -32,6 +32,8 @@ void Test();
 void Test()
 {
 	TEST_START
+		ShaderResourceManager::Initialize();
+	{
 	WinDriver winDriver("VertexBufferTest");
 	Renderer renderer(winDriver.GetWindowsHandle());
 	GPUProgram program;
@@ -60,5 +62,7 @@ void Test()
 			{Point3<MeshReal>(-0.5, 0.5, 0.0), Point2<MeshReal>(0.0, 0.0)} };
 	VertexBuffer vb2(square2, 4, loc);
 	Assert_Test(vb2.IsValid());
+	}
+	ShaderResourceManager::Terminate();
 }
 }

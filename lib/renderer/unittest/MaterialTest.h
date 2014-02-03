@@ -33,6 +33,7 @@ void Test()
 {
 	TEST_START
 
+		ShaderResourceManager::Initialize();
 	TextureResourceManager::Initialize();
     WinDriver windriver("MaterialTest");
 	Renderer render(windriver.GetWindowsHandle());
@@ -51,5 +52,6 @@ void Test()
 	}
 
 	TextureResourceManager::Terminate();
+	ShaderResourceManager::Terminate();
 }
 }

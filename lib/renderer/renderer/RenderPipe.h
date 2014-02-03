@@ -40,6 +40,8 @@ public:
 
 	template<class T>
 	static void SendCommand(const T &cmd);
+	template<class T>
+	static void SendCommandSync(const T &cmd);
 
 	//must pass command that actually return a value. otherwise this will stall
 	template<class T>
@@ -56,6 +58,12 @@ void GCL::RenderPipe::SendCommand(const T &cmd )
 {
 	//if threaded, the thread processes the command otherwise it's the pipe itself
 	mRenderThreads[0]->SendCommand(cmd);
+}
+template<class T>
+void GCL::RenderPipe::SendCommandSync(const T &cmd )
+{
+	//if threaded, the thread processes the command otherwise it's the pipe itself
+	mRenderThreads[0]->SendCommandSync(cmd);
 }
 template<class T>
 const GCL::ReturnMessage &GCL::RenderPipe::SendCommandSyncRet(const T &cmd )

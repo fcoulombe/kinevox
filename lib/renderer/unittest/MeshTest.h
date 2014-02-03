@@ -101,6 +101,7 @@ void Test()
 {
 	KINEVOX_TEST_START
 
+		ShaderResourceManager::Initialize();
 	TextureResourceManager::Initialize();
 	MeshResourceManager::Initialize();
 
@@ -141,5 +142,6 @@ void Test()
 
 	MeshResourceManager::Terminate();
 	TextureResourceManager::Terminate();
+	ShaderResourceManager::Terminate();
 }
 }

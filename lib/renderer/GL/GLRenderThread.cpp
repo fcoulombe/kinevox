@@ -361,14 +361,13 @@ void RCGPUProgramResetDefault(const RenderCommand &, RenderData &)
 	LOG_RENDER_CMD
 	GLGPUProgram::ResetDefault();
 }
+
 void RCCreateShader(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	const RenderCommand3Arg *data3 = static_cast<const RenderCommand3Arg *>(&data);
-	rd.mShaderMap[data.mData] = new GLShader((const char *)data3->mData2, GLShader::GetShaderType((size_t)data3->mData3));
-	char *xferbuffer = (char*)data3->mData2;
-	delete [] xferbuffer;
+	const RenderCommand2Arg *data3 = static_cast<const RenderCommand2Arg *>(&data);
+	rd.mShaderMap[data.mData] = new GLShader((const ShaderResource *)data3->mData2);
 }
 
 void RCDestroyShader(const RenderCommand &data, RenderData &renderData)

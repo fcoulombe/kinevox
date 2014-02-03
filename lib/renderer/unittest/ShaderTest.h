@@ -39,7 +39,7 @@ void Test();
 void Test()
 {
 	KINEVOX_TEST_START
-
+		ShaderResourceManager::Initialize();
 	TextureResourceManager::Initialize();
 	{
 		WinDriver winDriver("ShaderTest");
@@ -147,6 +147,7 @@ void Test()
 
 		GPUProgram::ResetDefault();
 	}
-	TextureResourceManager::Terminate();
+	TextureResourceManager::Terminate();	
+	ShaderResourceManager::Terminate();
 }
 }

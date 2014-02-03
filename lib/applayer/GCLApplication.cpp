@@ -35,6 +35,7 @@
 #include <renderer/Renderer.h>
 #include <renderer/FontResourceManager.h>
 #include <renderer/MeshResourceManager.h>
+#include <renderer/ShaderResourceManager.h>
 #include <renderer/TextureResourceManager.h>
 #include <script/ScriptResourceManager.h>
 #include <windriver/WinDriver.h>
@@ -68,6 +69,7 @@ void GCLApplication::InitializaAppLayerComponents()
 }
 /*static */void GCLApplication::Initialize(const char *windowsTitle)
 {
+	ShaderResourceManager::Initialize();
 	TextureResourceManager::Initialize();
 	FontResourceManager::Initialize();
 	ScriptResourceManager::Initialize();
@@ -96,6 +98,7 @@ void GCLApplication::InitializaAppLayerComponents()
 	ScriptResourceManager::Terminate();
 	FontResourceManager::Terminate();
 	TextureResourceManager::Terminate();
+	ShaderResourceManager::Terminate();
 }
 
 

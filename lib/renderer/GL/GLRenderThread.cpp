@@ -223,7 +223,10 @@ void RCCreateGPUProgram(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	rd.mGPUProgramMap[data.mData] = new GLGPUProgram();
+	const RenderCommand3Arg &data2 = static_cast<const RenderCommand3Arg &>(data);
+	GCLAssert(rd.mShaderMap.find(data2.mData2) != rd.mShaderMap.end());
+	GCLAssert(rd.mShaderMap.find(data2.mData3) != rd.mShaderMap.end());
+	rd.mGPUProgramMap[data.mData] = new GLGPUProgram(*rd.mShaderMap[data2.mData2], *rd.mShaderMap[data2.mData3]);
 }
 void RCDestroyGPUProgram(const RenderCommand &data, RenderData &renderData)
 {
@@ -245,19 +248,21 @@ void RCBindGPUProgram(const RenderCommand &data, RenderData &renderData)
 void RCAttachShader(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
+		GCLAssert(false && "delete this command");
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	const RenderCommand2Arg &data2 = static_cast<const RenderCommand2Arg &>(data);
+	//const RenderCommand2Arg &data2 = static_cast<const RenderCommand2Arg &>(data);
 
 	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data.mData]->AttachShader(*rd.mShaderMap[data2.mData2]);
+	//rd.mGPUProgramMap[data.mData]->AttachShader(*rd.mShaderMap[data2.mData2]);
 }
 void RCLinkGPUProgram(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
+		GCLAssert(false && "delete this command");
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
 
 	GCLAssert(rd.mGPUProgramMap.find(data.mData) != rd.mGPUProgramMap.end());
-	rd.mGPUProgramMap[data.mData]->Link();
+	//rd.mGPUProgramMap[data.mData]->Link();
 }
 void RCIsGPUProgramValid(const RenderCommand &data, RenderData &renderData)
 {

@@ -30,7 +30,6 @@ namespace GCL
 	class GLShaderResource : public GPUResource
 	{
 	public:
-
 		GLShaderResource(const ShaderResource *resource);
 		~GLShaderResource();
 		bool IsValid() const { return mIsValid; }
@@ -43,5 +42,21 @@ namespace GCL
 		GLuint mShaderObject;
 		bool mIsValid;
 		static const GLenum GLShaderType[];
+	};
+
+	class GLGPUProgramResource
+	{
+	public:
+		GLGPUProgramResource(const GLShaderResource *pshader, const GLShaderResource *vshader );
+		~GLGPUProgramResource();
+		bool IsValid() const { return mIsValid; }
+		GLuint GetProgramObject() const { return mProgramObject; }
+		size_t mRefCount;
+	private:
+		void AttachShader(const GLShaderResource &shader);
+		void Link();
+		void PrintInfoLog(GLuint );
+		GLuint mProgramObject;
+		bool mIsValid;
 	};
 }

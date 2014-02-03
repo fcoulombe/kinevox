@@ -36,12 +36,9 @@ void Test()
 	{
 	WinDriver winDriver("VertexBufferTest");
 	Renderer renderer(winDriver.GetWindowsHandle());
-	GPUProgram program;
 	Shader vertexShader("DefaultVertexShader", VERTEX_SHADER);
 	Shader fragmentShader("DefaultFragmentShader", FRAGMENT_SHADER);
-	program.AttachShader(vertexShader);
-	program.AttachShader(fragmentShader);
-	program.Link();
+	GPUProgram program(vertexShader, fragmentShader);
 	program.Bind();
 	AttribLocations loc;
 	loc.position = program.GetAttributeLocation("InPosition");

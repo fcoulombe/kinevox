@@ -37,3 +37,39 @@ void GLShaderResourceManager::Free( GPUResource * resource )
 {
 	delete resource;
 }
+
+GLGPUProgramResource * GCL::GLShaderResourceManager::LoadProgramResource(const GLShaderResource *pshader, const GLShaderResource *vshader )
+{
+	uint8_t pid = pshader->GetShaderObject() & 0x000000ff;
+	uint8_t vid = vshader->GetShaderObject() & 0x000000ff;
+	uint64_t key = (pid<<8) | vid;
+	auto it = mProgramResourceCache.find(key);
+	if (it != mProgramResourceCache.end())
+	{
+		++it->second->mRefCount;
+		return it->second;
+	}
+	GLGPUProgramResource *newResource = new GLGPUProgramResource(pshader, vshader);
+	mProgramResourceCache[key] = newResource;
+	return newResource;
+}
+
+void GCL::GLShaderResourceManager::ReleaseProgramResource( GLGPUProgramResource *resource )
+{
+	for (ProgramResourceCache::iterator it = mProgramResourceCache.begin(); it != mProgramResourceCache.end(); ++it)
+	{
+		GLGPUProgramResource *tempResource = it->second;
+		if (tempResource == resource)
+		{
+			--tempResource->mRefCount;
+			GCLAssert((long)(resource->mRefCount)>=0); //if we get a ref count of -1, something went really wrong;
+			if (resource->mRefCount == 0)
+			{
+				delete tempResource;
+				mProgramResourceCache.erase(it);
+			}
+			return;
+		}
+	}
+	GCLAssertMsg(false, "we released a program that didnt exist.");
+}

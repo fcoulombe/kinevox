@@ -111,3 +111,57 @@ void GLShaderResource::PrintInfoLog(GLuint p)
 }
 
 
+
+GCL::GLGPUProgramResource::GLGPUProgramResource( const GLShaderResource *pshader, const GLShaderResource *vshader ) 
+	: mRefCount(1),mIsValid (false)
+{
+	mProgramObject = glCreateProgram();glErrorCheck();
+	GCLAssertMsg(mProgramObject != 0, "Can't create program");
+	AttachShader(*pshader);
+	AttachShader(*vshader);
+	Link();
+	
+}
+
+GCL::GLGPUProgramResource::~GLGPUProgramResource()
+{
+	if (mIsValid)
+		glDeleteProgram(mProgramObject);glErrorCheck();
+}
+
+void GLGPUProgramResource::AttachShader(const GLShaderResource &shader)
+{
+	glAttachShader(mProgramObject, shader.GetShaderObject());glErrorCheck();
+}
+
+void GLGPUProgramResource::Link()
+{
+	glLinkProgram(mProgramObject);glErrorCheck();
+
+	GLint linked;
+	glGetProgramiv(mProgramObject, GL_LINK_STATUS, &linked);glErrorCheck();
+	if(linked)
+	{
+		mIsValid = true;
+	}
+	else
+	{
+		PrintInfoLog(mProgramObject);
+		glDeleteProgram(mProgramObject);glErrorCheck();
+		mIsValid = false;
+	}
+}
+
+
+void GLGPUProgramResource::PrintInfoLog(GLuint p)
+{
+	GLint infoLen = 0;
+	glGetProgramiv(p, GL_INFO_LOG_LENGTH, &infoLen);glErrorCheck();
+	if(infoLen > 1)
+	{
+		char* infoLog = new char[(sizeof(char) * infoLen)];
+		glGetProgramInfoLog(p, infoLen, NULL, infoLog);glErrorCheck();
+		std::cerr << "Error linking program:\n%s" << infoLog << std::endl;
+		delete [] infoLog;
+	}
+}

@@ -47,12 +47,9 @@ void Test()
 	{
         WinDriver winDriver("TextureAndShaderTest");
         Renderer renderer(winDriver.GetWindowsHandle());
-		GPUProgram program;
 		Shader vertexShader("DefaultVertexShader", VERTEX_SHADER);
 		Shader fragmentShader("DefaultFragmentShader", FRAGMENT_SHADER);
-		program.AttachShader(vertexShader);
-		program.AttachShader(fragmentShader);
-		program.Link();
+		GPUProgram program(vertexShader, fragmentShader);
 		program.Bind();
 
 		SquareRenderObject obj1;

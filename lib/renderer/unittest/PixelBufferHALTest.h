@@ -39,14 +39,9 @@ void Test()
 	WinDriver winDriver("PixelBufferHALTest");
 	Renderer renderer(winDriver.GetWindowsHandle());
 
-	GPUProgram program;
 	Shader vertexShader("DefaultVertexShader", VERTEX_SHADER);
 	Shader fragmentShader("DefaultFragmentShader", FRAGMENT_SHADER);
-	program.AttachShader(vertexShader);
-	program.AttachShader(fragmentShader);
-	program.Link();
-	program.Bind();
-
+	GPUProgram program(vertexShader, fragmentShader);
 	{
 	PixelBufferHAL buffer;
 	buffer.IsValid();

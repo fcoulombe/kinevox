@@ -34,9 +34,13 @@ class Shader;
   class GPUProgram
   {
   public:
-	GPUProgram() 
+	GPUProgram(Shader &vshader, Shader &pshader) 
 	{ 
-		RenderPipe::SendCommand(RenderCommand(GPUPROGRAM_CREATE, this)); 
+		RenderPipe::SendCommand(RenderCommand3Arg(GPUPROGRAM_CREATE, this, &pshader, &vshader)); 
+		//AttachShader(vshader);
+		//AttachShader(pshader);
+		//Link();
+		//Bind();
 	}
 
     ~GPUProgram() 
@@ -49,13 +53,8 @@ class Shader;
 	{
 		RenderPipe::SendCommand(RenderCommand(GPUPROGRAM_BIND, this)); 
 	}
-    void AttachShader(Shader &shader)
-    {
-    	mShaderList.push_back(&shader);
-		RenderPipe::SendCommand(RenderCommand2Arg(GPUPROGRAM_ATTACH_SHADER, this, &shader)); 
-    }
-	void Link() { RenderPipe::SendCommand(RenderCommand(GPUPROGRAM_LINK, this));  }
-    bool IsValid() const {  return RenderPipe::SendCommandSyncRet(RenderCommand(IS_GPUPROGRAM_VALID, (void*)this)).GetBool(); }
+	bool IsValid() const {  return RenderPipe::SendCommandSyncRet(RenderCommand(IS_GPUPROGRAM_VALID, (void*)this)).GetBool(); }
+ 
 
 	AttribLocations GetShaderLocations() const
 	{
@@ -81,6 +80,13 @@ class Shader;
 
     static void ResetDefault() { RenderPipe::SendCommand(RenderCommand(GPUPROGRAM_RESETDEFAULT)); }
   private:
+	  void AttachShader(Shader &shader)
+	  {
+		  mShaderList.push_back(&shader);
+		  RenderPipe::SendCommand(RenderCommand2Arg(GPUPROGRAM_ATTACH_SHADER, this, &shader)); 
+	  }
+	  void Link() { RenderPipe::SendCommand(RenderCommand(GPUPROGRAM_LINK, this));  }
+
 	std::vector<Shader *> mShaderList;
   };
 }

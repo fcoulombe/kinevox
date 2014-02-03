@@ -21,12 +21,12 @@
  */
 
 #pragma once
-
 #include <gcl/Assert.h>
 #include <renderer/GPUResourceManager.h>
 
 namespace GCL
 {
+	class GLGPUProgramResource;
   class GLShaderResource;
   class GLShaderResourceManager : public GPUResourceManager
   {
@@ -47,10 +47,15 @@ namespace GCL
     GPUResource *Allocate(const Resource *resource);
     void Free(GPUResource * /*resource*/);
 
+
+	GLGPUProgramResource *LoadProgramResource(const GLShaderResource *pshader, const GLShaderResource *vshader);
+	void ReleaseProgramResource(GLGPUProgramResource *resource);
   private:
     static GLShaderResourceManager *smpInstance;
 
     GLShaderResourceManager() {}
+	typedef std::map<uint64_t, GLGPUProgramResource*> ProgramResourceCache;
+	ProgramResourceCache mProgramResourceCache;
   };
 
 }

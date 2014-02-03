@@ -26,130 +26,93 @@
 
 #include "renderer/GL/GLShader.h"
 #include "renderer/GL/GLShaderResource.h"
+#include "renderer/GL/GLShaderResourceManager.h"
 #include "renderer/GL/GLTexture.h"
+
 
 using namespace GCL;
 
-GLGPUProgram::GLGPUProgram()
-:mIsValid (false)
+
+GLGPUProgram::GLGPUProgram(const GLShader &vshader, const GLShader &pshader)
 {
-	mProgramObject = glCreateProgram();glErrorCheck();
-	GCLAssertMsg(mProgramObject != 0, "Can't create program");
-	return;
+	mResource = GLShaderResourceManager::Instance().LoadProgramResource(vshader.mGPUResource, pshader.mGPUResource);
 }
 
 GLGPUProgram::~GLGPUProgram()
 {
-    if (mIsValid)
-        glDeleteProgram(mProgramObject);glErrorCheck();
+	GLShaderResourceManager::Instance().ReleaseProgramResource(mResource);
 }
 
 void GLGPUProgram::Bind()
 {
-	GCLAssert(mIsValid);
-	glUseProgram(mProgramObject);glErrorCheck();
+	GCLAssert(IsValid());
+	glUseProgram(mResource->GetProgramObject());glErrorCheck();
 }
 
-void GLGPUProgram::AttachShader(const GLShader &shader)
-{
-    glAttachShader(mProgramObject, shader.mGPUResource->GetShaderObject());glErrorCheck();
-}
-
-void GLGPUProgram::Link()
-{
-	glLinkProgram(mProgramObject);glErrorCheck();
-
-	GLint linked;
-	glGetProgramiv(mProgramObject, GL_LINK_STATUS, &linked);glErrorCheck();
-	if(linked)
-	{
-		mIsValid = true;
-	}
-	else
-	{
-		PrintInfoLog(mProgramObject);
-		glDeleteProgram(mProgramObject);glErrorCheck();
-		mIsValid = false;
-	}
-}
-
-
-void GLGPUProgram::PrintInfoLog(GLuint p)
-{
-	GLint infoLen = 0;
-	glGetProgramiv(p, GL_INFO_LOG_LENGTH, &infoLen);glErrorCheck();
-	if(infoLen > 1)
-	{
-		char* infoLog = new char[(sizeof(char) * infoLen)];
-		glGetProgramInfoLog(p, infoLen, NULL, infoLog);glErrorCheck();
-		std::cerr << "Error linking program:\n%s" << infoLog << std::endl;
-		delete [] infoLog;
-	}
-}
 
 
 void GLGPUProgram::SetProjectionMatrix(const Matrix44 &m)
 {
-	GCLAssert(mIsValid);
-	GLint projectionMatrixLoc = glGetUniformLocation(mProgramObject,"ProjectionMatrix");glErrorCheck();
+	GCLAssert(IsValid());
+	GLint projectionMatrixLoc = glGetUniformLocation(mResource->GetProgramObject(),"ProjectionMatrix");glErrorCheck();
 	Matrix44f mf(m);
 	glUniformMatrix4fv(projectionMatrixLoc,1,false,(const GLfloat*)&mf);glErrorCheck();
 }
 void GLGPUProgram::SetModelViewMatrix(const Matrix44 &m)
 {
-	GCLAssert(mIsValid);
-	GLint modelviewMatrixLoc = glGetUniformLocation(mProgramObject,"ModelViewMatrix");glErrorCheck();
+	GCLAssert(IsValid());
+	GLint modelviewMatrixLoc = glGetUniformLocation(mResource->GetProgramObject(),"ModelViewMatrix");glErrorCheck();
 	Matrix44f mm(m);
 	glUniformMatrix4fv(modelviewMatrixLoc,1,false,(const GLfloat*)&mm);glErrorCheck();
 }
 
 void GLGPUProgram::SetUniform(const char *uniforName, long val)
 {
-	GCLAssert(mIsValid);
-	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
+	GCLAssert(IsValid());
+	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObject(),uniforName);glErrorCheck();
 	glUniform1i(uniformLoc,(GLint)val);glErrorCheck();
 }
 
 void GLGPUProgram::SetUniform(const char *uniforName, const Point2<long> &val)
 {
 	//std::cout << "SetUniform: " << uniforName << " " << val << std::endl;
-	GCLAssert(mIsValid);
-	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
+	GCLAssert(IsValid());
+	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObject(),uniforName);glErrorCheck();
 	glUniform2i(uniformLoc, val.x, val.y);glErrorCheck();
 }
 
 void GLGPUProgram::SetUniform(const char *uniforName, const Point2<float> &val)
 {
-	GCLAssert(mIsValid);
-	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
+	GCLAssert(IsValid());
+	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObject(),uniforName);glErrorCheck();
 	glUniform2fv(uniformLoc,1, (GLfloat*)&val);glErrorCheck();
 }
 
 void GLGPUProgram::SetTextureSampler(const GLTexture &sampler)
 {
-	GLint textureLoc = glGetUniformLocation(mProgramObject,"texture");glErrorCheck();
+	GLint textureLoc = glGetUniformLocation(mResource->GetProgramObject(),"texture");glErrorCheck();
 	glUniform1i(textureLoc, sampler.GetTextureUnit());glErrorCheck();
 }
 
 void GLGPUProgram::GetUniform(const char *uniformName, Matrix44 &m44) const
 {
 	GLfloat mf[16];
-	GCLAssert(mIsValid);
-	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniformName);glErrorCheck();
+	GCLAssert(IsValid());
+	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObject(),uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
-	glGetUniformfv(	mProgramObject,uniformLoc,mf);glErrorCheck();
+	glGetUniformfv(	mResource->GetProgramObject(),uniformLoc,mf);glErrorCheck();
 	m44 = Matrix44((const float *)mf);
 }
 void GLGPUProgram::GetUniform(const char *uniformName, long &sampler) const
 {
-	GCLAssert(mIsValid);
-	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniformName);glErrorCheck();
+	GCLAssert(IsValid());
+	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObject(),uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
-	glGetUniformiv(mProgramObject,uniformLoc,(GLint*)&sampler);glErrorCheck();
+	glGetUniformiv(mResource->GetProgramObject(),uniformLoc,(GLint*)&sampler);glErrorCheck();
 }
 long GLGPUProgram::GetAttributeLocation(const char *attributeName) const
 {
-    long ret=  (long)glGetAttribLocation(mProgramObject,attributeName);glErrorCheck();
+    long ret=  (long)glGetAttribLocation(mResource->GetProgramObject(),attributeName);glErrorCheck();
 	//GCLAssertMsg(ret!=-1, attributeName);
 	return ret;
 }

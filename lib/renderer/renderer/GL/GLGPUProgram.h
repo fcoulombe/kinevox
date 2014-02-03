@@ -23,6 +23,7 @@
 #pragma once
 #include <3rdparty/OpenGL.h>
 #include <gcl/Point2.h>
+#include "renderer/GL/GLShaderResource.h"
 
 namespace GCL
 {
@@ -32,13 +33,12 @@ class GLTexture;
   class GLGPUProgram
   {
   public:
-	GLGPUProgram();
+	GLGPUProgram(const GLShader &vshader,const GLShader &pshader);
 
     ~GLGPUProgram();
     void Bind();
-    void AttachShader(const GLShader &shader);
-    void Link();
-    bool IsValid() const { return mIsValid; }
+
+    bool IsValid() const { return mResource->IsValid(); }
 
     void SetTextureSampler(const GLTexture &sampler);
     void SetProjectionMatrix(const Matrix44 &m);
@@ -52,8 +52,7 @@ class GLTexture;
 
     static void ResetDefault();
   private:
-    void PrintInfoLog(GLuint );
-    GLuint mProgramObject;
-    bool mIsValid;
+
+	  GLGPUProgramResource *mResource;
   };
 }

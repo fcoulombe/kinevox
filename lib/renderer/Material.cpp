@@ -133,13 +133,9 @@ void Material::LoadMaterial(const char *filename)
 
 	fp.close();
 
-	mProgram = new GPUProgram();
 	mVertexShader = new Shader(vshader, VERTEX_SHADER);
 	mFragmentShader =  new Shader(fshader, FRAGMENT_SHADER);
-	mProgram->AttachShader(*mVertexShader);
-	mProgram->AttachShader(*mFragmentShader);
-	mProgram->Link();
-	mProgram->Bind();
+	mProgram = new GPUProgram(*mVertexShader, *mFragmentShader);
     s.str("");
     s<< "Material: "<<filename<< " doesn't have a texture. for now all materials must have a texture"<<std::endl;
     GCLAssertMsg(strcmp(texture, "null")!=0, s.str().c_str());

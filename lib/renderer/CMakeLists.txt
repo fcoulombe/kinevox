@@ -9,6 +9,7 @@ file(GLOB ${ProjectName}_src "${ProjectName}/*.h" "*.cpp")
 
 file(GLOB ${ProjectName}_GL_src "${GFXAPI_NAME}/*.cpp")
 file(GLOB ${ProjectName}GFX_INCLUDE "${ProjectName}/${GFXAPI_NAME}/*.h")
+SOURCE_GROUP(${GFXAPI_NAME} FILES ${${ProjectName}_GL_src} ${${ProjectName}GFX_INCLUDE} )
 file(WRITE "${PROJECT_BINARY_DIR}/rendererconf.h" "#pragma once\n" )
 FOREACH(header ${${ProjectName}GFX_INCLUDE})
 	get_filename_component(fileName ${header} NAME)

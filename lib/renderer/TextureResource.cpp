@@ -81,8 +81,17 @@ TextureResource::TextureResource( const char *textureName )
 	}
 }
 
+
+
+
 TextureResource::~TextureResource()
 {
+}
+
+TextureResource::TextureResource(const PixelBuffer &pixelBuffer)
+{
+	TextureData &data = mTextureData;
+	data.imageData.Initialize(pixelBuffer);
 }
 
 

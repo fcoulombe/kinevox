@@ -34,6 +34,9 @@ namespace GCL
     public:
 
     TextureResource(const char *textureName);
+	template<typename PixelType>
+	TextureResource(PixelType *data, size_t width, size_t height);
+	TextureResource(const PixelBuffer &pixelBuffer);
     ~TextureResource();
 
     struct TextureData
@@ -71,4 +74,15 @@ namespace GCL
   private:
     TextureResource() {}
   };
+  template<typename PixelType>
+  TextureResource::TextureResource(PixelType *pixelData, size_t width, size_t height)
+  {
+	  TextureData &data = mTextureData;
+	  data.imageData.mPixels = (uint8_t*)pixelData;
+	  data.imageData.mWidth = width;
+	  data.imageData.mHeight = height;
+	  data.imageData.mBytesPerPixel = (uint8_t)PixelType::OffsetToNext();
+	  data.imageData.mBitDepth = 8;
+	  data.imageData.mBitsPerPixel = (uint8_t)(PixelType::OffsetToNext()*data.imageData.mBitDepth);
+  }
 }

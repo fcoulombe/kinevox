@@ -21,10 +21,10 @@
  */
 
 #include "renderer/TextureResourceManager.h"
-#include "renderer/TextureResource.h"
+#include "renderer/GL/GLTextureResourceManager.h"
 
 using namespace GCL;
-
+size_t TextureResourceManager::createdTextureResourceCount=0;
 TextureResourceManager *TextureResourceManager::smpInstance = NULL;
 
 Resource * TextureResourceManager::Allocate( const char *filename )
@@ -35,4 +35,21 @@ Resource * TextureResourceManager::Allocate( const char *filename )
 void TextureResourceManager::Free( Resource * resource )
 {
 	delete resource;
+}
+
+
+
+void GCL::TextureResourceManager::Initialize()
+{
+	GCLAssert(smpInstance == NULL);
+	smpInstance = new TextureResourceManager();
+	GLTextureResourceManager::Initialize();
+}
+
+void GCL::TextureResourceManager::Terminate()
+{
+	GLTextureResourceManager::Terminate();
+	GCLAssert(smpInstance != NULL);
+	delete smpInstance;
+	smpInstance = NULL;
 }

@@ -23,6 +23,8 @@
 #include "renderer/ShaderResourceManager.h"
 #include "renderer/ShaderResource.h"
 
+#include "renderer/GL/GLShaderResourceManager.h"
+
 using namespace GCL;
 
 ShaderResourceManager *ShaderResourceManager::smpInstance = NULL;
@@ -35,4 +37,19 @@ Resource * ShaderResourceManager::Allocate( const char *filename )
 void ShaderResourceManager::Free( Resource * resource )
 {
 	delete resource;
+}
+
+void GCL::ShaderResourceManager::Initialize()
+{
+	GCLAssert(smpInstance == NULL);
+	smpInstance = new ShaderResourceManager();
+	GLShaderResourceManager::Initialize();
+}
+
+void GCL::ShaderResourceManager::Terminate()
+{
+	GLShaderResourceManager::Terminate();
+	GCLAssert(smpInstance != NULL);
+	delete smpInstance;
+	smpInstance = NULL;
 }

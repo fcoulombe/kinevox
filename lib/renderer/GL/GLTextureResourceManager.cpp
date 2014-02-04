@@ -20,29 +20,21 @@
  * THE SOFTWARE.
  */
 
-#pragma once
+#include "renderer/GL/GLTextureResourceManager.h"
+#include "renderer/GL/GLTextureResource.h"
+#include "renderer/TextureResource.h"
 
-#include <gcl/Assert.h>
-#include <gcl/ResourceManager.h>
+using namespace GCL;
 
-namespace GCL
+GLTextureResourceManager *GLTextureResourceManager::smpInstance = NULL;
+
+GPUResource * GLTextureResourceManager::Allocate( const Resource *resource )
 {
-  class ShaderResource;
-  class ShaderResourceManager : public ResourceManager
-  {
-  public:
-    static void Initialize();
-    static void Terminate();
-    static ShaderResourceManager &Instance() {	GCLAssert(smpInstance != NULL);return *smpInstance;}
+  return new GLTextureResource(*static_cast<const TextureResource*>(resource));
+}
 
-    Resource *Allocate(const char *filename);
-    void Free(Resource * /*resource*/);
-
-  private:
-    static ShaderResourceManager *smpInstance;
-
-    ShaderResourceManager() {}
-  };
-
+void GLTextureResourceManager::Free( GPUResource * resource )
+{
+	delete resource;
 }
 

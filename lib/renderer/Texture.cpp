@@ -33,15 +33,14 @@ using namespace GCL;
 
 Texture::~Texture()
 {
-	RenderPipe::SendCommand(RenderCommand(TEXTURE_DESTROY, this));
-	if (mTextureResource)
-		TextureResourceManager::Instance().ReleaseResource(mTextureResource);
+	RenderPipe::SendCommandSync(RenderCommand(TEXTURE_DESTROY, this));
+	TextureResourceManager::Instance().ReleaseResource(mTextureResource);
 }
 
 Texture::Texture(const PixelBuffer &buffer)
 {
-	mTextureResource = NULL;
-	Create(buffer);
+	mTextureResource = TextureResourceManager::Instance().CreateResource(buffer);
+	Create();
 }
 
 Texture::Texture(const char *filename)
@@ -49,11 +48,7 @@ Texture::Texture(const char *filename)
 	mTextureResource = NULL;
 	bool ret = LoadTexture(filename);
 	GCLAssertMsg(ret, (std::string("Failed Loading Testure: ") + std::string(filename)).c_str());
-
-	const TextureResource::TextureData &tempTextureData = mTextureResource->mTextureData;
-	const PixelBuffer &imageData = tempTextureData.imageData;
-
-	Create(imageData);
+	Create();
 }
 
 Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
@@ -63,30 +58,28 @@ Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
 	{
 	case 1:
 	{
-		PixelBuffer buffer((PixelMono*)NULL, width, height);
-		Create(buffer);
+		mTextureResource = TextureResourceManager::Instance().CreateResource((PixelMono*)NULL, width, height);
 		break;
 	}
 	case 3:
 	{
-		PixelBuffer buffer((PixelRGB*)NULL, width, height);
-		Create(buffer);
+		mTextureResource = TextureResourceManager::Instance().CreateResource((PixelRGB*)NULL, width, height);
 		break;
 	}
 	case 4:
 	{
-		PixelBuffer buffer((PixelRGBA*)NULL, width, height);
-		Create(buffer);
+		mTextureResource = TextureResourceManager::Instance().CreateResource((PixelRGBA*)NULL, width, height);
+
 		break;
 	}
 	}
+	Create();
 }
 
 
-void Texture::Create(const PixelBuffer &buffer)
+void Texture::Create()
 {
-	PixelBuffer *xferBuffer = new PixelBuffer(buffer);
-	RenderPipe::SendCommand(RenderCommand2Arg(TEXTURE_CREATE, this, xferBuffer));
+	RenderPipe::SendCommand(RenderCommand2Arg(TEXTURE_CREATE, this, (void*)mTextureResource));
 }
 
 

@@ -21,63 +21,37 @@
  */
 
 #pragma once
-#include <3rdparty/OpenGL.h>
 #include <gcl/Macro.h>
 #include <gcl/PixelBuffer.h>
-#include "renderer/GL/GLPixelBufferHAL.h"
-
+#include "renderer/GL/GLTextureResource.h"
+#include "renderer/GL/GLTextureResourceManager.h"
+#include "renderer/TextureResource.h"
 namespace GCL
 {
-
-
 class GLTexture
 {
 public:
-	GLTexture(const PixelBuffer &imageData)
-	: mTextureId((GLuint)-1),
-	  mTextureUnit((GLuint)0)
+	GLTexture(const TextureResource &imageData)
 	{
-        Initialize(imageData);
+		mResource = static_cast<const GLTextureResource*>(GLTextureResourceManager::Instance().LoadResource(&imageData));
     }
-	~GLTexture();
-	void Bind() const
+	~GLTexture()
 	{
-		//std::cout << "Binding Texture: " <<mTextureId << std::endl;
-		GCLAssert(IsValid());
-		glBindTexture(GL_TEXTURE_2D, mTextureId);  glErrorCheck();
-		//mPBO->Bind();
+		GLTextureResourceManager::Instance().ReleaseResource(mResource);
 	}
+	void Bind() const { mResource->Bind(); 	}
 
-	size_t GetWidth() const 
-	{
-		GLint width;
-		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
-		return  (size_t)width; 
-	}
-	size_t GetHeight() const 
-	{ 
-		GLint height;
-		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-		return  (size_t)height; 
-	}
-    size_t GetBytesPerPixel() const 
-	{ 
-		GLint format;
-		glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &format);
-		return (format == GL_RGB8)?3:4;
-	}
-	void Initialize(const PixelBuffer &imageData);
-	bool IsValid() const { return (int)mTextureId!=-1; }
+	size_t GetWidth() const {return mResource->GetWidth();}
+	size_t GetHeight() const {return mResource->GetHeight(); }
+    size_t GetBytesPerPixel() const  { 	return mResource->GetBytesPerPixel();	}
+	uint32_t GetTextureUnit() const { return mResource->GetTextureUnit(); }
+	uint32_t GetTextureId() const { return mResource->GetTextureId(); }
+	bool IsValid() const { return mResource->IsValid(); }
 
-    const uint8_t *GetTextureFromVRAM() const;
-    const uint8_t *GetPixelBufferFromVRAM() const;
-
-    uint32_t GetTextureUnit() const { return mTextureUnit; }
-    uint32_t GetTextureId() const { return mTextureId; }
+	const uint8_t *GetTextureFromVRAM() const { return mResource->GetTextureFromVRAM(); }
+	const uint8_t *GetPixelBufferFromVRAM() const { return mResource->GetPixelBufferFromVRAM(); }
 private:
-	GLuint mTextureId;
-	GLuint mTextureUnit;
-	GLPixelBufferHAL *mPBO;
+	const GLTextureResource *mResource;
 };
 
 

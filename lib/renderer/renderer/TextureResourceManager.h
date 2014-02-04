@@ -21,9 +21,11 @@
  */
 
 #pragma once
-
+#include <sstream>
 #include <gcl/Assert.h>
+#include <gcl/Hash.h>
 #include <gcl/ResourceManager.h>
+#include "renderer/TextureResource.h"
 
 namespace GCL
 {
@@ -35,24 +37,39 @@ namespace GCL
   class TextureResourceManager : public ResourceManager
   {
   public:
-    static void Initialize()
-    {
-      GCLAssert(smpInstance == NULL);
-      smpInstance = new TextureResourceManager();
-    }
-    static void Terminate()
-    {
-      GCLAssert(smpInstance != NULL);
-      delete smpInstance;
-      smpInstance = NULL;
-    }
+    static void Initialize();
+    static void Terminate();
     static TextureResourceManager &Instance() {	GCLAssert(smpInstance != NULL);return *smpInstance;}
 
     Resource *Allocate(const char *filename);
     void Free(Resource * /*resource*/);
 
+	template<typename PixelType>
+	TextureResource *CreateResource(PixelType *pixelData, size_t width, size_t height)
+	{
+		TextureResource *newTextureResource = new TextureResource(pixelData, width, height);
+		
+		++createdTextureResourceCount;
+		std::stringstream fileName;
+		fileName << "CreatedTextureResource" << createdTextureResourceCount;
+		uint32_t key = Hash::DJB(fileName.str().c_str(), fileName.str().length());
+		mResourceCache[key] = newTextureResource;
+		return newTextureResource;
+	}
+	TextureResource *CreateResource(const PixelBuffer &pixelbuffer)
+	{
+		TextureResource *newTextureResource = new TextureResource(pixelbuffer);
+
+		++createdTextureResourceCount;
+		std::stringstream fileName;
+		fileName << "CreatedTextureResource" << createdTextureResourceCount;
+		uint32_t key = Hash::DJB(fileName.str().c_str(), fileName.str().length());
+		mResourceCache[key] = newTextureResource;
+		return newTextureResource;
+	}
   private:
     static TextureResourceManager *smpInstance;
+	static size_t createdTextureResourceCount;
 
     TextureResourceManager() {}
   };

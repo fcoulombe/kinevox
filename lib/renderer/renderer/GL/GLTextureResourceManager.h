@@ -21,27 +21,35 @@
  */
 
 #pragma once
-
 #include <gcl/Assert.h>
-#include <gcl/ResourceManager.h>
+#include <renderer/GPUResourceManager.h>
 
 namespace GCL
 {
-  class ShaderResource;
-  class ShaderResourceManager : public ResourceManager
+	class GLGPUProgramResource;
+  class GLTextureResource;
+  class GLTextureResourceManager : public GPUResourceManager
   {
   public:
-    static void Initialize();
-    static void Terminate();
-    static ShaderResourceManager &Instance() {	GCLAssert(smpInstance != NULL);return *smpInstance;}
+    static void Initialize()
+    {
+      GCLAssert(smpInstance == NULL);
+      smpInstance = new GLTextureResourceManager();
+    }
+    static void Terminate()
+    {
+      GCLAssert(smpInstance != NULL);
+      delete smpInstance;
+      smpInstance = NULL;
+    }
+    static GLTextureResourceManager &Instance() {	GCLAssert(smpInstance != NULL);return *smpInstance;}
 
-    Resource *Allocate(const char *filename);
-    void Free(Resource * /*resource*/);
-
+    GPUResource *Allocate(const Resource *resource);
+    void Free(GPUResource * /*resource*/);
   private:
-    static ShaderResourceManager *smpInstance;
+    static GLTextureResourceManager *smpInstance;
 
-    ShaderResourceManager() {}
+    GLTextureResourceManager() {}
   };
 
 }

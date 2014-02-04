@@ -405,10 +405,8 @@ void RCCreateTexture(const RenderCommand &data, RenderData &renderData)
 {
 	LOG_RENDER_CMD
 		GLRenderData &rd = static_cast<GLRenderData&>(renderData);
-	const RenderCommand2Arg *data2 = static_cast<const RenderCommand2Arg *>(&data);
-	rd.mTextureMap[data.mData] = new GLTexture(*(const PixelBuffer *)data2->mData2);
-	PixelBuffer *xferbuffer = (PixelBuffer *)data2->mData2;
-	delete xferbuffer;
+	const RenderCommand2Arg &data2 = static_cast<const RenderCommand2Arg &>(data);
+	rd.mTextureMap[data.mData] = new GLTexture(*(const TextureResource *)data2.mData2);
 }
 void RCBindTexture(const RenderCommand &data, RenderData &renderData)
 {

@@ -40,6 +40,8 @@ public:
 	{
 
 	}
+	void SetMesh(const std::string &filename);
+	bool HasMesh() const { return mMesh != nullptr; }
 	Mesh &GetMesh() { return *mMesh; }
 private:
 	Mesh *mMesh;

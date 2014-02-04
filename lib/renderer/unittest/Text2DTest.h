@@ -69,7 +69,9 @@ void Test()
         obj.Update();
         renderer.PreRender();
 		renderer.SetOrtho();
-		obj.Render();
+		Matrix44 proj;
+		renderer.GetProjection(proj);
+		obj.Render(proj);
 		renderer.PostRender();
 		winDriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END

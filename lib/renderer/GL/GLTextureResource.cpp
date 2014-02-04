@@ -37,13 +37,18 @@ mTextureUnit((GLuint)0)
 
 GLTextureResource::~GLTextureResource()
 {
+	RenderPipe::SendCommandSync([&](){
 	glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
+	});
 	delete mPBO;
+	RenderPipe::SendCommandSync([&](){
 	glDeleteTextures(1, &mTextureId); glErrorCheck();
+	});
 }
 void GLTextureResource::Initialize(const TextureResource &resource )
 {
 	const PixelBuffer &data = resource.mTextureData.imageData;
+	RenderPipe::SendCommand([&](){
 	glGenTextures(1, &mTextureId); glErrorCheck();
 	glBindTexture(GL_TEXTURE_2D, mTextureId);glErrorCheck();
 
@@ -53,26 +58,27 @@ void GLTextureResource::Initialize(const TextureResource &resource )
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);glErrorCheck();
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);glErrorCheck();
 
-
 	GCLAssert(BytesPerPixel[data.mBytesPerPixel-1]<= GL_RGBA);
-
 
 	glTexImage2D(GL_TEXTURE_2D, 0, BytePerPixel[data.mBytesPerPixel-1],
 		(GLsizei)data.mWidth, (GLsizei)data.mHeight, 0,BytesPerPixel[data.mBytesPerPixel-1],
 		GL_UNSIGNED_BYTE, NULL);glErrorCheck();
-
+	});
 	mPBO = new GLPixelBufferHAL();
+
+	RenderPipe::SendCommand([&](){
 	if (data.mPixels)
 	{
-		mPBO->Bind();
-		mPBO->PushData(data.mWidth, data.mHeight, data.mBytesPerPixel, data.mPixels);
+		mPBO->BindUnsafe();
+		mPBO->PushDataUnsafe(data.mWidth, data.mHeight, data.mBytesPerPixel, data.mPixels);
 		//push from pbo to texture
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)data.mWidth,
 			(GLsizei)data.mHeight, BytesPerPixel[data.mBytesPerPixel-1],
 			GL_UNSIGNED_BYTE, 0);glErrorCheck();
-		mPBO->UnBind();
+		mPBO->UnBindUnsafe();
 	}
 	glGenerateMipmap(GL_TEXTURE_2D);glErrorCheck();
+	});
 }
 
 
@@ -88,6 +94,9 @@ const uint8_t *GLTextureResource::GetPixelBufferFromVRAM() const
 const uint8_t *GLTextureResource::GetTextureFromVRAM() const
 {
 	Bind();
+	uint8_t *data;
+
+	RenderPipe::SendCommandSync([&](){
 	GLint width, height, format;
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
 	glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
@@ -95,7 +104,7 @@ const uint8_t *GLTextureResource::GetTextureFromVRAM() const
 	size_t bpp = (format == GL_RGB8)?3:4;
 	size_t imageSize = width*height*bpp;
 
-	uint8_t *data = new uint8_t[imageSize];
+	data = new uint8_t[imageSize];
 	memset(data, 0, imageSize);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);glErrorCheck();
 	if (bpp == 3)
@@ -103,6 +112,7 @@ const uint8_t *GLTextureResource::GetTextureFromVRAM() const
 	else
 		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	glErrorCheck();
+	});
 	return data;
 }
 

@@ -29,6 +29,14 @@
 
 using namespace GCL;
 
+void Actor::CreateComponent(const std::string &componentName)
+{
+	PtrLuaTableIterator it(nullptr);
+	std::pair<std::string, Component *> tempComponent = Component::CreateComponent(this, componentName,  it);
+	mComponentList[tempComponent.first] = (tempComponent.second);
+	Component *tempComponent2 = tempComponent.second;
+	tempComponent2->PostInit();
+}
 Actor::Actor(const char *name, const char *archetype)
 	: mTransform(true),
 	  mName(name)
@@ -55,6 +63,14 @@ Actor::Actor(const char *name, const char *archetype)
 		tempComponent->PostInit();
 	}
 
+	mParent = NULL;
+	GCLApplication::RegisterRenderObject(this);
+}
+Actor::Actor(const char *name)
+	: mTransform(true),
+	mName(name)
+{
+	
 	mParent = NULL;
 	GCLApplication::RegisterRenderObject(this);
 }

@@ -35,8 +35,9 @@ public:
 	virtual void Update(Real );
 	virtual void Render();
 	virtual void ProcessEvent(size_t event, void *arg);
-	virtual void PostInit() {}
+	virtual void PostInit();
 
+	void SetScript(const std::string &filename);
 private:
 	const ScriptResource *mScriptResource;
 };

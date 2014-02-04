@@ -121,16 +121,19 @@ void GCLApplication::Render()
 
 	//pass it to renderer
 	mRenderer->PreRender();
+	Matrix44 proj;
+	mRenderer->GetProjection(proj);
 	for (size_t i=0; i<mActorList.size(); ++i)
 	{
-		mActorList[i]->Render();
+		mActorList[i]->Render(proj);
 	}
 	//mRenderer->Render(renderList);
 	mRenderer->SetOrtho();
+	mRenderer->GetProjection(proj);
 	for (size_t i=0; i<mSpriteList.size(); ++i)
 	{
 		Sprite *tempSprite =mSpriteList[i];
-		tempSprite->Render();
+		tempSprite->Render(proj);
 	}
 	mRenderer->PostRender();
 	mWinDriver->SwapBuffer();

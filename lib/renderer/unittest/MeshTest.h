@@ -62,14 +62,14 @@ public:
 	{
 		delete obj;
 	}
-	void Render()
+	void Render(const Matrix44 &projection)
 	{
 		const RenderObject *tempRenderObject = obj;
 		const Material &tempMaterial = tempRenderObject->GetMaterial();
 		tempMaterial.Bind();
 		const Matrix44 &transform = mTransform;
 		GPUProgram *tempProgram = tempMaterial.GetShader();
-		tempProgram->SetProjectionMatrix();
+		tempProgram->SetProjectionMatrix(projection);
 		tempProgram->SetModelViewMatrix(transform);
 		tempRenderObject->GetVBO().Render();
 	}
@@ -133,7 +133,9 @@ void Test()
             rot+=0.001;
 		myMesh.SetOrientation(0.0,rot,0.0);
 		renderer.PreRender();
-		myMesh.Render();
+		Matrix44 proj;
+		renderer.GetProjection(proj);
+		myMesh.Render(proj);
 		renderer.PostRender();
 		windriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END

@@ -22,6 +22,7 @@
 
 #pragma once
 #include <3rdparty/OpenGL.h>
+#include "renderer/RenderPipe.h"
 
 namespace GCL
 {
@@ -33,22 +34,39 @@ public:
 	GLFrameBuffer(const GLTexture &texture, const GLRenderBuffer &depthBuffer);
 	~GLFrameBuffer()
 	{
+		RenderPipe::SendCommandSync([this](){
 		glDeleteFramebuffers(1, &mFrameBufferId); glErrorCheck();
+		});
 	}
 	void Bind()
 	{
-		GCLAssert(IsValid()); glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);  glErrorCheck();
+		RenderPipe::SendCommand([this](){GCLAssert(IsValidUnsafe()); glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);  glErrorCheck();});
 	}
 
-	bool IsValid() const { return (int)mFrameBufferId!=-1; }
+	bool IsValid() const 
+	{ 
+		bool ret;
+		RenderPipe::SendCommandSync([&](){
+		ret = IsValidUnsafe(); 
+		});
+		return ret;
+	}
 
 	static void ResetDefault()
 	{
+		RenderPipe::SendCommand([&](){
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);  glErrorCheck();
+		});
 	}
 
 private:
 	GLuint mFrameBufferId;
+	bool IsValidUnsafe() const 
+	{ 
+		bool ret;
+		ret = (int)mFrameBufferId!=-1; 
+		return ret;
+	}
 };
 
 }

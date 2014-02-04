@@ -100,11 +100,12 @@ void Test()
 		{
 			FrameBuffer frameBuffer(texture, depthRenderBuffer);
 
-			
+			Matrix44 proj;
+			renderer.GetProjection(proj);
             KINEVOX_TEST_LOOP_START
                 frameBuffer.Bind();
 			renderer.PreRender();
-			obj.Render();
+			obj.Render(proj);
 			renderer.PostRender();
             winDriver.SwapBuffer();
 			FrameBuffer::ResetDefault();

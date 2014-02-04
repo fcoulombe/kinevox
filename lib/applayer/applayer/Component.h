@@ -23,6 +23,7 @@
 #pragma once
 #include <map>
 #include <string>
+#include <gcl/Matrix44.h>
 #include <gcl/WorldUnit.h>
 #include <script/ConfigLua.h>
 
@@ -42,7 +43,7 @@ public:
 	}
 	//basically any component can perform render commands but 
 	//calling an empty virtual function is cheaper than calling posting a message
-	virtual void Render() {} 
+	virtual void Render(const Matrix44 &) {} 
 	virtual void Update(Real dt)=0;
 	virtual void PostInit() = 0;
 

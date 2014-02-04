@@ -51,6 +51,10 @@ public:
 	const uint8_t *GetTextureFromVRAM() const { return mResource->GetTextureFromVRAM(); }
 	const uint8_t *GetPixelBufferFromVRAM() const { return mResource->GetPixelBufferFromVRAM(); }
 private:
+	friend class GLGPUProgram;
+	friend class GLFrameBuffer;
+	uint32_t GetTextureIdUnsafe() const { return mResource->GetTextureIdUnsafe(); }
+	uint32_t GetTextureUnitUnsafe() const { return mResource->GetTextureUnitUnsafe(); }
 	const GLTextureResource *mResource;
 };
 

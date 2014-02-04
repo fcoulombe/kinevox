@@ -36,6 +36,8 @@ namespace GCL
 
   struct VertexP
   {
+	  VertexP(){}
+	  VertexP(const Point3<MeshReal> &p):position(p){}
     Point3<MeshReal> position;
     static size_t GetComponentType()  { return ePOSITION; }
     static size_t OffsetToPosition() { return 0; }
@@ -45,6 +47,8 @@ namespace GCL
 
   struct VertexPT
   {
+	  VertexPT(){}
+	VertexPT(const Point3<MeshReal> &p, const Point2<MeshReal> &t):position(p), textureCoordinate(t){}
     Point3<MeshReal> position;
     Point2<MeshReal> textureCoordinate;
     static size_t GetComponentType() { return ePOSITION|eTEXTURE_COORD; }
@@ -56,6 +60,8 @@ namespace GCL
 
   struct VertexPNT
   {
+	  VertexPNT(){}
+	VertexPNT(const Point3<MeshReal> &p,const Point3<MeshReal> &n, const Point2<MeshReal> &t):position(p), normal(n), textureCoordinate(t){}
     Point3<MeshReal> position;
     Point3<MeshReal> normal;
     Point2<MeshReal> textureCoordinate;
@@ -67,6 +73,8 @@ namespace GCL
 
   struct VertexPN
   {
+	  VertexPN(){}
+	VertexPN(const Point3<MeshReal> &p, const Point3<MeshReal> &n):position(p), normal(n){}
     Point3<MeshReal> position;
     Point3<MeshReal> normal;
     static size_t GetComponentType()  { return ePOSITION|eNORMAL; }

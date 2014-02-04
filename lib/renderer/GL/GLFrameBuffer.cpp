@@ -76,14 +76,16 @@ GLFrameBuffer::GLFrameBuffer(const GLTexture & texture, const GLRenderBuffer & d
 : mFrameBufferId((GLuint)-1)
 {
 	GCLAssert(texture.IsValid());
-
+	RenderPipe::SendCommand([&](){
+	
 	glGenFramebuffers(1, &mFrameBufferId); glErrorCheck();
 	glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId); glErrorCheck();
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.GetTextureId(), 0); glErrorCheck();
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.GetTextureIdUnsafe(), 0); glErrorCheck();
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer.GetRenderBufferId());glErrorCheck();
 
 	GLenum status =  glCheckFramebufferStatus(GL_FRAMEBUFFER);
 	checkFrameBufferStatus(status);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);glErrorCheck();
+	});
 }

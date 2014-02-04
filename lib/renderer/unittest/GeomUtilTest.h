@@ -87,8 +87,10 @@ void Test()
             sphere.SetOrientation(0.0,rot,0.0);
             plane.SetOrientation(0.0,rot,0.0);
             renderer.PreRender();
+			Matrix44 proj;
+			renderer.GetProjection(proj);
 			for (size_t i=0; i<objList.size(); ++i)
-				objList[i]->Render();
+				objList[i]->Render(proj);
             renderer.PostRender();
             winDriver.SwapBuffer();
             KINEVOX_TEST_LOOP_END

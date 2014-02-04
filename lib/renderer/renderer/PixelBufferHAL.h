@@ -21,11 +21,9 @@
  */
 
 #pragma once
-
-
 #include <gcl/PixelBuffer.h>
-#include "renderer/RenderCmd.h"
-#include "renderer/RenderPipe.h"
+#include "rendererconf.h"
+#include GFXAPI_PixelBufferHAL_H
 namespace GCL
 {
 
@@ -35,58 +33,52 @@ public:
 	PixelBufferHAL()
 	: PixelBuffer()
 	{
-		RenderPipe::SendCommand(RenderCommand(PBO_CREATE, this));
 	}
 	PixelBufferHAL(const PixelBuffer &buffer)
 	:	PixelBuffer(buffer)
 	{
-		RenderPipe::SendCommand(RenderCommand(PBO_CREATE, this));
 	}
 
-#if 1
 	template<typename PixelType>
 	PixelBufferHAL(const PixelType *pixelArray, size_t width, size_t height)
 	: PixelBuffer(pixelArray, width, height)
 	  {
-		RenderPipe::SendCommand(RenderCommand(PBO_CREATE, this));
 		Bind();
-		RenderPipe::SendCommand(RenderCommand5Arg(PBO_PUSH, this, (void*)width, (void*)height, (void*)PixelType::OffsetToNext(), 0));
+		mPixelBuffer.PushData(width, height, PixelType::OffsetToNext(), 0);
 		UnBind();
 	  }
-#endif
 
 	~PixelBufferHAL()
 	{
-		RenderPipe::SendCommand(RenderCommand(PBO_DESTROY, this));
 	}
 
 	void UnBind()
 	{
-		RenderPipe::SendCommand(RenderCommand(PBO_UNBIND, this));
+		mPixelBuffer.UnBind();
 	}
 	void Bind()
 	{
-		RenderPipe::SendCommand(RenderCommand(PBO_BIND, this));
+		mPixelBuffer.Bind();
 	}
 
 	void PushData()
 	{
-		uint8_t *xferBuffer = new uint8_t[mWidth * mHeight*mBytesPerPixel];
-		memcpy(xferBuffer, mPixels, mWidth * mHeight*mBytesPerPixel);
-		RenderPipe::SendCommand(RenderCommand5Arg(PBO_PUSH, this, (void*)mWidth, (void*)mHeight, (void*)(long)mBytesPerPixel, xferBuffer));
+		mPixelBuffer.PushData(mWidth, mHeight, mBytesPerPixel, mPixels);
 	}
 	uint8_t *PullData()
 	{
+		uint8_t *pix = mPixelBuffer.PullData(mWidth, mHeight, mBytesPerPixel);
 		delete [] mPixels;
-		mPixels= (uint8_t *)RenderPipe::SendCommandSyncRet(RenderCommand4Arg(PBO_PULL, (void*)this, (void*)mWidth, (void*)mHeight, (void*)(long)mBytesPerPixel)).GetPointer();
+		mPixels = pix;
 		return mPixels;
 	}
 	bool IsValid() const 
     { 
-		 return RenderPipe::SendCommandSyncRet(RenderCommand(IS_PBO_VALID, (void*)this)).GetBool();
-    }
+		return mPixelBuffer.IsValid();
+	}
 
 private:
+	IPixelBufferHAL mPixelBuffer;
 };
 
 }

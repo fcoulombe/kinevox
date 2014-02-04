@@ -29,6 +29,8 @@
 #include "renderer/GL/GLShaderResourceManager.h"
 #include "renderer/GL/GLTexture.h"
 
+#include "renderer/RenderPipe.h"
+
 
 using namespace GCL;
 
@@ -45,78 +47,99 @@ GLGPUProgram::~GLGPUProgram()
 
 void GLGPUProgram::Bind()
 {
-	GCLAssert(IsValid());
-	glUseProgram(mResource->GetProgramObject());glErrorCheck();
+	RenderPipe::SendCommand([this](){
+		GCLAssert(IsValidUnsafe());
+	glUseProgram(mResource->GetProgramObjectUnsafe());glErrorCheck();
+	});
 }
 
 
 
 void GLGPUProgram::SetProjectionMatrix(const Matrix44 &m)
 {
-	GCLAssert(IsValid());
-	GLint projectionMatrixLoc = glGetUniformLocation(mResource->GetProgramObject(),"ProjectionMatrix");glErrorCheck();
+	RenderPipe::SendCommand([this, m](){
+		GCLAssert(IsValidUnsafe());
+	GLint projectionMatrixLoc = glGetUniformLocation(mResource->GetProgramObjectUnsafe(),"ProjectionMatrix");glErrorCheck();
 	Matrix44f mf(m);
 	glUniformMatrix4fv(projectionMatrixLoc,1,false,(const GLfloat*)&mf);glErrorCheck();
+	});
 }
 void GLGPUProgram::SetModelViewMatrix(const Matrix44 &m)
 {
-	GCLAssert(IsValid());
-	GLint modelviewMatrixLoc = glGetUniformLocation(mResource->GetProgramObject(),"ModelViewMatrix");glErrorCheck();
+	RenderPipe::SendCommand([this, m](){
+		GCLAssert(IsValidUnsafe());
+	GLint modelviewMatrixLoc = glGetUniformLocation(mResource->GetProgramObjectUnsafe(),"ModelViewMatrix");glErrorCheck();
 	Matrix44f mm(m);
 	glUniformMatrix4fv(modelviewMatrixLoc,1,false,(const GLfloat*)&mm);glErrorCheck();
+	});
 }
 
 void GLGPUProgram::SetUniform(const char *uniforName, long val)
 {
-	GCLAssert(IsValid());
-	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObject(),uniforName);glErrorCheck();
+	RenderPipe::SendCommand([this, uniforName, val](){
+			GCLAssert(IsValidUnsafe());
+	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObjectUnsafe(),uniforName);glErrorCheck();
 	glUniform1i(uniformLoc,(GLint)val);glErrorCheck();
+	});
 }
 
 void GLGPUProgram::SetUniform(const char *uniforName, const Point2<long> &val)
 {
-	//std::cout << "SetUniform: " << uniforName << " " << val << std::endl;
-	GCLAssert(IsValid());
-	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObject(),uniforName);glErrorCheck();
+	RenderPipe::SendCommand([this, uniforName, val](){
+			GCLAssert(IsValidUnsafe());
+	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObjectUnsafe(),uniforName);glErrorCheck();
 	glUniform2i(uniformLoc, val.x, val.y);glErrorCheck();
+	});
 }
 
 void GLGPUProgram::SetUniform(const char *uniforName, const Point2<float> &val)
 {
-	GCLAssert(IsValid());
-	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObject(),uniforName);glErrorCheck();
+	RenderPipe::SendCommand([this, uniforName, val](){
+			GCLAssert(IsValidUnsafe());
+	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObjectUnsafe(),uniforName);glErrorCheck();
 	glUniform2fv(uniformLoc,1, (GLfloat*)&val);glErrorCheck();
+	});
 }
 
 void GLGPUProgram::SetTextureSampler(const GLTexture &sampler)
 {
-	GLint textureLoc = glGetUniformLocation(mResource->GetProgramObject(),"texture");glErrorCheck();
-	glUniform1i(textureLoc, sampler.GetTextureUnit());glErrorCheck();
+	RenderPipe::SendCommand([&](){
+	GLint textureLoc = glGetUniformLocation(mResource->GetProgramObjectUnsafe(),"texture");glErrorCheck();
+	glUniform1i(textureLoc, sampler.GetTextureUnitUnsafe());glErrorCheck();
+	});
 }
 
 void GLGPUProgram::GetUniform(const char *uniformName, Matrix44 &m44) const
 {
-	GLfloat mf[16];
-	GCLAssert(IsValid());
-	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObject(),uniformName);glErrorCheck();
+	RenderPipe::SendCommandSync([&](){
+			GCLAssert(IsValidUnsafe());
+	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObjectUnsafe(),uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
-	glGetUniformfv(	mResource->GetProgramObject(),uniformLoc,mf);glErrorCheck();
+	GLfloat mf[16];
+	glGetUniformfv(	mResource->GetProgramObjectUnsafe(),uniformLoc,mf);glErrorCheck();
 	m44 = Matrix44((const float *)mf);
+	});
 }
 void GLGPUProgram::GetUniform(const char *uniformName, long &sampler) const
 {
-	GCLAssert(IsValid());
-	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObject(),uniformName);glErrorCheck();
+	RenderPipe::SendCommandSync([&](){
+			GCLAssert(IsValidUnsafe());
+	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObjectUnsafe(),uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
-	glGetUniformiv(mResource->GetProgramObject(),uniformLoc,(GLint*)&sampler);glErrorCheck();
+	glGetUniformiv(mResource->GetProgramObjectUnsafe(),uniformLoc,(GLint*)&sampler);glErrorCheck();
+	});
 }
 long GLGPUProgram::GetAttributeLocation(const char *attributeName) const
 {
-    long ret=  (long)glGetAttribLocation(mResource->GetProgramObject(),attributeName);glErrorCheck();
-	//GCLAssertMsg(ret!=-1, attributeName);
+    long ret;
+	RenderPipe::SendCommandSync([&](){
+	ret = (long)glGetAttribLocation(mResource->GetProgramObjectUnsafe(),attributeName);glErrorCheck();
+	});
 	return ret;
 }
 void GLGPUProgram::ResetDefault()
 {
+	RenderPipe::SendCommand([](){
 	glUseProgram(0);glErrorCheck();
+	});
 }

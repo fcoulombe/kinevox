@@ -35,7 +35,7 @@ public:
 	virtual void Update(Real )
 	{
 	}
-	virtual void Render();
+	virtual void Render(const Matrix44 &proj);
 	virtual void ProcessEvent(size_t event, void *arg);
 	virtual void PostInit();
 private:

@@ -42,7 +42,7 @@ public:
 	void Update()
 	{
 	}
-	void Render();
+	void Render(const Matrix44 &projection);
 	void SetVisible(bool isVisible = true) { mIsVisible = isVisible; }
 	bool IsVisible() const { return mIsVisible; }
 
@@ -66,5 +66,6 @@ protected:
 	Material mMaterial;
 	WorldPoint2 mScale;
 	PixelBuffer buffer;
+	VertexP square[6];
 };
 }

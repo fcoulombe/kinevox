@@ -21,48 +21,29 @@
  */
 
 #pragma once
-#include "renderer/RenderCmd.h"
-#include "renderer/RenderPipe.h"
-
-
+#include "rendererconf.h"
+#include GFXAPI_RenderBuffer_H
 namespace GCL
 {
-#if 0
-	class GPUResource
-	{
-	public:
-		GPUResource()
-			: mGPUResourceId(ID++)
-		{
-			
-		}
-	protected:
-		size_t mGPUResourceId;
-	private:
-		static size_t ID; //we should have plenty of ids for everything
-	};
-#endif
+
 class RenderBuffer 
 {
 public:
 	RenderBuffer(size_t width, size_t height)
+		: mRenderBuffer(width, height)
 	{
-		RenderPipe::SendCommand(RenderCommand3Arg(RENDERBUFFER_CREATE, (void*)this, (void*)width, (void*)height));
 	}
 	~RenderBuffer()
 	{
-		RenderPipe::SendCommand(RenderCommand(RENDERBUFFER_DESTROY, (void*)this));
 	}
-	void Bind() { RenderPipe::SendCommand(RenderCommand(RENDERBUFFER_BIND, (void*)this)); }
-
-	bool IsValid() const {  return RenderPipe::SendCommandSyncRet(RenderCommand(IS_RENDERBUFFER_VALID, (void*)this)).GetBool(); }
-
+	void Bind() { mRenderBuffer.Bind(); }
+	bool IsValid() const {  return mRenderBuffer.IsValid(); }
 	void Save(const char * /*filename*/) { GCLAssert(false && "TBD"); }
 
 	static void ResetDefault() { GCLAssert(false && "TBD"); }
 
 private:
-	
+	IRenderBuffer mRenderBuffer;
+	friend class FrameBuffer;
 };
-
 }

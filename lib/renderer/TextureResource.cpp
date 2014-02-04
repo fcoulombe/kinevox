@@ -81,9 +81,6 @@ TextureResource::TextureResource( const char *textureName )
 	}
 }
 
-
-
-
 TextureResource::~TextureResource()
 {
 }

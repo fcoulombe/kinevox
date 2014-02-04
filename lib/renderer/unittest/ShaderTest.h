@@ -52,19 +52,21 @@ void Test()
 		Assert_Test(program.IsValid());
 
 		//set custom uniform
-		int testValue=56;
+		long testValue=56;
 		program.SetUniform("TestUniform", testValue);
 		program.GetUniform("TestUniform", testValue);
 		Assert_Test(testValue == 56);
 
 		//set matrix uniform test
 		Camera cam;
-		cam.Update();
+		renderer.SetCamera(cam);
 
 		Matrix44 modelView;
 		modelView.SetRotationX(90.0);
 		program.SetModelViewMatrix(modelView);
-		program.SetProjectionMatrix();
+		Matrix44 proj;
+		renderer.GetProjection(proj);
+		program.SetProjectionMatrix(proj);
 
 		//query uniform fail test
 
@@ -74,8 +76,10 @@ void Test()
 		Matrix44 proj2;
 		program.GetUniform("ProjectionMatrix", proj2);
 		s.str("");
-		s<<std::endl<<proj2<<std::endl<<"=="<<std::endl<<renderer.GetProjection();
-		AssertMsg_Test(proj2==renderer.GetProjection(), s.str().c_str());
+		Matrix44 testp;
+		renderer.GetProjection(testp);
+		s<<std::endl<<proj2<<std::endl<<"=="<<std::endl<<testp;
+		AssertMsg_Test(proj2==testp, s.str().c_str());
 
 		//query modelview matrix test
 		Matrix44 modelView2;
@@ -89,7 +93,7 @@ void Test()
 		tex.Bind();
 		program.SetTextureSampler(tex);
 
-		int sampler;
+		long sampler;
 		program.GetUniform("texture", sampler);
 		s.str("");
 		s<<sampler<<" == 0";
@@ -137,7 +141,9 @@ void Test()
 
 		KINEVOX_TEST_LOOP_START
 			renderer.PreRender();
-			obj.Render();
+		Matrix44 proj;
+		renderer.GetProjection(proj);
+			obj.Render(proj);
 			renderer.PostRender();
 			winDriver.SwapBuffer();
 		KINEVOX_TEST_LOOP_END

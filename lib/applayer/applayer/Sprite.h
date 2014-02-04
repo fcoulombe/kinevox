@@ -25,6 +25,7 @@
 #include <vector>
 #include <gcl/Point3.h>
 #include <gcl/Matrix44.h>
+#include <renderer/Vertex.h>
 namespace GCL
 {
 struct SpriteDataHeader
@@ -45,7 +46,7 @@ public:
 	Sprite(const char *filename="DefaultSprite");
 	~Sprite();
 
-	void Render();
+	void Render(const Matrix44 &proj);
 	void Update();
 	void Play();
 	void Pause();
@@ -78,6 +79,7 @@ private:
 	Material *mMaterial;
 	Matrix44 mTransform;
 	bool mIsVisible;
+	VertexPT square[6];
 };
 
 }

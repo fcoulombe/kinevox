@@ -68,7 +68,9 @@ void Test()
 
 	    SquareRenderObject obj;
 		renderer.PreRender();
-		obj.Render();
+		Matrix44 proj;
+		renderer.GetProjection(proj);
+		obj.Render(proj);
 		renderer.PostRender();
 	}
 

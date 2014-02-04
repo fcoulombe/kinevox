@@ -41,7 +41,7 @@ void Test()
 	actor.SetPosition(100.0,100.0,0.0);
 	Camera cam;
 	KINEVOX_TEST_LOOP_START
-		cam.Update();
+		GCLApplication::SetViewportCamera(cam); 
 		actor.Update(1.0);
 		GCLApplication::Update();
 		GCLApplication::Render();

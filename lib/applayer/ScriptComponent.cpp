@@ -33,26 +33,33 @@ using namespace GCL;
 GCL::ScriptComponent::ScriptComponent(Actor *parentActor, PtrLuaTableIterator &it)
 	: Component(parentActor)
 {
-	ScriptResourceManager &scriptManager = ScriptResourceManager::Instance();
+	mScriptResource = nullptr;
+	if (!it)
+		return;
 	while (!it->End())
 	{
 		if (it->GetKey() == "filename")
 		{
-			const std::string filename =  it->GetString();
-			std::stringstream s;
-			s<<SCRIPT_PATH<<filename<<".luac";
-			const Resource *resource = scriptManager.LoadResource(s.str().c_str());
-			const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
-			mScriptResource = luaResource;
+			SetScript(it->GetString());
 		}
 		++(*it);
 	}
-	//scriptManager.ExposeFunction("GetPosition", std::bind(&ScriptComponent::GetPosition, this, std::placeholders::_1 ));
-
-	mScriptResource->ExecuteFunction("Initialize", mParentActor);
 }
 
 
+void ScriptComponent::SetScript(const std::string &filename)
+{
+	ScriptResourceManager &scriptManager = ScriptResourceManager::Instance();
+	if (mScriptResource)
+		scriptManager.ReleaseResource(mScriptResource);
+	std::stringstream s;
+	s<<SCRIPT_PATH<<filename<<".luac";
+	const Resource *resource = scriptManager.LoadResource(s.str().c_str());
+	const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
+	mScriptResource = luaResource;
+
+	mScriptResource->ExecuteFunction("Initialize", mParentActor);
+}
 ScriptComponent::~ScriptComponent()
 {
 	mScriptResource->ExecuteFunction("Terminate", mParentActor);
@@ -72,4 +79,8 @@ void ScriptComponent::Update(Real )
 void GCL::ScriptComponent::Render()
 {
 	//sprite is auto registered by application, no need
+}
+
+void GCL::ScriptComponent::PostInit()
+{
 }

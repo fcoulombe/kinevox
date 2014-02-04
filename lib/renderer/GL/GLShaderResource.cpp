@@ -45,13 +45,17 @@ GLShaderResource::GLShaderResource( const ShaderResource *shaderRes )
 : GPUResource(),
 mIsValid (false)
 {
+	RenderPipe::SendCommand([this, shaderRes](){
 	mShaderObject = CompileShader(shaderRes);
+	});
 }
 
 GLShaderResource::~GLShaderResource()
 {
+	RenderPipe::SendCommandSync([&](){
 	if (mIsValid)
 		glDeleteShader(mShaderObject);glErrorCheck();
+	});
 }
 
 
@@ -115,23 +119,29 @@ void GLShaderResource::PrintInfoLog(GLuint p)
 GCL::GLGPUProgramResource::GLGPUProgramResource( const GLShaderResource *pshader, const GLShaderResource *vshader ) 
 	: mRefCount(1),mIsValid (false)
 {
+
+	RenderPipe::SendCommand([this, pshader, vshader](){
 	mProgramObject = glCreateProgram();glErrorCheck();
 	GCLAssertMsg(mProgramObject != 0, "Can't create program");
 	AttachShader(*pshader);
 	AttachShader(*vshader);
 	Link();
+	});
 	
 }
 
 GCL::GLGPUProgramResource::~GLGPUProgramResource()
 {
+	RenderPipe::SendCommandSync([&](){
 	if (mIsValid)
 		glDeleteProgram(mProgramObject);glErrorCheck();
+	});
 }
 
 void GLGPUProgramResource::AttachShader(const GLShaderResource &shader)
 {
-	glAttachShader(mProgramObject, shader.GetShaderObject());glErrorCheck();
+	GLuint shaderObject = shader.GetShaderObjectUnsafe();
+	glAttachShader(mProgramObject, shaderObject);glErrorCheck();
 }
 
 void GLGPUProgramResource::Link()

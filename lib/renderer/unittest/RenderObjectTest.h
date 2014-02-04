@@ -118,7 +118,9 @@ void Test()
         rot+=0.001;
         obj.SetOrientation(0.0,rot,0.0);
 		renderer.PreRender();
-		obj.Render();
+		Matrix44 proj;
+		renderer.GetProjection(proj);
+		obj.Render(proj);
 		renderer.PostRender();
 		winDriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END

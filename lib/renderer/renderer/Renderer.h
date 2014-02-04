@@ -25,8 +25,8 @@
 #include <gcl/Config.h>
 
 #include "renderer/Camera.h"
-#include "renderer/RenderPipe.h"
-#include "renderer/RenderCmd.h"
+#include "rendererconf.h"
+#include GFXAPI_Renderer_H
 #include "renderer/RenderObject.h"
 #include "renderer/ViewPort.h"
 namespace GCL
@@ -38,59 +38,62 @@ namespace GCL
       {
 		  mCamera = &Camera::DefaultCamera();
 		  RenderPipe::Initialize();
-		  RenderPipe::SendCommand(RenderCommand(CREATE_RENDERER, (void*)windowsHandle));
+		  mPimpl = new IRenderer(windowsHandle);
 		  mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
-		  uint8_t *xferbuffer = new uint8_t[sizeof(ViewPort)];
-		  memcpy(xferbuffer, &mViewPort, sizeof(ViewPort));
-		  RenderPipe::SendCommand(RenderCommand(RENDERER_SET_VIEWPORT, (void*)xferbuffer));
+		  mPimpl->SetViewPort(mViewPort);
       }
     ~Renderer() 
 	{
-		RenderPipe::SendCommand( RenderCommand(DESTROY_RENDERER));
+		delete mPimpl;
 		RenderPipe::Terminate();
 	}
 
 	void PreRender()
 	{
-		RenderPipe::SendCommand(RenderCommand(RENDERER_PRERENDER));
+		mPimpl->PreRender();
 	}
 	void PostRender()
 	{
-		RenderPipe::SendCommand(RenderCommand(RENDERER_POSTRENDER));
-		RenderPipe::SendCommand(RenderCommand(SWAP_BUFFER));
+		mPimpl->PostRender();
+		mPimpl->SwapBuffer();	
 	}
 
 	void SetCamera(Camera &camera)
 	{
 		mCamera = &camera;
+		mPimpl->SetProjection(camera);
+	}
+	void SetViewPort(const ViewPort &viewport)
+	{
+		mViewPort = viewport;
+		mPimpl->SetViewPort(mViewPort);
 	}
     const ViewPort &GetViewPort() const { return mViewPort; }
 
-	const std::string GetVendor() const 
+	void GetVendor(std::string &vendor) const 
 	{ 
-		return RenderPipe::SendCommandSyncRet( RenderCommand(RENDERER_GET_VENDOR)).GetString(); 
+		mPimpl->GetVendor(vendor);
 	}
-	const std::string GetVersion() const { return RenderPipe::SendCommandSyncRet(RenderCommand(RENDERER_GET_VERSION)).GetString(); }
-	const std::string GetRenderer() const { return RenderPipe::SendCommandSyncRet(RenderCommand(RENDERER_GET_RENDERER)).GetString();  }
-	const std::string GetShadingLanguageVersion() const { return RenderPipe::SendCommandSyncRet(RenderCommand(RENDERER_GET_SHADING_LANGUAGE_VERSION)).GetString();  }
-	const std::string GetGlewVersion() const { return RenderPipe::SendCommandSyncRet(RenderCommand(RENDERER_GET_GLEW_VERSION)).GetString();  }
-	const std::vector<std::string> GetExtensions() const { return  RenderPipe::SendCommandSyncRet(RenderCommand(RENDERER_GET_EXTENSIONS)).GetStringList();  }
-	bool IsExtensionSupported(const std::string &ext) const { return RenderPipe::SendCommandSyncRet(RenderCommand(RENDERER_GET_IS_EXTENSION_SUPPORTED, (void*)&ext)).GetBool(); }
-	bool IsGlewExtensionSupported(const std::string &ext) const { return RenderPipe::SendCommandSyncRet(RenderCommand(RENDERER_GET_IS_GLEW_EXTENSION_SUPPORTED, (void*)&ext)).GetBool(); }
+	void GetVersion(std::string &version) const { mPimpl->GetVersion(version); }
+	void GetRenderer(std::string &renderer) const { mPimpl->GetRenderer(renderer); }
+	void GetShadingLanguageVersion(std::string  &shadingLanguageVersion) const { mPimpl->GetShadingLanguageVersion(shadingLanguageVersion); }
+	void GetGlewVersion(std::string  &glewVersion) const { mPimpl->GetGlewVersion(glewVersion); }
+	void GetExtensions(std::vector<std::string>  &extensions) const { mPimpl->GetExtensions(extensions); }
+	bool IsExtensionSupported(const std::string &ext) const { return mPimpl->IsExtensionSupported(ext); }
+	bool IsGlewExtensionSupported(const std::string &ext) const { return mPimpl->IsGlewExtensionSupported(ext); }
 
 	void SetOrtho()
 	{
-		RenderPipe::SendCommand(RenderCommand(RENDERER_SET_ORTHO));
+		mPimpl->SetOrtho();
 	}
-	Matrix44 GetProjection() {return RenderPipe::SendCommandSyncRet(RenderCommand(RENDERER_GET_PROJECTION)).GetMatrix(); }
-	Matrix44 GetModelView() {return RenderPipe::SendCommandSyncRet(RenderCommand(RENDERER_GET_MODELVIEW)).GetMatrix();}
+	void GetProjection(Matrix44  &projection) {mPimpl->GetProjection(projection); }
+	void GetModelView(Matrix44  &modelView) {mPimpl->GetModelView(modelView); }
 
-	static Matrix44 GetGLProjection() {return RenderPipe::SendCommandSyncRet(RenderCommand(RENDERER_GET_GL_PROJECTION)).GetMatrix(); }
-	static Matrix44 GetGLModelView() {return RenderPipe::SendCommandSyncRet(RenderCommand(RENDERER_GET_GL_MODELVIEW)).GetMatrix();}
+	static Matrix44 GetGLProjection() {return IRenderer::GetGLProjection(); }
+	static Matrix44 GetGLModelView() {return IRenderer::GetGLModelView(); }
   private:
-	   ViewPort mViewPort;
-	   Camera *mCamera;
-	   
-     // IRenderer mPimpl;
+	  ViewPort mViewPort;
+	  Camera *mCamera;
+	  IRenderer *mPimpl;
   };
 }

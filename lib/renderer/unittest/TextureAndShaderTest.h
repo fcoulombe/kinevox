@@ -69,8 +69,10 @@ void Test()
 		objList.push_back(&obj2);
         KINEVOX_TEST_LOOP_START
 		renderer.PreRender();
+		Matrix44 proj;
+		renderer.GetProjection(proj);
 		for (size_t i=0; i<objList.size(); ++i)
-			objList[i]->Render();
+			objList[i]->Render(proj);
 		renderer.PostRender();
         winDriver.SwapBuffer();
         KINEVOX_TEST_LOOP_END

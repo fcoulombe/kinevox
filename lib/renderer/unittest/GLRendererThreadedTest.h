@@ -31,12 +31,8 @@
 #include <renderer/Renderer.h>
 #include <windriver/WinDriver.h>
 #include <renderer/RenderPipe.h>
-#include <renderer/RenderCmd.h>
 
 using namespace GCL;
-
-
-
 
 namespace GLRendererThreadedTest
 { 

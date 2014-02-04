@@ -33,7 +33,7 @@ using namespace GCL;
 
 Texture::~Texture()
 {
-	RenderPipe::SendCommandSync(RenderCommand(TEXTURE_DESTROY, this));
+	delete mTexture;
 	TextureResourceManager::Instance().ReleaseResource(mTextureResource);
 }
 
@@ -79,7 +79,7 @@ Texture::Texture(size_t width, size_t height, size_t bytesPerPixel )
 
 void Texture::Create()
 {
-	RenderPipe::SendCommand(RenderCommand2Arg(TEXTURE_CREATE, this, (void*)mTextureResource));
+	mTexture = new ITexture(*mTextureResource);
 }
 
 

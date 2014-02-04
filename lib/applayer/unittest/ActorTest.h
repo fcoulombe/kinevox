@@ -25,7 +25,9 @@
 #include <gcl/UnitTest.h>
 #include <applayer/Actor.h>
 #include <applayer/GCLApplication.h>
-
+#include <applayer/MeshComponent.h>
+#include <applayer/RenderComponent.h>
+#include <applayer/ScriptComponent.h>
 
 using namespace GCL;
 namespace ActorTest
@@ -36,13 +38,42 @@ void Test()
 	KINEVOX_TEST_START
 	GCLApplication::Initialize("ActorTest");
 	{
+		Actor actor("TestActor");
+		try
+		{
+			actor.CreateComponent("RenderComponent");
+		}
+		catch (GCL::GCLException& e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
+
+		actor.CreateComponent("MeshComponent");
+		actor.CreateComponent("ScriptComponent");
+		MeshComponent *tempMeshComponent = static_cast<MeshComponent*>(actor.GetComponent("MeshComponent"));
+		Assert_Test(!tempMeshComponent->HasMesh());
+		tempMeshComponent->SetMesh("ExampleMesh.mesh");
+		Assert_Test(tempMeshComponent->HasMesh());
+		ScriptComponent *tempScriptComponent = static_cast<ScriptComponent*>(actor.GetComponent("ScriptComponent"));
+		tempScriptComponent->SetScript("TestScriptedComponent");
+
+		actor.SetPosition(0.0,0.0,-10.0);
+		Assert_Test(actor.GetPosition() == WorldPoint3(0.0,0.0,-10.0));
+		Camera cam;
+		KINEVOX_TEST_LOOP_START
+		GCLApplication::SetViewportCamera(cam); 
+		GCLApplication::Update();
+		GCLApplication::Render();
+		KINEVOX_TEST_LOOP_END
+	}
+	{
 	Actor actor("TestActor", "TestActor");
 
 	actor.SetPosition(0.0,0.0,-10.0);
 	Assert_Test(actor.GetPosition() == WorldPoint3(0.0,0.0,-10.0));
 	Camera cam;
 	KINEVOX_TEST_LOOP_START
-		cam.Update();
+		GCLApplication::SetViewportCamera(cam); 
 		GCLApplication::Update();
 		GCLApplication::Render();
 	KINEVOX_TEST_LOOP_END

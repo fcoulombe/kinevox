@@ -22,42 +22,31 @@
 
 
 #include "renderer/RenderPipe.h"
-#include "renderer/RenderCmd.h"
-#include "rendererconf.h"
-#include GFXAPI_RenderThread_H
-
+#include <gcl/Config.h>
 using namespace GCL;
 
 bool RenderPipe::mIsInitialized = false;
-std::vector<RenderThread *> RenderPipe::mRenderThreads;
-ReturnMessage *RenderPipe::mRetMsg=NULL;
+bool RenderPipe::mIsThreaded = false;
+WorkerThread *RenderPipe::mCommandQueue = nullptr;
 
 
-
-
-
-void GCL::RenderPipe::SendReturnMessage( ReturnMessage *retMsg )
-{
-	mRetMsg = retMsg;
-}
 
 void GCL::RenderPipe::Initialize()
 {
 	GCLAssert(!mIsInitialized);
 	mIsInitialized = true;
-	mRetMsg = NULL;
-	mRenderThreads.push_back(new IRenderThread());
-	//if (mRenderThreads[0]->IsThreaded())
-		//mRenderThreads[0]->Start();
+	if (Config::Instance().GetInt("IS_RENDERER_THREDED"))
+		mIsThreaded = true;
+	else
+		mIsThreaded = false;
+	mCommandQueue = new WorkerThread("RenderThread");
 }
 
 void GCL::RenderPipe::Terminate()
 {
 	GCLAssert(mIsInitialized);
-	if (mRetMsg)
-		delete mRetMsg;
-	delete mRenderThreads[0];
-	mRenderThreads.clear();
+
+	delete mCommandQueue;
 	mIsInitialized = false;
 }
 

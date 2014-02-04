@@ -329,6 +329,8 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 	mNear(0.1),
 	mFar(100.0)
 {
+
+	RenderPipe::SendCommand([this, windowsHandle](){
 	mProjection.SetPerspective(mFov,mAspect,mNear,mFar);
 
 	InitWGL(windowsHandle);
@@ -365,11 +367,13 @@ GLRenderer::GLRenderer(size_t windowsHandle)
 	}
 	
 	StringUtil::Explode(extString, mExtensions ,delim); 
-
+	});
 
 }
 GLRenderer::~GLRenderer()
 {
+
+	RenderPipe::SendCommandSync([&](){
 	mExtensions.clear();
 #ifdef OS_WIN32
 	wglMakeCurrent( NULL, NULL );
@@ -378,9 +382,8 @@ GLRenderer::~GLRenderer()
 #elif defined(OS_LINUX)
 	glXMakeCurrent( mDisplay, 0, 0 );
 	glXDestroyContext( mDisplay, mCtx );
-
-
 #endif
+	});
 }
 
 bool GLRenderer::Update()
@@ -391,8 +394,10 @@ bool GLRenderer::Update()
 
 void GLRenderer::PreRender()
 {
+	RenderPipe::SendCommand([&](){
 	glClearColor(0.0, 0.0, 1.0, 0.0); glErrorCheck();
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); glErrorCheck();
+	});
 }
 void GLRenderer::PostRender()
 {
@@ -401,6 +406,7 @@ void GLRenderer::PostRender()
 
 void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 {
+	RenderPipe::SendCommand([&](){
 	if (isEnabled)
 	{
 		glEnable(GL_TEXTURE_2D); glErrorCheck();
@@ -410,12 +416,14 @@ void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 		glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
 		glDisable(GL_TEXTURE_2D); glErrorCheck();
 	}
+	});
 }
 
 
 Matrix44 GLRenderer::GetGLProjection()
 {
     Matrix44 projectionMatrixd;
+	RenderPipe::SendCommandSync([&](){
         Matrix44f projectionMatrix;
 	glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
 
@@ -435,12 +443,15 @@ Matrix44 GLRenderer::GetGLProjection()
 	projectionMatrixd[3].y = projectionMatrix.m3.y;
 	projectionMatrixd[3].z = projectionMatrix.m3.z;
 	projectionMatrixd[3].w = projectionMatrix.m3.w;
+	});
 
 	return projectionMatrixd;
 }
 Matrix44 GLRenderer::GetGLModelView()
 {
     Matrix44 modelViewMatrixd;
+
+	RenderPipe::SendCommandSync([&](){
 	Matrix44f modelViewMatrix;
 	glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&modelViewMatrix);
 	
@@ -460,20 +471,26 @@ Matrix44 GLRenderer::GetGLModelView()
 	modelViewMatrixd[3].y = modelViewMatrix.m3.y;
 	modelViewMatrixd[3].z = modelViewMatrix.m3.z;
 	modelViewMatrixd[3].w = modelViewMatrix.m3.w;
+	});
 	return modelViewMatrixd;
 }
 
 void GLRenderer::SwapBuffer()
 {
+
+	RenderPipe::SendCommand([&](){
 #ifdef OS_WIN32
 	SwapBuffers( mhDC );
 #elif defined(OS_LINUX)
 	glXSwapBuffers ( mDisplay, mWin );
 #endif
+	});
 }
 
-void GCL::GLRenderer::SetProjection( const Camera *camera )
+void GCL::GLRenderer::SetProjection( const Camera &camera )
 {
-	mProjection.SetPerspective(camera->GetFov(),camera->GetAspectRatio(),camera->GetNear(),camera->GetFar());
-	mModelView= Inverse(camera->GetTransform());
+	RenderPipe::SendCommand([&](){
+	mProjection.SetPerspective(camera.GetFov(),camera.GetAspectRatio(),camera.GetNear(),camera.GetFar());
+	mModelView= Inverse(camera.GetTransform());
+	});
 }

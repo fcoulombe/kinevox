@@ -43,50 +43,42 @@ public:
 	  mVertexCount(count),
 	  mVao(vertexArray)
 	{
+		RenderPipe::SendCommand([this, vertexArray, count, loc](){
 		glGenBuffers(1, &mVertexBufferId);glErrorCheck();
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);glErrorCheck();
-		mVao.PostInit(vertexArray, loc);
+		mVao.PostInitUnsafe(vertexArray, loc);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(VertexType)*count, (void*)vertexArray, mBufferType);glErrorCheck();
+		});
 	}
 
 	~GLVertexBuffer()
 	{
+		RenderPipe::SendCommandSync([&](){
 		glDeleteBuffers(1, &mVertexBufferId);glErrorCheck();
+		});
 	}
 
 	void Render(int mode = GL_TRIANGLES)
 	{
-		mVao.Bind();
+		RenderPipe::SendCommand([this, mode](){
+		mVao.BindUnsafe();
 		glDrawArrays((GLenum)mode, 0, (GLsizei)mVertexCount);glErrorCheck();
-		mVao.UnBind();
+		mVao.UnBindUnsafe();
+		});
 	}
 
-	bool IsValid() const { return mVertexBufferId!=(GLuint)-1; }
+	bool IsValid() const 
+	{ 
+		bool ret;
+		RenderPipe::SendCommandSync([&](){ret = IsValidUnsafe();});
+		return ret;
+	}
+	bool IsValidUnsafe() const { return mVertexBufferId!=(GLuint)-1; }
 
 	static GLint GetRenderMode(size_t mode)
 	{
 		GCLAssert(mode<sizeof(GLVertexBufferMode)/sizeof(GLint));
 		return GLVertexBufferMode[mode];
-	}
-	static GLVertexBuffer *CreateVBO(size_t type, const void *vertexArray, size_t count, const AttribLocations &loc)
-	{
-		switch (type)
-		{
-		case ePOSITION:
-			return new GLVertexBuffer((const VertexP *)vertexArray, count, loc);
-			break;
-		case ePOSITION|eNORMAL:
-			return new GLVertexBuffer((const VertexPN *)vertexArray, count, loc);
-			break;
-		case ePOSITION|eNORMAL|eTEXTURE_COORD:
-			return new GLVertexBuffer((const VertexPNT *)vertexArray, count, loc);
-			break;
-		case ePOSITION|eTEXTURE_COORD:
-			return new GLVertexBuffer((const VertexPT *)vertexArray, count, loc);
-			break;
-		default:
-			GCLAssert(false);
-		}
 	}
 private:
 	GLuint mVertexBufferId;
@@ -94,5 +86,4 @@ private:
 	size_t mVertexCount;
 	GLVertexArrayObject mVao;
 };
-
 }

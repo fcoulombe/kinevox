@@ -36,6 +36,8 @@ SpriteComponent::~SpriteComponent()
 GCL::SpriteComponent::SpriteComponent(Actor *parentActor, PtrLuaTableIterator &it)
 	: Component(parentActor)
 {
+	if (!it)
+		return;
 	while (!it->End())
 	{
 		if (it->GetKey() == "sprite")

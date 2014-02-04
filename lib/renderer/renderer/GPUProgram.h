@@ -23,9 +23,13 @@
 #pragma once
 #include <vector>
 
-#include "renderer/RenderCmd.h"
-#include "renderer/RenderPipe.h"
+//#include "renderer/RenderCmd.h"
+//#include "renderer/RenderPipe.h"
+#include "renderer/Shader.h"
 #include "renderer/ShaderAttributeLocations.h"
+#include "renderer/Texture.h"
+#include "rendererconf.h"
+#include GFXAPI_GPUProgram_H
 namespace GCL
 {
 class Matrix44;
@@ -35,26 +39,19 @@ class Shader;
   {
   public:
 	GPUProgram(Shader &vshader, Shader &pshader) 
+		: mProgram(*pshader.mShader, *vshader.mShader)
 	{ 
-		RenderPipe::SendCommand(RenderCommand3Arg(GPUPROGRAM_CREATE, this, &pshader, &vshader)); 
-		//AttachShader(vshader);
-		//AttachShader(pshader);
-		//Link();
-		//Bind();
 	}
 
     ~GPUProgram() 
 	{
-		RenderPipe::SendCommand(RenderCommand(GPUPROGRAM_DESTROY, this)); 
-
 		mShaderList.clear();
 	}
     void Bind() 
 	{
-		RenderPipe::SendCommand(RenderCommand(GPUPROGRAM_BIND, this)); 
+		mProgram.Bind();
 	}
-	bool IsValid() const {  return RenderPipe::SendCommandSyncRet(RenderCommand(IS_GPUPROGRAM_VALID, (void*)this)).GetBool(); }
- 
+	bool IsValid() const {  return mProgram.IsValid(); }
 
 	AttribLocations GetShaderLocations() const
 	{
@@ -64,29 +61,23 @@ class Shader;
 		loc.texCoord = GetAttributeLocation("InTexCoord");
 		return loc;
 	}
-    void SetTextureSampler(const Texture &sampler) { RenderPipe::SendCommand(RenderCommand2Arg(GPUPROGRAM_SET_TEXTURE_SAMPLER, (void*)this, (void*)&sampler)); }
-    void SetProjectionMatrix() 
+	void SetTextureSampler(const Texture &sampler) { mProgram.SetTextureSampler(*sampler.mTexture); } 
+	void SetProjectionMatrix(const Matrix44 &projection) 
 	{ 
-		RenderPipe::SendCommand(RenderCommand(GPUPROGRAM_SET_PROJECTION, (void*)this));  
+		mProgram.SetProjectionMatrix(projection);
 	}
-    void SetModelViewMatrix(const Matrix44 &m) { RenderPipe::SendCommand(RenderCommandMatArg(GPUPROGRAM_SET_MODELVIEW, (void*)this, m));}
-	void SetUniform(const char *uniformName, long value) { RenderPipe::SendCommand(RenderCommand3Arg(GPUPROGRAM_SET_UNIFORM_NUMBER, (void*)this, (void*)uniformName, (void*)value));}
-	void SetUniform(const char *uniformName, const Point2<float> &value) { RenderPipe::SendCommand(RenderCommandVec2fArg(GPUPROGRAM_SET_UNIFORM_VEC2f, (void*)this, (void*)uniformName, value));}
-	void SetUniform(const char *uniformName, const Point2<long> &value) { RenderPipe::SendCommand(RenderCommandVec2iArg(GPUPROGRAM_SET_UNIFORM_VEC2i, (void*)this, (void*)uniformName, value));}
+	void SetModelViewMatrix(const Matrix44 &m) { mProgram.SetModelViewMatrix(m); }
+	void SetUniform(const char *uniformName, long value) { mProgram.SetUniform(uniformName, value); }
+	void SetUniform(const char *uniformName, const Point2<float> &value) { mProgram.SetUniform(uniformName, value); }
+	void SetUniform(const char *uniformName, const Point2<long> &value) { mProgram.SetUniform(uniformName, value); }
 
-	void GetUniform(const char *unformName, Matrix44 &m44) const { m44 = RenderPipe::SendCommandSyncRet(RenderCommand2Arg(GPUPROGRAM_GET_UNIFORM_MATRIX, (void*)this, (void*)unformName)).GetMatrix(); }
-    void GetUniform(const char *unformName, int &ret) const { ret = RenderPipe::SendCommandSyncRet(RenderCommand2Arg(GPUPROGRAM_GET_UNIFORM_NUMBER, (void*)this, (void*)unformName)).GetNumber();  }
-    int GetAttributeLocation(const char *attributeName) const { return RenderPipe::SendCommandSyncRet(RenderCommand2Arg(GPUPROGRAM_GET_ATTRIBUTE_LOCATION, (void*)this, (void*)attributeName)).GetNumber();   }
+	void GetUniform(const char *unformName, Matrix44 &m44) const {  mProgram.GetUniform(unformName, m44); }
+	void GetUniform(const char *unformName, long &ret) const { mProgram.GetUniform(unformName, ret); }
+	int GetAttributeLocation(const char *attributeName) const { return mProgram.GetAttributeLocation(attributeName); }
 
-    static void ResetDefault() { RenderPipe::SendCommand(RenderCommand(GPUPROGRAM_RESETDEFAULT)); }
+	static void ResetDefault() { IGPUProgram::ResetDefault(); }
   private:
-	  void AttachShader(Shader &shader)
-	  {
-		  mShaderList.push_back(&shader);
-		  RenderPipe::SendCommand(RenderCommand2Arg(GPUPROGRAM_ATTACH_SHADER, this, &shader)); 
-	  }
-	  void Link() { RenderPipe::SendCommand(RenderCommand(GPUPROGRAM_LINK, this));  }
-
 	std::vector<Shader *> mShaderList;
+	IGPUProgram mProgram;
   };
 }

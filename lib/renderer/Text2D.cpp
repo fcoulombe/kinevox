@@ -37,25 +37,23 @@ GCL::Text2D::Text2D( const char *text )
 
 	MeshReal halfWidth = MeshReal(buffer.mWidth/2.0);
 	MeshReal halfHeight = MeshReal(buffer.mHeight/2.0);
-	const   VertexP square[6] = {
-		{Point3<MeshReal>(-halfWidth, -halfHeight, 0.0)},
-		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0)},
-		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0)},
-		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0)},
-		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0)},
-		{Point3<MeshReal>(halfWidth, halfHeight, 0.0)}
-	};
+	square[0] = VertexP(Point3<MeshReal>(-halfWidth, -halfHeight, 0.0));
+	square[1] = VertexP(Point3<MeshReal>(halfWidth, -halfHeight, 0.0));
+	square[2] = VertexP(Point3<MeshReal>(-halfWidth, halfHeight, 0.0));
+	square[3] = VertexP(Point3<MeshReal>(-halfWidth, halfHeight, 0.0));
+	square[4] = VertexP(Point3<MeshReal>(halfWidth, -halfHeight, 0.0));
+	square[5] = VertexP(Point3<MeshReal>(halfWidth, halfHeight, 0.0));
 	mObj = new RenderObject(mMaterial, square, 6);
 }
 
-void GCL::Text2D::Render()
+void GCL::Text2D::Render(const Matrix44 &projection)
 {
 	const RenderObject *tempRenderObject = mObj;
 	const Material &tempMaterial = tempRenderObject->GetMaterial();
 	tempMaterial.Bind();
 	const Matrix44 &transform = mTransform;
 	GPUProgram *tempProgram = tempMaterial.GetShader();
-	tempProgram->SetProjectionMatrix();
+	tempProgram->SetProjectionMatrix(projection);
 	tempProgram->SetModelViewMatrix(transform);
 	tempRenderObject->GetVBO().Render();
 }

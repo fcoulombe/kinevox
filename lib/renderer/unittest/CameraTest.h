@@ -42,7 +42,7 @@ void Test()
 	Renderer renderer(winDriver.GetWindowsHandle());
 
 	Camera camera;
-	camera.Update();
+	renderer.SetCamera(camera);
 	std::stringstream s;
 	//camera projection equal Matrix44::Projection
 	{
@@ -52,37 +52,41 @@ void Test()
 		Assert_Test(abseq(camera.GetFar(), 100.0));
 
 		Assert_Test(Matrix44::IDENTITY == camera.GetTransform());
-		Assert_Test(Inverse(Matrix44::IDENTITY) == renderer.GetModelView());
+		Matrix44 mview;
+		renderer.GetModelView(mview);
+		Assert_Test(Inverse(Matrix44::IDENTITY) == mview);
 
 		Matrix44 perspective;
 		perspective.SetPerspective( 45.0,640.0/480.0,0.1,100.0);
 		s.str("");
-		s <<std::setprecision(16)<< std::endl<<perspective << std::endl << "==" << std::endl << renderer.GetProjection();
-		AssertMsg_Test(perspective==renderer.GetProjection(), s.str().c_str());
+		Matrix44 project;
+		renderer.GetProjection(project);
+		s <<std::setprecision(16)<< std::endl<<perspective << std::endl << "==" << std::endl << project;
+		AssertMsg_Test(perspective==project, s.str().c_str());
 	}
 
 
 	ViewPort viewport;
 
-	camera.Update();
+	renderer.SetCamera(camera);
 
 	//std::cout << *(Matrix44*)&camera << std::endl;
-	camera.Update();
+	renderer.SetCamera(camera);
 	camera.MoveForward();
-	camera.Update();
+	renderer.SetCamera(camera);
 	camera.MoveBackward();
-	camera.Update();
+	renderer.SetCamera(camera);
 	camera.TurnLeft();
-	camera.Update();
+	renderer.SetCamera(camera);
 	camera.TurnRight();
-	camera.Update();
+	renderer.SetCamera(camera);
 	camera.TiltUp();
-	camera.Update();
+	renderer.SetCamera(camera);
 	camera.TiltDown();
-	camera.Update();
+	renderer.SetCamera(camera);
 	KINEVOX_TEST_LOOP_START
 
-		camera.Update();
+		renderer.SetCamera(camera);
 		renderer.PreRender();
 
 		renderer.PostRender();

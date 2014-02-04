@@ -38,6 +38,7 @@ class Actor
 {
 public:
 	Actor(const char *name, const char *archetype);
+	Actor(const char *name);
 
 	~Actor();
 
@@ -51,12 +52,12 @@ public:
 			tempComponent->Update(dt);
 		}
 	}
-	void Render()
+	void Render(const Matrix44 &proj)
 	{
 		for (auto it = mComponentList.begin(); it != mComponentList.end(); ++it)
 		{
 			Component *tempComponent = it->second;
-			tempComponent->Render();
+			tempComponent->Render(proj);
 		}
 	}
 	const Matrix44 &GetTransform() const {return mTransform; }
@@ -85,8 +86,13 @@ public:
 	Component *GetComponent(const std::string &componentName)
 	{
 		Component *tempComp = mComponentList[componentName];
-		GCLAssert(tempComp);
-		return tempComp; }
+		GCLAssertMsg(tempComp, std::string("actor: ") + mName +"does not have the component: "+ componentName );
+		return tempComp;
+	}
+	bool HasComponent(const std::string &componentName) const
+	{
+		return mComponentList.find(componentName)!= mComponentList.end();
+	}
 
 	void SendEvent(size_t event, void *arg)
 	{
@@ -96,6 +102,8 @@ public:
 			tempComponent->ProcessEvent(event, arg);
 		}
 	}
+
+	void CreateComponent(const std::string &componentName);
 private:
 	typedef std::map<std::string, Component*> ComponentMap;
 	ComponentMap mComponentList;

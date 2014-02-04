@@ -79,7 +79,7 @@ public:
 	bool Update(Real dt)
 	{
 		hasBeenInMainGameState = true;
-		cam.Update();
+		GCLApplication::SetViewportCamera(cam); 
 		actor.Update(dt);
 		if (mFramecount>3)
 			PushChildState(std::make_shared<PauseState>());

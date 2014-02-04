@@ -25,6 +25,7 @@
 #include <gcl/Point2.h>
 #include "renderer/GL/GLShaderResource.h"
 
+
 namespace GCL
 {
 class Matrix44;
@@ -37,8 +38,7 @@ class GLTexture;
 
     ~GLGPUProgram();
     void Bind();
-
-    bool IsValid() const { return mResource->IsValid(); }
+	bool IsValid() const { return mResource->IsValid(); }
 
     void SetTextureSampler(const GLTexture &sampler);
     void SetProjectionMatrix(const Matrix44 &m);
@@ -52,7 +52,7 @@ class GLTexture;
 
     static void ResetDefault();
   private:
-
+	  bool IsValidUnsafe() const { return mResource->IsValidUnsafe(); }
 	  GLGPUProgramResource *mResource;
   };
 }

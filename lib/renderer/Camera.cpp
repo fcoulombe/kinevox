@@ -25,8 +25,6 @@
 
 #include <gcl/Assert.h>
 #include <gcl/Math.h>
-#include "renderer/RenderPipe.h"
-#include "renderer/RenderCmd.h"
 
 using namespace GCL;
 
@@ -45,16 +43,6 @@ Camera::Camera()
   mFar(100.0)
 {
 }
-
-void Camera::Update()
-{
-	//mProjectionMatrix.SetPerspective(mFov,mAspect,mNear,mFar);
-	//mModelViewMatrix = Inverse(mCameraMatrix);
-	uint8_t *xferbuffer = new uint8_t[sizeof(Camera)];
-	memcpy(xferbuffer, this, sizeof(Camera));
-	RenderPipe::SendCommand(RenderCommand(RENDERER_SET_CAMERA, xferbuffer));
-}
-
 
 void Camera::MoveForward(Real speed)
 {
@@ -93,7 +81,6 @@ void Camera::TiltUp()
 }
 void Camera::TiltDown()
 {
-
 	Matrix44 rotMat;
 	rotMat.SetRotationX(DegreeToRadian(-1));
 	WorldPoint4 positionBack = mCameraMatrix[3];

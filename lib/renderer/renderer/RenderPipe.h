@@ -21,10 +21,8 @@
  */
 
 #pragma once
-#include <vector>
 #include <gcl/Assert.h>
-#include "renderer/RenderThread.h"
-
+#include <gcl/WorkerThread.h>
 #define ENABLE_RENDER_THREAD 1
 
 namespace GCL
@@ -42,39 +40,34 @@ public:
 	static void SendCommand(const T &cmd);
 	template<class T>
 	static void SendCommandSync(const T &cmd);
-
-	//must pass command that actually return a value. otherwise this will stall
-	template<class T>
-	static const ReturnMessage &SendCommandSyncRet(const T &cmd);
-	static void SendReturnMessage(ReturnMessage *retMsg);
-
+	static bool IsThreaded()  { return mIsThreaded; }
 private:
-	static std::vector<RenderThread *> mRenderThreads;
-	static ReturnMessage *mRetMsg;
 	static bool mIsInitialized;
+	static bool mIsThreaded;
+	static WorkerThread *mCommandQueue;
 };
 template<class T>
 void GCL::RenderPipe::SendCommand(const T &cmd )
 {
-	//if threaded, the thread processes the command otherwise it's the pipe itself
-	mRenderThreads[0]->SendCommand(cmd);
+	if (IsThreaded())
+	{
+		mCommandQueue->SendCommandAsync(cmd);
+	}
+	else
+	{
+		cmd();
+	}
 }
 template<class T>
 void GCL::RenderPipe::SendCommandSync(const T &cmd )
 {
-	//if threaded, the thread processes the command otherwise it's the pipe itself
-	mRenderThreads[0]->SendCommandSync(cmd);
-}
-template<class T>
-const GCL::ReturnMessage &GCL::RenderPipe::SendCommandSyncRet(const T &cmd )
-{
-	if (mRetMsg)
+	if (IsThreaded())
 	{
-		delete mRetMsg;
-		mRetMsg = NULL;
+		mCommandQueue->SendCommandSync(cmd);
 	}
-	mRenderThreads[0]->SendCommandSync(cmd);
-	GCLAssert(mRetMsg);
-	return *mRetMsg;
+	else
+	{
+		cmd();
+	}
 }
 }

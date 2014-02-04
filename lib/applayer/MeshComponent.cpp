@@ -21,7 +21,8 @@
  */
 
 #include "applayer/MeshComponent.h"
-#include "renderer/Mesh.h"
+#include "applayer/Actor.h"
+#include <renderer/Mesh.h>
 
 using namespace GCL;
 
@@ -30,17 +31,30 @@ using namespace GCL;
 GCL::MeshComponent::MeshComponent(Actor *parentActor, PtrLuaTableIterator &it)
 	: Component(parentActor)
 {
+	mMesh = nullptr;
+	if (!it)
+		return;
 	while (!it->End())
 	{
 		if (it->GetKey() == "filename")
 		{
-			const std::string meshPath = MESH_PATH + it->GetString();
-			mMesh = new Mesh(meshPath.c_str());
+			SetMesh(it->GetString());
 		}
 		++(*it);
 	}
 }
 
+void MeshComponent::SetMesh(const std::string &filename)
+{
+	if (HasMesh())
+		delete mMesh;
+	const std::string meshPath = MESH_PATH + filename;
+	mMesh = new Mesh(meshPath.c_str());
+	if (mParentActor->HasComponent("RenderComponent"))
+	{
+		mParentActor->GetComponent("RenderComponent")->PostInit();
+	}
+}
 GCL::MeshComponent::~MeshComponent()
 {
 	delete mMesh;

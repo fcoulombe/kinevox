@@ -22,9 +22,8 @@
 
 #pragma once
 #include <gcl/Macro.h>
-#include "renderer/RenderCmd.h"
-#include "renderer/RenderPipe.h"
-
+#include "rendererconf.h"
+#include GFXAPI_Texture_H
 namespace GCL
 {
 class TextureResource;
@@ -42,23 +41,25 @@ public:
 	void Save(const char *filename);
 
 
-	void Bind() const { RenderPipe::SendCommand(RenderCommand(TEXTURE_BIND, (void*)this));}
-	bool IsValid() const { return RenderPipe::SendCommandSyncRet(RenderCommand(IS_TEXTURE_VALID, (void*)this)).GetBool();}
+	void Bind() const { mTexture->Bind(); }
+	bool IsValid() const { return mTexture->IsValid(); } 
 	
 	size_t GetResourceWidth() const;
 	size_t GetResourceHeight() const;
 	size_t GetResourceBytesPerPixel() const;
 
-	size_t GetWidth() const { return (size_t)RenderPipe::SendCommandSyncRet(RenderCommand(TEXTURE_GET_WIDTH, (void*)this)).GetNumber(); }
-	size_t GetHeight() const { return (size_t)RenderPipe::SendCommandSyncRet(RenderCommand(TEXTURE_GET_HEIGHT, (void*)this)).GetNumber();  }
-    size_t GetBytesPerPixel() const { return (size_t)RenderPipe::SendCommandSyncRet(RenderCommand(TEXTURE_GET_BPP, (void*)this)).GetNumber();  }
+	size_t GetWidth() const { return mTexture->GetWidth(); } 
+	size_t GetHeight() const {return mTexture->GetHeight(); } 
+    size_t GetBytesPerPixel() const { return mTexture->GetBytesPerPixel(); } 
 
-
-    const uint8_t *GetTextureFromVRAM() const { return (const uint8_t *)RenderPipe::SendCommandSyncRet(RenderCommand(TEXTURE_GET_TEXTURE_FROM_VRAM, (void*)this)).GetPointer();  }
-    const uint8_t *GetPixelBufferFromVRAM() const { return (const uint8_t *)RenderPipe::SendCommandSyncRet(RenderCommand(TEXTURE_GET_PIXELBUFFER_FROM_VRAM, (void*)this)).GetPointer();}
+    const uint8_t *GetTextureFromVRAM() const { return mTexture->GetTextureFromVRAM(); }
+    const uint8_t *GetPixelBufferFromVRAM() const { return mTexture->GetPixelBufferFromVRAM(); } 
 private:
 	void Create();
 	const TextureResource *mTextureResource;
+	ITexture *mTexture;
+	friend class GPUProgram;
+	friend class FrameBuffer;
 };
 
 }

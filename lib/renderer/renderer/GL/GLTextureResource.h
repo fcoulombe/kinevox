@@ -24,6 +24,7 @@
 #include <3rdparty/OpenGL.h>
 #include "renderer/GPUResource.h"
 #include "renderer/GL/GLPixelBufferHAL.h"
+#include "renderer/RenderPipe.h"
 
 namespace GCL
 {
@@ -33,43 +34,83 @@ namespace GCL
 	public:
 		GLTextureResource(const TextureResource &resource);
 		~GLTextureResource();
-		bool IsValid() const { return (int)mTextureId!=-1; }
-		GLuint GetTextureObject() const { return mTextureId; }
+		bool IsValid() const 
+		{
+			bool ret;
+			RenderPipe::SendCommandSync([&](){
+				ret = IsValidUnsafe(); 
+			});
+			return ret;
+		}
+		GLuint GetTextureObject() const
+		{ 
+			GLuint ret;
+			RenderPipe::SendCommandSync([&](){
+				ret = GetTextureObjectUnsafe(); 
+			});
+			return ret;
+		}
 		void Initialize(const TextureResource &imageData);
-		uint32_t GetTextureUnit() const { return mTextureUnit; }
-		uint32_t GetTextureId() const { return mTextureId; }
+		uint32_t GetTextureUnit() const 
+		{ 
+			uint32_t ret;
+			RenderPipe::SendCommandSync([&](){
+				ret = GetTextureUnitUnsafe(); 
+			});
+			return ret; 
+		}
+		uint32_t GetTextureId() const 
+		{ 
+			uint32_t ret;
+			RenderPipe::SendCommandSync([&](){
+				ret = GetTextureIdUnsafe(); 
+			});
+			return ret; 
+		}
 		void Bind() const
 		{
-			//std::cout << "Binding Texture: " <<mTextureId << std::endl;
-			GCLAssert(IsValid());
+			RenderPipe::SendCommand([&](){
+				GCLAssert(IsValidUnsafe());
 			glBindTexture(GL_TEXTURE_2D, mTextureId);  glErrorCheck();
-			//mPBO->Bind();
+			});
 		}
 
 		size_t GetWidth() const 
 		{
 			GLint width;
+			RenderPipe::SendCommandSync([&](){
 			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
+			});
 			return  (size_t)width; 
 		}
 		size_t GetHeight() const 
 		{ 
 			GLint height;
+			RenderPipe::SendCommandSync([&](){
 			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+			});
 			return  (size_t)height; 
 		}
 		size_t GetBytesPerPixel() const 
 		{ 
 			GLint format;
+			RenderPipe::SendCommandSync([&](){
 			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &format);
+			});
 			return (format == GL_RGB8)?3:4;
 		}
 		const uint8_t *GetTextureFromVRAM() const;
 		const uint8_t *GetPixelBufferFromVRAM() const;
 	private:
+		friend class GLTexture;
 		GLTextureResource() {}
 		GLuint mTextureId;
 		GLuint mTextureUnit;
 		GLPixelBufferHAL *mPBO;
+
+		bool IsValidUnsafe() const { return (int)mTextureId!=-1; }
+		GLuint GetTextureObjectUnsafe() const { return mTextureId; }
+		uint32_t GetTextureUnitUnsafe() const { return mTextureUnit; }
+		uint32_t GetTextureIdUnsafe() const { return mTextureId; }
 	};
 }

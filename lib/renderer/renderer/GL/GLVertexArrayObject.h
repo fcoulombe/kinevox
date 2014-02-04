@@ -28,20 +28,28 @@
 
 namespace GCL
 {
-
-
 class GLVertexArrayObject
 {
 public:
 	template<typename VertexType>
 	GLVertexArrayObject(const VertexType *) //argument is to make the template happy.
 	{
+
+		RenderPipe::SendCommand([&](){
 		mType = (uint32_t)VertexType::GetComponentType();
 		glGenVertexArrays(1, &mVao); glErrorCheck();
 		glBindVertexArray(mVao); glErrorCheck();
+		});
 	}
 	template<typename VertexType>
-	void PostInit(const VertexType *, const AttribLocations &loc)
+	void PostInit(const VertexType *d, const AttribLocations &loc)
+	{
+		RenderPipe::SendCommand([&](){
+			PostInitUnsafe(d, loc);
+		});
+	}
+	template<typename VertexType>
+	void PostInitUnsafe(const VertexType *, const AttribLocations &loc)
 	{
 		if (mType & ePOSITION)
 		{
@@ -75,31 +83,50 @@ public:
 
 	~GLVertexArrayObject()
 	{
+		RenderPipe::SendCommandSync([&](){
 		glDeleteVertexArrays(1, &mVao);glErrorCheck();
+		});
 	}
 	void Bind()
 	{
-		 glBindVertexArray(mVao);glErrorCheck();
+		RenderPipe::SendCommand([&](){
+		 BindUnsafe();
+		});
 	}
 
 
 	void UnBind()
 	{
-		 glBindVertexArray(0);glErrorCheck();
+		RenderPipe::SendCommand([&](){
+		 UnBindUnsafe();
+		});
 	}
 
 	bool IsValid() const
 	{
-		return (glIsVertexArray(mVao) == GL_TRUE);
+		bool ret;
+
+		RenderPipe::SendCommandSync([&](){
+		ret = (glIsVertexArray(mVao) == GL_TRUE);
+		});
+		return ret;
 	}
 
 private:
+	friend class GLVertexBuffer;
 	uint32_t mType;
-	size_t mVertexSize;
-
+	//size_t mVertexSize;
 	GLuint mVao;
+	void BindUnsafe()
+	{
+		glBindVertexArray(mVao);glErrorCheck();
+	}
 
 
+	void UnBindUnsafe()
+	{
+		glBindVertexArray(0);glErrorCheck();
+	}
 };
 
 }

@@ -44,8 +44,13 @@ RenderComponent::~RenderComponent()
 void GCL::RenderComponent::PostInit()
 {
 	//must find the mesh component and hook it up with us
+	if (!mParentActor->HasComponent("MeshComponent"))
+		return;
 	Component *meshComponent = mParentActor->GetComponent("MeshComponent");
 	MeshComponent *tempMeshComponent = static_cast<MeshComponent*>(meshComponent);
+
+	if (!tempMeshComponent->HasMesh())
+		return;
 
 	Mesh &mesh = tempMeshComponent->GetMesh();
 	switch ((size_t)mesh.GetVertexType())
@@ -75,14 +80,14 @@ void GCL::RenderComponent::ProcessEvent( size_t , void * )
 
 }
 
-void GCL::RenderComponent::Render()
+void GCL::RenderComponent::Render(const Matrix44 &proj)
 {
 	const RenderObject *tempRenderObject = mObj;
 	const Material &tempMaterial = tempRenderObject->GetMaterial();
 	tempMaterial.Bind();
 	const Matrix44 &transform = mParentActor->GetTransform();
 	GPUProgram *tempProgram = tempMaterial.GetShader();
-	tempProgram->SetProjectionMatrix();
+	tempProgram->SetProjectionMatrix(proj);
 	tempProgram->SetModelViewMatrix(transform);
 	tempRenderObject->GetVBO().Render();
 }

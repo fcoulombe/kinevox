@@ -53,7 +53,6 @@ Sprite::Sprite(const char *filename)
   mScale(1.0, 1.0),
   mTransform(true),
   mIsVisible(true)
-
 {
 	LoadSprite(filename);
 	GCLApplication::RegisterSprite(this);
@@ -91,14 +90,13 @@ void Sprite::LoadSprite(const char * filename)
 	MeshReal halfWidth = MeshReal(mHeader.width/2.0);
 	MeshReal halfHeight = MeshReal(mHeader.height/2.0);
 
-	const   VertexPT square[6] = {
-		{Point3<MeshReal>(-halfWidth, -halfHeight, 0.0),Point2<MeshReal>(0.0, 0.0)},
-		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0), Point2<MeshReal>(1.0, 0.0)},
-		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0), Point2<MeshReal>(0.0, 1.0)},
-		{Point3<MeshReal>(-halfWidth, halfHeight, 0.0), Point2<MeshReal>(0.0, 1.0)},
-		{Point3<MeshReal>(halfWidth, -halfHeight, 0.0), Point2<MeshReal>(1.0, 0.0)},
-		{Point3<MeshReal>(halfWidth, halfHeight, 0.0), Point2<MeshReal>(1.0, 1.0)}
-	};
+	square[0] = VertexPT(Point3<MeshReal>(-halfWidth, -halfHeight, 0.0),Point2<MeshReal>(0.0, 0.0));
+	square[1] = VertexPT(Point3<MeshReal>(halfWidth, -halfHeight, 0.0), Point2<MeshReal>(1.0, 0.0));
+	square[2] = VertexPT(Point3<MeshReal>(-halfWidth, halfHeight, 0.0), Point2<MeshReal>(0.0, 1.0));
+	square[3] = VertexPT(Point3<MeshReal>(-halfWidth, halfHeight, 0.0), Point2<MeshReal>(0.0, 1.0));
+	square[4] = VertexPT(Point3<MeshReal>(halfWidth, -halfHeight, 0.0), Point2<MeshReal>(1.0, 0.0));
+	square[5] = VertexPT(Point3<MeshReal>(halfWidth, halfHeight, 0.0), Point2<MeshReal>(1.0, 1.0));
+	
 
 	mMaterial = new Material("DefaultSprite");
 	mObj = new RenderObject( *mMaterial, square, 6);
@@ -131,10 +129,11 @@ void Sprite::Update()
 }
 
 
-void Sprite::Render()
+void Sprite::Render(const Matrix44 &proj)
 {
 	if (!IsVisible())
 		return;
+	//RenderPipe::BufferCommands();
 	const RenderObject *tempRenderObject = mObj;
 	const Material &tempMaterial = tempRenderObject->GetMaterial();
 	tempMaterial.Bind();
@@ -142,7 +141,7 @@ void Sprite::Render()
 	currentTexture.Bind();
 	const Matrix44 &transform = mTransform;
 	GPUProgram *tempProgram = tempMaterial.GetShader();
-	tempProgram->SetProjectionMatrix();
+	tempProgram->SetProjectionMatrix(proj);
 	tempProgram->SetModelViewMatrix(transform);
 	tempProgram->SetUniform("CurrentFrame", (long)mCurrentFrame);
 	tempProgram->SetUniform("Dimension", Point2<long>(long(mHeader.width), long(mHeader.height)));
@@ -151,6 +150,7 @@ void Sprite::Render()
 	tempProgram->SetTextureSampler(currentTexture);
 
 	tempRenderObject->GetVBO().Render();
+	//RenderPipe::FlushCommands();
 }
 #if 0
 void Sprite::Render() const

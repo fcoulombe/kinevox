@@ -22,15 +22,12 @@
 
 #pragma once
 
-#include "renderer/RenderCmd.h"
-#include "renderer/RenderPipe.h"
+#include "rendererconf.h"
+#include GFXAPI_Shader_H
 #include "renderer/ShaderResource.h"
 #include "renderer/ShaderResourceManager.h"
 namespace GCL
 {
-
-
-
   class Shader
   {
   public:
@@ -44,17 +41,17 @@ namespace GCL
 		const Resource *tempResource = ShaderResourceManager::Instance().LoadResource(shaderFileName.c_str());
 		mResource = static_cast<const ShaderResource*>(tempResource);
 		mResource->SetShaderType(type);
-		RenderPipe::SendCommand(RenderCommand2Arg(SHADER_CREATE, this, (void*)mResource));
+		mShader = new IShader(mResource);
 	}
     ~Shader() 
 	{
-		RenderPipe::SendCommandSync(RenderCommand(SHADER_DESTROY, this));
+		delete mShader;
 		ShaderResourceManager::Instance().ReleaseResource(mResource);
 	}
-    bool IsValid() const { return RenderPipe::SendCommandSyncRet(RenderCommand(IS_SHADER_VALID, (void*)this)).GetBool(); }
-
+	bool IsValid() const { return mShader->IsValid(); }
 private:
 	const ShaderResource *mResource;
-	
+	IShader *mShader;
+	friend class GPUProgram;
   };
 }

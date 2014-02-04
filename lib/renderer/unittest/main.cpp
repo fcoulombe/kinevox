@@ -59,48 +59,48 @@
 using namespace GCL;
 int main(int argc, char **argv)
 {
-    std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
-    SUITE_INIT(argc, argv)
+	std::cout << "[TEST]" << std::string(argv[0]) << std::endl;
+	SUITE_INIT(argc, argv)
 #if 0
-        D3DRendererTest::Test();
-    #endif
+		D3DRendererTest::Test();
+#endif
 #if USE_OPENRL
-        RLRendererTest::Test();
+	RLRendererTest::Test();
 #endif
 
-   //     GLRendererThreadedTest::Test();
-        GLRendererTest::Test();
+	//     GLRendererThreadedTest::Test();
+	GLRendererTest::Test();
 
-  CameraTest::Test();
-   
-  ShaderTest::Test();
+	CameraTest::Test();
 
-    VertexTest::Test();
-    VertexBufferTest::Test();
-    PixelBufferHALTest::Test();
+	ShaderTest::Test();
 
-    TextureResourceTest::Test();
-    TextureTest::Test();
+	VertexTest::Test();
+	VertexBufferTest::Test();
+	PixelBufferHALTest::Test();
+
+	TextureResourceTest::Test();
+	TextureTest::Test();
 
 	TextureAndShaderTest::Test();
 
 	RenderObjectTest::Test();
-    MaterialTest::Test();
-	
+	MaterialTest::Test();
+
 	FontResourceTest::Test();
 	TTFFontTest::Test();
-    Text2DTest::Test();
-    
-    RenderObjectWithMaterialTest::Test();
-    GeomUtilTest::Test();
-    
-    RenderBufferTest::Test();
-    FrameBufferTest::Test();
+	Text2DTest::Test();
 
-    MeshLoadingTest::Test();
-    MeshResourceTest::Test();
-    MeshTest::Test();
-	
-    SUITE_TERMINATE
-        return 0;
+	RenderObjectWithMaterialTest::Test();
+	GeomUtilTest::Test();
+
+	RenderBufferTest::Test();
+	FrameBufferTest::Test();
+
+	MeshLoadingTest::Test();
+	MeshResourceTest::Test();
+	MeshTest::Test();
+
+	SUITE_TERMINATE
+		return 0;
 }

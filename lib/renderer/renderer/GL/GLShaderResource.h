@@ -23,6 +23,7 @@
 #pragma once
 #include <3rdparty/OpenGL.h>
 #include "renderer/GPUResource.h"
+#include "renderer/RenderPipe.h"
 
 namespace GCL
 {
@@ -32,16 +33,34 @@ namespace GCL
 	public:
 		GLShaderResource(const ShaderResource *resource);
 		~GLShaderResource();
-		bool IsValid() const { return mIsValid; }
+		bool IsValid() const 
+		{
+			bool ret;
+			RenderPipe::SendCommandSync([&](){
+			ret = IsValidUnsafe(); 
+			});
+			return ret;
+		}
 		static GLenum GetShaderType(size_t type) { return GLShaderType[type]; }
-		GLuint GetShaderObject() const { return mShaderObject; }
+		GLuint GetShaderObject() const 
+		{ 
+			GLuint ret;
+			RenderPipe::SendCommandSync([&](){
+				ret = GetShaderObjectUnsafe(); 
+			});
+			return ret;
+		}
 	private:
+		friend class GLGPUProgramResource;
 		GLShaderResource() {}
 		GLuint CompileShader(const ShaderResource *shaderRes);
 		void PrintInfoLog(GLuint );
 		GLuint mShaderObject;
 		bool mIsValid;
 		static const GLenum GLShaderType[];
+
+		bool IsValidUnsafe() const { return mIsValid; }
+		GLuint GetShaderObjectUnsafe() const { return mShaderObject; }
 	};
 
 	class GLGPUProgramResource
@@ -49,14 +68,32 @@ namespace GCL
 	public:
 		GLGPUProgramResource(const GLShaderResource *pshader, const GLShaderResource *vshader );
 		~GLGPUProgramResource();
-		bool IsValid() const { return mIsValid; }
-		GLuint GetProgramObject() const { return mProgramObject; }
+		bool IsValid() const
+		{ 
+			bool ret;
+			RenderPipe::SendCommandSync([&](){
+				ret = IsValidUnsafe(); 
+			});
+			return ret;
+		}
+		GLuint GetProgramObject() const 
+		{ 
+			GLuint ret;
+			RenderPipe::SendCommandSync([&](){
+				ret = GetProgramObjectUnsafe(); 
+			});
+			return ret;
+		}
 		size_t mRefCount;
 	private:
-		void AttachShader(const GLShaderResource &shader);
-		void Link();
-		void PrintInfoLog(GLuint );
+		friend class GLGPUProgram;
+		void AttachShader(const GLShaderResource &shader); //unsafe
+		void Link(); //unsafe
+		void PrintInfoLog(GLuint ); //unsafe
 		GLuint mProgramObject;
 		bool mIsValid;
+
+		bool IsValidUnsafe() const { return mIsValid; }
+		GLuint GetProgramObjectUnsafe() const { return mProgramObject; }
 	};
 }

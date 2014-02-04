@@ -38,14 +38,25 @@ void Test()
 	Renderer renderer(winDriver.GetWindowsHandle());
 
 	std::cout << "OpenGL Stats"<<std::endl;
-	std::cout << "Version: " << renderer.GetVersion()<<std::endl;
-	std::cout << "Vendor: " << renderer.GetVendor()<<std::endl;
-	std::cout << "Renderer: " << renderer.GetRenderer()<<std::endl;
-	std::cout << "ShadingLanguageVersion: " << renderer.GetShadingLanguageVersion()<<std::endl;
-	std::cout << "GlewVersion: " << renderer.GetGlewVersion()<<std::endl;
+	std::string version;
+	renderer.GetVersion(version);
+	std::cout << "Version: " << version <<std::endl;
+	std::string vendor;
+	renderer.GetVendor(vendor);
+	std::cout << "Vendor: " << vendor<<std::endl;
+	std::string rendererstr;
+	renderer.GetRenderer(rendererstr);
+	std::cout << "Renderer: " << rendererstr<<std::endl;
+	std::string shadingLanguageVersion;
+	renderer.GetShadingLanguageVersion(shadingLanguageVersion);
+	std::cout << "ShadingLanguageVersion: " << shadingLanguageVersion<<std::endl;
+	std::string glewVersion;
+	renderer.GetGlewVersion(glewVersion);
+	std::cout << "GlewVersion: " << glewVersion<<std::endl;
 
 	std::cout << "Extensions: " << std::endl;
-	const std::vector<std::string> &ext = renderer.GetExtensions();
+	std::vector<std::string> ext;
+	renderer.GetExtensions(ext);
 	for (size_t i=0; i<ext.size();++i)
 	{
 		std::cout << ext[i] << std::endl;;

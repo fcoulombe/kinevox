@@ -46,10 +46,10 @@ void Test()
 	std::stringstream s;
 	//camera projection equal Matrix44::Projection
 	{
-		Assert_Test(camera.GetFov() == 45.0);
-		Assert_Test(camera.GetAspectRatio() == (640.0/480.0));
-		Assert_Test(camera.GetNear()==0.1);
-		Assert_Test(camera.GetFar()==100.0);
+		Assert_Test(abseq(camera.GetFov(), 45.0));
+		Assert_Test(abseq(camera.GetAspectRatio(), 640.0/480.0));
+		Assert_Test(abseq(camera.GetNear(), 0.1));
+		Assert_Test(abseq(camera.GetFar(), 100.0));
 
 		Assert_Test(Matrix44::IDENTITY == camera.GetTransform());
 		Assert_Test(Inverse(Matrix44::IDENTITY) == renderer.GetModelView());

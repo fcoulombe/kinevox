@@ -57,27 +57,18 @@
         <rotate sid="rotateZ">0 0 1 0</rotate>
         <rotate sid="rotateY">0 1 0 0</rotate>
         <rotate sid="rotateX">1 0 0 0</rotate>
-        <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
-        <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
-        <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
         <scale sid="scale">1 1 1</scale>
         <node id="Area1" name="Area1" type="NODE">
           <translate sid="translate">0 0 0</translate>
           <rotate sid="rotateZ">0 0 1 0</rotate>
           <rotate sid="rotateY">0 1 0 0</rotate>
           <rotate sid="rotateX">1 0 0 0</rotate>
-          <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
-          <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
-          <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
           <scale sid="scale">1 1 1</scale>
           <node id="tile1" name="tile1" type="NODE">
             <translate sid="translate">0 0 0</translate>
             <rotate sid="rotateZ">0 0 1 0</rotate>
             <rotate sid="rotateY">0 1 0 0</rotate>
             <rotate sid="rotateX">1 0 0 0</rotate>
-            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
-            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
-            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
             <scale sid="scale">1 1 1</scale>
             <extra>
               <technique profile="OpenCOLLADAMaya">
@@ -90,9 +81,6 @@
             <rotate sid="rotateZ">0 0 1 0</rotate>
             <rotate sid="rotateY">0 1 0 0</rotate>
             <rotate sid="rotateX">1 0 0 0</rotate>
-            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
-            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
-            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
             <scale sid="scale">1 1 1</scale>
             <extra>
               <technique profile="OpenCOLLADAMaya">
@@ -105,9 +93,6 @@
             <rotate sid="rotateZ">0 0 1 0</rotate>
             <rotate sid="rotateY">0 1 0 0</rotate>
             <rotate sid="rotateX">1 0 0 0</rotate>
-            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
-            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
-            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
             <scale sid="scale">1 1 1</scale>
             <extra>
               <technique profile="OpenCOLLADAMaya">
@@ -120,9 +105,6 @@
             <rotate sid="rotateZ">0 0 1 0</rotate>
             <rotate sid="rotateY">0 1 0 0</rotate>
             <rotate sid="rotateX">1 0 0 0</rotate>
-            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
-            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
-            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
             <scale sid="scale">1 1 1</scale>
             <extra>
               <technique profile="OpenCOLLADAMaya">
@@ -135,9 +117,6 @@
             <rotate sid="rotateZ">0 0 1 0</rotate>
             <rotate sid="rotateY">0 1 0 0</rotate>
             <rotate sid="rotateX">1 0 0 0</rotate>
-            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
-            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
-            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
             <scale sid="scale">1 1 1</scale>
             <extra>
               <technique profile="OpenCOLLADAMaya">
@@ -150,9 +129,6 @@
             <rotate sid="rotateZ">0 0 1 0</rotate>
             <rotate sid="rotateY">0 1 0 0</rotate>
             <rotate sid="rotateX">1 0 0 0</rotate>
-            <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
-            <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
-            <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
             <scale sid="scale">1 1 1</scale>
             <extra>
               <technique profile="OpenCOLLADAMaya">

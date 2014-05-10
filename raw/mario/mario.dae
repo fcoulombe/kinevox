@@ -153,9 +153,6 @@
         <rotate sid="rotateZ">0 0 1 0</rotate>
         <rotate sid="rotateY">0 1 0 49.08862686297532</rotate>
         <rotate sid="rotateX">1 0 0 -90.00000000257237</rotate>
-        <skew sid="skewXY">0 1 0 0  0 1 0 </skew>
-        <skew sid="skewXZ">0 1 0 0  0 0 1 </skew>
-        <skew sid="skewYZ">0 0 1 0  0 0 1 </skew>
         <scale sid="scale">1 1 1</scale>
         <instance_geometry url="#Mesh_002Shape">
           <bind_material>

@@ -1,0 +1,7 @@
+Component = {
+	Name = "Mesh",
+	Parameters = {
+		filename = "filepath"
+	}
+}
+

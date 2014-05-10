@@ -1,0 +1,7 @@
+Component = {
+	Name = "Sprite",
+	Parameters = {
+		sprite = "filepath"
+	}
+}
+

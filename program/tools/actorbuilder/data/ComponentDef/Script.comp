@@ -1,0 +1,7 @@
+Component = {
+	Name = "Script",
+	Parameters = {
+		filename = "filepath"
+	}
+}
+

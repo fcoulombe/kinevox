@@ -42,7 +42,11 @@ static ToolMeshData sMeshData;
 static ToolNodeData sNodeData;
 void ParseNode(const aiScene* scene, const aiNode* node, ToolNodeData &nodeData)
 {
-	
+	if (node->mName == aiString("VisualSceneNode"))
+	{
+		ParseNode(scene, node->mChildren[0], nodeData);
+		return;
+	}
 	LOG_ASSIMP("   %s \n", node->mName.C_Str());
 	nodeData.mName = node->mName.C_Str();
 	nodeData.mTransform[0] = WorldPoint4(node->mTransformation[0][0], node->mTransformation[0][1], node->mTransformation[0][2], node->mTransformation[0][3]);

@@ -23,6 +23,7 @@
 #pragma once
 
 #include <string>
+#include <gcl/Path.h>
 #include <gcl/Point4.h>
 #include "common/BufferWriter.h"
 #include "common/ToolStringTableData.h"
@@ -65,7 +66,7 @@ struct ToolMaterialData
 		fp << "frag_shader: DefaultFragmentShader" << std::endl;
         if (texName.length())
         {
-		    fp << "texture: data/Texture/" << texName<<std::endl;
+		    fp << "texture: data/Texture/" << Path::PathFromFirstSlash(texName)<<std::endl;
         }
         else
         {

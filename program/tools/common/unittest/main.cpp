@@ -23,6 +23,7 @@
 #include "BufferWriterTest.h"
 #include "TTFLoadingTest.h"
 
+#include "AssimpLoadingTest.h"
 #include "ColladaLoadingTest.h"
 #include "FBXLoadingTest.h"
 #include "MeshSavingTest.h"
@@ -40,7 +41,7 @@ int main(int argc, char **argv)
   SUITE_INIT(argc, argv)
 	  BufferWriterTest::Test();
 	  TTFLoadingTest::Test();
-
+	  AssimpLoadingTest::Test();
 	  ColladaLoadingTest::Test();
       FBXLoadingTest::Test();
       WorldSavingTest::Test();

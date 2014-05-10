@@ -22,18 +22,19 @@
 
 #pragma once
 
-#include "common/ColladaManager.h"
+#include "common/AssimpManager.h"
 #include "common/ToolMeshData.h"
+#include "common/ToolNodeData.h"
 
 namespace GCL
 {
 class SceneLoader
 {
 public:
-    static void Initialize() { ColladaManager::Initialize(); }
-    static void Terminate() { ColladaManager::Terminate(); }
-    static bool LoadScene(const char *filename) { return ColladaManager::LoadScene(filename); }
-    static ToolMeshData &GetMeshData() { return ColladaManager::GetMeshData(); }
-    static ToolNodeData &GetNodeData() { return ColladaManager::GetNodeData(); }
+    static void Initialize() { AssimpManager::Initialize(); }
+    static void Terminate() { AssimpManager::Terminate(); }
+    static bool LoadScene(const char *filename) { return AssimpManager::LoadScene(filename); }
+    static ToolMeshData &GetMeshData() { return AssimpManager::GetMeshData(); }
+    static ToolNodeData &GetNodeData() { return AssimpManager::GetNodeData(); }
  };
 }

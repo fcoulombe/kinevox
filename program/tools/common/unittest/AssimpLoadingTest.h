@@ -22,28 +22,27 @@
 #pragma once
 #include <sstream>
 
-#include <common/ColladaManager.h>
+#include <common/AssimpManager.h>
 #include <gcl/UnitTest.h>
 
 using namespace GCL;
-namespace ColladaLoadingTest
+namespace AssimpLoadingTest
 {
 void Test()
 {
 	TEST_START
-#ifdef ENABLE_COLLADA
-	ColladaManager::Initialize();
 
-    ColladaManager::LoadScene("datamisc/ExampleMesh.dae");
-    ToolMeshData &data = ColladaManager::GetMeshData();
+	AssimpManager::Initialize();
+
+    AssimpManager::LoadScene("datamisc/ExampleMesh.dae");
+    ToolMeshData &data = AssimpManager::GetMeshData();
     (void)data;
-    ColladaManager::LoadScene("datamisc/World1.dae");
-    ToolNodeData &nodeData = ColladaManager::GetNodeData();
+    AssimpManager::LoadScene("datamisc/World1.dae");
+    ToolNodeData &nodeData = AssimpManager::GetNodeData();
     Assert_Test(nodeData.mName == "World1");
     Assert_Test(nodeData.mNodeList.front().mName == "Area1");
     Assert_Test(nodeData.mNodeList.front().mNodeList.front().mName == "tile1");
 //std::cout << data << std::endl;
-    ColladaManager::Terminate();
-#endif
+    AssimpManager::Terminate();
 }
 }

@@ -21,12 +21,10 @@
  */
 
 #pragma once
-
+#ifdef ENABLE_COLLADA
 #include <3rdparty/Collada.h>
 #include "common/ToolNodeData.h"
 #include "common/ToolMeshData.h"
-
-
 #include <list>
 namespace GCL
 {
@@ -45,3 +43,4 @@ public:
     
  };
 }
+#endif

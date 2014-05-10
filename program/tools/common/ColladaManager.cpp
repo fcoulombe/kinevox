@@ -19,7 +19,7 @@
 * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 * THE SOFTWARE.
 */
-
+#ifdef ENABLE_COLLADA
 #include "common/ColladaManager.h"
 #include <gcl/Assert.h>
 #include <gcl/Path.h>
@@ -622,3 +622,4 @@ bool KinevoxWriter::writeController( const COLLADAFW::Controller* /*Controller*/
 {
     return true;
 }
+#endif

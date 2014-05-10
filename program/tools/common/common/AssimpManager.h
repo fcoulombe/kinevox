@@ -19,31 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 #pragma once
-#include <sstream>
 
-#include <common/ColladaManager.h>
-#include <gcl/UnitTest.h>
+#include <3rdparty/Assimp.h>
+#include "common/ToolNodeData.h"
+#include "common/ToolMeshData.h"
 
-using namespace GCL;
-namespace ColladaLoadingTest
+
+#include <list>
+namespace GCL
 {
-void Test()
-{
-	TEST_START
-#ifdef ENABLE_COLLADA
-	ColladaManager::Initialize();
 
-    ColladaManager::LoadScene("datamisc/ExampleMesh.dae");
-    ToolMeshData &data = ColladaManager::GetMeshData();
-    (void)data;
-    ColladaManager::LoadScene("datamisc/World1.dae");
-    ToolNodeData &nodeData = ColladaManager::GetNodeData();
-    Assert_Test(nodeData.mName == "World1");
-    Assert_Test(nodeData.mNodeList.front().mName == "Area1");
-    Assert_Test(nodeData.mNodeList.front().mNodeList.front().mName == "tile1");
-//std::cout << data << std::endl;
-    ColladaManager::Terminate();
-#endif
-}
+class AssimpManager
+{
+public:
+	static void Initialize();
+	static void Terminate();
+	static bool LoadScene(const char *filename);
+	//static KFbxScene *GetScene() { return pScene; }
+	//static KFbxNode *GetRootNode() { return pScene->GetRootNode(); }
+	static ToolMeshData &GetMeshData();
+    static ToolNodeData &GetNodeData();
+
+    
+ };
 }

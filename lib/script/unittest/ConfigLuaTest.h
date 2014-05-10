@@ -41,7 +41,7 @@ namespace ConfigLuaTest
         Assert_Test(testInt == 666);
 
         Real testFloat = config.GetReal("config.TestFloat");
-        Assert_Test(abseq(testFloat, 66.66));
+        Assert_Test(abseq(testFloat, 66.66, DBL_PRECISION_TOLERANCE));
 
         const std::string testString = config.GetString("config.TestString");
         Assert_Test(testString == "TestString");

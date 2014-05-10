@@ -1,7 +1,6 @@
 bin
 build*
 gclbuildscript
-3rdParty
 site_scons
 *.idb
 *.pdb

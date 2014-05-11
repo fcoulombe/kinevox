@@ -45,18 +45,18 @@ void Test()
 	loc.normal = program.GetAttributeLocation("InNormal");
 	loc.texCoord = program.GetAttributeLocation("InTexCoord");
 	
-	VertexPNT square[4] = { {Point3<MeshReal>(-0.5, -0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } ,
-			{Point3<MeshReal>(0.5, -0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } ,
-			{Point3<MeshReal>(0.5, 0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } ,
-			{Point3<MeshReal>(-0.5, 0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0) } };
+	VertexPNT square[4] = { VertexPNT(Point3<MeshReal>(-0.5, -0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0)),
+			VertexPNT(Point3<MeshReal>(0.5, -0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0)),
+			VertexPNT(Point3<MeshReal>(0.5, 0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0)),
+			VertexPNT(Point3<MeshReal>(-0.5, 0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 0.0))  };
 	VertexBuffer vb(square, 4, loc);
 	Assert_Test(vb.IsValid());
 
 
-	VertexPT square2[4] = { {Point3<MeshReal>(-0.5, -0.5, 0.0), Point2<MeshReal>(0.0, 0.0)} ,
-			{Point3<MeshReal>(0.5, -0.5, 0.0), Point2<MeshReal>(0.0, 0.0) } ,
-			{Point3<MeshReal>(0.5, 0.5, 0.0), Point2<MeshReal>(0.0, 0.0)} ,
-			{Point3<MeshReal>(-0.5, 0.5, 0.0), Point2<MeshReal>(0.0, 0.0)} };
+	VertexPT square2[4] = { VertexPT(Point3<MeshReal>(-0.5, -0.5, 0.0), Point2<MeshReal>(0.0, 0.0)) ,
+			VertexPT(Point3<MeshReal>(0.5, -0.5, 0.0), Point2<MeshReal>(0.0, 0.0) ) ,
+			VertexPT(Point3<MeshReal>(0.5, 0.5, 0.0), Point2<MeshReal>(0.0, 0.0)) ,
+			VertexPT(Point3<MeshReal>(-0.5, 0.5, 0.0), Point2<MeshReal>(0.0, 0.0)) };
 	VertexBuffer vb2(square2, 4, loc);
 	Assert_Test(vb2.IsValid());
 	}

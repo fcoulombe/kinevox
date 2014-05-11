@@ -28,13 +28,13 @@
 
 namespace GCL
 {
-static const   VertexPNT square[6] = {
-        {Point3<MeshReal>(-0.5, -0.5, 0.0), 	Point3<MeshReal>(0.0, 0.0, 1.0) ,Point2<MeshReal>(0.0, 0.0)},
-        {Point3<MeshReal>(0.5, -0.5, 0.0), 	Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(1.0, 0.0)},
-        {Point3<MeshReal>(-0.5, 0.5, 0.0), 	Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 1.0)},
-        {Point3<MeshReal>(-0.5, 0.5, 0.0), 	Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 1.0)},
-        {Point3<MeshReal>(0.5, -0.5, 0.0), 	Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(1.0, 0.0)},
-        {Point3<MeshReal>(0.5, 0.5, 0.0), 	Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(1.0, 1.0)}
+static const VertexPNT square[6] = {
+        VertexPNT(Point3<MeshReal>(-0.5, -0.5, 0.0), Point3<MeshReal>(0.0, 0.0, 1.0) ,Point2<MeshReal>(0.0, 0.0)),
+        VertexPNT(Point3<MeshReal>(0.5, -0.5, 0.0), 	Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(1.0, 0.0)),
+        VertexPNT(Point3<MeshReal>(-0.5, 0.5, 0.0), 	Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 1.0)),
+        VertexPNT(Point3<MeshReal>(-0.5, 0.5, 0.0), 	Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(0.0, 1.0)),
+        VertexPNT(Point3<MeshReal>(0.5, -0.5, 0.0), 	Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(1.0, 0.0)),
+        VertexPNT(Point3<MeshReal>(0.5, 0.5, 0.0), 	Point3<MeshReal>(0.0, 0.0, 1.0), Point2<MeshReal>(1.0, 1.0))
     };
 class RenderObjectHelper
 {

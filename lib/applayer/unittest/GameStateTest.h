@@ -88,9 +88,9 @@ public:
 		return true;
 	}
 
+	Actor actor;
 	size_t mFramecount;
 	Camera cam;
-	Actor actor;
 };
 
 class MainMenuState: public GameState

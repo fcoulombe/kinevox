@@ -104,7 +104,9 @@ void GLGPUProgram::SetUniform(const char *uniforName, const Point2<float> &val)
 void GLGPUProgram::SetTextureSampler(const GLTexture &sampler)
 {
 	RenderPipe::SendCommand([&](){
-	GLint textureLoc = glGetUniformLocation(mResource->GetProgramObjectUnsafe(),"texture");glErrorCheck();
+	GLint program = mResource->GetProgramObjectUnsafe();
+	GLint textureLoc = glGetUniformLocation(program,"texture");glErrorCheck();
+	long s;
 	glUniform1i(textureLoc, sampler.GetTextureUnitUnsafe());glErrorCheck();
 	});
 }
@@ -123,10 +125,14 @@ void GLGPUProgram::GetUniform(const char *uniformName, Matrix44 &m44) const
 void GLGPUProgram::GetUniform(const char *uniformName, long &sampler) const
 {
 	RenderPipe::SendCommandSync([&](){
-			GCLAssert(IsValidUnsafe());
-	GLint uniformLoc = glGetUniformLocation(mResource->GetProgramObjectUnsafe(),uniformName);glErrorCheck();
+	GCLAssert(IsValidUnsafe());
+
+	GLint program = mResource->GetProgramObjectUnsafe();
+	GLint uniformLoc = glGetUniformLocation(program,uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
-	glGetUniformiv(mResource->GetProgramObjectUnsafe(),uniformLoc,(GLint*)&sampler);glErrorCheck();
+	GLint tempSampler;
+	glGetUniformiv(program,uniformLoc,&tempSampler);glErrorCheck();
+	sampler = tempSampler;
 	});
 }
 long GLGPUProgram::GetAttributeLocation(const char *attributeName) const

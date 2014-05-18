@@ -114,7 +114,10 @@ void GLESGPUProgram::SetUniform(const char *uniforName, const Point2<long> &val)
 {
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniforName);glErrorCheck();
-	glUniform2iv(uniformLoc,1, (GLint*)&val);glErrorCheck();
+	GLint temp[2];
+	glUniform2iv(uniformLoc,1, temp);glErrorCheck();
+	val.x = temp[0];
+	val.y = temp[1];
 }
 
 void GLESGPUProgram::SetUniform(const char *uniforName, const Point2<float> &val)
@@ -144,7 +147,9 @@ void GLESGPUProgram::GetUniform(const char *uniformName, long &sampler) const
 	GCLAssert(mIsValid);
 	GLint uniformLoc = glGetUniformLocation(mProgramObject,uniformName);glErrorCheck();
 	GCLAssert(uniformLoc!=-1);
-	glGetUniformiv(mProgramObject,uniformLoc,(GLint*)&sampler);glErrorCheck();
+	GLint temp;
+	glGetUniformiv(mProgramObject,uniformLoc,&temp);glErrorCheck();
+	sampler = temp;
 }
 int GLESGPUProgram::GetAttributeLocation(const char *attributeName) const
 {

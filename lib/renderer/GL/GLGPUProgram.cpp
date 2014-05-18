@@ -106,7 +106,6 @@ void GLGPUProgram::SetTextureSampler(const GLTexture &sampler)
 	RenderPipe::SendCommand([&](){
 	GLint program = mResource->GetProgramObjectUnsafe();
 	GLint textureLoc = glGetUniformLocation(program,"texture");glErrorCheck();
-	long s;
 	glUniform1i(textureLoc, sampler.GetTextureUnitUnsafe());glErrorCheck();
 	});
 }

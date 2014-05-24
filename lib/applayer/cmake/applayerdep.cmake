@@ -1,1 +1,1 @@
-SET(DEPENDENCIES windriver input renderer script)
+SET(DEPENDENCIES windriver input renderer script physics)

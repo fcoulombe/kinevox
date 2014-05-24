@@ -32,6 +32,7 @@
 #include <gcl/Assert.h>
 #include <gcl/ThreadManager.h>
 #include <input/Input.h>
+#include <physics/PhysicsWorld.h>
 #include <renderer/Renderer.h>
 #include <renderer/FontResourceManager.h>
 #include <renderer/MeshResourceManager.h>
@@ -45,6 +46,7 @@
 #include "applayer/Component.h"
 #include "applayer/RenderComponent.h"
 #include "applayer/MeshComponent.h"
+#include "applayer/RigidBodyComponent.h"
 #include "applayer/SpriteComponent.h"
 #include "applayer/ScriptComponent.h"
 using namespace GCL;
@@ -64,6 +66,7 @@ void GCLApplication::InitializaAppLayerComponents()
 {
 	REGISTER_COMPONENT_FACTOR(MeshComponent);
 	REGISTER_COMPONENT_FACTOR(RenderComponent);
+	REGISTER_COMPONENT_FACTOR(RigidBodyComponent);
 	REGISTER_COMPONENT_FACTOR(SpriteComponent);
 	REGISTER_COMPONENT_FACTOR(ScriptComponent);
 }
@@ -74,6 +77,7 @@ void GCLApplication::InitializaAppLayerComponents()
 	FontResourceManager::Initialize();
 	ScriptResourceManager::Initialize();
 	MeshResourceManager::Initialize();
+	PhysicsWorld::Initialize();
 	GCLAssert(mRenderer == NULL);
     mWinDriver = new WinDriver(windowsTitle);
 	mRenderer = new Renderer(mWinDriver->GetWindowsHandle());
@@ -94,6 +98,7 @@ void GCLApplication::InitializaAppLayerComponents()
     GCLAssert(mWinDriver);
     delete mWinDriver;
     mWinDriver = NULL;
+    PhysicsWorld::Terminate();
 	MeshResourceManager::Terminate();
 	ScriptResourceManager::Terminate();
 	FontResourceManager::Terminate();
@@ -109,6 +114,7 @@ void GCLApplication::Update()
 	//{
 	//	m2DRenderObjectList[i]->Update();
 //	}
+	PhysicsWorld::Update(1.0);
 	GameStateManager::Update(1.0);
 	ScriptResourceManager::Instance().Update();
 	ThreadManager::ReThrowException();

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,39 +19,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-#include <iostream>
-#ifdef USE_VLD
-#include <vld.h>
-#endif
-#include <kinetestlib/UnitTest.h>
 
-#include "GCLApplicationTest.h"
-#include "ActorTest.h"
-#include "RigidBodyActorTest.h"
-#include "GameStateTest.h"
-#include "SpriteTest.h"
-#include "SpriteComponentTest.h"
-#include "ScriptComponentTest.h"
-#include "GCLApplicationCameraTest.h"
-#include "GCLRenderTargetTest.h"
-//#include "GCLText2DTest.h"
-//#include "GCLWorldTest.h"
+#include "applayer/RigidBodyComponent.h"
+#include "applayer/Actor.h"
+#include <physics/RigidBody.h>
 
-int main(int argc, char ** argv)
+using namespace GCL;
+
+
+
+RigidBodyComponent::RigidBodyComponent(Actor *parentActor, PtrLuaTableIterator &it)
+	: Component(parentActor)
 {
-	 SUITE_INIT(argc, argv)
-	 GCLApplicationTest::Test();
-	 GCLApplicationCameraTest::Test();
-	 SpriteTest::Test();	 
-	 ActorTest::Test();
-	 RigidBodyActorTest::Test();
-	 SpriteComponentTest::Test();
-	 ScriptComponentTest::Test();
-	 GameStateTest::Test();
-		//GCLRenderTargetTest::Test();
-		//GCLText2DTest::Test();
-       // GCLWorldTest::Test();
-		SUITE_TERMINATE
+	mBody = nullptr;
+	if (!it)
+		return;
+	/*while (!it->End())
+	{
+		if (it->GetKey() == "filename")
+		{
+			SetMesh(it->GetString());
+		}
+		++(*it);
+	}*/
+}
 
-	return 0;
+
+RigidBodyComponent::~RigidBodyComponent()
+{
+	delete mBody;
 }

@@ -1,0 +1,11 @@
+Archetype = {
+	Name = "floor",
+	Components = {
+		RenderComponent = {
+		},
+		MeshComponent = {
+			filename="floor.mesh"
+		}
+	}
+}
+

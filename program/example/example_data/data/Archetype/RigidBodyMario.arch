@@ -1,0 +1,13 @@
+Archetype = {
+	Name = "TestRigidBodyActor",
+	Components = {
+		RenderComponent = {
+		},
+		MeshComponent = {
+			filename="floor.mesh"
+		},
+		RigidBodyComponent = {
+		}
+	}
+}
+

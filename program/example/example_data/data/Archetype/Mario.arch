@@ -1,0 +1,11 @@
+Archetype = {
+	Name = "Mario",
+	Components = {
+		RenderComponent = {
+		},
+		MeshComponent = {
+			filename="mario2.mesh"
+		}
+	}
+}
+

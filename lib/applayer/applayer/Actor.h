@@ -27,6 +27,7 @@
 #include <gcl/Assert.h>
 #include <gcl/Matrix44.h>
 #include "applayer/Component.h"
+#include "applayer/Node.h"
 
 namespace GCL
 {
@@ -34,15 +35,13 @@ namespace GCL
 	{
 		AE_REGISTER_RENDER_OBJECT
 	};
-class Actor
+class Actor : public Node
 {
 public:
 	Actor(const char *name, const char *archetype);
 	Actor(const char *name);
 
 	~Actor();
-
-	void RemoveChild(const Actor *child);
 
 	void Update(Real dt)
 	{
@@ -59,29 +58,6 @@ public:
 			Component *tempComponent = it->second;
 			tempComponent->Render(proj);
 		}
-	}
-	const Matrix44 &GetTransform() const {return mTransform; }
-	void SetTransform(const Matrix44 &transform) {mTransform = transform; }
-
-	void SetOrientation(Real x,Real y,Real z)
-	{
-		const WorldPoint4 backupPosition = mTransform[3];
-		Matrix44 xRot;
-		xRot.SetRotationX(x);
-		Matrix44 yRot;
-		yRot.SetRotationY(y);
-		Matrix44 zRot;
-		zRot.SetRotationZ(z);
-		mTransform = xRot * yRot;// * zRot;
-
-		mTransform.SetPosition(backupPosition);
-	}
-	const WorldPoint3 &GetPosition() const { return (const WorldPoint3&)(mTransform.GetPosition()); }
-	void SetPosition(Real x, Real y,Real z)
-	{ SetPosition(WorldPoint3(x,y,z));	}
-	void SetPosition(const WorldPoint3 &position)
-	{
-		mTransform.SetPosition(position);
 	}
 	Component *GetComponent(const std::string &componentName)
 	{
@@ -107,10 +83,6 @@ public:
 private:
 	typedef std::map<std::string, Component*> ComponentMap;
 	ComponentMap mComponentList;
-	Matrix44 mTransform;
-	Actor *mParent;
-	std::list<Actor*> mChilds;
-	std::string mName;
 };
 
 }

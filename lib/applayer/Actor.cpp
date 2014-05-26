@@ -38,8 +38,7 @@ void Actor::CreateComponent(const std::string &componentName)
 	tempComponent2->PostInit();
 }
 Actor::Actor(const char *name, const char *archetype)
-	: mTransform(true),
-	  mName(name)
+	: Node(name)
 {
 	std::string archFile(ARCHETYPE_PATH);
 	archFile += archetype;
@@ -63,15 +62,11 @@ Actor::Actor(const char *name, const char *archetype)
 		tempComponent->PostInit();
 	}
 
-	mParent = NULL;
 	GCLApplication::RegisterRenderObject(this);
 }
 Actor::Actor(const char *name)
-	: mTransform(true),
-	mName(name)
+	: Node(name)
 {
-	
-	mParent = NULL;
 	GCLApplication::RegisterRenderObject(this);
 }
 
@@ -83,16 +78,7 @@ Actor::~Actor()
 		delete tempComponent;
 	}
 	mComponentList.clear();
-	if (mParent)
-	{
-		mParent->RemoveChild(this);
-	}
+	
 	GCLApplication::ReleaseRenderObject(this);
 }
 
-void GCL::Actor::RemoveChild( const Actor *child )
-{
-	auto it = std::find(mChilds.begin(), mChilds.end(), child);
-	GCLAssert(it != mChilds.end());
-	mChilds.erase(it);
-}

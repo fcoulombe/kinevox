@@ -27,6 +27,7 @@
 
 #include "GCLApplicationTest.h"
 #include "ActorTest.h"
+#include "NodeTest.h"
 #include "RigidBodyActorTest.h"
 #include "GameStateTest.h"
 #include "SpriteTest.h"
@@ -35,11 +36,13 @@
 #include "GCLApplicationCameraTest.h"
 #include "GCLRenderTargetTest.h"
 //#include "GCLText2DTest.h"
-//#include "GCLWorldTest.h"
+#include "GCLWorldTest.h"
 
 int main(int argc, char ** argv)
 {
 	 SUITE_INIT(argc, argv)
+		NodeTest::Test();
+#if 1
 	 GCLApplicationTest::Test();
 	 GCLApplicationCameraTest::Test();
 	 SpriteTest::Test();	 
@@ -50,7 +53,8 @@ int main(int argc, char ** argv)
 	 GameStateTest::Test();
 		//GCLRenderTargetTest::Test();
 		//GCLText2DTest::Test();
-       // GCLWorldTest::Test();
+#endif
+     GCLWorldTest::Test();
 		SUITE_TERMINATE
 
 	return 0;

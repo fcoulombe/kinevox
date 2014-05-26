@@ -59,8 +59,8 @@ void ParseNode(const aiScene* scene, const aiNode* node, ToolNodeData &nodeData)
 	{
 		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		ToolSubMeshData subMeshData;
-		if(mesh->mName.length == 0)
-			continue;
+		//if(mesh->mName.length == 0)
+		//	continue;
 		LOG_ASSIMP("   %s \n", mesh->mName.C_Str());
 		LOG_ASSIMP ("    %i vertices in mesh[%d]\n", mesh->mNumVertices, i);
 		LOG_ASSIMP ("    %i uv comp in mesh[%d]\n", mesh->mNumUVComponents, i);
@@ -85,7 +85,7 @@ void ParseNode(const aiScene* scene, const aiNode* node, ToolNodeData &nodeData)
 				if (mesh->GetNumColorChannels())
 					color = mesh->mColors[0][indice];
 				subMeshData.mIndiceList.push_back(indice);
-				subMeshData.mVertexList.push_back(Point3<MeshReal>(position.x, position.z, position.y));
+				subMeshData.mVertexList.push_back(Point3<MeshReal>(position.x, position.y, position.z));
 				subMeshData.mUvList.push_back(Point2<MeshReal>(texCoord.x, texCoord.y));
 				subMeshData.mNormalList.push_back(Point3<MeshReal>(normal.x, normal.y, normal.z));
 				subMeshData.mVertexColor.push_back(Point4<MeshReal>(color.r, color.g, color.b, color.a));
@@ -106,7 +106,7 @@ void ParseNode(const aiScene* scene, const aiNode* node, ToolNodeData &nodeData)
 
 bool GCL::AssimpManager::LoadScene( const char *filename )
 {
-	const aiScene* scene = aiImportFile (filename, 0/*aiProcess_Triangulate*/);
+	const aiScene* scene = aiImportFile (filename, aiProcess_Triangulate);
 	
 	GCLAssertMsg(scene, std::string("ERROR: reading mesh ") + filename);
 	LOG_ASSIMP ("  %i animations\n", scene->mNumAnimations);

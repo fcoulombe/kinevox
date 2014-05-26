@@ -31,7 +31,7 @@ using namespace GCL;
 RigidBodyComponent::RigidBodyComponent(Actor *parentActor, PtrLuaTableIterator &it)
 	: Component(parentActor)
 {
-	mBody = nullptr;
+	mBody = new RigidBody();
 	if (!it)
 		return;
 	/*while (!it->End())

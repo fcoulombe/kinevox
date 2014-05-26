@@ -21,13 +21,10 @@
  */
 
 #include <applayer/GCLApplication.h>
-#include <applayer/GCLRenderObject2D.h>
+#include <applayer/Sprite.h>
 #include <gcl/Exception.h>
 #include <gcl/Time.h>
 #include <input/Input.h>
-#include <renderer/Camera.h>
-#include <renderer/Material.h>
-#include <renderer/GLRenderer.h>
 
 
 using namespace GCL;
@@ -40,43 +37,58 @@ int main(int /*argc*/, char ** /*argv*/)
 	try
 	{
 		GCLApplication::Initialize("Sprite Example");
-		Camera myCamera;
-		GCLApplication::SetViewportCamera(myCamera);
+		Sprite obj;
+		obj.Play();
 
-
-		GCLRenderObject2D obj("SpriteExampleTest");
-		//obj.SetPosition(100.0, 100.0, 0.0);
-		GCLRenderObject2D obj2("SpriteExampleTest2", "SpriteExample2");
-		GCLRenderObject2D obj3("SpriteExampleTest3", "SpriteExample3");
-
+		static const WorldPoint3 kPositionTest(320.0, 240.0, 0.0);
+		obj.SetPosition(kPositionTest);
 
 		bool isRunning = true;
-		Real x = 100.0;
-		Real y = 100.0;
-		while (isRunning)
+		const size_t TICKS_PER_SECOND = 60;
+		const size_t SKIP_TICKS = 1000 / TICKS_PER_SECOND;
+		const int MAX_FRAMESKIP = 5;
+		size_t next_game_tick = GCL::Time::GetTickMs()-1;
+		int loops;
+		while(isRunning)
 		{
-			GCLApplication::Update();
-			if (Input::IsKeyUp(GCL_ESCAPE))
-				isRunning=false;
+			loops = 0;
+			while(GCL::Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP)
+			{
 
-			if (Input::IsKeyUp(GCL_UP))
-				y-=0.1;
-			if (Input::IsKeyUp(GCL_DOWN))
-				y+=0.1;
+				GCLApplication::Update();
+				obj.Update();
+				if (Input::IsKeyUp(GCL_ESCAPE))
+					isRunning=false;
 
-			if (Input::IsKeyUp(GCL_LEFT))
-				x-=0.1;
-			if (Input::IsKeyUp(GCL_RIGHT))
-				x+=0.1;
-
-
-			obj.SetPosition(WorldPoint3(x,y,0.0));
-			obj2.SetPosition(WorldPoint3(x+100,y,0.0));
-			obj3.SetPosition(WorldPoint3(x+200,y,0.0));
-
-			GCLApplication::Render();
-			Time::SleepMs(1000);
-			std::cout.flush();
+				if (Input::IsKeyUp(GCL_LEFT))
+				{
+					WorldPoint3 position = obj.GetPosition();
+					position.x -= 1.0;
+					obj.SetPosition(position);
+				}
+				if (Input::IsKeyUp(GCL_RIGHT))
+				{
+					WorldPoint3 position = obj.GetPosition();
+					position.x += 1.0;
+					obj.SetPosition(position);
+				}
+				if (Input::IsKeyUp(GCL_UP))
+				{
+					WorldPoint3 position = obj.GetPosition();
+					position.y -= 1.0;
+					obj.SetPosition(position);
+				}
+				if (Input::IsKeyUp(GCL_DOWN))
+				{
+					WorldPoint3 position = obj.GetPosition();
+					position.y += 1.0;
+					obj.SetPosition(position);
+				}
+				GCLApplication::Render();
+				std::cout.flush();
+				next_game_tick += SKIP_TICKS;
+				loops++;
+			}
 		}
 	}
 	catch(GCLException &e)

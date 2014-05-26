@@ -93,11 +93,11 @@ namespace GCL
         }
         for (size_t i=0; i<meshData.mIndiceList.size(); ++i)
         {
-            int indice = meshData.mIndiceList[i];
+            //int indice = meshData.mIndiceList[i];
 
-            const Point3<MeshReal> &tempVert = meshData.mVertexList[indice];
+            const Point3<MeshReal> &tempVert = meshData.mVertexList[i];
             buffer << tempVert;
-            const Point3<MeshReal> &tempNormal = meshData.mNormalList[indice];
+            const Point3<MeshReal> &tempNormal = meshData.mNormalList[i];
             buffer << tempNormal;
             const Point2<MeshReal> &tempUv = meshData.mUvList[i];
             buffer << tempUv;

@@ -54,7 +54,7 @@ public:
 
 	void Update(Real dt)
 	{
-		mDynamicsWorld->stepSimulation(dt,10);
+		mDynamicsWorld->stepSimulation(btScalar(dt),10);
 	}
 
 	void AddRigidBody(pRigidBody *body)

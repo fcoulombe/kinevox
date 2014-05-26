@@ -34,6 +34,10 @@ void Test()
 
 	AssimpManager::Initialize();
 
+	AssimpManager::LoadScene("datamisc/floor.fbx");
+	ToolMeshData &floor_data = AssimpManager::GetMeshData();
+	(void)floor_data;
+
     AssimpManager::LoadScene("datamisc/ExampleMesh.dae");
     ToolMeshData &data = AssimpManager::GetMeshData();
     (void)data;

@@ -36,63 +36,14 @@ void Test()
 
 	SceneLoader::Initialize();
 
-	SceneLoader::LoadScene("datamisc/World1.dae");
+	SceneLoader::LoadScene("datamisc/Level1.fbx");
 
 	ToolNodeData &data = SceneLoader::GetNodeData();
 	//std::cout << data << std::endl;
 
-	BufferWriter buffer(1024*500);
+	BufferWriter buffer(1024*1500);
 	buffer << data;
-
-	std::stringstream s;
-	{
-		s.str("");
-		ToolMeshData testData;
-        testData.mMaterialCount = 1;
-        
-        ToolSubMeshData subMeshTestData;
-		subMeshTestData.mVertexList.resize(8);
-		subMeshTestData.mIndiceList.resize(36);
-		subMeshTestData.mNormalList.resize(8);
-		subMeshTestData.mVertexColor.resize(0);
-		subMeshTestData.mUvList.resize(36);
-        testData.mSubMeshList.push_back(subMeshTestData);
-
-		ToolMeshData *testData2 = reinterpret_cast<ToolMeshData*>(buffer.GetBuffer());
-		(void)testData2;
-#if 0  
-        s<< testData.mSubMeshList.size() << " == " << testData2->mSubMeshList.size() << std::endl;
-        AssertMsg_Test(testData.mSubMeshList.size()  == testData2->mSubMeshList.size(), s.str().c_str());
-        s.str("");
-//GCLAssert(false); //unimp
- 
-ToolSubMeshData
-
-		s<< testData.mVertexCount << " == " << testData2->mVertexList.size() << std::endl;
-		AssertMsg_Test(testData.mVertexCount  == testData2->mVertexList.size(), s.str().c_str());
-		s.str("");
-		s<< testData.mIndicesCount << " == " << testData2->mIndicesCount << std::endl;
-		AssertMsg_Test(testData.mIndicesCount  == testData2->mIndicesCount, s.str().c_str());
-		s.str("");
-		s<< testData.mNormalCount << " == " << testData2->mNormalCount << std::endl;
-		AssertMsg_Test(testData.mNormalCount  == testData2->mNormalCount, s.str().c_str());
-		s.str("");
-		s<< testData.mVertexColorCount << " == " << testData2->mVertexColorCount << std::endl;
-		//AssertMsg_Test(testData.mVertexColorCount  == testData2->mVertexColorCount, s.str().c_str());
-		s.str("");
-		s<< testData.mMaterialCount << " == " << testData2->mMaterialCount << std::endl;
-		AssertMsg_Test(testData.mMaterialCount  == testData2->mMaterialCount, s.str().c_str());
-		s.str("");
-		s<< testData.mUvCount << " == " << testData2->mUvCount << std::endl;
-		AssertMsg_Test(testData.mUvCount  == testData2->mUvCount, s.str().c_str());
-#endif
-
-		buffer.WriteToFile("ExampleMesh.mesh");
-	}
-
-//	const std::string matFilename = data.mMaterialData.matName+".mat";
-	//data.mMaterialData.WriteToFile(matFilename);
-
+	buffer.WriteToFile("ExampleWorld.nodes");
 
 	SceneLoader::Terminate();
 }

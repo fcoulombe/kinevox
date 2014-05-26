@@ -34,5 +34,6 @@
 #define RLSL_PATH DATA_PATH"RLSL/"
 #define GLSL_PATH DATA_PATH"GLSL/"
 #define ARCHETYPE_PATH DATA_PATH"Archetype/"
+#define WORLD_PATH DATA_PATH"World/"
 
 

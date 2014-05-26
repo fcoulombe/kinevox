@@ -137,12 +137,12 @@ GCLINLINE BufferWriter &operator<<(BufferWriter &buffer, const Matrix44 &data)
 }
 GCLINLINE BufferWriter & operator<<( BufferWriter& buffer, const std::string &stringData)
 {
-	//size_t len = stringData.length();
 	uint32_t paddedLen = 0xbaadf00d;// = uint32_t(Memory::Align(len+1));
     size_t currOffset = buffer.GetCurrentOffset();
 	uint32_t *patchLen = (uint32_t *)&(buffer.GetBuffer()[currOffset]);
+	buffer.Write(paddedLen);
+	currOffset = buffer.GetCurrentOffset();
 
-    buffer.Write(paddedLen);
 	buffer.Write(stringData.c_str(), stringData.length());
 	buffer.Pad();
     *patchLen = (uint32_t)(buffer.GetCurrentOffset()-currOffset);

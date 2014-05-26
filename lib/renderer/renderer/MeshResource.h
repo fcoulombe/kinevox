@@ -80,7 +80,7 @@ public:
         const SubMeshData *GetSubMeshData(size_t index) const 
         { 
             GCLAssert(index <mSubMeshCount); 
-            SubMeshData *curSubMesh = (SubMeshData *)((uint8_t*)(this)+sizeof(MeshData)+mMaterialNameLen-sizeof(uint32_t));
+            SubMeshData *curSubMesh = (SubMeshData *)((uint8_t*)(this)+sizeof(MeshData)+mMaterialNameLen);
             
             size_t iteration = 0;
             while (iteration != index)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,35 +20,37 @@
  * THE SOFTWARE.
  */
 
-#pragma once
+#include "applayer/GCLWorld.h"
+#include "applayer/Node.h"
+#include <gcl/Assert.h>
+#include <gcl/File.h>
 
-#include <stdint.h>
-#include <list>
-#include <string>
-#include <gcl/Matrix44.h>
+using namespace GCL;
 
 
-namespace GCL
+GCL::GCLWorld::GCLWorld( const char * name )
 {
+	std::string worldFile(WORLD_PATH);
+	worldFile += name;
+	worldFile += ".world";
+	GCLAssert(GCLFile::Exists(worldFile));
+	GCLFile fp(worldFile);
+	const size_t fileSize = fp.GetFileSize();
+	mWorldFileData = new uint8_t[fileSize];
+	fp.Read(mWorldFileData, fileSize);
+	NodeData *data = (NodeData *)mWorldFileData;
+	mRootNode = new Node(data);
 
+}
 
-	class Node;
-class GCLWorld 
+GCL::GCLWorld::GCLWorld()
 {
-public:
-	GCLWorld();
-    GCLWorld(const char * name);
+	mWorldFileData = nullptr;
+	mRootNode = new Node("World");
+}
 
-    ~GCLWorld();
-	const Node &GetRootNode() const { return *mRootNode; }
-	Node &GetRootNode() { return *mRootNode; }
-
-	Node &GetNode(const std::string &nodeName);
-
-private:
-	uint8_t *mWorldFileData;
-	Node *mRootNode;
-
-};
-
+GCL::GCLWorld::~GCLWorld()
+{
+	delete mRootNode;
+	delete [] mWorldFileData;
 }

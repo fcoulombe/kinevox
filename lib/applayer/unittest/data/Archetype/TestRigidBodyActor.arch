@@ -1,10 +1,10 @@
 Archetype = {
-	Name = "TestActor",
+	Name = "TestRigidBodyActor",
 	Components = {
 		RenderComponent = {
 		},
 		MeshComponent = {
-			filename="ExampleMesh.mesh"
+			filename="floor.mesh"
 		},
 		RigidBodyComponent = {
 		}

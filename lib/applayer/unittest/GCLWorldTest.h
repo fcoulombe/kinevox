@@ -38,7 +38,14 @@ void Test()
 	GCLApplication::Initialize("GCLWorldTest");
 	{
 
-        GCLWorld world("World1");
+    GCLWorld world("Level1");
+	const Node &root = world.GetRootNode();
+	Assert_Test(root.GetName() == "RootNode");
+	Assert_Test(root.GetId() == 0);
+	Assert_Test(root.GetTransform() == Matrix44::IDENTITY);
+	Assert_Test(root.GetParent() == nullptr);
+	Assert_Test(root.GetChildCount() == 1);
+
     KINEVOX_TEST_LOOP_START
 	GCLApplication::Update();
 	GCLApplication::Render();

@@ -22,15 +22,21 @@
 
 #pragma once
 
+#include <gcl/WorldUnit.h>
 
 namespace GCL
 {
+	class Matrix44;
+	template<typename T> class Point3;
+	typedef Point3<Real> WorldPoint3;
 class pRigidBody
 {
 public:
 	pRigidBody(){}
 	virtual ~pRigidBody(){}
 	void *GetBody() { return mBody; }
+	virtual void GetTransform(Matrix44 &mat) const = 0;
+	virtual void SetPosition(const WorldPoint3 &position) = 0;
 protected:
 	void *mBody; // pointer to the rigid body.
 };
@@ -38,8 +44,13 @@ protected:
 class RigidBody
 {
 public:
-	RigidBody();
+	RigidBody(Real mass = 0.0);
 	~RigidBody();
+	void GetTransform(Matrix44 &mat) const { mPimpl->GetTransform(mat); }
+	void SetPosition(const WorldPoint3 &position)
+	{
+		mPimpl->SetPosition(position);
+	}
 private:
 	friend class PhysicsWorld;
 	pRigidBody *mPimpl;

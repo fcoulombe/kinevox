@@ -80,6 +80,9 @@ public:
 	}
 
 	void CreateComponent(const std::string &componentName);
+	void SetPosition(Real x, Real y,Real z)
+	{ SetPosition(WorldPoint3(x,y,z));	}
+	void SetPosition(const WorldPoint3 &position);
 private:
 	typedef std::map<std::string, Component*> ComponentMap;
 	ComponentMap mComponentList;

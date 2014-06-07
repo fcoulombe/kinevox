@@ -114,8 +114,8 @@ void GCLApplication::Update()
 	//{
 	//	m2DRenderObjectList[i]->Update();
 //	}
-	PhysicsWorld::Update(1.0);
-	GameStateManager::Update(1.0);
+	PhysicsWorld::Update(1.0/60.0);
+	GameStateManager::Update(1.0/60.0);
 	ScriptResourceManager::Instance().Update();
 	ThreadManager::ReThrowException();
 }

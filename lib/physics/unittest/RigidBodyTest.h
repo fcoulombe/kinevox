@@ -22,6 +22,7 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
+#include <gcl/Matrix44.h>
 
 #include <physics/RigidBody.h>
 
@@ -34,8 +35,26 @@ void Test()
 	TEST_START
 	PhysicsWorld::Initialize();
 	{
-	RigidBody groundPlane;
-	PhysicsWorld::Update(1./60.);
+		RigidBody box(10.0);
+		RigidBody groundPlane;
+		Matrix44 planeTransform;
+		groundPlane.GetTransform(planeTransform);
+		Assert_Test(planeTransform == Matrix44::IDENTITY);
+		
+		Matrix44 boxTransform;
+		box.GetTransform(boxTransform);
+		Assert_Test(boxTransform == Matrix44::IDENTITY);
+		PhysicsWorld::Update(1./60.);
+		groundPlane.GetTransform(planeTransform);
+		Assert_Test(planeTransform == Matrix44::IDENTITY);
+
+		box.GetTransform(boxTransform);
+		Assert_Test(boxTransform != Matrix44::IDENTITY);
+
+		groundPlane.SetPosition(WorldPoint3(0.0, 10.0, 0.0));
+		groundPlane.GetTransform(planeTransform);
+		Assert_Test(planeTransform.GetPosition() == WorldPoint4(0.0, 10.0, 0.0, 1.0));
+
 	}
 	PhysicsWorld::Terminate();
 

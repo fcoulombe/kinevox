@@ -1,12 +1,13 @@
 Archetype = {
-	Name = "TestRigidBodyActor",
+	Name = "RigidBodyMario",
 	Components = {
 		RenderComponent = {
 		},
 		MeshComponent = {
-			filename="floor.mesh"
+			filename="mario2.mesh"
 		},
 		RigidBodyComponent = {
+		  weight = 10.0
 		}
 	}
 }

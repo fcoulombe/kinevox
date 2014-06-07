@@ -24,6 +24,7 @@
 #include <algorithm>
 
 #include "applayer/GCLApplication.h"
+#include "applayer/RigidBodyComponent.h"
 
 #include <script/ConfigLua.h>
 
@@ -82,3 +83,15 @@ Actor::~Actor()
 	GCLApplication::ReleaseRenderObject(this);
 }
 
+
+void Actor::SetPosition(const WorldPoint3 &position)
+{
+	auto it = mComponentList.find("RigidBodyComponent");
+	if (it != mComponentList.end())
+	{
+		Component *tempComp = it->second;
+		RigidBodyComponent *tempRigidBodyComp = static_cast<RigidBodyComponent*>(tempComp);
+		tempRigidBodyComp->SetPosition(position);
+	}
+	Node::SetPosition(position);
+}

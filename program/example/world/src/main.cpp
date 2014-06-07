@@ -43,21 +43,26 @@ int main(int /*argc*/, char ** /*argv*/)
 		Node &root = world.GetRootNode();
 		Node *area = new Node("Area1");
 		root.AddChildNode(*area);
+		for (size_t j=0; j<5; ++j)
+		{
 		for (size_t i=0; i<10; ++i)
 		{
 			std::stringstream name;
 			name << "floor";
+			name << j;
+			name << "x";
 			name << i;
 			Actor *tile = new Actor(name.str().c_str(), "floor");
 
-			tile->SetPosition(0.0,-5.0,i*-10.0);
+			tile->SetPosition(10.0*j-25.0,-5.0,i*-10.0);
 			area->AddChildNode(*tile);
 		}
-		Actor *mario = new Actor("Mario", "Mario");
+		}
+		Actor *mario = new Actor("Mario", "RigidBodyMario");
 		area->AddChildNode(*mario);
 		
 		mario->SetOrientation(0.0, DegreeToRadian(180.0), 0.0);
-		mario->SetPosition(0.0,-5.0,-10.0);
+		mario->SetPosition(0.0,5.0,-10.0);
 
 		//GCLWorld world("Level1");
 		//Actor &obj = world.GetActor("Mario");
@@ -76,6 +81,7 @@ int main(int /*argc*/, char ** /*argv*/)
 			loops = 0;
 			while(GCL::Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP)
 			{
+				mario->Update(1.0);
 				GCLApplication::SetViewportCamera(cam);
 				GCLApplication::Update();
 				if (Input::IsKeyUp(GCL_ESCAPE))

@@ -22,6 +22,7 @@
 
 #include "physics/RigidBody.h"
 #include "physics/PhysicsWorld.h"
+#include <gcl/Matrix44.h>
 #include <btBulletCollisionCommon.h>
 
 #include <BulletDynamics/Dynamics/btRigidBody.h>
@@ -35,17 +36,17 @@ using namespace GCL;
 class Bullet3RigidBody : public pRigidBody
 {
 public:
-	Bullet3RigidBody()
+	Bullet3RigidBody(Real in_mass)
 	{
-		btCollisionShape* shape = new btBoxShape(btVector3(btScalar(50.),btScalar(50.),btScalar(50.)));
-		btScalar mass(0.);
+		btCollisionShape* shape = new btBoxShape(btVector3(btScalar(5.),btScalar(5.),btScalar(5.)));
+		btScalar mass((btScalar)in_mass);
 		bool isDynamic = (mass != 0.f);
 		btVector3 localInertia(0,0,0);
 		if (isDynamic)
 			shape->calculateLocalInertia(mass,localInertia);
 		btTransform groundTransform;
 		groundTransform.setIdentity();
-		groundTransform.setOrigin(btVector3(0,-56,0));
+		groundTransform.setOrigin(btVector3(0,0,0));
 		btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,shape,localInertia);
 		mBody = new btRigidBody(rbInfo);
@@ -60,14 +61,33 @@ public:
 		delete shape;
 		delete body;
 	}
+	void GetTransform(Matrix44 &mat) const 
+	{
+		btRigidBody* body = (btRigidBody*)mBody;
+		Matrix44f m;
+		static_assert(sizeof(btScalar) == sizeof(float), "make sure the matrix size if the same as what bullet uses");
+		body->getWorldTransform().getOpenGLMatrix((btScalar*)&m);
+		mat[0] = WorldPoint4(m[0].x, m[0].y, m[0].z, m[0].w);
+		mat[1] = WorldPoint4(m[1].x, m[1].y, m[1].z, m[1].w);
+		mat[2] = WorldPoint4(m[2].x, m[2].y, m[2].z, m[2].w);
+		mat[3] = WorldPoint4(m[3].x, m[3].y, m[3].z, m[3].w);
+	}
+
+	void SetPosition(const WorldPoint3 &position)
+	{
+		btRigidBody* body = (btRigidBody*)mBody;
+		btTransform &t = body->getWorldTransform();
+		t.setOrigin(btVector3((btScalar)position.x, (btScalar)position.y, (btScalar)position.z));
+		body->setWorldTransform(t);
+	}
 private:
 	//btCollisionShape* mShape;
 	//btRigidBody* mBody;
 };
 
-RigidBody::RigidBody()
+RigidBody::RigidBody(Real mass)
 {
-	mPimpl = new Bullet3RigidBody();
+	mPimpl = new Bullet3RigidBody(mass);
 	PhysicsWorld::AddRigidBody(this);
 }
 

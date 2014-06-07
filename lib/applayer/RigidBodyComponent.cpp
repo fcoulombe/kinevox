@@ -31,21 +31,35 @@ using namespace GCL;
 RigidBodyComponent::RigidBodyComponent(Actor *parentActor, PtrLuaTableIterator &it)
 	: Component(parentActor)
 {
-	mBody = new RigidBody();
+	
 	if (!it)
 		return;
-	/*while (!it->End())
+	Real weight = 0.0;
+	while (!it->End())
 	{
-		if (it->GetKey() == "filename")
+		if (it->GetKey() == "weight")
 		{
-			SetMesh(it->GetString());
+			weight = it->GetReal();
 		}
 		++(*it);
-	}*/
+	}
+	mBody = new RigidBody(weight);
 }
 
 
 RigidBodyComponent::~RigidBodyComponent()
 {
 	delete mBody;
+}
+
+void GCL::RigidBodyComponent::Update( Real )
+{
+	Matrix44 transform;
+	mBody->GetTransform(transform);
+	mParentActor->SetTransform(transform);
+}
+
+void GCL::RigidBodyComponent::SetPosition( const WorldPoint3 &position )
+{
+	mBody->SetPosition(position);
 }

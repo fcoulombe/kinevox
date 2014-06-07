@@ -89,9 +89,9 @@ public:
 
 	void SetOrientation(Real x,Real y,Real z);
 	const WorldPoint3 &GetPosition() const { return (const WorldPoint3&)(mTransform.GetPosition()); }
-	void SetPosition(Real x, Real y,Real z)
+	virtual void SetPosition(Real x, Real y,Real z)
 	{ SetPosition(WorldPoint3(x,y,z));	}
-	void SetPosition(const WorldPoint3 &position)
+	virtual void SetPosition(const WorldPoint3 &position)
 	{
 		mTransform.SetPosition(position);
 	}

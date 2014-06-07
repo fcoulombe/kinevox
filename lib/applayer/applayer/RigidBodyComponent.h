@@ -33,13 +33,13 @@ public:
 	RigidBodyComponent(Actor *parentActor, PtrLuaTableIterator &it);
 
 	~RigidBodyComponent();
-	virtual void Update(Real )
-	{
-	}
+	virtual void Update(Real );
 	virtual void PostInit()
 	{
 
 	}
+
+	void SetPosition(const WorldPoint3 &position);
 
 private:
 	RigidBody *mBody;

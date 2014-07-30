@@ -381,7 +381,7 @@ Objects:  {
 		}
 		UseMipMap: 0
 		Filename: "C:/src/kinevox/raw/cube/mushroomtga.tga"
-		RelativeFilename: "..\cube\mushroomtga.tga"
+		RelativeFilename: "../cube/mushroomtga.tga"
 	}
 	Texture: 772237296, "Texture::mushroomTextureFile", "" {
 		Type: "TextureVideoClip"
@@ -394,7 +394,7 @@ Objects:  {
 		}
 		Media: "Video::mushroomTextureFile"
 		FileName: "C:/src/kinevox/raw/cube/mushroomtga.tga"
-		RelativeFilename: "..\cube\mushroomtga.tga"
+		RelativeFilename: "../cube/mushroomtga.tga"
 		ModelUVTranslation: 0,0
 		ModelUVScaling: 1,1
 		Texture_Alpha_Source: "None"

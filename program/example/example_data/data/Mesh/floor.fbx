@@ -381,11 +381,11 @@ Objects:  {
 	Video: 691950704, "Video::grass2", "Clip" {
 		Type: "Clip"
 		Properties70:  {
-			P: "Path", "KString", "XRefUrl", "", "C:/src/media/texture/GrassGreenTexture0001.png"
+			P: "Path", "KString", "XRefUrl", "", "C:/src/media/texture/grass.png"
 		}
 		UseMipMap: 0
-		Filename: "C:/src/media/texture/GrassGreenTexture0001.png"
-		RelativeFilename: "..\..\..\..\..\..\media\texture\GrassGreenTexture0001.png"
+		Filename: "C:/src/media/texture/grass.png"
+		RelativeFilename: "../../../../../../media/texture/grass.png"
 	}
 	Texture: 532226512, "Texture::grass2", "" {
 		Type: "TextureVideoClip"
@@ -397,8 +397,8 @@ Objects:  {
 			P: "UseMaterial", "bool", "", "",1
 		}
 		Media: "Video::grass2"
-		FileName: "C:/src/media/texture/GrassGreenTexture0001.png"
-		RelativeFilename: "..\..\..\..\..\..\media\texture\GrassGreenTexture0001.png"
+		FileName: "C:/src/media/texture/grass.png"
+		RelativeFilename: "../../../../../../media/texture/grass.png"
 		ModelUVTranslation: 0,0
 		ModelUVScaling: 1,1
 		Texture_Alpha_Source: "None"

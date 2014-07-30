@@ -1100,7 +1100,7 @@ Objects:  {
 		}
 		UseMipMap: 0
 		Filename: "C:/src/kinevox/raw/mario/mario_fire.png"
-		RelativeFilename: "..\..\kinevox\raw\mario\mario_fire.png"
+		RelativeFilename: "../../kinevox/raw/mario/mario_fire.png"
 	}
 	Texture: 532228768, "Texture::mario_fire_png", "" {
 		Type: "TextureVideoClip"
@@ -1113,7 +1113,7 @@ Objects:  {
 		}
 		Media: "Video::mario_fire_png"
 		FileName: "C:/src/kinevox/raw/mario/mario_fire.png"
-		RelativeFilename: "..\..\kinevox\raw\mario\mario_fire.png"
+		RelativeFilename: "../../kinevox/raw/mario/mario_fire.png"
 		ModelUVTranslation: 0,0
 		ModelUVScaling: 1,1
 		Texture_Alpha_Source: "None"

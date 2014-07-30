@@ -387,7 +387,7 @@ Objects:  {
 		}
 		UseMipMap: 0
 		Filename: "C:/src/media/texture/grass.png"
-		RelativeFilename: "..\texture\grass.png"
+		RelativeFilename: "../texture/grass.png"
 	}
 	Texture: 228818224, "Texture::grass2", "" {
 		Type: "TextureVideoClip"
@@ -400,7 +400,7 @@ Objects:  {
 		}
 		Media: "Video::grass2"
 		FileName: "C:/src/media/texture/grass.png"
-		RelativeFilename: "..\texture\grass.png"
+		RelativeFilename: "../texture/grass.png"
 		ModelUVTranslation: 0,0
 		ModelUVScaling: 1,1
 		Texture_Alpha_Source: "None"

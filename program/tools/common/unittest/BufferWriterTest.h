@@ -153,6 +153,7 @@ void Test()
 	
         s.str("");
         uint32_t paddedLen = *(uint32_t *)&(rawBuffer[curOffset]);
+		curOffset += sizeof(uint32_t) ;
         s<< paddedLen << " == " << newOffset-curOffset<<std::endl;
         AssertMsg_Test(paddedLen == newOffset-curOffset, s.str().c_str());
     }

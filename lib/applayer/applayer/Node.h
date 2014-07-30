@@ -67,7 +67,7 @@ public:
 	Node *GetParent() { return mParentNode; }
 	const Node *GetParent() const { return mParentNode; }
 
-	void GCL::Node::AddChildNode( Node &newNode)
+	void AddChildNode( Node &newNode)
 	{
 		Node *oldParentNode = newNode.GetParent();
 		if (oldParentNode)

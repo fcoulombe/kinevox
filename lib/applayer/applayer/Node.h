@@ -52,7 +52,14 @@ public:
 	Node(const NodeData *data, Node *parent = nullptr);
 	virtual ~Node();
 	uint32_t GetId() const { return mId; }
-
+	virtual void Update(Real dt)
+	{
+		for (auto it = mChilds.begin(); it != mChilds.end(); ++it)
+		{
+			Node *tempNode = *it;
+			tempNode->Update(dt);
+		}
+	}
 	void SetName(const std::string &name) { mName = name; }
 	const std::string &GetName() const { return mName; }
 

@@ -50,6 +50,7 @@ public:
 			Component *tempComponent = it->second;
 			tempComponent->Update(dt);
 		}
+		Node::Update(dt);
 	}
 	void Render(const Matrix44 &proj)
 	{

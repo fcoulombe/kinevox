@@ -37,12 +37,14 @@ namespace GCL
         GCL_DOWN = VK_DOWN,
         GCL_LEFT = VK_LEFT,
         GCL_RIGHT = VK_RIGHT,
-        GCL_ENTER = VK_RETURN
+        GCL_ENTER = VK_RETURN,
+        GCL_PG_UP = VK_PRIOR,
+        GCL_PG_DOWN = VK_NEXT,
     };
 #elif defined(OS_LINUX)
 #include <X11/keysym.h>
-    namespace GCL
-    {
+namespace GCL
+{
     enum KeyNames
     {
         GCL_ESCAPE = XK_Escape ,
@@ -72,13 +74,13 @@ namespace GCL
         {
             mKeyListenerList.clear();
         }
-     
+
         static EventManager &Instance()
         {
             GCLAssert(smpInstance);
             return *smpInstance;
         }
-        
+
         void KeyDown(uint32_t key);
         void KeyUp(uint32_t key);
         void RegisterKeyListener(KeyListener *listener)

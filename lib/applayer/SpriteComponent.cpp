@@ -62,7 +62,7 @@ void SpriteComponent::Update(Real )
 	mSprite->Update();
 }
 
-void GCL::SpriteComponent::Render()
+void GCL::SpriteComponent::Render(const Matrix44 &)
 {
 	//sprite is auto registered by application, no need
 }

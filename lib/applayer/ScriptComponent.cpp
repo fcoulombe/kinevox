@@ -76,7 +76,7 @@ void ScriptComponent::Update(Real )
 	mScriptResource->ExecuteFunction("Logic", mParentActor);
 }
 
-void GCL::ScriptComponent::Render()
+void GCL::ScriptComponent::Render(const Matrix44 &)
 {
 	//sprite is auto registered by application, no need
 }

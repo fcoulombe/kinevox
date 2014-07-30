@@ -25,12 +25,8 @@
 #include <gcl/AABox.h>
 #include <gcl/Matrix44.h>
 #include <gcl/Sphere.h>
-#include <btBulletCollisionCommon.h>
 
-#include <BulletDynamics/Dynamics/btRigidBody.h>
-
-//#include "BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h"
-//#include "BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h"
+#include <3rdparty/BulletRigidBody.h>
 
 
 using namespace GCL;

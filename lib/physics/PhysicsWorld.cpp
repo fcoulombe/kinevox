@@ -22,10 +22,8 @@
 
 #include "physics/PhysicsWorld.h"
 #include "physics/RigidBody.h"
-#include <btBulletCollisionCommon.h>
-#include <BulletDynamics/ConstraintSolver/btSequentialImpulseConstraintSolver.h>
-#include <BulletDynamics/Dynamics/btDiscreteDynamicsWorld.h>
 
+#include <3rdparty/BulletWorld.h>
 
 using namespace GCL;
 

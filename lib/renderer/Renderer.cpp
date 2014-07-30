@@ -27,7 +27,7 @@ using namespace GCL;
 
 
 template<typename VertexType>
-void DrawNormals(const VertexData &data)
+void DrawNormals(const VertexData &data, const AttribLocations &loc)
 {
 	std::vector<Point3<MeshReal> > normalLines;
 	const VertexType *vertexData = (const VertexType *)(data.mVertexData); 
@@ -39,7 +39,7 @@ void DrawNormals(const VertexData &data)
 	}
 	const VertexP *pos = (const VertexP *)(normalLines.data());
 	VertexData lineData(pos, normalLines.size(), VertexP::GetComponentType());
-	VertexBuffer buffer((const VertexP *)lineData.mVertexData, lineData.mVertexCount);
+	VertexBuffer buffer((const VertexP *)lineData.mVertexData, lineData.mVertexCount, loc);
 	buffer.Render(VBM_LINES);
 
 }

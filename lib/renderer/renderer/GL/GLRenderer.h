@@ -179,7 +179,7 @@ private:
 	Display *mDisplay;
 	Window mWin;
 	GLXContext mCtx;
-	Colormap mCmap;
+	//Colormap mCmap;
 #endif
 	void SetOrthoUnsafe()
 	{

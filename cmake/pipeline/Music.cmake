@@ -21,7 +21,7 @@ foreach(src ${musicFiles})
 		add_custom_command(
 			OUTPUT ${DstFile}
 			COMMAND mpg321 ${src} -w - | oggenc -o ${DstFile} -
-			DEPENDS ${SrcFile} 
+			DEPENDS ${src} 
 			VERBATIM)
 	ENDIF()
 

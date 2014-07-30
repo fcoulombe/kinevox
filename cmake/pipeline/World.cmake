@@ -9,7 +9,7 @@ foreach(src ${worldFiles})
     add_custom_command(
         OUTPUT ${DstFile}
         COMMAND worldconverter ${src} ${DstFile}
-        DEPENDS ${SrcFile} worldconverter)
+        DEPENDS ${src} worldconverter)
     list(APPEND DstFiles ${DstFile})
 endforeach()
 SET(DATA_DEP ${DATA_DEP} ${DstFiles})

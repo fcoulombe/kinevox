@@ -103,6 +103,8 @@ RigidBodyComponent::RigidBodyComponent(Actor *parentActor, PtrLuaTableIterator &
 	case SPHERE:
 		mBody = new RigidBody(sphere, weight);
 		break;
+	default:
+		mBody = nullptr;
 	}
 }
 

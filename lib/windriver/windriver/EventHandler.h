@@ -52,7 +52,9 @@ namespace GCL
         GCL_DOWN = XK_Down,
         GCL_LEFT = XK_Left,
         GCL_RIGHT = XK_Right,
-        GCL_ENTER = XK_Return
+        GCL_ENTER = XK_Return,
+        GCL_PG_UP = XK_Page_Up,
+        GCL_PG_DOWN = XK_Page_Down,
     };
 #else
 #error "TBD"

@@ -53,7 +53,9 @@ public:
 		groundTransform.setOrigin(btVector3(0,0,0));
 		btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,shape,localInertia);
-		mBody = new btRigidBody(rbInfo);
+		btRigidBody *tempBody = new btRigidBody(rbInfo);
+		tempBody->setActivationState(DISABLE_DEACTIVATION);
+		mBody = tempBody;
 	}
 	Bullet3RigidBody(const Sphere &sphere, Real in_mass)
 	{
@@ -68,7 +70,9 @@ public:
 		groundTransform.setOrigin(btVector3(0,0,0));
 		btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
 		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,shape,localInertia);
-		mBody = new btRigidBody(rbInfo);
+		btRigidBody *tempBody = new btRigidBody(rbInfo);
+		tempBody->setActivationState(DISABLE_DEACTIVATION);
+		mBody = tempBody;
 	}
 	~Bullet3RigidBody()
 	{

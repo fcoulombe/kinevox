@@ -36,7 +36,7 @@ void Test()
 
 	SceneLoader::Initialize();
 
-	SceneLoader::LoadScene("datamisc/Level1.fbx");
+	SceneLoader::LoadScene("datamisc/level1.fbx");
 
 	ToolNodeData &data = SceneLoader::GetNodeData();
 	//std::cout << data << std::endl;

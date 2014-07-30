@@ -47,7 +47,7 @@ public:
 	GCLEXPORT static void Initialize(const char *windowsTitle);
 	GCLEXPORT static void Terminate();
 
-	GCLEXPORT static void Update();
+	GCLEXPORT static void Update(Real dt = 1.0/60.0);
 	GCLEXPORT static void Render();
 
 	GCLEXPORT static void SetViewportCamera(Camera &camera);

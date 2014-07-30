@@ -107,15 +107,15 @@ void GCLApplication::InitializaAppLayerComponents()
 }
 
 
-void GCLApplication::Update()
+void GCLApplication::Update(Real dt)
 {
 	Input::ProcessInput();
 	//for (size_t i=0; i<m2DRenderObjectList.size(); ++i)
 	//{
 	//	m2DRenderObjectList[i]->Update();
 //	}
-	PhysicsWorld::Update(1.0/60.0);
-	GameStateManager::Update(1.0/60.0);
+	PhysicsWorld::Update(dt);
+	GameStateManager::Update(dt);
 	ScriptResourceManager::Instance().Update();
 	ThreadManager::ReThrowException();
 }

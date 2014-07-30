@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -52,7 +52,7 @@ int main(int /*argc*/, char ** /*argv*/)
 			name << j;
 			name << "x";
 			name << i;
-			Actor *tile = new Actor(name.str().c_str(), "floor");
+			Actor *tile = new Actor(name.str().c_str(), "RigidFloor");
 
 			tile->SetPosition(10.0*j-25.0,-5.0,i*-10.0);
 			area->AddChildNode(*tile);
@@ -75,15 +75,20 @@ int main(int /*argc*/, char ** /*argv*/)
 		const int MAX_FRAMESKIP = 5;
 		size_t next_game_tick = GCL::Time::GetTickMs()-1;
 		int loops;
-		//Real x=0., y=0.,z=0.;
+		
+		size_t lastTime = next_game_tick;
 		while(isRunning)
 		{
 			loops = 0;
+			size_t currentTime;
 			while(GCL::Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP)
 			{
-				mario->Update(1.0);
+				currentTime = GCL::Time::GetTickMs();
+				Real deltaTime = (currentTime - lastTime) / 1000.0;
+				lastTime = currentTime;
+				area->Update(deltaTime);
 				GCLApplication::SetViewportCamera(cam);
-				GCLApplication::Update();
+				GCLApplication::Update(deltaTime);
 				if (Input::IsKeyUp(GCL_ESCAPE))
 					isRunning=false;
 				const Real kSpeed = 0.1;

@@ -26,6 +26,8 @@
 
 namespace GCL
 {
+	class AABox;
+	class Sphere;
 	class Matrix44;
 	template<typename T> class Point3;
 	typedef Point3<Real> WorldPoint3;
@@ -44,7 +46,8 @@ protected:
 class RigidBody
 {
 public:
-	RigidBody(Real mass = 0.0);
+	RigidBody(const AABox &box, Real mass = 0.0);
+	RigidBody(const Sphere &sphere, Real mass = 0.0);
 	~RigidBody();
 	void GetTransform(Matrix44 &mat) const { mPimpl->GetTransform(mat); }
 	void SetPosition(const WorldPoint3 &position)

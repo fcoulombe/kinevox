@@ -22,6 +22,8 @@
 
 #include "applayer/RigidBodyComponent.h"
 #include "applayer/Actor.h"
+#include <gcl/AABox.h>
+#include <gcl/Sphere.h>
 #include <physics/RigidBody.h>
 
 using namespace GCL;
@@ -31,19 +33,77 @@ using namespace GCL;
 RigidBodyComponent::RigidBodyComponent(Actor *parentActor, PtrLuaTableIterator &it)
 	: Component(parentActor)
 {
-	
+	mBody = nullptr;
 	if (!it)
 		return;
 	Real weight = 0.0;
+	AABox box;
+	Sphere sphere;
+	enum BodyShape
+	{
+		NONE,
+		BOX,
+		SPHERE
+	};
+	BodyShape shape = NONE;
 	while (!it->End())
 	{
 		if (it->GetKey() == "weight")
 		{
 			weight = it->GetReal();
 		}
+		else if (it->GetKey() == "sphere")
+		{
+			shape = SPHERE;
+			PtrLuaTableIterator sphereIt = it->GetTableIterator();
+			while (!sphereIt->End())
+			{
+				if (sphereIt->GetKey() == "radius")
+				{
+					sphere.SetRadius(sphereIt->GetReal());
+				}
+				++(*sphereIt);
+			}
+		}
+		else if (it->GetKey() == "box")
+		{
+			shape = BOX;
+			PtrLuaTableIterator boxIt = it->GetTableIterator();
+
+			Real width=0.;
+			Real height=0.;
+			Real length=0.;
+			while (!boxIt->End())
+			{
+				if (boxIt->GetKey() == "width")
+				{
+					width = boxIt->GetReal();
+				}
+				else if (boxIt->GetKey() == "height")
+				{
+					height = boxIt->GetReal();
+				}
+				else if (boxIt->GetKey() == "length")
+				{
+					length = boxIt->GetReal();
+				}
+				++(*boxIt);
+			}
+			box = AABox(width, height, length);
+			GCLAssert(box != AABox(0.,0.,0.));
+		}
+
 		++(*it);
 	}
-	mBody = new RigidBody(weight);
+	switch (shape)
+	{
+	case BOX:
+		mBody = new RigidBody(box, weight);
+		break;
+	case SPHERE:
+		mBody = new RigidBody(sphere, weight);
+		break;
+	}
 }
 
 
@@ -59,7 +119,19 @@ void GCL::RigidBodyComponent::Update( Real )
 	mParentActor->SetTransform(transform);
 }
 
-void GCL::RigidBodyComponent::SetPosition( const WorldPoint3 &position )
+void RigidBodyComponent::SetPosition( const WorldPoint3 &position )
 {
+	GCLAssert(mBody);
 	mBody->SetPosition(position);
+}
+void RigidBodyComponent::SetBody(const AABox &box, Real weight)
+{
+	GCLAssert(mBody == nullptr);
+	mBody = new RigidBody(box, weight);
+}
+
+void RigidBodyComponent::SetBody(const Sphere &sphere, Real weight)
+{
+	GCLAssert(mBody == nullptr);
+	mBody = new RigidBody(sphere, weight);
 }

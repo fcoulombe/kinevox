@@ -22,7 +22,9 @@
 
 #include "physics/RigidBody.h"
 #include "physics/PhysicsWorld.h"
+#include <gcl/AABox.h>
 #include <gcl/Matrix44.h>
+#include <gcl/Sphere.h>
 #include <btBulletCollisionCommon.h>
 
 #include <BulletDynamics/Dynamics/btRigidBody.h>
@@ -36,9 +38,26 @@ using namespace GCL;
 class Bullet3RigidBody : public pRigidBody
 {
 public:
-	Bullet3RigidBody(Real in_mass)
+	Bullet3RigidBody(const AABox &box, Real in_mass)
 	{
-		btCollisionShape* shape = new btBoxShape(btVector3(btScalar(5.),btScalar(5.),btScalar(5.)));
+		btCollisionShape* shape = new btBoxShape(btVector3(btScalar(box.GetWidth()),
+												 btScalar(box.GetHeight()),
+												 btScalar(box.GetLength())));
+		btScalar mass((btScalar)in_mass);
+		bool isDynamic = (mass != 0.f);
+		btVector3 localInertia(0,0,0);
+		if (isDynamic)
+			shape->calculateLocalInertia(mass,localInertia);
+		btTransform groundTransform;
+		groundTransform.setIdentity();
+		groundTransform.setOrigin(btVector3(0,0,0));
+		btDefaultMotionState* myMotionState = new btDefaultMotionState(groundTransform);
+		btRigidBody::btRigidBodyConstructionInfo rbInfo(mass,myMotionState,shape,localInertia);
+		mBody = new btRigidBody(rbInfo);
+	}
+	Bullet3RigidBody(const Sphere &sphere, Real in_mass)
+	{
+		btCollisionShape* shape = new btSphereShape(btScalar(sphere.GetRadius()));
 		btScalar mass((btScalar)in_mass);
 		bool isDynamic = (mass != 0.f);
 		btVector3 localInertia(0,0,0);
@@ -85,9 +104,14 @@ private:
 	//btRigidBody* mBody;
 };
 
-RigidBody::RigidBody(Real mass)
+RigidBody::RigidBody(const AABox &box, Real mass)
 {
-	mPimpl = new Bullet3RigidBody(mass);
+	mPimpl = new Bullet3RigidBody(box, mass);
+	PhysicsWorld::AddRigidBody(this);
+}
+RigidBody::RigidBody(const Sphere &sphere, Real mass)
+{
+	mPimpl = new Bullet3RigidBody(sphere, mass);
 	PhysicsWorld::AddRigidBody(this);
 }
 

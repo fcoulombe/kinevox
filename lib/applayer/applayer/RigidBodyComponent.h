@@ -26,6 +26,8 @@
 
 namespace GCL
 {
+	class AABox;
+	class Sphere;
 	class RigidBody;
 class RigidBodyComponent : public Component
 {
@@ -38,8 +40,11 @@ public:
 	{
 
 	}
-
+	void SetBody(const AABox &box, Real weight = 0.);
+	void SetBody(const Sphere &sphere, Real weight = 0.);
 	void SetPosition(const WorldPoint3 &position);
+	void SetWeight();
+	void SetShape();
 
 private:
 	RigidBody *mBody;

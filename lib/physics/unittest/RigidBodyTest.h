@@ -22,6 +22,7 @@
 #pragma once
 
 #include <gcl/UnitTest.h>
+#include <gcl/AABox.h>
 #include <gcl/Matrix44.h>
 
 #include <physics/RigidBody.h>
@@ -35,8 +36,8 @@ void Test()
 	TEST_START
 	PhysicsWorld::Initialize();
 	{
-		RigidBody box(10.0);
-		RigidBody groundPlane;
+		RigidBody box(AABox(1.,1.,1.), 10.0);
+		RigidBody groundPlane(AABox(10.,1.,10.));
 		Matrix44 planeTransform;
 		groundPlane.GetTransform(planeTransform);
 		Assert_Test(planeTransform == Matrix44::IDENTITY);

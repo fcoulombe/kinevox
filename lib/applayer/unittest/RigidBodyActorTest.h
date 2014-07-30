@@ -23,6 +23,7 @@
 #include <sstream>
 
 #include <gcl/UnitTest.h>
+#include <gcl/AABox.h>
 #include <applayer/Actor.h>
 #include <applayer/GCLApplication.h>
 #include <applayer/MeshComponent.h>
@@ -58,6 +59,9 @@ void Test()
 		Assert_Test(tempMeshComponent->HasMesh());
 		ScriptComponent *tempScriptComponent = static_cast<ScriptComponent*>(actor.GetComponent("ScriptComponent"));
 		tempScriptComponent->SetScript("TestScriptedComponent");
+		
+		RigidBodyComponent *tempRigidBodyComponent = static_cast<RigidBodyComponent*>(actor.GetComponent("RigidBodyComponent"));
+		tempRigidBodyComponent->SetBody(AABox(1.,1.,1.), 10.0);
 
 		actor.SetPosition(0.0,0.0,-10.0);
 		Assert_Test(actor.GetPosition() == WorldPoint3(0.0,0.0,-10.0));

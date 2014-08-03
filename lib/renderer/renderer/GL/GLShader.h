@@ -34,7 +34,7 @@ namespace GCL
     ~GLShader();
 	bool IsValid() const { return mGPUResource->IsValid(); }
   private:
-	  const GLShaderResource *mGPUResource;
+	const GLShaderResource *mGPUResource;
 
 	friend class GLGPUProgram;
 

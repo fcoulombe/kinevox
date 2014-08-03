@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,21 +20,21 @@
  * THE SOFTWARE.
  */
 
-#pragma once
-#include "renderer/GLES/GLESShaderResource.h"
+#include "renderer/GLES/GLESTextureResourceManager.h"
+#include "renderer/GLES/GLESTextureResource.h"
+#include "renderer/TextureResource.h"
 
-namespace GCL
+using namespace GCL;
+
+GLESTextureResourceManager *GLESTextureResourceManager::smpInstance = NULL;
+
+GPUResource * GLESTextureResourceManager::Allocate( const Resource *resource )
 {
-
-  class GLESShader
-  {
-  public:
-	GLESShader(const ShaderResource *shaderSourcePath);
-    ~GLESShader();
-    bool IsValid() const { return mGPUResource->IsValid(); }
-  private:
-    const GLESShaderResource *mGPUResource;
-
-	friend class GLESGPUProgram;
-  };
+  return new GLESTextureResource(*static_cast<const TextureResource*>(resource));
 }
+
+void GLESTextureResourceManager::Free( GPUResource * resource )
+{
+	delete resource;
+}
+

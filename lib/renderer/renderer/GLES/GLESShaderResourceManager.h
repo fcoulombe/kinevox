@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,20 +21,42 @@
  */
 
 #pragma once
-#include "renderer/GLES/GLESShaderResource.h"
+#include <gcl/Assert.h>
+#include <renderer/GPUResourceManager.h>
 
 namespace GCL
 {
-
-  class GLESShader
+	class GLESGPUProgramResource;
+  class GLESShaderResource;
+  class GLESShaderResourceManager : public GPUResourceManager
   {
   public:
-	GLESShader(const ShaderResource *shaderSourcePath);
-    ~GLESShader();
-    bool IsValid() const { return mGPUResource->IsValid(); }
-  private:
-    const GLESShaderResource *mGPUResource;
+    static void Initialize()
+    {
+      GCLAssert(smpInstance == NULL);
+      smpInstance = new GLESShaderResourceManager();
+    }
+    static void Terminate()
+    {
+      GCLAssert(smpInstance != NULL);
+      delete smpInstance;
+      smpInstance = NULL;
+    }
+    static GLESShaderResourceManager &Instance() {	GCLAssert(smpInstance != NULL);return *smpInstance;}
 
-	friend class GLESGPUProgram;
+    GPUResource *Allocate(const Resource *resource);
+    void Free(GPUResource * /*resource*/);
+
+
+	GLESGPUProgramResource *LoadProgramResource(const GLESShaderResource *pshader, const GLESShaderResource *vshader);
+	void ReleaseProgramResource(GLESGPUProgramResource *resource);
+  private:
+    static GLESShaderResourceManager *smpInstance;
+
+    GLESShaderResourceManager() {}
+	typedef std::map<uint64_t, GLESGPUProgramResource*> ProgramResourceCache;
+	ProgramResourceCache mProgramResourceCache;
   };
+
 }
+

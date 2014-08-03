@@ -56,6 +56,20 @@ namespace GCL
         GCL_PG_UP = XK_Page_Up,
         GCL_PG_DOWN = XK_Page_Down,
     };
+#elif defined(OS_ANDROID)
+namespace GCL
+{
+    enum KeyNames
+    {
+    	GCL_ESCAPE,
+        GCL_UP,
+        GCL_DOWN,
+        GCL_LEFT,
+        GCL_RIGHT,
+        GCL_ENTER,
+        GCL_PG_UP,
+        GCL_PG_DOWN,
+    };
 #else
 #error "TBD"
 namespace GCL

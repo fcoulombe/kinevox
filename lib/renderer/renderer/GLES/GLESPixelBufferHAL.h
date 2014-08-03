@@ -23,6 +23,8 @@
 #pragma once
 
 #include <3rdparty/OpenGL.h>
+#include "renderer/RenderPipe.h"
+#include <cstring>
 
 namespace GCL
 {
@@ -123,7 +125,25 @@ private:
         }
 
     private:
-
+    	friend class GLESTextureResource;
+    	bool IsValidUnsafe() const
+    	{
+    		bool ret;
+    		return ret;
+    	}
+    	void UnBindUnsafe()
+    	{
+    	}
+    	void BindUnsafe()
+    	{
+    	}
+    	void PushDataUnsafe(size_t, size_t , size_t , const uint8_t *)
+    	{
+    	}
+    	uint8_t *PullDataUnsafe(size_t , size_t , size_t )
+    	{
+    		return nullptr;
+    	}
     };
 #endif
 

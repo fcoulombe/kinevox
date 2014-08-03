@@ -21,62 +21,41 @@
  */
 
 #pragma once
-#include <3rdparty/OpenGL.h>
 #include <gcl/Macro.h>
 #include <gcl/PixelBuffer.h>
-#include "renderer/GLES/GLESPixelBufferHAL.h"
+#include "renderer/GLES/GLESTextureResource.h"
+#include "renderer/GLES/GLESTextureResourceManager.h"
+#include "renderer/TextureResource.h"
 
 namespace GCL
 {
-
-
 class GLESTexture
 {
 public:
-	GLESTexture(const PixelBuffer &imageData)
-	: mTextureId((GLuint)-1),
-	  mTextureUnit((GLuint)0)
+	GLESTexture(const TextureResource &imageData)
 	{
-        Initialize(imageData);
+		mResource = static_cast<const GLESTextureResource*>(GLESTextureResourceManager::Instance().LoadResource(&imageData));
     }
-	~GLESTexture();
-	void Bind() const
+	~GLESTexture()
 	{
-		//std::cout << "Binding Texture: " <<mTextureId << std::endl;
-		GCLAssert(IsValid());
-		glBindTexture(GL_TEXTURE_2D, mTextureId);  glErrorCheck();
-		//mPBO->Bind();
+		GLESTextureResourceManager::Instance().ReleaseResource(mResource);
 	}
+	void Bind() const { mResource->Bind(); 	}
+	size_t GetWidth() const {return mResource->GetWidth();}
+	size_t GetHeight() const {return mResource->GetHeight(); }
+    size_t GetBytesPerPixel() const  { 	return mResource->GetBytesPerPixel();	}
+	uint32_t GetTextureUnit() const { return mResource->GetTextureUnit(); }
+	uint32_t GetTextureId() const { return mResource->GetTextureId(); }
+	bool IsValid() const { return mResource->IsValid(); }
 
-	size_t GetWidth() const 
-	{
-		GCLAssert(false && "unsupported");
-		return  0; 
-	}
-	size_t GetHeight() const 
-	{ 
-
-		GCLAssert(false && "unsupported");
-		return  (size_t)0; 
-	}
-    size_t GetBytesPerPixel() const 
-	{ 
-
-		GCLAssert(false && "unsupported");
-		return 0;
-	}
-	void Initialize(const PixelBuffer &imageData);
-	bool IsValid() const { return (int)mTextureId!=-1; }
-
-    const uint8_t *GetTextureFromVRAM() const;
-    const uint8_t *GetPixelBufferFromVRAM() const;
-
-    uint32_t GetTextureUnit() const { return mTextureUnit; }
-    uint32_t GetTextureId() const { return mTextureId; }
+	const uint8_t *GetTextureFromVRAM() const { return mResource->GetTextureFromVRAM(); }
+	const uint8_t *GetPixelBufferFromVRAM() const { return mResource->GetPixelBufferFromVRAM(); }
 private:
-	GLuint mTextureId;
-	GLuint mTextureUnit;
-	GLESPixelBufferHAL *mPBO;
+	friend class GLESGPUProgram;
+	friend class GLESFrameBuffer;
+	uint32_t GetTextureIdUnsafe() const { return mResource->GetTextureIdUnsafe(); }
+	uint32_t GetTextureUnitUnsafe() const { return mResource->GetTextureUnitUnsafe(); }
+	const GLESTextureResource *mResource;
 };
 
 

@@ -23,17 +23,17 @@
 #pragma once
 #include <3rdparty/OpenGL.h>
 #include "renderer/GPUResource.h"
-#include "renderer/GLES/GLPixelBufferHAL.h"
+#include "renderer/GLES/GLESPixelBufferHAL.h"
 #include "renderer/RenderPipe.h"
 
 namespace GCL
 {
 	class TextureResource;
-	class GLTextureResource : public GPUResource
+	class GLESTextureResource : public GPUResource
 	{
 	public:
-		GLTextureResource(const TextureResource &resource);
-		~GLTextureResource();
+		GLESTextureResource(const TextureResource &resource);
+		~GLESTextureResource();
 		bool IsValid() const 
 		{
 			bool ret;
@@ -78,35 +78,29 @@ namespace GCL
 		size_t GetWidth() const 
 		{
 			GLint width;
-			RenderPipe::SendCommandSync([&](){
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
-			});
+			GCLAssert(false && "Unsupported");
 			return  (size_t)width; 
 		}
 		size_t GetHeight() const 
 		{ 
 			GLint height;
-			RenderPipe::SendCommandSync([&](){
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
-			});
+			GCLAssert(false && "Unsupported");
 			return  (size_t)height; 
 		}
 		size_t GetBytesPerPixel() const 
 		{ 
 			GLint format;
-			RenderPipe::SendCommandSync([&](){
-			glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_INTERNAL_FORMAT, &format);
-			});
-			return (format == GL_RGB8)?3:4;
+			GCLAssert(false && "Unsupported");
+			return format;
 		}
 		const uint8_t *GetTextureFromVRAM() const;
 		const uint8_t *GetPixelBufferFromVRAM() const;
 	private:
-		friend class GLTexture;
-		GLTextureResource() {}
+		friend class GLESTexture;
+		GLESTextureResource() {}
 		GLuint mTextureId;
 		GLuint mTextureUnit;
-		GLPixelBufferHAL *mPBO;
+		GLESPixelBufferHAL *mPBO;
 
 		bool IsValidUnsafe() const { return (int)mTextureId!=-1; }
 		GLuint GetTextureObjectUnsafe() const { return mTextureId; }

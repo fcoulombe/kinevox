@@ -23,6 +23,8 @@
 #pragma once
 #include <3rdparty/OpenGL.h>
 #include <gcl/Point2.h>
+#include "renderer/GLES/GLESShaderResource.h"
+
 
 namespace GCL
 {
@@ -32,13 +34,11 @@ class GLESTexture;
   class GLESGPUProgram
   {
   public:
-	GLESGPUProgram();
+	GLESGPUProgram(const GLESShader &vshader,const GLESShader &pshader);
 
     ~GLESGPUProgram();
     void Bind();
-    void AttachShader(const GLESShader &shader);
-    void Link();
-    bool IsValid() const { return mIsValid; }
+	bool IsValid() const { return mResource->IsValid(); }
 
     void SetTextureSampler(const GLESTexture &sampler);
     void SetProjectionMatrix(const Matrix44 &m);
@@ -48,13 +48,11 @@ class GLESTexture;
 	void SetUniform(const char *uniforName, const Point2<float> &val);
     void GetUniform(const char *unformName, Matrix44 &m44) const;
     void GetUniform(const char *unformName, long &ret) const;
-    int GetAttributeLocation(const char *attributeName) const;
+    long GetAttributeLocation(const char *attributeName) const;
 
     static void ResetDefault();
   private:
-    void PrintInfoLog(GLuint );
-    GLuint mProgramObject;
-    bool mIsValid;
+	  bool IsValidUnsafe() const { return mResource->IsValidUnsafe(); }
+	  GLESGPUProgramResource *mResource;
   };
 }
-

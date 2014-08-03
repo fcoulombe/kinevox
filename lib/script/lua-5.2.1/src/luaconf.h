@@ -540,7 +540,9 @@
 ** without modifying the main part of the file.
 */
 
-
+#ifdef __ANDROID__
+#define getlocaledecpoint() '.'
+#endif
 
 #endif
 

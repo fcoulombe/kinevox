@@ -75,7 +75,7 @@ void GCL::SocketUDP::Open( uint16_t port )
     GCLAssertMsg(ret >= 0, "failed to bind socket\n" );
         
     //set non blocking since we don't want the program to stall on receive command
-#if defined(OS_LINUX) || defined(OS_MACOSX)
+#if defined(OS_LINUX) || defined(OS_MACOSX) || defined(OS_ANDROID)
     int nonBlocking = 1;
     ret = fcntl( mHandle, F_SETFL, O_NONBLOCK, nonBlocking );
     GCLAssertMsg(ret != -1,"failed to set non-blocking socket\n" );
@@ -90,7 +90,7 @@ void GCL::SocketUDP::Open( uint16_t port )
 
 void GCL::SocketUDP::Close()
 {
-#if defined(OS_MACOSX) || defined(OS_LINUX)
+#if defined(OS_MACOSX) || defined(OS_LINUX) || defined(OS_ANDROID)
 	shutdown( mHandle , 2);
 #elif defined(OS_WIN32)
     closesocket( mHandle );

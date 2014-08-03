@@ -51,13 +51,12 @@ void GLESRenderer::Init3DState()
 	glDepthMask(GL_TRUE); glErrorCheck();
 	
 	glDepthFunc(GL_LESS); glErrorCheck();
-
-	
-//	glEnable(GL_DEPTH_TEST); glErrorCheck();
-	
-	//glDisable(GL_BLEND); glErrorCheck();
+	glEnable(GL_DEPTH_TEST); glErrorCheck();
+	glDisable(GL_BLEND); glErrorCheck();
 
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
+	
+	//glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
 }
 
 void eglErrorCheck()
@@ -158,6 +157,7 @@ void GLESRenderer::InitLinux(size_t windowsHandle)
 #endif
 
 }
+
 GLESRenderer::GLESRenderer(size_t windowsHandle)
 	:   mModelView(true),
 		mFov(45.0),
@@ -165,6 +165,9 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
 	mNear(0.1),
 	mFar(100.0)
 {
+	RenderPipe::SendCommand([this, windowsHandle](){
+	mProjection.SetPerspective(mFov,mAspect,mNear,mFar);
+
 	InitWin(windowsHandle);
 	InitLinux(windowsHandle);
 
@@ -241,10 +244,13 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
 #else
 	mGlewVersion  = std::string("Unused");
 #endif
+	});
 
 }
 GLESRenderer::~GLESRenderer()
 {
+	RenderPipe::SendCommandSync([&](){
+	mExtensions.clear();
 	eglMakeCurrent(eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) ;
 	eglTerminate(eglDisplay);
 
@@ -259,6 +265,7 @@ GLESRenderer::~GLESRenderer()
     delete x11Visual;
 
 #endif
+	});
 }
 
 bool GLESRenderer::Update()
@@ -269,16 +276,20 @@ bool GLESRenderer::Update()
 
 void GLESRenderer::PreRender()
 {
+	RenderPipe::SendCommand([&](){
 	glClearColor(0.0, 0.0, 1.0, 0.0); glErrorCheck();
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); glErrorCheck();
+	});
 }
 void GLESRenderer::PostRender()
 {
+
 }
 
 
 void GLESRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 {
+	RenderPipe::SendCommand([&](){
 	if (isEnabled)
 	{
 		glEnable(GL_TEXTURE_2D); glErrorCheck();
@@ -288,6 +299,7 @@ void GLESRenderer::RenderState::SetTextureEnabled(bool isEnabled)
 		glBindTexture(GL_TEXTURE_2D, 0);  glErrorCheck();
 		glDisable(GL_TEXTURE_2D); glErrorCheck();
 	}
+	});
 }
 
 
@@ -306,11 +318,16 @@ Matrix44 GLESRenderer::GetGLModelView()
 
 void GLESRenderer::SwapBuffer()
 {
+
+	RenderPipe::SendCommand([&](){
 	eglSwapBuffers(eglDisplay, eglSurface);
+	});
 }
 
-void GCL::GLESRenderer::SetProjection( const Camera *camera )
+void GCL::GLESRenderer::SetProjection( const Camera &camera )
 {
-	mProjection.SetPerspective(camera->GetFov(),camera->GetAspectRatio(),camera->GetNear(),camera->GetFar());
-	mModelView= Inverse(camera->GetTransform());
+	RenderPipe::SendCommand([&](){
+	mProjection.SetPerspective(camera.GetFov(),camera.GetAspectRatio(),camera.GetNear(),camera.GetFar());
+	mModelView= Inverse(camera.GetTransform());
+	});
 }

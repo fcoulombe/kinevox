@@ -1,3 +1,6 @@
+IF(${CMAKE_SYSTEM_NAME} STREQUAL "Android")
+SET(KINEVOX_ARCHITECTURE "64bit")
+ELSE()
 INCLUDE(CheckTypeSize)
 CHECK_TYPE_SIZE (size_t SIZE_T_SIZE)
 
@@ -5,6 +8,7 @@ IF(${SIZE_T_SIZE} EQUAL 4)
 SET(KINEVOX_ARCHITECTURE "32bit")
 else()
 SET(KINEVOX_ARCHITECTURE "64bit")
+ENDIF()
 ENDIF()
 
 message("OS: " ${CMAKE_SYSTEM_NAME} ${CMAKE_CXX_COMPILER_ID} ${KINEVOX_ARCHITECTURE})
@@ -92,12 +96,11 @@ ENDIF()
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O0")	
 ENDIF()
 
-
 configure_file (
-  "${PROJECT_SOURCE_DIR}/cmake/kinevoxconf.h.in"
+  "${CMAKE_CURRENT_LIST_DIR}/kinevoxconf.h.in"
   "${PROJECT_BINARY_DIR}/kinevoxconf.h"
   )
 include_directories("${PROJECT_BINARY_DIR}")
-include_directories("${PROJECT_SOURCE_DIR}/3rdParty/include")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/../3rdParty/include")
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)

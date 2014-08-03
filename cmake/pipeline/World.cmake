@@ -8,8 +8,10 @@ foreach(src ${worldFiles})
 
     add_custom_command(
         OUTPUT ${DstFile}
-        COMMAND worldconverter ${src} ${DstFile}
-        DEPENDS ${src} worldconverter)
+        COMMAND tools/src/tools-build/worldconverter/worldconverter ${src} ${DstFile}
+        DEPENDS ${src} tools
+        WORKING_DIRECTORY
+        ${PROJECT_BINARY_DIR})
     list(APPEND DstFiles ${DstFile})
 endforeach()
 SET(DATA_DEP ${DATA_DEP} ${DstFiles})

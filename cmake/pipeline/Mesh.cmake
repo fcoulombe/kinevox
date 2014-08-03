@@ -8,8 +8,11 @@ foreach(src ${meshFiles})
 	string(REPLACE ${dataPath} ${OUT_MESH_DIR} DstFile ${DstFile})
 	add_custom_command(
 		OUTPUT ${DstFile}
-		COMMAND meshconverter ${src} ${DstFile}
-		DEPENDS ${src} meshconverter)
+		COMMAND tools/src/tools-build/meshconverter/meshconverter ${src} ${DstFile}
+		DEPENDS ${src} tools
+		WORKING_DIRECTORY
+        ${PROJECT_BINARY_DIR}
+		)
 	list(APPEND DstFiles ${DstFile})
 endforeach()
 SET(DATA_DEP ${DATA_DEP} ${DstFiles})

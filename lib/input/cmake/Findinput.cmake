@@ -1,7 +1,7 @@
 SET(DepName "input")
 ProcessDependencies(${DepName})
 
-SET(INPUT_ROOT ${CMAKE_CURRENT_LIST_DIR}/../)
+get_filename_component(INPUT_ROOT ${CMAKE_CURRENT_LIST_DIR}/../ REALPATH)
 SET(INPUT_INCLUDE_DIR ${INPUT_ROOT} )
 
 

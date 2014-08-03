@@ -1,7 +1,7 @@
 SET(DepName "applayer")
 ProcessDependencies(${DepName})
 
-SET(APPLAYER_ROOT ${CMAKE_CURRENT_LIST_DIR}/../)
+get_filename_component(APPLAYER_ROOT ${CMAKE_CURRENT_LIST_DIR}/../ REALPATH)
 SET(APPLAYER_INCLUDE_DIR ${APPLAYER_ROOT} )
 
 

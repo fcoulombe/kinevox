@@ -1,7 +1,7 @@
 SET(DepName "renderer")
 ProcessDependencies(${DepName})
 
-SET(RENDERER_ROOT ${CMAKE_CURRENT_LIST_DIR}/../)
+get_filename_component(RENDERER_ROOT ${CMAKE_CURRENT_LIST_DIR}/../ REALPATH)
 SET(RENDERER_INCLUDE_DIR ${RENDERER_ROOT} )
 
 

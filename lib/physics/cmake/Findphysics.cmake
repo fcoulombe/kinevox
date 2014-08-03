@@ -1,7 +1,7 @@
 SET(DepName "physics")
 ProcessDependencies(${DepName})
 
-SET(PHYSICS_ROOT ${CMAKE_CURRENT_LIST_DIR}/../)
+get_filename_component(PHYSICS_ROOT ${CMAKE_CURRENT_LIST_DIR}/../ REALPATH)
 SET(PHYSICS_INCLUDE_DIR ${PHYSICS_ROOT} )
 
 

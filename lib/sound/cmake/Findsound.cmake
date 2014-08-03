@@ -1,7 +1,7 @@
 SET(DepName "sound")
 ProcessDependencies(${DepName})
 
-SET(SOUND_ROOT ${CMAKE_CURRENT_LIST_DIR}/../)
+get_filename_component(SOUND_ROOT ${CMAKE_CURRENT_LIST_DIR}/../ REALPATH)
 SET(SOUND_INCLUDE_DIR ${SOUND_ROOT} )
 
 

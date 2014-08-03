@@ -1,6 +1,6 @@
 SET(DepName "windriver")
 ProcessDependencies(${DepName})
-SET(windriver_ROOT ${CMAKE_CURRENT_LIST_DIR}/../)
+get_filename_component(windriver_ROOT ${CMAKE_CURRENT_LIST_DIR}/../ REALPATH)
 SET(windriver_INCLUDE_DIR ${windriver_ROOT})
 
 

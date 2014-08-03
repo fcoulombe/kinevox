@@ -1,7 +1,7 @@
 SET(DepName "common")
 ProcessDependencies(${DepName})
 
-SET(common_ROOT ${CMAKE_CURRENT_LIST_DIR}/../)
+get_filename_component(common_ROOT ${CMAKE_CURRENT_LIST_DIR}/../ REALPATH)
 SET(common_INCLUDE_DIR ${common_ROOT} )
 
 

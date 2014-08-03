@@ -1,7 +1,7 @@
 SET(DepName "kinetestlib")
 ProcessDependencies(${DepName})
 
-SET(kinetestlib_ROOT ${CMAKE_CURRENT_LIST_DIR}/../)
+get_filename_component(kinetestlib_ROOT ${CMAKE_CURRENT_LIST_DIR}/../ REALPATH)
 SET(kinetestlib_INCLUDE_DIR ${kinetestlib_ROOT} )
 
 

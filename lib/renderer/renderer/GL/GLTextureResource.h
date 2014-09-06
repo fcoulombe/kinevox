@@ -23,7 +23,7 @@
 #pragma once
 #include <3rdparty/OpenGL.h>
 #include "renderer/GPUResource.h"
-#include "renderer/GLES/GLPixelBufferHAL.h"
+#include "renderer/GL/GLPixelBufferHAL.h"
 #include "renderer/RenderPipe.h"
 
 namespace GCL

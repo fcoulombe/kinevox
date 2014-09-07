@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
+#include <sstream>
 
 #include "MainGameState.h"
-
 
 #include <applayer/Actor.h>
 #include <applayer/GameStateManager.h>
@@ -65,9 +65,13 @@ MainGameState::MainGameState()
 :GameState("MainGame")
 {
 	std::cout << "EnterMainGameState"<<std::endl;
+    size_t startTime = Time::GetTickMs();
 	for (size_t i=0; i<NUM_ROW*NUM_COL; ++i)
 	{
-		Actor *block = new Actor("Block", "Block");
+        std::stringstream blockName;
+        blockName << "Block";
+        blockName << i;
+		Actor *block = new Actor(blockName.str().c_str(), "Block");
 		blocks.push_back(block);
 		Sprite & sprite = *static_cast<SpriteComponent*>(block->GetComponent("SpriteComponent"))->GetSprite();
 
@@ -92,6 +96,7 @@ MainGameState::MainGameState()
 	paddle->SetPosition(START_POSITION);
 
 	ball->SetPosition(START_POSITION+WorldPoint3(100,0,0));
+    std::cout << "Loading time: " << Time::GetTickMs() - startTime << " ms" << std::endl;
 }
 bool MainGameState::Update(Real dt)
 {

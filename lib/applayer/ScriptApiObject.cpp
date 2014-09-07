@@ -32,10 +32,19 @@ using namespace GCL;
 
 static size_t GetObjectId(lua_State * L)
 {
-	lua_getglobal(L,"KINEVOS_ACTOR_ID");
-	size_t objectid = lua_tointeger(L, lua_gettop(L));
-	lua_pop(L, 1);
+    int top = lua_gettop(L);
+    lua_getfield(L, -top, "KINEVOX_ACTOR_ID");
+    size_t objectid = (size_t)lua_topointer(L, -1);
+    lua_pop(L, 1);
 	return objectid;
+}
+
+static int KGetName(lua_State * L)
+{
+    size_t objectid = GetObjectId(L);
+    const Actor *actor = (const Actor *)objectid;
+    lua_pushstring(L, actor->GetName().c_str());
+    return 1;
 }
 
 static int KGetPosition(lua_State * L)
@@ -64,9 +73,9 @@ static int KSetPosition(lua_State * L)
 
 	Actor *actor = (Actor *)objectid;
 
-	Real x = lua_tonumber(L, 1);
-	Real y = lua_tonumber(L, 2);
-	Real z = lua_tonumber(L, 3);
+	Real x = lua_tonumber(L, 2);
+	Real y = lua_tonumber(L, 3);
+	Real z = lua_tonumber(L, 4);
 	actor->SetPosition(x, y, z);
 	return 1;
 }
@@ -75,7 +84,8 @@ static int KSetPosition(lua_State * L)
 static const luaL_Reg objectExposedFunc[] = {
 		{ "GetPosition", KGetPosition},
 		{ "SetPosition", KSetPosition},
-		{ NULL, NULL } };
+        { "GetName", KGetName},
+        { NULL, NULL } };
 
 int luaopen_objectLib(lua_State * L)
 {

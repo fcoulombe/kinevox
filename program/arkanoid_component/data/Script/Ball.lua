@@ -1,12 +1,12 @@
-function Initialize()
+function Initialize(self)
     SCREEN_SIZE = kinevox.GetScreenSize()
     VELOCITY = { -6.0,-3.0} 
     kinevox.Log("CreateBall " .. SCREEN_SIZE[0] .. " " .. SCREEN_SIZE[1] .. " Velocity: " .. VELOCITY[1] .. VELOCITY[2])
 end
 
-function Logic()
+function Logic(self)
    
-    pos = object.GetPosition()
+    pos = self:GetPosition()
    
     local newX = pos[0]
     local newY = pos[1]
@@ -28,18 +28,32 @@ function Logic()
       newX = 0
       newY = 0
     end
+    
      
-    kinevox.Log("CreateBall " .. newX .. " " .. newY .. " Velocity: " .. VELOCITY[1] .. VELOCITY[2])
+    --kinevox.Log("CreateBall " .. newX .. " " .. newY .. " Velocity: " .. VELOCITY[1] .. VELOCITY[2])
     local velocityX = VELOCITY[1]
     local velocityY = VELOCITY[2]
     newX = newX + velocityX
     newY = newY + velocityY
-     kinevox.Log("ball logic: " .. pos[0] .. " " .. pos[1] .. " -> " .. newX .. " " .. newY)
-    object.SetPosition(newX, newY, 0)
     
+    --Test collision against the blocks
+    for i=0,5*8-1,1 do 
+      tempBlock = kinevox.GetActor("Block"..i)
+      blockPos = tempBlock:GetPosition()
+      if newX > blockPos[0]-32 and newX < blockPos[0]+32 and newY > blockPos[1] - 16 and newY < blockPos[1] +16 then
+        VELOCITY[1] = VELOCITY[1]*-1.0
+        VELOCITY[2] = VELOCITY[2]*-1.0
+        newX = pos[0]
+        newY = pos[1]
+        kinevox.Log("hit!")
+        break
+      end
+    end
+    --kinevox.Log("ball logic: " .. pos[0] .. " " .. pos[1] .. " -> " .. newX .. " " .. newY)
+    self:SetPosition(newX, newY, 0)
 end
 
 
-function Terminate()
+function Terminate(self)
     kinevox.Log("Destroy ball")
 end

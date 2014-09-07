@@ -1,10 +1,10 @@
-function Initialize()
+function Initialize(self)
     SCREEN_SIZE = kinevox.GetScreenSize()
     VELOCITY = 10.0
 end
 
-function Logic()
-    pos = object.GetPosition()
+function Logic(self)
+    pos = self:GetPosition()
     local newX = pos[0]
     local newY = pos[1]
     if input.IsKeyDown(GCL_LEFT) then
@@ -19,10 +19,10 @@ function Logic()
         newX = SCREEN_SIZE[0]
       end
     end
-    object.SetPosition(newX, newY, 0)  
+    self:SetPosition(newX, newY, 0)  
 end
 
 
-function Terminate()
+function Terminate(self)
    
 end

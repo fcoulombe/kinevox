@@ -23,6 +23,7 @@
 #include "applayer/ScriptApi.h"
 #include "applayer/Actor.h"
 #include "applayer/GCLApplication.h"
+#include "applayer/ScriptComponent.h"
 #include <gcl/Config.h>
 #include <script/ScriptResourceManager.h>
 #include <script/Lua.h>
@@ -35,13 +36,57 @@ static int KLog(lua_State * L)
 	std::cout << "[Script] " << str << std::endl;
 	return 1;
 }
+static int KLoadLib(lua_State * L)
+{
+    const char *lib = lua_tostring(L, 1);
+    std::stringstream s;
+    s<<SCRIPT_PATH<<lib<<".luac";
+    int res = luaL_loadfile(L, s.str().c_str());
+    (void)res;
+    int ret = lua_pcall(L,0,LUA_MULTRET,0);   
+    if ( ret!=0 )
+    {
+        std::stringstream err;
+        const char *errorMsg = lua_tostring(L, -1);
+        err<< std::endl << errorMsg;
+        lua_pop(L, 1); // remove error message
+        GCLAssertMsg(false, err.str().c_str());
+    }
+    return 1;
+}
+
 static int KGetActor(lua_State * L)
 {
-	const char *actorName = lua_tostring(L, 1);
+    const char *actorName = lua_tostring(L, 1);
     Actor *actor = GCLApplication::GetActor(actorName);
-
-    lua_pushlightuserdata(L, actor);
-	return 1;
+    if (actor->HasComponent("ScriptComponent"))
+    {
+        Component *tempComponent = actor->GetComponent("ScriptComponent");
+        ScriptComponent *tempScriptComponent = static_cast<ScriptComponent*>(tempComponent);
+        
+        lua_getfield(L, LUA_REGISTRYINDEX, tempScriptComponent->GetScriptResource()->GetFileName().c_str());
+        lua_pushlightuserdata(L, actor);
+        lua_setfield(L,-2,"raw_object");
+    }
+    else
+    {
+        lua_newtable(L); // 1
+        lua_getglobal(L,"_G"); // 21
+        lua_setfield(L,-2,"__index"); // 1
+        lua_getfield(L, -1, "__index"); // 21
+        lua_getfield(L, -1, "object"); // 321
+        lua_pushnil(L); // 4321
+        while(lua_next(L, -2)) { // load key value at 54321
+            const char *functionName = lua_tostring(L, -2);
+            lua_setfield(L, -5, functionName);
+        }
+        lua_pop(L, 1);
+        lua_pop(L, 1);
+        lua_pushlightuserdata(L, actor);
+        lua_setfield(L,-2,"KINEVOX_ACTOR_ID");
+    }
+    //lua_pushlightuserdata(L, actor);
+    return 1;
 }
 
 
@@ -99,6 +144,7 @@ static const luaL_Reg kinevoxExposedFunc[] = {
 		{ "GetActor", KGetActor},
 		{ "SetPosition", KSetPosition},
         { "GetPosition", KGetPosition},
+        { "LoadLib", KLoadLib},
 		{ NULL, NULL } };
 
 

@@ -38,6 +38,7 @@ public:
 	virtual void PostInit();
 
 	void SetScript(const std::string &filename);
+    const ScriptResource *GetScriptResource() const { return mScriptResource; }
 private:
 	const ScriptResource *mScriptResource;
 };

@@ -42,6 +42,16 @@ mFilename(scriptFileName)
     lua_setfield(L,-2,"__index"); //store it in the table at key index 21
 
     lua_pushvalue(L,-1); //pushes a copy of the table onto the stack 321
+
+    lua_getfield(L, -1, "__index"); // load index at 4321
+    lua_getfield(L, -1, "object"); // load object at 54321
+    lua_pushnil(L); // load nill at 654321
+    while(lua_next(L, -2)) { // load key value at 7654321
+        const char *functionName = lua_tostring(L, -2);
+        lua_setfield(L, -5, functionName);
+    }
+    lua_pop(L, 1);
+    lua_pop(L, 1);
     lua_setfield(L, LUA_REGISTRYINDEX, mFilename.c_str()); //store the table into the registry and pops it 21
 
     lua_pushvalue(L,-1); //pushes a copy of the table onto the stack 321
@@ -49,6 +59,7 @@ mFilename(scriptFileName)
     lua_setupvalue(L,1,1); //1
     int ret = lua_pcall(L,0,LUA_MULTRET,0);   
     L.ReportLuaErrors(ret);
+        
 }
 
 ScriptResource::~ScriptResource()
@@ -63,13 +74,15 @@ ScriptResource::~ScriptResource()
 void ScriptResource::ExecuteFunction(const char *functionName, void *obj) const
 {
     LuaState &L = ScriptResourceManager::Instance().GetLuaState();
-    lua_getfield(L, LUA_REGISTRYINDEX, mFilename.c_str());
-    lua_pushinteger(L, (lua_Integer)obj);
-    lua_setglobal(L,"KINEVOS_ACTOR_ID");
+    lua_getfield(L, LUA_REGISTRYINDEX, mFilename.c_str()); 
     lua_getfield(L, -1, functionName);
     if (!lua_isnil(L, lua_gettop(L)))
     {
-    	int s = lua_pcall(L, 0, 0, 0);
+        lua_getfield(L, LUA_REGISTRYINDEX, mFilename.c_str());
+        lua_pushlightuserdata(L, obj);
+        lua_setfield(L,-2,"KINEVOX_ACTOR_ID");
+
+        int s = lua_pcall(L, 1, 0, 0);
     	L.ReportLuaErrors(s);
     }
     else

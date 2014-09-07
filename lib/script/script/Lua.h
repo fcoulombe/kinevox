@@ -64,7 +64,8 @@ namespace GCL
             if ( status!=0 )
             {
                 std::stringstream err;
-                err<< std::endl << lua_tostring(L, -1) ;
+                const char *errorMsg = lua_tostring(L, -1);
+                err<< std::endl << errorMsg;
                 lua_pop(L, 1); // remove error message
                 GCLAssertMsg(false, err.str().c_str());
             }

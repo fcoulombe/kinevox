@@ -208,3 +208,11 @@ void GCL::GCLApplication::ReleaseWorld( GCLWorld* shouldBeTheSameWorldAsTheCurre
 {
     GCLAssert(shouldBeTheSameWorldAsTheCurrent == mCurrentWorld); mCurrentWorld = NULL;
 }
+
+GCLEXPORT  Actor * GCL::GCLApplication::GetActor( const char *actorName )
+{
+    auto it = std::find_if(mActorList.begin(), mActorList.end(),
+        [actorName](const Actor *actor) { return strcmp(actor->GetName().c_str(), actorName) == 0; }); 
+    GCLAssertMsg(it != mActorList.end(), "Couldn't find the actor needed");
+    return *it;
+}

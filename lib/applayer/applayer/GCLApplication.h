@@ -59,6 +59,8 @@ public:
 	GCLEXPORT static void RegisterCustomRenderObject(Actor* newRenderObject);
 
 	GCLEXPORT static void InitializaAppLayerComponents();
+    GCLEXPORT static Actor *GetActor(const char *actorName);
+
 private:
 	GCLApplication();
 	~GCLApplication();

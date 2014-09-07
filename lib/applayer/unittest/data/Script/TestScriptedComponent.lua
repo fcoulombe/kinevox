@@ -53,6 +53,7 @@ end
 
 function RemoteFunction(self)
   kinevox.Log("Calling Remote function from actor"..self:GetName())
+  assert(self:GetName() == "TestScriptedActor2")
 end
 
 function Terminate(self)

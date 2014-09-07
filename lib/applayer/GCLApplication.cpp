@@ -213,6 +213,6 @@ GCLEXPORT  Actor * GCL::GCLApplication::GetActor( const char *actorName )
 {
     auto it = std::find_if(mActorList.begin(), mActorList.end(),
         [actorName](const Actor *actor) { return strcmp(actor->GetName().c_str(), actorName) == 0; }); 
-    GCLAssertMsg(it != mActorList.end(), "Couldn't find the actor needed");
+    GCLAssertMsg(it != mActorList.end(), std::string("Couldn't find the actor: ") + actorName);
     return *it;
 }

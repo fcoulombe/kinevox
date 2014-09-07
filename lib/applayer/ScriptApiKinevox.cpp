@@ -66,7 +66,7 @@ static int KGetActor(lua_State * L)
         
         lua_getfield(L, LUA_REGISTRYINDEX, tempScriptComponent->GetScriptResource()->GetFileName().c_str());
         lua_pushlightuserdata(L, actor);
-        lua_setfield(L,-2,"raw_object");
+        lua_setfield(L,-2,"KINEVOX_ACTOR_ID");
     }
     else
     {

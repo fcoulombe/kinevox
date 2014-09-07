@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,15 +23,57 @@
 #include "applayer/ScriptApi.h"
 #include <script/ScriptResourceManager.h>
 #include <script/Lua.h>
+#include <input/Input.h>
 
 using namespace GCL;
 
-extern int luaopen_objectLib(lua_State * L);
-extern int luaopen_kinevoxLib(lua_State * L);
-extern int luaopen_inputLib(lua_State * L);
-ScriptApi::ScriptApi()
+static int KIsKeyUp(lua_State * L)
 {
-	ScriptResourceManager::Instance().ExposeModule("kinevox",luaopen_kinevoxLib);
-	ScriptResourceManager::Instance().ExposeModule("object",luaopen_objectLib);
-	ScriptResourceManager::Instance().ExposeModule("input",luaopen_inputLib);
+	lua_Integer key = lua_tointeger(L, 1);
+	if (Input::IsKeyUp((uint32_t)key))
+	{
+		lua_pushboolean(L, 1);
+	}
+	else
+	{
+		lua_pushboolean(L, 0);
+	}
+
+	return 1;
 }
+static int KIsKeyDown(lua_State * L)
+{
+	lua_Integer key = lua_tointeger(L, 1);
+	if (Input::IsKeyDown((uint32_t)key))
+	{
+		lua_pushboolean(L, 1);
+	}
+	else
+	{
+		lua_pushboolean(L, 0);
+	}
+
+	return 1;
+}
+
+
+
+static const luaL_Reg inputExposedFunc[] = {
+	{ "IsKeyDown", KIsKeyDown},
+	{ "IsKeyUp", KIsKeyUp},
+	{ NULL, NULL } };
+
+#define REGISTER_GLOBAL_KEY(key) 	lua_pushinteger(L, key);lua_setglobal(L,#key);
+int luaopen_inputLib(lua_State * L)
+{
+	luaL_newlib(L, inputExposedFunc);
+	REGISTER_GLOBAL_KEY(GCL_ESCAPE);
+	REGISTER_GLOBAL_KEY(GCL_UP);
+	REGISTER_GLOBAL_KEY(GCL_DOWN);
+	REGISTER_GLOBAL_KEY(GCL_LEFT);
+	REGISTER_GLOBAL_KEY(GCL_RIGHT);
+	//lua_pushinteger(L, GCL_ESCAPE);
+	//lua_setglobal(L,"GCL_ESCAPE");
+	return 1;
+}
+

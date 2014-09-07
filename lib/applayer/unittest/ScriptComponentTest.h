@@ -36,10 +36,10 @@ void Test()
 	KINEVOX_TEST_START
 	GCLApplication::Initialize("ScriptComponentTest");
 	{
-	Actor actor("TestScriptedActor", "TestScriptedActor");
+	Actor actor("TestScriptedActor1", "TestScriptedActor");
 	actor.SetPosition(0.0,0.0,-10.0);
-	Actor actor2("TestScriptedActor", "TestScriptedActor");
-	actor2.SetPosition(0.0,0.0,-10.0);
+	Actor actor2("TestScriptedActor2", "TestScriptedActor");
+	actor2.SetPosition(0.0,0.0,-20.0);
 
 	Camera cam;
 	KINEVOX_TEST_LOOP_START

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,17 +21,65 @@
  */
 
 #include "applayer/ScriptApi.h"
+#include "applayer/Actor.h"
+#include "applayer/GCLApplication.h"
 #include <script/ScriptResourceManager.h>
 #include <script/Lua.h>
+#include <input/Input.h>
 
 using namespace GCL;
 
-extern int luaopen_objectLib(lua_State * L);
-extern int luaopen_kinevoxLib(lua_State * L);
-extern int luaopen_inputLib(lua_State * L);
-ScriptApi::ScriptApi()
+
+static size_t GetObjectId(lua_State * L)
 {
-	ScriptResourceManager::Instance().ExposeModule("kinevox",luaopen_kinevoxLib);
-	ScriptResourceManager::Instance().ExposeModule("object",luaopen_objectLib);
-	ScriptResourceManager::Instance().ExposeModule("input",luaopen_inputLib);
+	lua_getglobal(L,"KINEVOS_ACTOR_ID");
+	size_t objectid = lua_tointeger(L, lua_gettop(L));
+	lua_pop(L, 1);
+	return objectid;
 }
+
+static int KGetPosition(lua_State * L)
+{
+	size_t objectid = GetObjectId(L);
+
+	const Actor *actor = (const Actor *)objectid;
+	const WorldPoint3 &pos = actor->GetPosition();
+	lua_newtable(L);
+
+	lua_pushinteger(L,0);
+	lua_pushnumber(L,pos.x);
+	lua_settable(L,-3);
+	lua_pushinteger(L,1);
+	lua_pushnumber(L,pos.y);
+	lua_settable(L,-3);
+	lua_pushinteger(L,2);
+	lua_pushnumber(L,pos.z);
+	lua_settable(L,-3);
+
+	return 1;
+}
+static int KSetPosition(lua_State * L)
+{
+	size_t objectid = GetObjectId(L);
+
+	Actor *actor = (Actor *)objectid;
+
+	Real x = lua_tonumber(L, 1);
+	Real y = lua_tonumber(L, 2);
+	Real z = lua_tonumber(L, 3);
+	actor->SetPosition(x, y, z);
+	return 1;
+}
+
+
+static const luaL_Reg objectExposedFunc[] = {
+		{ "GetPosition", KGetPosition},
+		{ "SetPosition", KSetPosition},
+		{ NULL, NULL } };
+
+int luaopen_objectLib(lua_State * L)
+{
+	luaL_newlib(L, objectExposedFunc);
+	return 1;
+}
+

@@ -38,17 +38,27 @@ function Logic(self)
     
     --Test collision against the blocks
     for i=0,5*8-1,1 do 
-      tempBlock = kinevox.GetActor("Block"..i)
-      blockPos = tempBlock:GetPosition()
+      local tempBlock = kinevox.GetActor("Block"..i)
+      local blockPos = tempBlock:GetPosition()
       if newX > blockPos[0]-32 and newX < blockPos[0]+32 and newY > blockPos[1] - 16 and newY < blockPos[1] +16 then
         VELOCITY[1] = VELOCITY[1]*-1.0
         VELOCITY[2] = VELOCITY[2]*-1.0
         newX = pos[0]
         newY = pos[1]
-        kinevox.Log("hit!")
+        tempBlock:Hit()
         break
       end
     end
+    
+    --Test collision against paddle
+    local paddle = kinevox.GetActor("Paddle")
+    local paddlePos = paddle:GetPosition()
+    if newX > paddlePos[0]-64 and newX < paddlePos[0]+64 and newY > paddlePos[1] - 16 and newY < paddlePos[1] +16 then
+        VELOCITY[2] = VELOCITY[2]*-1.0
+        newX = pos[0]
+        newY = pos[1]
+    end
+    
     --kinevox.Log("ball logic: " .. pos[0] .. " " .. pos[1] .. " -> " .. newX .. " " .. newY)
     self:SetPosition(newX, newY, 0)
 end

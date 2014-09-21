@@ -72,9 +72,11 @@ Sound::Sound(const char *filename)
 }
 Sound::~Sound()
 {
+	ALuint buffer = mBuffer;
+	ALuint sources = mSources;
     SoundManager::SendCommand([=]{
-	alDeleteSources(1, &mSources);
-	alDeleteBuffers(1, &mBuffer);
+	alDeleteSources(1, &sources);
+	alDeleteBuffers(1, &buffer);
     });
 	SoundResourceManager::Instance().ReleaseResource(mSoundResource);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,19 +21,29 @@
  */
 
 #include "applayer/ScriptApi.h"
+#include <string>
 #include <script/ScriptResourceManager.h>
 #include <script/Lua.h>
+#include <sound/SoundManager.h>
 
 using namespace GCL;
 
-extern int luaopen_objectLib(lua_State * L);
-extern int luaopen_kinevoxLib(lua_State * L);
-extern int luaopen_inputLib(lua_State * L);
-extern int luaopen_soundLib(lua_State * L);
-ScriptApi::ScriptApi()
+static int KPlaySound(lua_State * L)
 {
-	ScriptResourceManager::Instance().ExposeModule("kinevox",luaopen_kinevoxLib);
-	ScriptResourceManager::Instance().ExposeObjectModule("object",luaopen_objectLib);
-	ScriptResourceManager::Instance().ExposeModule("input",luaopen_inputLib);
-	ScriptResourceManager::Instance().ExposeModule("sound",luaopen_soundLib);
+	const char *soundFile = lua_tostring(L, 1);
+    std::string fullPath(SOUND_PATH);
+    fullPath += soundFile;
+    SoundPtr sound = SoundManager::LoadSound(fullPath.c_str());
+	return 1;
 }
+
+static const luaL_Reg soundExposedFunc[] = {
+	{ "PlaySound", KPlaySound},
+	{ NULL, NULL } };
+
+int luaopen_soundLib(lua_State * L)
+{
+	luaL_newlib(L, soundExposedFunc);
+	return 1;
+}
+

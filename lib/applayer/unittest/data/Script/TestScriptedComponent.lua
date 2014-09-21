@@ -45,10 +45,16 @@ function TestInputModule(self)
   end
 end
 
+function TestSoundModule(self)
+  --Test PlaySound
+  sound.PlaySound("Explosion.wav")
+end
+
 function Logic(self)
   self:TestKinevoxModule()
   self:TestObjectModule()
   self:TestInputModule()
+  self:TestSoundModule()
 end
 
 function RemoteFunction(self)

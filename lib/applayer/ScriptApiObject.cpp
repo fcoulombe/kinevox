@@ -25,7 +25,6 @@
 #include "applayer/GCLApplication.h"
 #include <script/ScriptResourceManager.h>
 #include <script/Lua.h>
-#include <input/Input.h>
 
 using namespace GCL;
 

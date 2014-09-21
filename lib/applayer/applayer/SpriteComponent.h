@@ -36,7 +36,8 @@ public:
 	virtual void Render(const Matrix44 &);
 	virtual void ProcessEvent(size_t event, void *arg);
 	virtual void PostInit() {}
-
+    
+    const Sprite *GetSprite() const { return mSprite; }
 	Sprite *GetSprite() { return mSprite; }
 private:
 	Sprite *mSprite;

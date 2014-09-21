@@ -23,7 +23,6 @@
 #pragma once
 #include <gcl/Assert.h>
 #include <gcl/WorkerThread.h>
-#define ENABLE_RENDER_THREAD 1
 
 namespace GCL
 {

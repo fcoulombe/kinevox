@@ -176,7 +176,11 @@ public:
 
 	~pWinDriver()
 	{
+		XDestroyIC(mInputContext);
+
 		XDestroyWindow( data.mDisplay, data.mWin );
+		XFlush(data.mDisplay);
+		XCloseIM(mInputMethod);
 		XFreeColormap( data.mDisplay, mCmap );
 		XCloseDisplay( data.mDisplay );
 	}

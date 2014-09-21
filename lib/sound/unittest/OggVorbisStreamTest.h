@@ -24,9 +24,9 @@
 
 #include <gcl/Macro.h>
 #include <gcl/UnitTest.h>
-#include <sound/ALSoundDevice.h>
-#include <sound/OggVorbisStream.h>
 
+#include <sound/OggVorbisStream.h>
+#include <sound/SoundManager.h>
 
 
 using namespace GCL;
@@ -37,28 +37,30 @@ void Test()
 	TEST_START
 
 	SoundResourceManager::Initialize();
-	ALSoundDevice device;
+    SoundManager::Initialize();
+    {
 
-	OggStream stream(MUSIC_PATH"ExampleMusic.ogg");
+	OggStreamPtr stream = SoundManager::LoadMusic(MUSIC_PATH"ExampleMusic.ogg");
 
 
-	stream.Play();
+	stream->Play();
 	size_t i=0;
 	const size_t kLoopCount = 10; //10000000;
 	while (i<kLoopCount) //(stream.IsPlaying())
 	{
-		stream.Update();
+		stream->Update();
 		++i;
 	}
-	stream.Stop();
-	stream.Play();
+	stream->Stop();
+	stream->Play();
 	i=0;
 	while (i<kLoopCount) //(stream.IsPlaying())
 	{
-		stream.Update();
+		stream->Update();
 		++i;
 	}
-
+    }
+    SoundManager::Terminate();
 	SoundResourceManager::Terminate();
 
 }

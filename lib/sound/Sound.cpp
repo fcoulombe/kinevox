@@ -28,6 +28,7 @@
 #include <3rdparty/OpenAL.h>
 #include <gcl/Assert.h>
 #include <gcl/Macro.h>
+#include "sound/SoundManager.h"
 #include "sound/SoundResource.h"
 #include "sound/SoundResourceManager.h"
 
@@ -44,10 +45,9 @@ GCLINLINE std::ostream& operator<<( std::ostream& output, const SoundResource &P
 
 Sound::Sound(const char *filename)
 {
-
 	bool ret = LoadSound(filename);
 	GCLAssertMsg(ret, (std::string("Failed Loading Sound: ") + std::string(filename)).c_str());
-
+    SoundManager::SendCommand([=]{
 	//std::cout << *mSoundResource << std::endl;
 	alGenBuffers(1, &mBuffer);alErrorCheck();
 	alBufferData(mBuffer,
@@ -68,12 +68,14 @@ Sound::Sound(const char *filename)
 	alListener3f(AL_VELOCITY, 0, 0, 0);alErrorCheck();
 	//alListener3f(AL_ORIENTATION, 0, 0, -1);alErrorCheck();
 	alSourcei(mSources, AL_BUFFER, mBuffer);
-
+    });
 }
 Sound::~Sound()
 {
+    SoundManager::SendCommand([=]{
 	alDeleteSources(1, &mSources);
 	alDeleteBuffers(1, &mBuffer);
+    });
 	SoundResourceManager::Instance().ReleaseResource(mSoundResource);
 }
 bool Sound::LoadSound(const char *filename)
@@ -85,33 +87,45 @@ bool Sound::LoadSound(const char *filename)
 
 void Sound::Play()
 {
+    SoundManager::SendCommand([=]{
 	alSourcePlay(mSources);alErrorCheck();
+    });
 }
 
 void Sound::Stop()
 {
+    SoundManager::SendCommand([=]{
 	alSourceStop( mSources);alErrorCheck();
+    });
 }
 void Sound::Rewind()
 {
+    SoundManager::SendCommand([=]{
 	alSourceRewind( mSources);alErrorCheck();
+    });
 }
 void Sound::Pause()
 {
+    SoundManager::SendCommand([=]{
 	alSourcePause( mSources);alErrorCheck();
+    });
 }
 
 bool Sound::IsPlaying() const
 {
-	ALint val;
+    ALint val;
+    SoundManager::SendCommandSync([&]{
 	alGetSourcei(mSources,AL_SOURCE_STATE,&val);alErrorCheck();
+    });
 	return val != AL_PLAYING;
 }
 
 Real Sound::GetCurrentPlayTime() const
 {
 	int byteoffset;
+    SoundManager::SendCommandSync([&]{
 	alGetSourcei(mSources, AL_BYTE_OFFSET, &byteoffset);
+    });
 	return Real(byteoffset) / mSoundResource->mSoundData.header.byteRate ;
 }
 

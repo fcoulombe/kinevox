@@ -22,31 +22,38 @@
 
 
 #include "sound/ALSoundDevice.h"
+#include "sound/SoundManager.h"
 
 using namespace GCL;
 
 
 ALSoundDevice::ALSoundDevice()
 {
+    SoundManager::SendCommand([&]{
 	mDevice = alcOpenDevice(NULL);
 	GCLAssert(mDevice);
 	mContext=alcCreateContext(mDevice,NULL);
 	alcMakeContextCurrent(mContext);alErrorCheck();
+    });
 }
 
 ALSoundDevice::~ALSoundDevice()
 {
-	mContext=alcGetCurrentContext();
-	mDevice=alcGetContextsDevice(mContext);
+    SoundManager::SendCommand([]{
+	ALCcontext *context=alcGetCurrentContext();
+	ALCdevice *device=alcGetContextsDevice(context);
 	alcMakeContextCurrent(NULL);
-	alcDestroyContext(mContext);
-	alcCloseDevice(mDevice);
-
+	alcDestroyContext(context);
+	alcCloseDevice(device);
+    });
 }
 
 const char *ALSoundDevice::GetDeviceSpecifier() const
 {
-	const char *temp = alcGetString(mDevice, ALC_DEVICE_SPECIFIER );
+	const char *temp;
+    SoundManager::SendCommandSync([&]{
+    temp = alcGetString(mDevice, ALC_DEVICE_SPECIFIER );
 	alErrorCheck();
-	return temp;
+    });
+    return temp;
 }

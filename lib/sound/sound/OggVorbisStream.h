@@ -22,6 +22,7 @@
 
 #pragma once
 
+#include <memory>
 #include <gcl/Macro.h>
 
 #include <3rdparty/OpenAL.h>
@@ -32,7 +33,6 @@ namespace GCL
 class OggStream
 {
 public:
-	OggStream(const char *filename);
 	~OggStream();
 	void Open(const char *filename); // obtain a handle to the file
 	void Release();         // release the file handle
@@ -44,6 +44,9 @@ public:
 	const vorbis_info* GetVorbisInfo() const { return mVorbisInfo; }
 	const vorbis_comment* GetVorbisComment() const { return mVorbisComment; }
 private:
+    friend class SoundManager;
+    OggStream(const char *filename);
+    bool IsPlayingUnsafe();         // check if the source is playing
 	FILE*           mFp;       // file handle
 	OggVorbis_File  mOggStream;     // stream handle
 	vorbis_info*    mVorbisInfo;    // some formatting data
@@ -58,6 +61,8 @@ private:
 
 	friend std::ostream& operator<<( std::ostream& output, const OggStream &P);
 };
+
+typedef std::shared_ptr<OggStream> OggStreamPtr; 
 
 
 }

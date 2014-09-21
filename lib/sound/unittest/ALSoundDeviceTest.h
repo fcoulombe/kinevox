@@ -23,7 +23,7 @@
 #include <sstream>
 
 #include <gcl/UnitTest.h>
-#include <sound/ALSoundDevice.h>
+#include <sound/SoundManager.h>
 
 using namespace GCL;
 namespace ALSoundDeviceTest
@@ -32,8 +32,8 @@ namespace ALSoundDeviceTest
 void Test()
 {
 	TEST_START
- 
-	ALSoundDevice device;
-	std::cout << "Sound Device: " << device.GetDeviceSpecifier() << std::endl;
+    SoundManager::Initialize();
+	std::cout << "Sound Device: " << SoundManager::GetDeviceSpecifier() << std::endl;
+    SoundManager::Terminate();
 }
 }

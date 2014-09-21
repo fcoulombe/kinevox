@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,41 +22,59 @@
 
 #pragma once
 
-#include <memory>
-#include <list>
-#include <3rdparty/OpenAL.h>
-#include <gcl/WorldUnit.h>
+#include <gcl/WorkerThread.h>
+#include "sound/Sound.h"
+#include "sound/OggVorbisStream.h"
 
 namespace GCL
 {
-class SoundResource;
-
-class Sound
+class SoundManager
 {
 public:
-	~Sound();
-	bool LoadSound(const char *filename);
-	bool IsValid() const { return mSoundResource!=NULL; }
-	bool IsPlaying() const;
-	void Save(const char *filename);
-	void Play();
-	void Stop();
-	void Pause();
-	void Rewind();
+	static void Initialize();
+	static void Terminate();
+	static SoundPtr LoadSound(const char *filename);
+    static OggStreamPtr LoadMusic(const char *filename);
+    static void Update();
 
-	Real GetCurrentPlayTime() const;
-	Real GetTotalTime() const;
+    static const char *GetDeviceSpecifier();
+
+    template<class T>
+    static void SendCommand(const T &cmd);
+    template<class T>
+    static void SendCommandSync(const T &cmd);
+    static bool IsThreaded()  { return mIsThreaded; }
 private:
-    friend class SoundManager;
-	Sound(const char *filename);
-	ALuint mBuffer;
-	ALuint mSources;
-
-	const SoundResource *mSoundResource;
-    
+    static WorkerThread *mCommandQueue;
+	static SoundList mSoundList;
+    static bool mIsThreaded;
+    friend class Sound;
 };
-typedef std::shared_ptr<Sound> SoundPtr;
-typedef std::list<SoundPtr> SoundList;
+
+template<class T>
+void GCL::SoundManager::SendCommand(const T &cmd )
+{
+    if (IsThreaded())
+    {
+        mCommandQueue->SendCommandAsync(cmd);
+    }
+    else
+    {
+        cmd();
+    }
+}
+template<class T>
+void GCL::SoundManager::SendCommandSync(const T &cmd )
+{
+    if (IsThreaded())
+    {
+        mCommandQueue->SendCommandSync(cmd);
+    }
+    else
+    {
+        cmd();
+    }
+}
 
 }
 

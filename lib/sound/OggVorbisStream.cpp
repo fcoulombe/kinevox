@@ -21,7 +21,9 @@
  */
 
 #include "sound/OggVorbisStream.h"
+#include <iostream>
 #include <gcl/File.h>
+#include "sound/SoundManager.h"
 
 using namespace GCL;
 
@@ -34,14 +36,17 @@ OggStream::OggStream(const char *filename)
 OggStream::~OggStream()
 {
 	Stop();
+    SoundManager::SendCommandSync([=]{
 	alDeleteSources(1, &mSource);	alErrorCheck();
 	alDeleteBuffers(2, mBuffers);	alErrorCheck();
 
 	ov_clear(&mOggStream);
+    });
 }
 
 void OggStream::Open(const char *filename)
 {
+    SoundManager::SendCommand([=]{
 	int result;
 
 	GCLAssert(GCLFile::Exists(filename));
@@ -54,6 +59,7 @@ void OggStream::Open(const char *filename)
 		mFormat = AL_FORMAT_MONO16;
 	else
 		mFormat = AL_FORMAT_STEREO16;
+
 	alGenBuffers(2, mBuffers);	alErrorCheck();
 	alGenSources(1, &mSource);	alErrorCheck();
 
@@ -62,6 +68,7 @@ void OggStream::Open(const char *filename)
 	alSource3f(mSource, AL_DIRECTION,       0.0, 0.0, 0.0);alErrorCheck();
 	alSourcef (mSource, AL_ROLLOFF_FACTOR,  0.0          );alErrorCheck();
 	alSourcei (mSource, AL_SOURCE_RELATIVE, AL_TRUE      );alErrorCheck();
+    });
 }
 
 
@@ -90,7 +97,8 @@ std::ostream& operator<<( std::ostream& output, const OggStream &P)
 
 void OggStream::Play()
 {
-	if(IsPlaying())
+    SoundManager::SendCommand([&]{
+	if(IsPlayingUnsafe())
 		return;
 
 	Stream(mBuffers[0]);
@@ -99,11 +107,13 @@ void OggStream::Play()
 
 	alSourceQueueBuffers(mSource, 2, mBuffers);alErrorCheck();
 	alSourcePlay(mSource);alErrorCheck();
+    });
 
 }
 
 void OggStream::Stop()
 {
+    SoundManager::SendCommand([&]{
 	alSourceStop(mSource);alErrorCheck();
 	int queued;
 
@@ -118,23 +128,33 @@ void OggStream::Stop()
 	//send file back to beginning
 	int result = ov_raw_seek(&mOggStream,0);
 	ovErrorCheck(result);
+    });
 }
 
 bool OggStream::IsPlaying()
 {
-	ALenum state;
+    bool ret;
+    SoundManager::SendCommandSync([&]{
+        ret = IsPlayingUnsafe();
+    });
 
-	alGetSourcei(mSource, AL_SOURCE_STATE, &state);alErrorCheck();
+    return ret;
+}
 
-	return (state == AL_PLAYING);
+bool OggStream::IsPlayingUnsafe()
+{
+    ALenum state;
+    alGetSourcei(mSource, AL_SOURCE_STATE, &state);alErrorCheck();
+    return (state == AL_PLAYING);
 }
 
 void OggStream::Update()
 {
+    SoundManager::SendCommand([&]{
 	int processed;
-
+    
 	alGetSourcei(mSource, AL_BUFFERS_PROCESSED, &processed);alErrorCheck();
-
+    std::cout << mSource << " " << processed << std::endl;
 	while(processed--)
 	{
 		ALuint buffer;
@@ -145,7 +165,7 @@ void OggStream::Update()
 
 		alSourceQueueBuffers(mSource, 1, &buffer);		alErrorCheck();
 	}
-
+    });
 }
 
 void OggStream::Stream(ALuint buffer)
@@ -162,7 +182,9 @@ void OggStream::Stream(ALuint buffer)
 		if(result > 0)
 			size += result;
 		else
-			break;
+        {
+			ov_time_seek(&mOggStream,0.f);
+        }
 	}
 
 	GCLAssert(size != 0);

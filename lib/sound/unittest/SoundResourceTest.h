@@ -38,8 +38,7 @@ void Test()
 
 	SoundResourceManager::Initialize();
 	{
-	ALSoundDevice device;
-
+	
 	SoundResourceManager &soundResourceManager = SoundResourceManager::Instance();
 	const Resource *wavResource;
 	wavResource = soundResourceManager.LoadResource(SOUND_PATH"Explosion.wav");

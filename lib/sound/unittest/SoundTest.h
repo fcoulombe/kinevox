@@ -25,10 +25,11 @@
 #include <gcl/Macro.h>
 #include <gcl/Time.h>
 #include <gcl/UnitTest.h>
-#include <sound/ALSoundDevice.h>
 #include <sound/Sound.h>
+#include <sound/SoundManager.h>
 #include <sound/SoundResource.h>
 #include <sound/SoundResourceManager.h>
+
 
 using namespace GCL;
 namespace SoundTest
@@ -39,25 +40,23 @@ void Test()
 	TEST_START
 
 	SoundResourceManager::Initialize();
+    SoundManager::Initialize();
 	{
-	ALSoundDevice device;
-	Sound sound(SOUND_PATH"Explosion.wav");
-	//SoundList soundList;
-	//soundList.push_back(&sound);
+	SoundPtr sound = SoundManager::LoadSound(SOUND_PATH"Explosion.wav");
 
-	sound.Play();
-	while (!sound.IsPlaying())
+	sound->Play();
+	while (!sound->IsPlaying())
 	{
 		Time::SleepMs(1);
 	}
-	sound.Pause();
-	sound.Stop();
-	sound.Rewind();
+	sound->Pause();
+	sound->Stop();
+	sound->Rewind();
 
-	Assert_Test(sound.GetCurrentPlayTime() ==0.0 );
-	Assert_Test(abseq(sound.GetTotalTime(),2.297874928, DBL_PRECISION_TOLERANCE));
+	Assert_Test(sound->GetCurrentPlayTime() ==0.0 );
+	Assert_Test(abseq(sound->GetTotalTime(),2.297874928, DBL_PRECISION_TOLERANCE));
 	}
+    SoundManager::Terminate();
 	SoundResourceManager::Terminate();
-
 }
 }

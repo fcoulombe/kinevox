@@ -26,7 +26,7 @@
 #include <fstream>
 #include <cstring>
 
-#include "gcl/Assert.h"
+#include <gcl/Assert.h>
 
 using namespace GCL;
 

@@ -39,6 +39,9 @@
 #include <renderer/ShaderResourceManager.h>
 #include <renderer/TextureResourceManager.h>
 #include <script/ScriptResourceManager.h>
+#include <sound/ALSoundDevice.h>
+#include <sound/SoundResourceManager.h>
+#include <sound/SoundManager.h>
 #include <windriver/WinDriver.h>
 
 
@@ -51,10 +54,10 @@
 #include "applayer/ScriptComponent.h"
 using namespace GCL;
 
-GCLWorld *GCLApplication::mCurrentWorld=NULL;
-Renderer *GCLApplication::mRenderer = NULL;
-WinDriver *GCLApplication::mWinDriver = NULL;
-ScriptApi *GCLApplication::mScriptApi = NULL;
+GCLWorld *GCLApplication::mCurrentWorld= nullptr;
+Renderer *GCLApplication::mRenderer = nullptr;
+WinDriver *GCLApplication::mWinDriver = nullptr;
+ScriptApi *GCLApplication::mScriptApi = nullptr;
 ActorList GCLApplication::mActorList;
 SpriteList GCLApplication::mSpriteList;
 
@@ -72,6 +75,8 @@ void GCLApplication::InitializaAppLayerComponents()
 }
 /*static */void GCLApplication::Initialize(const char *windowsTitle)
 {
+    SoundResourceManager::Initialize();
+    SoundManager::Initialize();
 	ShaderResourceManager::Initialize();
 	TextureResourceManager::Initialize();
 	FontResourceManager::Initialize();
@@ -104,11 +109,14 @@ void GCLApplication::InitializaAppLayerComponents()
 	FontResourceManager::Terminate();
 	TextureResourceManager::Terminate();
 	ShaderResourceManager::Terminate();
+    SoundManager::Terminate();
+    SoundResourceManager::Terminate();
 }
 
 
 void GCLApplication::Update(Real dt)
 {
+    SoundManager::Update();
 	Input::ProcessInput();
 	//for (size_t i=0; i<m2DRenderObjectList.size(); ++i)
 	//{
@@ -123,7 +131,7 @@ void GCLApplication::Render()
 {
     GCLAssert(mWinDriver);
 	GCLAssert(mRenderer);
-	//perform actor culling against view frustom
+	//perform actor culling against view frustum
 
 	//pass it to renderer
 	mRenderer->PreRender();

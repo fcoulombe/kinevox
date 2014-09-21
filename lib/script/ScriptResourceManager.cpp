@@ -49,6 +49,11 @@ void ScriptResourceManager::Free( Resource * resource )
 	delete resource;
 }
 
+void ScriptResourceManager::ExposeObjectModule(const char *libName, scriptFunction constructor)
+{
+    ExposeModule(libName, constructor);
+    mObjectModules.push_back(libName);
+}
 void ScriptResourceManager::ExposeModule(const char *libName, scriptFunction constructor)  const
 {
     LuaState &tempState = *mLuaState;

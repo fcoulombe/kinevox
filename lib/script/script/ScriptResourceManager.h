@@ -22,8 +22,11 @@
 
 #pragma once
 
+#include <vector>
+#include <string>
 #include <gcl/Assert.h>
 #include <gcl/ResourceManager.h>
+#include <gcl/ResourceCache.h>
 #include "script/ConfigLua.h"
 #include "script/ScriptResource.h"
 
@@ -32,7 +35,7 @@ namespace GCL
 {
   class LuaState;
   typedef int (*scriptFunction) (lua_State *L);
-  class ScriptResourceManager : public ResourceManager
+  class ScriptResourceManager : public ResourceCache
   {
   public:
     static void Initialize()
@@ -43,6 +46,7 @@ namespace GCL
     static void Terminate()
     {
       GCLAssert(smpInstance != NULL);
+      smpInstance->FlushCache();
       delete smpInstance;
       smpInstance = NULL;
     }
@@ -51,14 +55,17 @@ namespace GCL
     Resource *Allocate(const char *filename);
     void Free(Resource * /*resource*/);
 
+    void ExposeObjectModule(const char *libName, scriptFunction constructor);
     void ExposeModule(const char *libName, scriptFunction constructor) const;
     void ExposeFunction(const char *funcName, scriptFunction func) const;
 
 	void Update();
+    const std::vector<std::string> &GetObjectModuleList() const { return mObjectModules; }
   private:
     static ScriptResourceManager *smpInstance;
     LuaState *mLuaState;
     LuaState &GetLuaState() { return *mLuaState; }
+    std::vector<std::string> mObjectModules;
     ScriptResourceManager();
     ~ScriptResourceManager();
     friend class ScriptResource;

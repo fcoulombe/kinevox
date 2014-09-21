@@ -43,15 +43,19 @@ mFilename(scriptFileName)
 
     lua_pushvalue(L,-1); //pushes a copy of the table onto the stack 321
 
-    lua_getfield(L, -1, "__index"); // load index at 4321
-    lua_getfield(L, -1, "object"); // load object at 54321
-    lua_pushnil(L); // load nill at 654321
-    while(lua_next(L, -2)) { // load key value at 7654321
-        const char *functionName = lua_tostring(L, -2);
-        lua_setfield(L, -5, functionName);
+    auto objectModuleList = ScriptResourceManager::Instance().GetObjectModuleList();
+    for (auto objectModule : objectModuleList)
+    {
+        lua_getfield(L, -1, "__index"); // load index at 4321
+        lua_getfield(L, -1, objectModule.c_str()); // load object at 54321
+        lua_pushnil(L); // load nill at 654321
+        while(lua_next(L, -2)) { // load key value at 7654321
+            const char *functionName = lua_tostring(L, -2);
+            lua_setfield(L, -5, functionName);
+        }
+        lua_pop(L, 1);
+        lua_pop(L, 1);
     }
-    lua_pop(L, 1);
-    lua_pop(L, 1);
     lua_setfield(L, LUA_REGISTRYINDEX, mFilename.c_str()); //store the table into the registry and pops it 21
 
     lua_pushvalue(L,-1); //pushes a copy of the table onto the stack 321

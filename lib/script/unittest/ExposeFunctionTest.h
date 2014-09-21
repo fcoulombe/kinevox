@@ -29,6 +29,11 @@
 using namespace GCL;
 namespace ExposeFunctionTest
 {
+    class TestScriptedObject
+    {
+    public:
+    };
+    TestScriptedObject object;
     void FunctionToExpose(int bleh, int blah, const char *str);
     void FunctionToExpose(int bleh, int blah, const char *str)
     {
@@ -50,18 +55,48 @@ namespace ExposeFunctionTest
         luaL_newlib (L, kinevoxExposedFunc);
         return 1;
     }
+
+    static size_t GetObjectId(lua_State * L)
+    {
+        int top = lua_gettop(L);
+        lua_getfield(L, -top, "KINEVOX_ACTOR_ID");
+        size_t objectid = (size_t)lua_topointer(L, -1);
+        lua_pop(L, 1);
+        return objectid;
+    }
+    int ObjectFunctionToExposeProx(lua_State * L)
+    {
+        size_t objectid = GetObjectId(L);
+        size_t testObjectId = (size_t)&object;
+        GCLAssert(objectid == testObjectId);
+        std::cout << "we call a C func!" << std::endl;
+        return 1;
+    }
+
+    static const luaL_Reg objectExposedFunc [] = {
+        {"ObjectFunctionToExpose", ObjectFunctionToExposeProx},
+        {NULL, NULL}
+    };
+    int luaopen_objectLib(lua_State * L )
+    {
+        luaL_newlib (L, objectExposedFunc);
+        return 1;
+    }
+
     void Test()
     {
         KINEVOX_TEST_START
         ScriptResourceManager::Initialize();
 
+        ScriptResourceManager::Instance().ExposeObjectModule("scripted_object", luaopen_objectLib);
         ScriptResourceManager::Instance().ExposeModule("kinevox", luaopen_kinevoxLib);
         ScriptResourceManager::Instance().ExposeFunction("FunctionToExpose", FunctionToExposeProx);
         {
+            
             const Resource *resource = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"ExposeToLuaTest.luac");
             const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
 
-            luaResource->ExecuteFunction("Logic");
+            luaResource->ExecuteFunction("Logic", &object);
             ScriptResourceManager::Instance().ReleaseResource(resource);
 			ScriptResourceManager::Instance().Update(); //gc
         }

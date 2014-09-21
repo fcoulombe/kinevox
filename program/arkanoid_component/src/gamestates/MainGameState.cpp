@@ -65,15 +65,17 @@ MainGameState::MainGameState()
 :GameState("MainGame")
 {
 	std::cout << "EnterMainGameState"<<std::endl;
+
     size_t startTime = Time::GetTickMs();
-	for (size_t i=0; i<NUM_ROW*NUM_COL; ++i)
+
+    for (size_t i=0; i<NUM_ROW*NUM_COL; ++i)
 	{
         std::stringstream blockName;
         blockName << "Block";
         blockName << i;
 		Actor *block = new Actor(blockName.str().c_str(), "Block");
 		blocks.push_back(block);
-		Sprite & sprite = *static_cast<SpriteComponent*>(block->GetComponent("SpriteComponent"))->GetSprite();
+		const Sprite & sprite = *static_cast<SpriteComponent*>(block->GetComponent("SpriteComponent"))->GetSprite();
 
 		size_t blockWidth = sprite.GetWidth();
 		size_t blockHeight = sprite.GetHeight();
@@ -91,21 +93,22 @@ MainGameState::MainGameState()
 		block->SetPosition(position);
 		std::cout << position << std::endl;
 	}
-	paddle = new Actor("Paddle", "Paddle");
+
+    paddle = new Actor("Paddle", "Paddle");
 	ball = new Actor("Ball", "Ball");
 	paddle->SetPosition(START_POSITION);
 
 	ball->SetPosition(START_POSITION+WorldPoint3(100,0,0));
+
     std::cout << "Loading time: " << Time::GetTickMs() - startTime << " ms" << std::endl;
 }
 bool MainGameState::Update(Real dt)
 {
-	//std::cout << "MainGameState";
 	for (size_t i=0; i<NUM_ROW*NUM_COL; ++i)
 	{
 		blocks[i]->Update(dt);
 	}
-	paddle->Update(dt);
+    paddle->Update(dt);
 	ball->Update(dt);
 	GameState::Update(dt);
 

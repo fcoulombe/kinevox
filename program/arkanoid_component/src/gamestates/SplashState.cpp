@@ -25,6 +25,7 @@
 
 #include <applayer/GameStateManager.h>
 #include "MainMenuState.h"
+#include <sound/SoundManager.h>
 
 using namespace GCL;
 using namespace Arkanoid;
@@ -33,6 +34,7 @@ SplashState::SplashState()
   splash("Splash"),
   timeSpent(0.)
 {
+    SoundManager::LoadMusic(MUSIC_PATH"intro_loop.ogg")->Play();
 	splash.SetPosition(WorldPoint3(320,240,0));
 }
 

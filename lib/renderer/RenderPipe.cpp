@@ -47,6 +47,7 @@ void GCL::RenderPipe::Terminate()
 	GCLAssert(mIsInitialized);
 
 	delete mCommandQueue;
+    mCommandQueue = nullptr;
 	mIsInitialized = false;
 }
 

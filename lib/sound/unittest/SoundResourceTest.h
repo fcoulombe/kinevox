@@ -40,11 +40,28 @@ void Test()
 	{
 	
 	SoundResourceManager &soundResourceManager = SoundResourceManager::Instance();
+	//mono
+	{
 	const Resource *wavResource;
 	wavResource = soundResourceManager.LoadResource(SOUND_PATH"Explosion.wav");
 	Assert_Test(wavResource);
-
+	const SoundResource *soundResource = static_cast<const SoundResource*>(wavResource);
+	Assert_Test(soundResource->GetNumChannels() == 1);
+	Assert_Test(soundResource->GetSampleRate() == 8000);
+	Assert_Test(soundResource->GetBitsPerSample() == 8);
 	soundResourceManager.ReleaseResource(wavResource);
+	}
+	//stereo
+	{
+	const Resource *wavResource;
+	wavResource = soundResourceManager.LoadResource(SOUND_PATH"Explosion2.wav");
+	Assert_Test(wavResource);
+	const SoundResource *soundResource = static_cast<const SoundResource*>(wavResource);
+	Assert_Test(soundResource->GetNumChannels() == 1);
+	Assert_Test(soundResource->GetSampleRate() == 48000);
+	Assert_Test(soundResource->GetBitsPerSample() == 16);
+	soundResourceManager.ReleaseResource(wavResource);
+	}
 	}
 	SoundResourceManager::Terminate();
 

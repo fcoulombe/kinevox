@@ -47,14 +47,14 @@ Sound::Sound(const char *filename)
 {
 	bool ret = LoadSound(filename);
 	GCLAssertMsg(ret, (std::string("Failed Loading Sound: ") + std::string(filename)).c_str());
-    SoundManager::SendCommand([=]{
+    SoundManager::SendCommand([&]{
 	//std::cout << *mSoundResource << std::endl;
 	alGenBuffers(1, &mBuffer);alErrorCheck();
 	alBufferData(mBuffer,
 			mSoundResource->GetFormat(),
 			mSoundResource->mSoundData.soundData,
 			mSoundResource->mSoundData.header.data_size,
-			mSoundResource->mSoundData.header.sampleRate);alErrorCheck();
+			mSoundResource->GetSampleRate());alErrorCheck();
 
 	alGenSources(1, &mSources);alErrorCheck();
 	alSourcef(mSources, AL_PITCH, 1);alErrorCheck();
@@ -119,7 +119,7 @@ bool Sound::IsPlaying() const
     SoundManager::SendCommandSync([&]{
 	alGetSourcei(mSources,AL_SOURCE_STATE,&val);alErrorCheck();
     });
-	return val != AL_PLAYING;
+	return val == AL_PLAYING;
 }
 
 Real Sound::GetCurrentPlayTime() const

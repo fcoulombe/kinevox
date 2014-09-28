@@ -34,6 +34,7 @@ static int KPlaySound(lua_State * L)
     std::string fullPath(SOUND_PATH);
     fullPath += soundFile;
     SoundPtr sound = SoundManager::LoadSound(fullPath.c_str());
+    sound->Play();
 	return 1;
 }
 

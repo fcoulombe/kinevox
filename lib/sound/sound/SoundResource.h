@@ -57,10 +57,31 @@ namespace GCL
 
     ALenum GetFormat() const
     {
-    	if (mSoundData.header.channel == 1)
-    		return AL_FORMAT_MONO8;
-    	return AL_FORMAT_STEREO16;
+    	auto bitsPerSample = GetBitsPerSample();
+    	auto numChannels = GetNumChannels();
+    	if (bitsPerSample == 8)
+    	{
+			if (numChannels == 1)
+				return AL_FORMAT_MONO8;
+			else
+				return AL_FORMAT_STEREO8;
+    	}
+    	else if (bitsPerSample == 16)
+    	{
+			if (numChannels == 1)
+				return AL_FORMAT_MONO16;
+			else
+				return AL_FORMAT_STEREO16;
+    	}
+    	else
+    	{
+    		GCLAssert(false);
+    		return -1;
+    	}
     }
+    uint16_t GetNumChannels() const { return mSoundData.header.channel; }
+    uint32_t GetSampleRate() const { return mSoundData.header.sampleRate; }
+    uint16_t GetBitsPerSample() const { return mSoundData.header.bitsPerSample; }
   private:
     SoundResource() {}
   };

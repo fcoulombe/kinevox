@@ -45,7 +45,7 @@ void Test()
 	SoundPtr sound = SoundManager::LoadSound(SOUND_PATH"Explosion.wav");
 
 	sound->Play();
-	while (!sound->IsPlaying())
+	while (sound->IsPlaying())
 	{
 		Time::SleepMs(1);
 	}

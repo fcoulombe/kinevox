@@ -6,6 +6,7 @@ end
 
 function Hit(self)
   kinevox.Log("hit!")
+  sound.PlaySound("explosion.wav")
 end
 
 function Terminate(self)

@@ -83,11 +83,14 @@ void GCL::RenderComponent::ProcessEvent( size_t , void * )
 void GCL::RenderComponent::Render(const Matrix44 &proj)
 {
 	const RenderObject *tempRenderObject = mObj;
-	const Material &tempMaterial = tempRenderObject->GetMaterial();
-	tempMaterial.Bind();
-	const Matrix44 &transform = mParentActor->GetTransform();
-	GPUProgram *tempProgram = tempMaterial.GetShader();
-	tempProgram->SetProjectionMatrix(proj);
-	tempProgram->SetModelViewMatrix(transform);
-	tempRenderObject->GetVBO().Render();
+	if (tempRenderObject->IsVisible())
+	{
+		const Material &tempMaterial = tempRenderObject->GetMaterial();
+		tempMaterial.Bind();
+		const Matrix44 &transform = mParentActor->GetTransform();
+		GPUProgram *tempProgram = tempMaterial.GetShader();
+		tempProgram->SetProjectionMatrix(proj);
+		tempProgram->SetModelViewMatrix(transform);
+		tempRenderObject->GetVBO().Render();
+	}
 }

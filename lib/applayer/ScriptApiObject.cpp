@@ -23,6 +23,10 @@
 #include "applayer/ScriptApi.h"
 #include "applayer/Actor.h"
 #include "applayer/GCLApplication.h"
+#include "applayer/RenderComponent.h"
+#include "applayer/SpriteComponent.h"
+#include "applayer/Sprite.h"
+#include <renderer/RenderObject.h>
 #include <script/ScriptResourceManager.h>
 #include <script/Lua.h>
 
@@ -79,11 +83,56 @@ static int KSetPosition(lua_State * L)
 	return 1;
 }
 
+static int KSetVisible(lua_State * L)
+{
+	size_t objectid = GetObjectId(L);
+
+	Actor *actor = (Actor *)objectid;
+	bool isVisible = lua_toboolean(L, 2);
+    if (actor->HasComponent("SpriteComponent"))
+    {
+    	SpriteComponent *spriteComponent = static_cast<SpriteComponent *>(actor->GetComponent("SpriteComponent"));
+    	spriteComponent->GetSprite()->SetVisible(isVisible);
+    }
+    else if (actor->HasComponent("RenderComponent"))
+    {
+    	RenderComponent *renderComponent = static_cast<RenderComponent *>(actor->GetComponent("RenderComponent"));
+    	renderComponent->GetRenderObject()->SetVisible(isVisible);
+    }
+    else
+    {
+    	GCLAssert(false && "No visible component");
+    }
+	return 1;
+}
+
+static int KIsVisible(lua_State * L)
+{
+    size_t objectid = GetObjectId(L);
+    Actor *actor = (Actor *)objectid;
+    if (actor->HasComponent("SpriteComponent"))
+    {
+    	const SpriteComponent *spriteComponent = static_cast<SpriteComponent *>(actor->GetComponent("SpriteComponent"));
+    	lua_pushboolean(L, spriteComponent->GetSprite()->IsVisible());
+    }
+    else if (actor->HasComponent("RenderComponent"))
+    {
+    	const RenderComponent *renderComponent = static_cast<RenderComponent *>(actor->GetComponent("RenderComponent"));
+    	lua_pushboolean(L, renderComponent->GetRenderObject()->IsVisible());
+    }
+    else
+    {
+    	GCLAssert(false && "No visible component");
+    }
+    return 1;
+}
 
 static const luaL_Reg objectExposedFunc[] = {
 		{ "GetPosition", KGetPosition},
 		{ "SetPosition", KSetPosition},
         { "GetName", KGetName},
+        { "SetVisible", KSetVisible},
+        { "IsVisible", KIsVisible},
         { NULL, NULL } };
 
 int luaopen_objectLib(lua_State * L)

@@ -85,7 +85,8 @@ public:
 	template<typename VertexType>
 	RenderObject( Material &material, const VertexType *vertexArray, size_t count)
 	:  mVBO(vertexArray, count, material.GetShader()->GetShaderLocations()),
-	mIsDrawNormals(false)
+	mIsDrawNormals(false),
+	mIsVisible(true)
 	{
 		mMaterial = (&material);
 	}
@@ -118,11 +119,14 @@ public:
 #endif
     void SetEnableDrawNormals(bool isDrawingNormals = true) { mIsDrawNormals = isDrawingNormals; }
     bool IsDrawingNormals() const { return mIsDrawNormals; }
+    bool IsVisible() const { return mIsVisible; }
+    void SetVisible(bool isVisible = true) { mIsVisible = isVisible; }
 protected:
 	//Matrix44 mTransform;
 	Material *mMaterial;
 	VertexBuffer mVBO;
     bool mIsDrawNormals;
+    bool mIsVisible;
 };
 	typedef std::vector<const RenderObject*> RenderObjectList;
 }

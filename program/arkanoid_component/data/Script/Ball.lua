@@ -39,14 +39,16 @@ function Logic(self)
     --Test collision against the blocks
     for i=0,5*8-1,1 do 
       local tempBlock = kinevox.GetActor("Block"..i)
-      local blockPos = tempBlock:GetPosition()
-      if newX > blockPos[0]-32 and newX < blockPos[0]+32 and newY > blockPos[1] - 16 and newY < blockPos[1] +16 then
-        VELOCITY[1] = VELOCITY[1]*-1.0
-        VELOCITY[2] = VELOCITY[2]*-1.0
-        newX = pos[0]
-        newY = pos[1]
-        tempBlock:Hit()
-        break
+      if tempBlock:IsVisible() then
+        local blockPos = tempBlock:GetPosition()
+        if newX > blockPos[0]-32 and newX < blockPos[0]+32 and newY > blockPos[1] - 16 and newY < blockPos[1] +16 then
+          VELOCITY[1] = VELOCITY[1]*-1.0
+          VELOCITY[2] = VELOCITY[2]*-1.0
+          newX = pos[0]
+          newY = pos[1]
+          tempBlock:Hit()
+          break
+        end
       end
     end
     

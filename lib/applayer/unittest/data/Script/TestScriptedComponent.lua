@@ -35,6 +35,11 @@ function TestObjectModule(self)
   pos = self:GetPosition()
   assert(pos[0] == 10 and pos[1] == 20)
   kinevox.Log("position: "..pos[0].." "..pos[1].." "..pos[2])
+  
+  self:SetVisible(false)
+  assert(self:IsVisible() == false)
+  self:SetVisible(true)
+  assert(self:IsVisible() == true)
 end
 
 function TestInputModule(self)

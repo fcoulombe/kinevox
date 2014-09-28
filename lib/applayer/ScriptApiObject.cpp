@@ -88,7 +88,7 @@ static int KSetVisible(lua_State * L)
 	size_t objectid = GetObjectId(L);
 
 	Actor *actor = (Actor *)objectid;
-	bool isVisible = lua_toboolean(L, 2);
+	bool isVisible = lua_toboolean(L, 2) != 0;
     if (actor->HasComponent("SpriteComponent"))
     {
     	SpriteComponent *spriteComponent = static_cast<SpriteComponent *>(actor->GetComponent("SpriteComponent"));

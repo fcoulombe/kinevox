@@ -108,7 +108,7 @@ std::unique_ptr<LuaTableIterator> GCL::LuaTableIterator::GetTableIterator() cons
 
 void GCL::LuaTableIterator::operator++()
 {
-	lua_pop(mL, mStackSize);
+	lua_pop(mL, (int)mStackSize);
 	Next();
 }
 
@@ -146,7 +146,7 @@ void GCL::LuaTableIterator::Next()
 	mStackSize = top2-top;
 	if (!End())
 	{
-		int type = lua_type(mL, -mStackSize);
+		int type = lua_type(mL, -(int)mStackSize);
 		switch (type)
 		{
 		case LUA_TSTRING:

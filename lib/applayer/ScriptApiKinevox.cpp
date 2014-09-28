@@ -89,40 +89,6 @@ static int KGetActor(lua_State * L)
     return 1;
 }
 
-
-static int KSetPosition(lua_State * L)
-{
-	Actor *actor = (Actor *)lua_topointer(L, 1);
-
-	Real x = lua_tonumber(L, 2);
-	Real y = lua_tonumber(L, 3);
-	Real z = lua_tonumber(L, 4);
-	actor->SetPosition(x, y, z);
-
-
-	return 1;
-}
-
-static int KGetPosition(lua_State * L)
-{
-    Actor *actor = (Actor *)lua_topointer(L, 1);
-
-    const WorldPoint3 &pos = actor->GetPosition();
-    lua_newtable(L);
-
-    lua_pushinteger(L,0);
-    lua_pushnumber(L,pos.x);
-    lua_settable(L,-3);
-    lua_pushinteger(L,1);
-    lua_pushnumber(L,pos.y);
-    lua_settable(L,-3);
-    lua_pushinteger(L,2);
-    lua_pushnumber(L,pos.z);
-    lua_settable(L,-3);
-
-    return 1;
-}
-
 static int KGetScreenSize(lua_State * L)
 {
 	lua_newtable(L);
@@ -142,8 +108,6 @@ static const luaL_Reg kinevoxExposedFunc[] = {
 		{ "Log", KLog },
 		{ "GetScreenSize", KGetScreenSize},
 		{ "GetActor", KGetActor},
-		{ "SetPosition", KSetPosition},
-        { "GetPosition", KGetPosition},
         { "LoadLib", KLoadLib},
 		{ NULL, NULL } };
 

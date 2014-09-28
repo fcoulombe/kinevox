@@ -29,7 +29,7 @@ using namespace GCL;
 
 ALSoundDevice::ALSoundDevice()
 {
-    SoundManager::SendCommand([&]{
+    SoundManager::SendCommandSync([&]{
 	mDevice = alcOpenDevice(NULL);
 	GCLAssert(mDevice);
 	mContext=alcCreateContext(mDevice,NULL);
@@ -39,9 +39,9 @@ ALSoundDevice::ALSoundDevice()
 
 ALSoundDevice::~ALSoundDevice()
 {
-    SoundManager::SendCommand([]{
-	ALCcontext *context=alcGetCurrentContext();
-	ALCdevice *device=alcGetContextsDevice(context);
+	ALCcontext *context=mContext;
+	ALCdevice *device=mDevice;
+	SoundManager::SendCommand([context, device]{
 	alcMakeContextCurrent(NULL);
 	alcDestroyContext(context);
 	alcCloseDevice(device);

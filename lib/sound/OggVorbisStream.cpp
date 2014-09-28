@@ -154,7 +154,6 @@ void OggStream::Update()
 	int processed;
     
 	alGetSourcei(mSource, AL_BUFFERS_PROCESSED, &processed);alErrorCheck();
-    std::cout << mSource << " " << processed << std::endl;
 	while(processed--)
 	{
 		ALuint buffer;

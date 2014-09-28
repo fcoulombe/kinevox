@@ -30,6 +30,7 @@ using namespace GCL;
 const size_t OggStream::BUFFER_SIZE = (4096 * 8);
 
 OggStream::OggStream(const char *filename)
+    : mIsStreaming(false)
 {
 	Open(filename);
 }
@@ -107,6 +108,7 @@ void OggStream::Play()
 
 	alSourceQueueBuffers(mSource, 2, mBuffers);alErrorCheck();
 	alSourcePlay(mSource);alErrorCheck();
+    mIsStreaming = true;
     });
 
 }
@@ -114,6 +116,7 @@ void OggStream::Play()
 void OggStream::Stop()
 {
     SoundManager::SendCommand([&]{
+        mIsStreaming = false;
 	alSourceStop(mSource);alErrorCheck();
 	int queued;
 
@@ -151,19 +154,30 @@ bool OggStream::IsPlayingUnsafe()
 void OggStream::Update()
 {
     SoundManager::SendCommand([&]{
-	int processed;
-    
-	alGetSourcei(mSource, AL_BUFFERS_PROCESSED, &processed);alErrorCheck();
-	while(processed--)
-	{
-		ALuint buffer;
 
-		alSourceUnqueueBuffers(mSource, 1, &buffer);		alErrorCheck();
+        if (!mIsStreaming)
+            return;
+        // check if stream has been interrupted!
+        ALint status;
+        alGetSourcei(mSource, AL_SOURCE_STATE, &status);alErrorCheck();
+        if (AL_STOPPED == status)
+        {
+            // Just continue
+            alSourcePlay(mSource);alErrorCheck();
+        }
+        int processed;
+	    alGetSourcei(mSource, AL_BUFFERS_PROCESSED, &processed);alErrorCheck();
+	    while(processed--)
+	    {
+            std::cout << "Queue buffeR" << std::endl;
+		    ALuint buffer;
 
-		Stream(buffer);
+		    alSourceUnqueueBuffers(mSource, 1, &buffer);		alErrorCheck();
 
-		alSourceQueueBuffers(mSource, 1, &buffer);		alErrorCheck();
-	}
+		    Stream(buffer);
+
+		    alSourceQueueBuffers(mSource, 1, &buffer);		alErrorCheck();
+	    }
     });
 }
 

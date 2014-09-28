@@ -55,6 +55,7 @@ private:
 	ALuint mBuffers[2]; // front and back buffers
 	ALuint mSource;     // audio source
 	ALenum mFormat;     // internal format
+    bool mIsStreaming;
 	static const size_t BUFFER_SIZE;
 
 	void Stream(ALuint buffer);   // reloads a buffer

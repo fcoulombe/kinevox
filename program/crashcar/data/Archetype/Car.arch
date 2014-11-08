@@ -1,0 +1,12 @@
+Archetype = {
+	Name = "Car",
+	Components = {
+		SpriteComponent = {
+		sprite = "Car"
+		},
+		ScriptComponent = {
+		  filename = "Car"
+		}
+	}
+}
+

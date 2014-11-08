@@ -1,0 +1,9 @@
+Archetype = {
+	Name = "MainMenu",
+	Components = {
+        SpriteComponent = {
+        sprite = "MainMenu"
+        },
+	}
+}
+

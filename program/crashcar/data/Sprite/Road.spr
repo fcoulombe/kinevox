@@ -1,0 +1,10 @@
+gclsprite = {
+    width=512,
+    height=512,
+    frame_count="1",
+    texture_count = 1,
+    textures = {
+        texture0 = "Road.png"
+    }
+    
+}

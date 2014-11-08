@@ -152,7 +152,7 @@ namespace GCL
         template <typename T>
         inline void Push(T& t)
         {
-            lua_pushlightuserdata(l, &t);
+            lua_pushlightuserdata(L, &t);
         }
 
        /* template <typename T, typename... Rest>

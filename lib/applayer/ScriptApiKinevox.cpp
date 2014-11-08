@@ -126,7 +126,6 @@ static int KCreateActor(lua_State * L)
 static int KDestroyActor(lua_State * L)
 {
     const char *actorName = lua_tostring(L, 1);
-    std::cout << "killing: " << actorName << std::endl;
     GCLApplication::DestroyActor(actorName);
     return 1;
 }

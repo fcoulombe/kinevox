@@ -145,13 +145,17 @@ void GCLApplication::Render()
 	mRenderer->PreRender();
 	Matrix44 proj;
 	mRenderer->GetProjection(proj);
+    mRenderer->SetIsDepthTesting(true);
+    std::sort(mActorList.begin(), mActorList.end(),  [](Actor * a, Actor * b){return b->GetPosition().z < a->GetPosition().z;});
 	for (size_t i=0; i<mActorList.size(); ++i)
 	{
 		mActorList[i]->Render(proj);
 	}
 	//mRenderer->Render(renderList);
-	mRenderer->SetOrtho();
+	mRenderer->SetIsDepthTesting(false);
+    mRenderer->SetOrtho();
 	mRenderer->GetProjection(proj);
+    std::sort(mSpriteList.begin(), mSpriteList.end(),  [](Sprite * a, Sprite * b){return b->GetPosition().z > a->GetPosition().z;});
 	for (size_t i=0; i<mSpriteList.size(); ++i)
 	{
 		Sprite *tempSprite =mSpriteList[i];

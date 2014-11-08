@@ -37,6 +37,10 @@ int main(int /*argc*/, char ** /*argv*/)
 	try
 	{
 		GCLApplication::Initialize("Sprite Example");
+        Sprite car("Car");
+        static const WorldPoint3 kCarPositionTest(120.0, 240.0, 0.0);
+        car.SetPosition(kCarPositionTest);
+
 		Sprite obj;
 		obj.Play();
 
@@ -57,6 +61,7 @@ int main(int /*argc*/, char ** /*argv*/)
 
 				GCLApplication::Update();
 				obj.Update();
+                car.Update();
 				if (Input::IsKeyUp(GCL_ESCAPE))
 					isRunning=false;
 

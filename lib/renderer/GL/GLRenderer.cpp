@@ -58,7 +58,7 @@ void GLRenderer::Init3DState()
 	glDepthMask(GL_TRUE); glErrorCheck();
 	glDepthFunc(GL_LESS); glErrorCheck();
 	glEnable(GL_DEPTH_TEST); glErrorCheck();
-	glDisable(GL_BLEND); glErrorCheck();
+	glEnable(GL_BLEND); glErrorCheck();
 
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
 	
@@ -493,4 +493,18 @@ void GCL::GLRenderer::SetProjection( const Camera &camera )
 	mProjection.SetPerspective(camera.GetFov(),camera.GetAspectRatio(),camera.GetNear(),camera.GetFar());
 	mModelView= Inverse(camera.GetTransform());
 	});
+}
+
+void GCL::GLRenderer::SetIsDepthTesting( bool isDepthTesting /*= true*/ )
+{
+    RenderPipe::SendCommand([=](){
+        if (isDepthTesting)
+        {
+            glEnable(GL_DEPTH_TEST); glErrorCheck();
+        }
+        else
+        {
+            glDisable(GL_DEPTH_TEST); glErrorCheck();
+        }
+    });
 }

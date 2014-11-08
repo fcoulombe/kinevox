@@ -86,6 +86,10 @@ namespace GCL
 	{
 		mPimpl->SetOrtho();
 	}
+    void SetIsDepthTesting(bool isDepthTesting = true)
+    {
+        mPimpl->SetIsDepthTesting(isDepthTesting);
+    }
 	void GetProjection(Matrix44  &projection) {mPimpl->GetProjection(projection); }
 	void GetModelView(Matrix44  &modelView) {mPimpl->GetModelView(modelView); }
 

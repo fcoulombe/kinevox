@@ -1,7 +1,7 @@
 function Initialize(self)
 end
 
-function Logic(self)
+function Logic(self, dt)
 end
 
 function Hit(self)

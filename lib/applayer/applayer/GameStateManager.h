@@ -65,6 +65,7 @@ public:
 		}
 	}
 	static const std::string &GetCurrentStateName() { GCLAssert(!mStates.empty()); return mStates.top()->GetStateName(); }
+    static const GameStatePtr GetCurrentState() { GCLAssert(!mStates.empty()); return mStates.top(); }
 private:
 	static std::stack<GameStatePtr> mStates;
 

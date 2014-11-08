@@ -39,6 +39,8 @@ class GCLWorld;
 class Sprite;
 class ScriptApi;
 typedef std::vector<Actor *> ActorList;
+typedef std::shared_ptr<Actor> ActorPtr;
+typedef std::vector<ActorPtr> StrongActorList;
 
 typedef std::vector<Sprite *> SpriteList;
 class GCLApplication
@@ -47,7 +49,7 @@ public:
 	GCLEXPORT static void Initialize(const char *windowsTitle);
 	GCLEXPORT static void Terminate();
 
-	GCLEXPORT static void Update(Real dt = 1.0/60.0);
+	GCLEXPORT static void Update();
 	GCLEXPORT static void Render();
 
 	GCLEXPORT static void SetViewportCamera(Camera &camera);
@@ -61,6 +63,10 @@ public:
 	GCLEXPORT static void InitializaAppLayerComponents();
     GCLEXPORT static Actor *GetActor(const char *actorName);
 
+    GCLEXPORT static ActorPtr CreateActor(const char *actorName, const char *archetype);
+    GCLEXPORT static void DestroyActor(const char *actorName);
+
+    GCLEXPORT static Real GetCurrentDt() { return mCurrentDt; }
 private:
 	GCLApplication();
 	~GCLApplication();
@@ -87,9 +93,12 @@ private:
 
     static GCLWorld *mCurrentWorld;
 	static ActorList mActorList;
+    static StrongActorList mStrongActorList;
 	static SpriteList mSpriteList;
 
 	static ScriptApi *mScriptApi;
+
+	static Real mCurrentDt;
 
 };
 

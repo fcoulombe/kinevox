@@ -19,34 +19,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#pragma once
+#include <sstream>
 
-
-#include "MainMenuState.h"
-#include "MainGameState.h"
+#include <gcl/UnitTest.h>
+#include <applayer/Actor.h>
+#include <applayer/ScriptedGameState.h>
 #include <applayer/GameStateManager.h>
-#include <input/Input.h>
+#include <applayer/GCLApplication.h>
+
+
 
 using namespace GCL;
-using namespace Arkanoid;
-
-
-MainMenuState::MainMenuState()
-: GameState("MainMenu"),
-  menu("MainMenu")
+namespace ScriptedGameStateTest
 {
-	std::cout << "enter main menu" << std::endl;
-	menu.SetPosition(WorldPoint3(320,240,0));
-}
-bool MainMenuState::Update(Real dt)
+
+void Test()
 {
-	//std::cout << "Main Menu" << std::endl;
-	menu.Update();
-	if (Input::IsKeyUp(GCL_ENTER))
+	KINEVOX_TEST_START
+	GCLApplication::Initialize("GameStateTest");
 	{
-		std::cout << "enter!"<<std::endl;
-		GameStateManager::ChangeToState(std::make_shared<MainGameState>());
-	}
-	GameState::Update(dt);
-	return true;
-}
+		GameStateManager::ChangeToState(std::make_shared<ScriptedGameState>("TestSplashState", "TestSplashState"));
+		Assert_Test(GameStateManager::GetCurrentStateName() == "TestSplashState");
 
+
+		//KINEVOX_TEST_LOOP_START
+		for (size_t i=0; i<20; ++i)
+		{
+			GCLApplication::Update();
+			GCLApplication::Render();
+		}
+		//KINEVOX_TEST_LOOP_END
+	}
+	GCLApplication::Terminate();
+}
+}

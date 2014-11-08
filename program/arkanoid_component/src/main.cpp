@@ -27,13 +27,11 @@
 #endif
 #include <applayer/GCLApplication.h>
 #include <applayer/GameStateManager.h>
+#include <applayer/ScriptedGameState.h>
 #include <gcl/Time.h>
 #include <input/Input.h>
 
-#include "gamestates/SplashState.h"
-
 using namespace GCL;
-using namespace Arkanoid;
 
 int main(int /*argc*/, char ** /*argv*/)
 {
@@ -42,7 +40,7 @@ int main(int /*argc*/, char ** /*argv*/)
 	try
 	{
 		GCLApplication::Initialize("Arkanoid");
-		GameStateManager::ChangeToState(std::make_shared<SplashState>());
+		GameStateManager::ChangeToState(std::make_shared<ScriptedGameState>("SplashState", "SplashState"));
 		bool isRunning = true;
 		const size_t TICKS_PER_SECOND = 60;
 		const size_t SKIP_TICKS = 1000 / TICKS_PER_SECOND;

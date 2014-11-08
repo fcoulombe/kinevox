@@ -20,21 +20,34 @@
  * THE SOFTWARE.
  */
 
-#pragma once
+#include "applayer/ScriptedGameState.h"
+#include <sstream>
+#include <script/ScriptResource.h>
 
-#include <applayer/GameState.h>
-#include <applayer/Sprite.h>
+using namespace GCL;
 
-namespace Arkanoid
+
+GCL::ScriptedGameState::ScriptedGameState( const std::string &name, const std::string &scriptFileName ) : GameState(name)
 {
+    ScriptResourceManager &scriptManager = ScriptResourceManager::Instance();
+    std::stringstream s;
+    s<<SCRIPT_PATH<<scriptFileName<<".luac";
+    const Resource *resource = scriptManager.LoadResource(s.str().c_str());
+    const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
+    mScriptResource = luaResource;
 
-class MainMenuState: public GCL::GameState
+    mScriptResource->ExecuteMethod("Initialize", this);
+
+}
+
+bool GCL::ScriptedGameState::Update( Real dt )
 {
-public:
-	MainMenuState();
-	bool Update(GCL::Real dt);
-private:
-	GCL::Sprite menu;
-};
+    mScriptResource->ExecuteMethod("Logic", this, dt);
+    return GameState::Update(dt);
+}
 
+GCL::ScriptedGameState::~ScriptedGameState()
+{
+    mScriptResource->ExecuteMethod("Terminate", this);
+    ScriptResourceManager::Instance().ReleaseResource(mScriptResource);
 }

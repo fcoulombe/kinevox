@@ -28,11 +28,12 @@
 #include <gcl/ResourceManager.h>
 #include <gcl/ResourceCache.h>
 #include "script/ConfigLua.h"
-#include "script/ScriptResource.h"
+//#include "script/ScriptResource.h"
 
 struct lua_State;
 namespace GCL
 {
+    class ScriptResource;
   class LuaState;
   typedef int (*scriptFunction) (lua_State *L);
   class ScriptResourceManager : public ResourceCache

@@ -33,6 +33,7 @@
 #include "SpriteTest.h"
 #include "SpriteComponentTest.h"
 #include "ScriptComponentTest.h"
+#include "ScriptedGameStateTest.h"
 #include "GCLApplicationCameraTest.h"
 #include "GCLRenderTargetTest.h"
 //#include "GCLText2DTest.h"
@@ -51,8 +52,9 @@ int main(int argc, char ** argv)
 	 SpriteComponentTest::Test();
 	 ScriptComponentTest::Test();
 	 GameStateTest::Test();
-		//GCLRenderTargetTest::Test();
-		//GCLText2DTest::Test();
+	 ScriptedGameStateTest::Test();
+	 GCLRenderTargetTest::Test();
+	 //GCLText2DTest::Test();
 #endif
      GCLWorldTest::Test();
 		SUITE_TERMINATE

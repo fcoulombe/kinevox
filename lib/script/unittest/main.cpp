@@ -24,6 +24,7 @@
 #include <vld.h>
 #endif
 #include "LuaTest.h"
+#include "LuaStateTest.h"
 #include "ScriptTest.h"
 #include "ScriptResourceTest.h"
 #include "ExposeFunctionTest.h"
@@ -33,6 +34,7 @@ int main(int argc, char ** argv)
 {
 	SUITE_INIT(argc, argv)
 		LuaTest::Test();
+	LuaStateTest::Test();
 	ScriptTest::Test();
 	ScriptResourceTest::Test();
 	ExposeFunctionTest::Test();

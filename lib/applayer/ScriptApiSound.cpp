@@ -33,13 +33,24 @@ static int KPlaySound(lua_State * L)
 	const char *soundFile = lua_tostring(L, 1);
     std::string fullPath(SOUND_PATH);
     fullPath += soundFile;
-    SoundPtr sound = SoundManager::LoadSound(fullPath.c_str());
+    auto sound = SoundManager::LoadSound(fullPath.c_str());
     sound->Play();
 	return 1;
 }
 
+static int KPlayMusic(lua_State * L)
+{
+    const char *soundFile = lua_tostring(L, 1);
+    std::string fullPath(MUSIC_PATH);
+    fullPath += soundFile;
+    auto sound = SoundManager::LoadMusic(fullPath.c_str());
+    sound->Play();
+    return 1;
+}
+
 static const luaL_Reg soundExposedFunc[] = {
 	{ "PlaySound", KPlaySound},
+    { "PlayMusic", KPlayMusic},
 	{ NULL, NULL } };
 
 int luaopen_soundLib(lua_State * L)

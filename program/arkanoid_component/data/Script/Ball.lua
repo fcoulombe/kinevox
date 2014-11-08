@@ -4,7 +4,7 @@ function Initialize(self)
     kinevox.Log("CreateBall " .. SCREEN_SIZE[0] .. " " .. SCREEN_SIZE[1] .. " Velocity: " .. VELOCITY[1] .. VELOCITY[2])
 end
 
-function Logic(self)
+function Logic(self, dt)
    
     pos = self:GetPosition()
    
@@ -37,7 +37,7 @@ function Logic(self)
     newY = newY + velocityY
     
     --Test collision against the blocks
-    for i=0,5*8-1,1 do 
+    for i=1,5*8,1 do 
       local tempBlock = kinevox.GetActor("Block"..i)
       if tempBlock:IsVisible() then
         local blockPos = tempBlock:GetPosition()

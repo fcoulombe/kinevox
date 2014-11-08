@@ -22,23 +22,28 @@
 
 #pragma once
 
-#include <applayer/GameState.h>
-#include <applayer/GameStateManager.h>
+#include <deque>
+#include <memory>
+#include <string>
+
+#include <gcl/Assert.h>
+#include <gcl/WorldUnit.h>
+#include "applayer/GameState.h"
 
 
-namespace Arkanoid
+namespace GCL
 {
-class PauseState: public GameState
+    class ScriptResource;
+class ScriptedGameState : public GameState
 {
 public:
-	PauseState()
-: GameState("Pause")
-{}
-	bool Update(Real dt)
-	{
-		hasBeenInPauseState = true;
-		GameState::Update(dt);
-		return false;
-	}
+	ScriptedGameState(const std::string &name, const std::string &scriptFileName);
+	~ScriptedGameState();
+
+	bool Update(Real dt);
+
+private:
+    const ScriptResource *mScriptResource;
 };
+
 }

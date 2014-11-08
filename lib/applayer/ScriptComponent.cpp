@@ -23,7 +23,8 @@
 #include "applayer/ScriptComponent.h"
 
 #include "applayer/Actor.h"
-#include <script/ScriptResourceManager.h>
+#include "applayer/GCLApplication.h"
+#include <script/ScriptResource.h>
 
 #include <sstream>
 
@@ -58,11 +59,11 @@ void ScriptComponent::SetScript(const std::string &filename)
 	const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
 	mScriptResource = luaResource;
 
-	mScriptResource->ExecuteFunction("Initialize", mParentActor);
+	mScriptResource->ExecuteMethod("Initialize", mParentActor);
 }
 ScriptComponent::~ScriptComponent()
 {
-	mScriptResource->ExecuteFunction("Terminate", mParentActor);
+	mScriptResource->ExecuteMethod("Terminate", mParentActor);
 	ScriptResourceManager::Instance().ReleaseResource(mScriptResource);
 }
 
@@ -73,7 +74,7 @@ void GCL::ScriptComponent::ProcessEvent( size_t , void * )
 
 void ScriptComponent::Update(Real )
 {
-	mScriptResource->ExecuteFunction("Logic", mParentActor);
+	mScriptResource->ExecuteMethod("Logic", mParentActor, GCLApplication::GetCurrentDt());
 }
 
 void GCL::ScriptComponent::Render(const Matrix44 &)

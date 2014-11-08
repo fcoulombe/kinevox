@@ -30,6 +30,7 @@
 #include "applayer/Sprite.h"
 #include "applayer/ScriptApi.h"
 #include <gcl/Assert.h>
+#include <gcl/Time.h>
 #include <gcl/ThreadManager.h>
 #include <input/Input.h>
 #include <physics/PhysicsWorld.h>
@@ -59,7 +60,10 @@ Renderer *GCLApplication::mRenderer = nullptr;
 WinDriver *GCLApplication::mWinDriver = nullptr;
 ScriptApi *GCLApplication::mScriptApi = nullptr;
 ActorList GCLApplication::mActorList;
+StrongActorList GCLApplication::mStrongActorList;
 SpriteList GCLApplication::mSpriteList;
+
+Real GCLApplication::mCurrentDt = 1.0/60.0;
 
 #define REGISTER_COMPONENT_FACTOR(name) \
 	Component::Register(#name, \
@@ -114,16 +118,20 @@ void GCLApplication::InitializaAppLayerComponents()
 }
 
 
-void GCLApplication::Update(Real dt)
+void GCLApplication::Update()
 {
+	size_t currentTime = GCL::Time::GetTickMs();
+    static size_t lastTime = currentTime;
+	Real mCurrentDt = (currentTime - lastTime) / 1000.0;
+	lastTime = currentTime;
     SoundManager::Update();
 	Input::ProcessInput();
-	//for (size_t i=0; i<m2DRenderObjectList.size(); ++i)
-	//{
-	//	m2DRenderObjectList[i]->Update();
-//	}
-	PhysicsWorld::Update(dt);
-	GameStateManager::Update(dt);
+	PhysicsWorld::Update(mCurrentDt);
+    for (auto actor : mStrongActorList)
+    {
+        actor->Update(mCurrentDt);
+    }
+	GameStateManager::Update(mCurrentDt);
 	ScriptResourceManager::Instance().Update();
 	ThreadManager::ReThrowException();
 }
@@ -223,4 +231,19 @@ GCLEXPORT  Actor * GCL::GCLApplication::GetActor( const char *actorName )
         [actorName](const Actor *actor) { return strcmp(actor->GetName().c_str(), actorName) == 0; }); 
     GCLAssertMsg(it != mActorList.end(), std::string("Couldn't find the actor: ") + actorName);
     return *it;
+}
+
+GCLEXPORT  ActorPtr GCL::GCLApplication::CreateActor( const char *actorName, const char *archetype )
+{
+    auto newActor = std::make_shared<Actor>(actorName, archetype);
+    mStrongActorList.push_back(newActor);
+    return newActor;
+}
+
+GCLEXPORT  void GCL::GCLApplication::DestroyActor( const char *actorName )
+{
+    auto it = std::find_if(mStrongActorList.begin(), mStrongActorList.end(),
+        [actorName](const ActorPtr actor) { return strcmp(actor->GetName().c_str(), actorName) == 0; }); 
+    GCLAssertMsg(it != mStrongActorList.end(), std::string("Couldn't find the actor: ") + actorName);
+    mStrongActorList.erase(it);
 }

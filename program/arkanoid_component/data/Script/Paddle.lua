@@ -3,7 +3,7 @@ function Initialize(self)
     VELOCITY = 10.0
 end
 
-function Logic(self)
+function Logic(self, dt)
     pos = self:GetPosition()
     local newX = pos[0]
     local newY = pos[1]

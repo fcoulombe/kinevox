@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2013 by Francois Coulombe
+* Copyright (C) 2014 by Francois Coulombe
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -23,31 +23,23 @@
 #include <sstream>
 
 #include <kinetestlib/UnitTest.h>
-#include <script/ScriptResource.h>
+#include <script/Lua.h>
+
 
 using namespace GCL;
-namespace ScriptResourceTest
+namespace LuaStateTest
 {
     void Test()
     {
         KINEVOX_TEST_START
-        ScriptResourceManager::Initialize();
+            std::stringstream s;
         {
-            const Resource *resource = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"TestLuaScript.luac");
-            const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
-            luaResource->ExecuteFunction("Logic");
+            LuaState L;
+            L.Push(14);
+            L.Push("bleh");
+            L.Push(1.0);
+            
 
-            const Resource *resource2 = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"TestLuaScript.luac");
-            const ScriptResource *luaResource2 = static_cast<const ScriptResource*>(resource2);
-            luaResource2->ExecuteFunction("Logic");
-
-            luaResource2->ExecuteFunction("Logic2", 1.0);
-
-
-            ScriptResourceManager::Instance().ReleaseResource(resource);
-            ScriptResourceManager::Instance().ReleaseResource(resource2);
-			ScriptResourceManager::Instance().Update(); //gc
         }
-        ScriptResourceManager::Terminate();
     }
 }

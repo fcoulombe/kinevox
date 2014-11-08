@@ -22,10 +22,12 @@
 
 #include "applayer/ScriptApi.h"
 #include "applayer/Actor.h"
+#include "applayer/GameStateManager.h"
+#include "applayer/ScriptedGameState.h"
 #include "applayer/GCLApplication.h"
 #include "applayer/ScriptComponent.h"
 #include <gcl/Config.h>
-#include <script/ScriptResourceManager.h>
+#include <script/ScriptResource.h>
 #include <script/Lua.h>
 
 using namespace GCL;
@@ -104,11 +106,65 @@ static int KGetScreenSize(lua_State * L)
 	return 1;
 }
 
+static int KChangeToState(lua_State * L)
+{
+    const char *stateName = lua_tostring(L, 1);
+    const char *scriptFileName = lua_tostring(L, 2);
+    GameStateManager::ChangeToState(std::make_shared<ScriptedGameState>(stateName, scriptFileName));
+
+    return 1;
+}
+
+static int KCreateActor(lua_State * L)
+{
+    const char *actorName = lua_tostring(L, 1);
+    const char *archetypeFileName = lua_tostring(L, 2);
+    GCLApplication::CreateActor(actorName, archetypeFileName);
+    return 1;
+}
+
+static int KDestroyActor(lua_State * L)
+{
+    const char *actorName = lua_tostring(L, 1);
+    std::cout << "killing: " << actorName << std::endl;
+    GCLApplication::DestroyActor(actorName);
+    return 1;
+}
+
+
+static int KPushChildState(lua_State * L)
+{
+    const char *stateName = lua_tostring(L, 1);
+    const char *scriptFileName = lua_tostring(L, 2);
+    GameStateManager::GetCurrentState()->PushChildState(std::make_shared<ScriptedGameState>(stateName, scriptFileName));
+    return 1;
+}
+
+static int KPushState(lua_State * L)
+{
+    const char *stateName = lua_tostring(L, 1);
+    const char *scriptFileName = lua_tostring(L, 2);
+    GameStateManager::PushState(std::make_shared<ScriptedGameState>(stateName, scriptFileName));
+
+    return 1;
+}
+static int KPopState(lua_State * /*L*/)
+{
+    GameStateManager::PopState();
+    return 1;
+}
+
 static const luaL_Reg kinevoxExposedFunc[] = {
 		{ "Log", KLog },
 		{ "GetScreenSize", KGetScreenSize},
 		{ "GetActor", KGetActor},
         { "LoadLib", KLoadLib},
+        { "ChangeToState", KChangeToState},
+        { "PushChildState", KPushChildState},
+        { "PushState", KPushState},
+        { "PopState", KPopState},
+        { "DestroyActor", KDestroyActor},
+        { "CreateActor", KCreateActor},
 		{ NULL, NULL } };
 
 

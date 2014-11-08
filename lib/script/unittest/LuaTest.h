@@ -98,8 +98,6 @@ namespace LuaTest
             GObj obj2(SCRIPT_PATH"TestLuaScript2.luac");
             obj2.Logic();
             obj.Logic();
-            
-
         }
     }
 }

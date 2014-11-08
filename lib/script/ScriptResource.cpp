@@ -33,37 +33,38 @@ ScriptResource::ScriptResource( const char *scriptFileName )
 mFilename(scriptFileName)
 {
     LuaState &L = ScriptResourceManager::Instance().GetLuaState();
-    int s = luaL_loadfile(L, scriptFileName); //1
-    L.ReportLuaErrors(s);
+    LuaState tempL(lua_newthread(L)); //1 thread
+    int s = luaL_loadfile(tempL, scriptFileName); //1
+    tempL.ReportLuaErrors(s);
     GCLAssertMsg(s==0, scriptFileName);
     //create environment
-    lua_newtable(L); //push new table on the stack 21
-    lua_getglobal(L,"_G"); //put the global on the stack 321
-    lua_setfield(L,-2,"__index"); //store it in the table at key index 21
+    lua_newtable(tempL); //push new table on the stack 21
+    lua_getglobal(tempL,"_G"); //put the global on the stack 321
+    lua_setfield(tempL,-2,"__index"); //store it in the table at key index 21
 
-    lua_pushvalue(L,-1); //pushes a copy of the table onto the stack 321
+    lua_pushvalue(tempL,-1); //pushes a copy of the table onto the stack 321
 
     auto objectModuleList = ScriptResourceManager::Instance().GetObjectModuleList();
     for (auto objectModule : objectModuleList)
     {
-        lua_getfield(L, -1, "__index"); // load index at 4321
-        lua_getfield(L, -1, objectModule.c_str()); // load object at 54321
-        lua_pushnil(L); // load nill at 654321
-        while(lua_next(L, -2)) { // load key value at 7654321
-            const char *functionName = lua_tostring(L, -2);
-            lua_setfield(L, -5, functionName);
+        lua_getfield(tempL, -1, "__index"); // load index at 4321
+        lua_getfield(tempL, -1, objectModule.c_str()); // load object at 54321
+        lua_pushnil(tempL); // load nill at 654321
+        while(lua_next(tempL, -2)) { // load key value at 7654321
+            const char *functionName = lua_tostring(tempL, -2);
+            lua_setfield(tempL, -5, functionName);
         }
-        lua_pop(L, 1);
-        lua_pop(L, 1);
+        lua_pop(tempL, 1);
+        lua_pop(tempL, 1);
     }
-    lua_setfield(L, LUA_REGISTRYINDEX, mFilename.c_str()); //store the table into the registry and pops it 21
+    lua_setfield(tempL, LUA_REGISTRYINDEX, mFilename.c_str()); //store the table into the registry and pops it 21
 
-    lua_pushvalue(L,-1); //pushes a copy of the table onto the stack 321
-    lua_setmetatable(L,-2); //21
-    lua_setupvalue(L,1,1); //1
-    int ret = lua_pcall(L,0,LUA_MULTRET,0);   
-    L.ReportLuaErrors(ret);
-        
+    lua_pushvalue(tempL,-1); //pushes a copy of the table onto the stack 321
+    lua_setmetatable(tempL,-2); //21
+    lua_setupvalue(tempL,1,1); //1
+    int ret = lua_pcall(tempL,0,LUA_MULTRET,0);   
+    tempL.ReportLuaErrors(ret);
+    lua_pop(L, 1);        
 }
 
 ScriptResource::~ScriptResource()
@@ -75,23 +76,4 @@ ScriptResource::~ScriptResource()
 }
 
 
-void ScriptResource::ExecuteFunction(const char *functionName, void *obj) const
-{
-    LuaState &L = ScriptResourceManager::Instance().GetLuaState();
-    lua_getfield(L, LUA_REGISTRYINDEX, mFilename.c_str()); 
-    lua_getfield(L, -1, functionName);
-    if (!lua_isnil(L, lua_gettop(L)))
-    {
-        lua_getfield(L, LUA_REGISTRYINDEX, mFilename.c_str());
-        lua_pushlightuserdata(L, obj);
-        lua_setfield(L,-2,"KINEVOX_ACTOR_ID");
 
-        int s = lua_pcall(L, 1, 0, 0);
-    	L.ReportLuaErrors(s);
-    }
-    else
-    {
-    	lua_pop(L, 1);
-    }
-    lua_pop(L, 1);
-}

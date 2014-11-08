@@ -72,6 +72,7 @@ int luaopen_inputLib(lua_State * L)
 	REGISTER_GLOBAL_KEY(GCL_DOWN);
 	REGISTER_GLOBAL_KEY(GCL_LEFT);
 	REGISTER_GLOBAL_KEY(GCL_RIGHT);
+    REGISTER_GLOBAL_KEY(GCL_ENTER);
 	//lua_pushinteger(L, GCL_ESCAPE);
 	//lua_setglobal(L,"GCL_ESCAPE");
 	return 1;

@@ -55,7 +55,7 @@ function TestSoundModule(self)
   sound.PlaySound("Explosion.wav")
 end
 
-function Logic(self)
+function Logic(self, dt)
   self:TestKinevoxModule()
   self:TestObjectModule()
   self:TestInputModule()

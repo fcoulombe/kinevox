@@ -47,11 +47,12 @@ OggStream::~OggStream()
 
 void OggStream::Open(const char *filename)
 {
-    SoundManager::SendCommand([=]{
+    const std::string filename_copy(filename);
+    SoundManager::SendCommand([this, filename_copy]{
 	int result;
 
-	GCLAssert(GCLFile::Exists(filename));
-	result = ov_fopen(filename, &mOggStream); ovErrorCheck(result);
+	GCLAssert(GCLFile::Exists(filename_copy));
+	result = ov_fopen(filename_copy.c_str(), &mOggStream); ovErrorCheck(result);
 
 	mVorbisInfo = ov_info(&mOggStream, -1);
 	mVorbisComment = ov_comment(&mOggStream, -1);
@@ -169,13 +170,9 @@ void OggStream::Update()
 	    alGetSourcei(mSource, AL_BUFFERS_PROCESSED, &processed);alErrorCheck();
 	    while(processed--)
 	    {
-            std::cout << "Queue buffeR" << std::endl;
-		    ALuint buffer;
-
+            ALuint buffer;
 		    alSourceUnqueueBuffers(mSource, 1, &buffer);		alErrorCheck();
-
 		    Stream(buffer);
-
 		    alSourceQueueBuffers(mSource, 1, &buffer);		alErrorCheck();
 	    }
     });

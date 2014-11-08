@@ -69,7 +69,7 @@ namespace ExposeFunctionTest
         size_t objectid = GetObjectId(L);
         size_t testObjectId = (size_t)&object;
         GCLAssert(objectid == testObjectId);
-        std::cout << "we call a C func!" << std::endl;
+        std::cout << "we call an object func!" << std::endl;
         return 1;
     }
 
@@ -96,7 +96,7 @@ namespace ExposeFunctionTest
             const Resource *resource = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"ExposeToLuaTest.luac");
             const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
 
-            luaResource->ExecuteFunction("Logic", &object);
+            luaResource->ExecuteMethod("Logic", &object);
             ScriptResourceManager::Instance().ReleaseResource(resource);
 			ScriptResourceManager::Instance().Update(); //gc
         }

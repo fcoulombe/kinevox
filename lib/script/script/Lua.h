@@ -31,15 +31,18 @@ extern "C"
 #include <lauxlib.h>
 }
 #include <gcl/Assert.h>
+#include <gcl/WorldUnit.h>
 namespace GCL
 {
     class LuaState
     {
     private:
         lua_State *L;
+        bool mIsChildState;
     public:
         LuaState() 
-            : L(luaL_newstate()) 
+            : L(luaL_newstate()),
+            mIsChildState(false)
         { 
 			luaL_openlibs(L); 
 
@@ -47,8 +50,15 @@ namespace GCL
 			lua_newtable(L); //push new table on the stack 1
 			lua_setfield(L, LUA_REGISTRYINDEX, "ConfigTable"); //store it in the registry
 		}
+        LuaState(lua_State *state) 
+            : L(state) ,
+            mIsChildState(true)
+        { 
+        }
 
         ~LuaState() {
+            if (mIsChildState)
+                return;
 			lua_pushnil(L);
 			lua_setfield(L, LUA_REGISTRYINDEX, "ConfigTable"); //delete config table
             lua_close(L);
@@ -56,7 +66,7 @@ namespace GCL
 
         // implicitly act as a lua_State pointer
         inline operator lua_State*()
-        		{
+        {
             return L;
         }
         void ReportLuaErrors( const int status)
@@ -115,5 +125,41 @@ namespace GCL
 		{
 			lua_gc(L, LUA_GCSTEP, 1);
 		}
+        void Push(int value)
+        {
+            lua_pushinteger(L, value);
+        }
+        void Push(unsigned int value)
+        {
+            lua_pushunsigned(L, value);
+        }
+        void Push(bool value)
+        {
+            lua_pushboolean(L, value);
+        }
+        void Push(Real value)
+        {
+            lua_pushnumber(L, value);
+        }
+        void Push(const char *value)
+        {
+            lua_pushstring(L, value);
+        }
+        void Push(const std::string &value)
+        {
+            lua_pushlstring(L, value.c_str(), value.size());
+        }
+        template <typename T>
+        inline void Push(T& t)
+        {
+            lua_pushlightuserdata(l, &t);
+        }
+
+       /* template <typename T, typename... Rest>
+        inline void Pushs(lua_State *l, T value, Rest... rest)
+        {
+            Push(l, m, std::forward<T>(value));
+            Pushs(l, m, rest...);
+        }*/
     };
 }

@@ -7,9 +7,9 @@ endif()
 
 option(USE_OPENRL "Enables Open Ray Tracing Library. SDK from caustic must be installed" OFF)
 IF(${CMAKE_SYSTEM_NAME} STREQUAL "Android")
-SET(GFXAPI_TO_USE "OpenGLES2" CACHE STRING "library to use for graphics")
+    SET(GFXAPI_TO_USE "OpenGLES2" CACHE STRING "library to use for graphics")
 Else()
-SET(GFXAPI_TO_USE "OpenGL3" CACHE STRING "library to use for graphics")
+    SET(GFXAPI_TO_USE "OpenGL3" CACHE STRING "library to use for graphics")
 endif()
 SET_PROPERTY(CACHE GFXAPI_TO_USE PROPERTY STRINGS OpenGL3 OpenGL OpenGLES2 OpenGLES3 D3D) 
 

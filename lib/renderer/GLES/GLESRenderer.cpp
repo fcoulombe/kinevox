@@ -331,3 +331,17 @@ void GCL::GLESRenderer::SetProjection( const Camera &camera )
 	mModelView= Inverse(camera.GetTransform());
 	});
 }
+
+void GCL::GLESRenderer::SetIsDepthTesting( bool isDepthTesting /*= true*/ )
+{
+    RenderPipe::SendCommand([=](){
+        if (isDepthTesting)
+        {
+            glEnable(GL_DEPTH_TEST); glErrorCheck();
+        }
+        else
+        {
+            glDisable(GL_DEPTH_TEST); glErrorCheck();
+        }
+    });
+}

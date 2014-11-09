@@ -149,6 +149,7 @@ public:
 			SetModelViewUnsafe(modelView);
 		});
 	}
+	void SetIsDepthTesting(bool isDepthTesting = true);
 private:
 	void Init3DState();
    

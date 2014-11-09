@@ -94,7 +94,7 @@ int main(int /*argc*/, char ** /*argv*/)
                 lastTime = currentTime;
                 area->Update(deltaTime);
                 GCLApplication::SetViewportCamera(cam);
-                GCLApplication::Update(deltaTime);
+                GCLApplication::Update();
                 if (Input::IsKeyUp(GCL_ESCAPE))
                     isRunning=false;
                 const Real kSpeed = 0.1;

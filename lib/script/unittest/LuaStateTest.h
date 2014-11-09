@@ -37,7 +37,7 @@ namespace LuaStateTest
             LuaState L;
             L.Push(14);
             L.Push("bleh");
-            L.Push(1.0);
+            L.Push(Real(1.0));
             
 
         }

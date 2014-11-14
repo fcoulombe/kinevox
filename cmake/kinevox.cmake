@@ -54,14 +54,70 @@ macro(ProcessDependencies projName)
 	endif()
 endmacro()
 
+SET(USE_NATIVE_ACTIVITY ON)
+macro(AndroidExecutable ProjectName)
+    add_library(${ProjectName} SHARED ${${ProjectName}_src} ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.c ${DATA_DEP})
+    set(ANDROID_SO_OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/android/libs/${ANDROID_ABI})
+    set_target_properties(${ProjectName} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${ANDROID_SO_OUTDIR})
+    set_target_properties(${ProjectName} PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE ${ANDROID_SO_OUTDIR})
+    set_target_properties(${ProjectName} PROPERTIES LIBRARY_OUTPUT_DIRECTORY_DEBUG ${ANDROID_SO_OUTDIR})
+    IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
+        list(REVERSE DEP_LIBS)
+    ENDIF()
+    SET(ANDROID_SDK_TOOL $ENV{ANDROID_SDK}/tools/android)
+    SET(ANDROID_ANT ant)
+    #SET(ANDROID_PLATFORM android-$(ANDROID_NATIVE_API_LEVEL))
+    SET(ANDROID_PLATFORM android-20)
+    execute_process(COMMAND ${ANDROID_SDK_TOOL} create project
+             --path ${CMAKE_CURRENT_BINARY_DIR}/android
+             --target ${ANDROID_PLATFORM}
+             --name ${ProjectName}
+             --package com.kinevox.${ProjectName}
+             --activity KinevoxActivity
+             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+    if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+      set(ANT_BUILD_TYPE "debug")
+      set(IS_DEBUGGABLE "true")
+    else()
+      set(IS_DEBUGGABLE "false")
+    endif() 
+    if (NOT ${USE_NATIVE_ACTIVITY})
+
+        configure_file (
+          "${PROJECT_SOURCE_DIR}/android/AndroidManifest_java.xml"
+          "${CMAKE_CURRENT_BINARY_DIR}/android/AndroidManifest.xml"
+          )
+          
+        configure_file (
+          "${PROJECT_SOURCE_DIR}/android/KinevoxActivity.java"
+          "${CMAKE_CURRENT_BINARY_DIR}/android/src/com/kinevox/${ProjectName}/KinevoxActivity.java"
+          )
+        configure_file (
+          "${PROJECT_SOURCE_DIR}/android/KinevoxLib.java"
+          "${CMAKE_CURRENT_BINARY_DIR}/android/src/com/kinevox/${ProjectName}/KinevoxLib.java"
+          )
+        configure_file (
+          "${PROJECT_SOURCE_DIR}/android/KinevoxView.java"
+          "${CMAKE_CURRENT_BINARY_DIR}/android/src/com/kinevox/${ProjectName}/KinevoxView.java"
+          )
+  
+    else()
+        configure_file (
+          "${PROJECT_SOURCE_DIR}/android/AndroidManifest_native.xml"
+          "${CMAKE_CURRENT_BINARY_DIR}/android/AndroidManifest.xml"
+          )
+    endif()  
+    add_custom_command(TARGET ${ProjectName} POST_BUILD COMMAND ${ANDROID_ANT} -v ${ANT_BUILD_TYPE} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/android)          
+    
+endmacro(AndroidExecutable ProjectName)
+
 macro(Executable ProjectName)
 	INCLUDE(DLL)
 	if(${ANDROID})
-	   add_library(${ProjectName} SHARED ${${ProjectName}_src} ${DATA_DEP})
-	   IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
-        list(REVERSE DEP_LIBS)
-       ENDIF()
+	   SET(EXTRA_LIBS android log)
+	   AndroidExecutable(${ProjectName})
 	else()
+	   SET(EXTRA_LIBS)
 	   add_executable(${ProjectName} ${${ProjectName}_src} ${DATA_DEP})
 	   IF(${CMAKE_CXX_COMPILER_ID} STREQUAL "GNU" OR ${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
         list(REVERSE DEP_LIBS)
@@ -69,7 +125,7 @@ macro(Executable ProjectName)
        ENDIF()
 	endif()
 
-    target_link_libraries( ${ProjectName} ${DEP_LIBS})
+    target_link_libraries( ${ProjectName} ${DEP_LIBS} ${EXTRA_LIBS} )
 endmacro()
 
 macro(Test ProjectName)

@@ -32,7 +32,7 @@
 
 using namespace GCL;
 
-static int KLog(lua_State * L)
+static int ScriptLog(lua_State * L)
 {
 	const char *str = lua_tostring(L, 1);
 	std::cout << "[Script] " << str << std::endl;
@@ -154,7 +154,7 @@ static int KPopState(lua_State * /*L*/)
 }
 
 static const luaL_Reg kinevoxExposedFunc[] = {
-		{ "Log", KLog },
+		{ "Log", ScriptLog },
 		{ "GetScreenSize", KGetScreenSize},
 		{ "GetActor", KGetActor},
         { "LoadLib", KLoadLib},

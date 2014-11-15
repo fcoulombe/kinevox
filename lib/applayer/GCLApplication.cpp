@@ -77,7 +77,7 @@ void GCLApplication::InitializaAppLayerComponents()
 	REGISTER_COMPONENT_FACTOR(SpriteComponent);
 	REGISTER_COMPONENT_FACTOR(ScriptComponent);
 }
-/*static */void GCLApplication::Initialize(const char *windowsTitle)
+/*static */void GCLApplication::Initialize(const char * windowsTitle)
 {
     SoundResourceManager::Initialize();
     SoundManager::Initialize();
@@ -89,6 +89,8 @@ void GCLApplication::InitializaAppLayerComponents()
 	PhysicsWorld::Initialize();
 	GCLAssert(mRenderer == NULL);
     mWinDriver = new WinDriver(windowsTitle);
+    while (!mWinDriver->IsReady())
+    	mWinDriver->SwapBuffer();
 	mRenderer = new Renderer(mWinDriver->GetWindowsHandle());
 	mScriptApi = new ScriptApi();
 	InitializaAppLayerComponents();

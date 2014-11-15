@@ -231,8 +231,7 @@ void GLRenderer::InitGLX(size_t windowsHandle)
 
 			ctxErrorOccurred = false;
 
-			std::cout <<  "Failed to create GL 3.0 context"
-					" ... using old-style GLX context" << std::endl;
+			KLog("Failed to create GL 3.0 context  ... using old-style GLX context");
 			mCtx = glXCreateContextAttribsARB( mDisplay, bestFbc, 0,True, context_attribs );
 		}
 #else
@@ -252,7 +251,7 @@ void GLRenderer::InitGLX(size_t windowsHandle)
 	// Verifying that context is a direct context
 	if ( ! glXIsDirect ( mDisplay, mCtx ) )
 	{
-		std::cout << "Indirect GLX rendering context obtained" << std::endl;
+		KLog("Indirect GLX rendering context obtained");
 	}
 	else
 	{

@@ -19,7 +19,7 @@ void main()
 	int rowPerTexture = height/Dimension.y;
 
 	int whatRow = CurrentFrame/framePerWidth;
-	int whatCol = int(mod(CurrentFrame,framePerWidth));
+	int whatCol = int(mod(float(CurrentFrame),float(framePerWidth)));
 	int whatTexture = whatRow/rowPerTexture;
 	
 	whatRow = whatRow - (whatTexture*rowPerTexture);

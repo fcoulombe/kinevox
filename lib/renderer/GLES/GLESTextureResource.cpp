@@ -49,6 +49,7 @@ void GLESTextureResource::Initialize(const TextureResource &resource )
 {
 	const PixelBuffer &data = resource.mTextureData.imageData;
 	RenderPipe::SendCommand([&](){
+		glActiveTexture(GL_TEXTURE0);glErrorCheck();
 	glGenTextures(1, &mTextureId); glErrorCheck();
 	glBindTexture(GL_TEXTURE_2D, mTextureId);glErrorCheck();
 
@@ -74,7 +75,7 @@ void GLESTextureResource::Initialize(const TextureResource &resource )
 		//push from pbo to texture
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)data.mWidth,
 			(GLsizei)data.mHeight, BytesPerPixel[data.mBytesPerPixel-1],
-			GL_UNSIGNED_BYTE, 0);glErrorCheck();
+			GL_UNSIGNED_BYTE, data.mPixels);glErrorCheck();
 		mPBO->UnBindUnsafe();
 	}
 	glGenerateMipmap(GL_TEXTURE_2D);glErrorCheck();

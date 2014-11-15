@@ -367,5 +367,9 @@ size_t WinDriver::GetWindowsHandle() const
 {
 	return (size_t)mpWinDriver->GetWindowsHandle();
 }
+bool WinDriver::IsReady() const
+{
+	return true;
+}
 }
 #endif

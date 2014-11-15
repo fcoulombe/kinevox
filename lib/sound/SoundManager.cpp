@@ -23,6 +23,7 @@
 #include "sound/SoundManager.h"
 #include <iostream>
 #include <gcl/Config.h>
+#include <gcl/Log.h>
 #include "sound/ALSoundDevice.h"
 
 using namespace GCL;
@@ -34,7 +35,7 @@ SoundList SoundManager::mSoundList;
 WorkerThread *SoundManager::mCommandQueue = nullptr;
 void GCL::SoundManager::Initialize()
 {
-    std::cout << "SoundManager::Initialize" << std::endl;
+    KLog("SoundManager::Initialize");
     GCLAssert(device == nullptr);
     if (Config::Instance().GetInt("IS_RENDERER_THREDED"))
         mIsThreaded = true;

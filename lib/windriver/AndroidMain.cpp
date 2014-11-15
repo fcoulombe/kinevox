@@ -20,7 +20,9 @@
  * THE SOFTWARE.
  */
 #if	defined( OS_ANDROID)
+#include <sstream>
 #include <gcl/Log.h>
+#include <gcl/Exception.h>
 #include <gcl/File.h>
 using namespace GCL;
 extern int main(int argc, char **argv);
@@ -36,9 +38,27 @@ JNIEXPORT void android_main(struct android_app* state)
    	app_dummy();
    	gAndroidApp = state;
    	GCLFile::RegisterAssetManager(gAndroidApp->activity->assetManager);
-
+	try
+	{
     char **argv=nullptr;
    	main(0, argv);
-
+	}
+	catch (GCLException & e)
+	{
+		std::stringstream str;
+		str << "[FAILED] " << std::endl;
+		str << e.what();
+		KLog("%s", str.str().c_str());
+	}
+	catch (std::exception &e)
+	{
+		std::stringstream s;
+		s << "[FAILED] " << e.what() << std::endl;
+		KLog("%s", s.str().c_str());
+	}
+	catch (...)
+	{
+		KLog("[FAILED] not sure what happened");
+	}
 }
 #endif

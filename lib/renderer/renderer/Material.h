@@ -40,6 +40,7 @@ public:
 	void SetTexture(const char *texture);
 
     GPUProgram *GetShader() const { return mProgram; }
+    Texture *GetTexture() const { return mTexture; }
 private:
 	Material(Material &);
 	void operator=(Material &);

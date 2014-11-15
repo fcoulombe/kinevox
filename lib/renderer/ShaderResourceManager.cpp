@@ -23,7 +23,8 @@
 #include "renderer/ShaderResourceManager.h"
 #include "renderer/ShaderResource.h"
 
-#include "renderer/GL/GLShaderResourceManager.h"
+#include "rendererconf.h"
+#include GFXAPI_ShaderResourceManager_H
 
 using namespace GCL;
 
@@ -43,12 +44,12 @@ void GCL::ShaderResourceManager::Initialize()
 {
 	GCLAssert(smpInstance == NULL);
 	smpInstance = new ShaderResourceManager();
-	GLShaderResourceManager::Initialize();
+	IShaderResourceManager::Initialize();
 }
 
 void GCL::ShaderResourceManager::Terminate()
 {
-	GLShaderResourceManager::Terminate();
+	IShaderResourceManager::Terminate();
 	GCLAssert(smpInstance != NULL);
 	delete smpInstance;
 	smpInstance = NULL;

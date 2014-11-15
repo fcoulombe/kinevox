@@ -21,7 +21,8 @@
  */
 
 #include "renderer/TextureResourceManager.h"
-#include "renderer/GL/GLTextureResourceManager.h"
+#include "rendererconf.h"
+#include GFXAPI_TextureResourceManager_H
 
 using namespace GCL;
 size_t TextureResourceManager::createdTextureResourceCount=0;
@@ -43,12 +44,12 @@ void GCL::TextureResourceManager::Initialize()
 {
 	GCLAssert(smpInstance == NULL);
 	smpInstance = new TextureResourceManager();
-	GLTextureResourceManager::Initialize();
+	ITextureResourceManager::Initialize();
 }
 
 void GCL::TextureResourceManager::Terminate()
 {
-	GLTextureResourceManager::Terminate();
+	ITextureResourceManager::Terminate();
 	GCLAssert(smpInstance != NULL);
 	delete smpInstance;
 	smpInstance = NULL;

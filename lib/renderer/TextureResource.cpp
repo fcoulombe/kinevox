@@ -48,13 +48,9 @@ TextureResource::TextureResource( const char *textureName )
 	TextureData &data = mTextureData;
 	if (strncmp(ext.c_str(), "tga", 3) == 0)
 	{
-		std::fstream fp(path.c_str(), std::fstream::binary|std::fstream::in);
-		GCLAssertMsg(fp.is_open() && fp.good(), msg.c_str());
-
+		GCLFile fp(path.c_str());
 		PixelBuffer::LoadTga(fp, data.imageData);
 		GCLAssert(data.imageData.mPixels);
-
-		fp.close();
 	}
 	else if (strncmp(ext.c_str(), "png", 3) == 0)
 	{

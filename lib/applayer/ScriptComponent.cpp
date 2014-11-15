@@ -54,7 +54,7 @@ void ScriptComponent::SetScript(const std::string &filename)
 	if (mScriptResource)
 		scriptManager.ReleaseResource(mScriptResource);
 	std::stringstream s;
-	s<<SCRIPT_PATH<<filename<<".luac";
+	s<<SCRIPT_PATH<<filename<<".lua";
 	const Resource *resource = scriptManager.LoadResource(s.str().c_str());
 	const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
 	mScriptResource = luaResource;

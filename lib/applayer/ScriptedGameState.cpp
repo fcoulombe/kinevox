@@ -31,7 +31,7 @@ GCL::ScriptedGameState::ScriptedGameState( const std::string &name, const std::s
 {
     ScriptResourceManager &scriptManager = ScriptResourceManager::Instance();
     std::stringstream s;
-    s<<SCRIPT_PATH<<scriptFileName<<".luac";
+    s<<SCRIPT_PATH<<scriptFileName<<".lua";
     const Resource *resource = scriptManager.LoadResource(s.str().c_str());
     const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
     mScriptResource = luaResource;

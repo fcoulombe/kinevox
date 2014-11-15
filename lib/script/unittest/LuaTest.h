@@ -23,6 +23,7 @@
 #include <sstream>
 
 #include <kinetestlib/UnitTest.h>
+#include <gcl/Log.h>
 #include <script/Script.h>
 #include <script/Lua.h>
 
@@ -38,7 +39,14 @@ namespace LuaTest
         Script(const char *filename)
             : mFilename(filename)
         {
-            int s = luaL_loadfile(L, filename); //1
+
+        	GCLFile scriptFile(filename);
+        	size_t fileSize = scriptFile.GetFileSize();
+        	uint8_t *buffer = new uint8_t[fileSize];
+        	scriptFile.Read(buffer, fileSize);
+        	std::string name = std::string("@")+filename;
+        	int s = luaL_loadbuffer(L,(const char*)buffer,fileSize,name.c_str());
+            //int s = luaL_loadfile(L, filename); //1
             L.ReportLuaErrors(s);
             GCLAssertMsg(s==0, filename);
 
@@ -75,7 +83,7 @@ namespace LuaTest
     class GObj
     {
     public:
-        GObj(const char *scriptName = SCRIPT_PATH"TestLuaScript.luac")
+        GObj(const char *scriptName = SCRIPT_PATH"TestLuaScript.lua")
             : mScript(scriptName)
         {
             
@@ -94,8 +102,8 @@ namespace LuaTest
         KINEVOX_TEST_START
             std::stringstream s;
         {
-            GObj obj(SCRIPT_PATH"TestLuaScript.luac");
-            GObj obj2(SCRIPT_PATH"TestLuaScript2.luac");
+            GObj obj(SCRIPT_PATH"TestLuaScript.lua");
+            GObj obj2(SCRIPT_PATH"TestLuaScript2.lua");
             obj2.Logic();
             obj.Logic();
         }

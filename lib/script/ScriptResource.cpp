@@ -24,6 +24,8 @@
 #include "script/ScriptResourceManager.h"
 #include "script/Lua.h"
 #include <gcl/Assert.h>
+#include <gcl/File.h>
+#include <gcl/Log.h>
 
 
 using namespace GCL;
@@ -34,8 +36,15 @@ mFilename(scriptFileName)
 {
     LuaState &L = ScriptResourceManager::Instance().GetLuaState();
     LuaState tempL(lua_newthread(L)); //1 thread
-    int s = luaL_loadfile(tempL, scriptFileName); //1
+    GCLFile scriptFile(scriptFileName);
+    size_t fileSize = scriptFile.GetFileSize();
+    uint8_t *buffer = new uint8_t[fileSize];
+    scriptFile.Read(buffer, fileSize);
+
+    std::string name = std::string("@")+scriptFileName;
+    int s = luaL_loadbuffer(tempL,(const char*)buffer,fileSize,name.c_str());
     tempL.ReportLuaErrors(s);
+
     GCLAssertMsg(s==0, scriptFileName);
     //create environment
     lua_newtable(tempL); //push new table on the stack 21

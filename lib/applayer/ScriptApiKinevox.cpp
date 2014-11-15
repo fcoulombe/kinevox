@@ -27,6 +27,7 @@
 #include "applayer/GCLApplication.h"
 #include "applayer/ScriptComponent.h"
 #include <gcl/Config.h>
+#include <gcl/Log.h>
 #include <script/ScriptResource.h>
 #include <script/Lua.h>
 
@@ -35,15 +36,21 @@ using namespace GCL;
 static int ScriptLog(lua_State * L)
 {
 	const char *str = lua_tostring(L, 1);
-	std::cout << "[Script] " << str << std::endl;
+	KLog("[Script] %s", str);
 	return 1;
 }
 static int KLoadLib(lua_State * L)
 {
     const char *lib = lua_tostring(L, 1);
     std::stringstream s;
-    s<<SCRIPT_PATH<<lib<<".luac";
-    int res = luaL_loadfile(L, s.str().c_str());
+    s<<SCRIPT_PATH<<lib<<".lua";
+    //int res = luaL_loadfile(L, s.str().c_str());
+    GCLFile scriptFile(s.str().c_str());
+    size_t fileSize = scriptFile.GetFileSize();
+    uint8_t *buffer = new uint8_t[fileSize];
+    scriptFile.Read(buffer, fileSize);
+    std::string name = std::string("@")+s.str();
+    int res = luaL_loadbuffer(L,(const char*)buffer,fileSize,name.c_str());
     (void)res;
     int ret = lua_pcall(L,0,LUA_MULTRET,0);   
     if ( ret!=0 )

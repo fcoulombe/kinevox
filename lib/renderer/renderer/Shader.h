@@ -35,6 +35,9 @@ namespace GCL
 	{
 #if USE_OPENGL3
 		const std::string shaderFileName = std::string(GLSL_PATH) + std::string(shaderSourcePath)+std::string(".glsl3");
+#elif defined(ES2)
+		const std::string shaderFileName = std::string(GLSL_PATH) + std::string(shaderSourcePath)+std::string(".glsles");
+
 #else
 		const std::string shaderFileName = std::string(GLSL_PATH) + std::string(shaderSourcePath)+std::string(".glsl");
 #endif

@@ -26,6 +26,7 @@
 #include <cstring>
 
 #include <gcl/Assert.h>
+#include <gcl/File.h>
 
 using namespace GCL;
 
@@ -58,12 +59,10 @@ TextureResource::TextureResource( const char *textureName )
 	else if (strncmp(ext.c_str(), "png", 3) == 0)
 	{
 #ifndef OS_IPHONE
-		FILE *fp = fopen(path.c_str(), "rb");
-		GCLAssertMsg(fp, path.c_str());
+		GCLFile fp(path.c_str());
 
 		PixelBuffer::LoadPng(fp, data.imageData);
 		GCLAssert(data.imageData.mPixels);
-		fclose(fp);
 #else
 		GCLAssertMsg(false, "cant load png on iphone yet" );
 #endif

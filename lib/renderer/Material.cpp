@@ -27,6 +27,7 @@
 
 #include <gcl/Assert.h>
 #include <gcl/Config.h>
+#include <gcl/Log.h>
 #include <gcl/StringUtil.h>
 #include "renderer/GPUProgram.h"
 #include "renderer/Shader.h"
@@ -54,6 +55,7 @@ Material::~Material()
 
 void Material::LoadMaterial(const char *filename)
 {
+	KLog("LoadMaterial %s", filename);
 	if (mProgram )
 	{
 		delete mFragmentShader;
@@ -84,59 +86,49 @@ void Material::LoadMaterial(const char *filename)
 			break;
 		}
 	}
-	std::ifstream fp(fullFileName.c_str());
-	std::stringstream s;
-	s << "Failed loading the file: " << fullFileName;
-	GCLAssertMsg(fp.good(), s.str().c_str());
-
+	GCLFile fp(fullFileName.c_str());
+	auto fileBuffer = fp.ReadAll();
+	std::string fileContent((const char *)fileBuffer.get());
+	std::vector<std::string> lines;
+	StringUtil::Explode(fileContent, lines, '\n');
 
 	const size_t BUFFER_SIZE = 1024;
-	char buffer[BUFFER_SIZE];
 	char vshader[BUFFER_SIZE];
 	char fshader[BUFFER_SIZE];
-	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "vertex_shader: %s", vshader);
-
-	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "frag_shader: %s", fshader);
+	sscanf(lines[0].c_str(), "vertex_shader: %s", vshader);
+	sscanf(lines[1].c_str(), "frag_shader: %s", fshader);
 
 	//shader: default
 	char texture[BUFFER_SIZE];
-	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "texture: %s", texture);
+	sscanf(lines[2].c_str(), "texture: %s", texture);
 	//texture: TEXTURE_PATH/mushroomtga.tga
 
 #if USE_64BIT_PLATFORM
-#define FLOAT_FLAG "%lf"
+#	define FLOAT_FLAG "%lf"
 #else
-#define FLOAT_FLAG "%f"
+#	define FLOAT_FLAG "%f"
 #endif
 	WorldPoint4 &ambient = mAmbient;
-	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "ambient: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &ambient.x, &ambient.y, &ambient.z, &ambient.w);
+	sscanf(lines[3].c_str(), "ambient: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &ambient.x, &ambient.y, &ambient.z, &ambient.w);
 
 	WorldPoint4 &diffuse = mDiffuse;
-	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "diffuse: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &diffuse.x, &diffuse.y, &diffuse.z, &diffuse.w);
+	sscanf(lines[4].c_str(), "diffuse: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &diffuse.x, &diffuse.y, &diffuse.z, &diffuse.w);
 
 	WorldPoint4 &specular = mSpecular;
-	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "specular: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &specular.x, &specular.y, &specular.z, &specular.w);
+	sscanf(lines[5].c_str(), "specular: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &specular.x, &specular.y, &specular.z, &specular.w);
 
 	WorldPoint4 &emissive = mEmissive;
-	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "emissive: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &emissive.x, &emissive.y, &emissive.z, &emissive.w);
+	sscanf(lines[6].c_str(), "emissive: " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG " " FLOAT_FLAG, &emissive.x, &emissive.y, &emissive.z, &emissive.w);
 
 	Real &shininess = mShininess;
-	fp.getline(buffer, BUFFER_SIZE);
-	sscanf(buffer, "shininess: " FLOAT_FLAG, &shininess);
+	sscanf(lines[7].c_str(), "shininess: " FLOAT_FLAG, &shininess);
 
-	fp.close();
+	fp.Close();
 
 	mVertexShader = new Shader(vshader, VERTEX_SHADER);
 	mFragmentShader =  new Shader(fshader, FRAGMENT_SHADER);
 	mProgram = new GPUProgram(*mVertexShader, *mFragmentShader);
-    s.str("");
+    std::stringstream s;
     s<< "Material: "<<filename<< " doesn't have a texture. for now all materials must have a texture"<<std::endl;
     GCLAssertMsg(strcmp(texture, "null")!=0, s.str().c_str());
 	mTexture = new Texture(texture);

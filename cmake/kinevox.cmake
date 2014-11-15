@@ -107,8 +107,12 @@ macro(AndroidExecutable ProjectName)
           "${CMAKE_CURRENT_BINARY_DIR}/android/AndroidManifest.xml"
           )
     endif()  
+    add_custom_command(TARGET ${ProjectName} POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory assets WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/android)
+    add_custom_command(TARGET ${ProjectName} POST_BUILD COMMAND ln -sf ../../data/ data WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/android/assets)        
     add_custom_command(TARGET ${ProjectName} POST_BUILD COMMAND ${ANDROID_ANT} -v ${ANT_BUILD_TYPE} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/android)          
-    
+    if (NOT "${DATA_DEP}" STREQUAL "")
+        add_dependencies(${ProjectName} ${DATA_DEP})
+    endif()
 endmacro(AndroidExecutable ProjectName)
 
 macro(Executable ProjectName)

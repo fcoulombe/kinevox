@@ -27,6 +27,7 @@
 
 #include <3rdparty/OpenGL.h>
 #include <gcl/Assert.h>
+#include <gcl/Log.h>
 #include <gcl/StringUtil.h>
 
 #include "renderer/Camera.h"
@@ -42,10 +43,21 @@ using namespace GCL;
 
 void GLESRenderer::Init3DState()
 {
+
+	EGLint w, h;//, dummy, format;
+    GLboolean ret;
+    int i32Values;
+	ret = eglGetConfigAttrib(mEglDisplay, mEglConfig, EGL_DEPTH_SIZE , &i32Values);
+	GCLAssert(ret);
+    ret = eglQuerySurface(mEglDisplay, mEglSurface, EGL_WIDTH, &w);
+    GCLAssert(ret);
+    ret = eglQuerySurface(mEglDisplay, mEglSurface, EGL_HEIGHT, &h);
+    GCLAssert(ret);
+    KLog("resolution %dx%d", w, h);
 	glErrorCheck();
-    glViewport(0,0,(GLsizei)mViewPort.GetWidth(),(GLsizei)mViewPort.GetHeight()); 
+    glViewport(0,0,(GLsizei)w,(GLsizei)h);
 	glErrorCheck();
-	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); glErrorCheck();
+	glClearColor(0.0f, 0.0f, 1.0f, 0.0f); glErrorCheck();
 	glClearDepth(1.0); glErrorCheck();
 	
 	glDepthMask(GL_TRUE); glErrorCheck();
@@ -55,6 +67,7 @@ void GLESRenderer::Init3DState()
 	glDisable(GL_BLEND); glErrorCheck();
 
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
+	glActiveTexture(GL_TEXTURE0);glErrorCheck();
 	
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
 }
@@ -111,9 +124,9 @@ void GLESRenderer::InitWin(size_t windowsHandle)
 #ifdef OS_WIN32
     HDC hDC = GetDC((HWND)windowsHandle);
     GCLAssertMsg(hDC, "Failed to create the device context");
-    eglDisplay = eglGetDisplay(hDC);
-    if(eglDisplay == EGL_NO_DISPLAY)
-        eglDisplay = eglGetDisplay((EGLNativeDisplayType) EGL_DEFAULT_DISPLAY);
+    mEglDisplay = eglGetDisplay(hDC);
+    if(mEglDisplay == EGL_NO_DISPLAY)
+        mEglDisplay = eglGetDisplay((EGLNativeDisplayType) EGL_DEFAULT_DISPLAY);
 #else
     (void)windowsHandle;
 #endif
@@ -149,9 +162,9 @@ void GLESRenderer::InitLinux(size_t windowsHandle)
 	XFlush(x11Display);
 
 
-	eglDisplay = eglGetDisplay((EGLNativeDisplayType)x11Display);
+	mEglDisplay = eglGetDisplay((EGLNativeDisplayType)x11Display);
 
-	eglWindow = (EGLNativeWindowType)mWin;
+	mEglWindow = (EGLNativeWindowType)mWin;
 #else
 	(void)windowsHandle;
 #endif
@@ -166,70 +179,84 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
 	mFar(100.0)
 {
 	RenderPipe::SendCommand([this, windowsHandle](){
-	mProjection.SetPerspective(mFov,mAspect,mNear,mFar);
-
+		KLog("Start init renderer");
+		mProjection.SetPerspective(mFov,mAspect,mNear,mFar);
+#ifdef OS_ANDROID
 	InitWin(windowsHandle);
 	InitLinux(windowsHandle);
-
+	mEglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
     EGLint iMajorVersion, iMinorVersion;
-    EGLBoolean ret = eglInitialize(eglDisplay, &iMajorVersion, &iMinorVersion);
+    EGLBoolean ret = eglInitialize(mEglDisplay, &iMajorVersion, &iMinorVersion);
     GCLAssertMsg(ret, "eglInitialize() failed.");
-    ret = eglBindAPI(EGL_OPENGL_ES_API); 
+    //ret = eglBindAPI(EGL_OPENGL_ES_API);
 
 
-#if defined(ES2)
-   /* const EGLint pi32ConfigAttribs[] =
-    {
-        EGL_LEVEL,				0,
-        EGL_SURFACE_TYPE,		EGL_WINDOW_BIT,
-        EGL_RENDERABLE_TYPE,	EGL_OPENGL_ES2_BIT,
-        EGL_NATIVE_RENDERABLE,	EGL_FALSE,
-        EGL_DEPTH_SIZE,			EGL_DONT_CARE,
-        EGL_NONE
-    };*/
+#	if defined(ES2)
+#		ifdef OS_ANDROID
+    const EGLint pi32ConfigAttribs[] = {
+            EGL_SURFACE_TYPE, EGL_WINDOW_BIT,
+            EGL_BLUE_SIZE, 8,
+            EGL_GREEN_SIZE, 8,
+            EGL_RED_SIZE, 8,
+            EGL_NONE
+    };
+#		else
 	EGLint pi32ConfigAttribs[5];
 	pi32ConfigAttribs[0] = EGL_SURFACE_TYPE;
 	pi32ConfigAttribs[1] = EGL_WINDOW_BIT;
 	pi32ConfigAttribs[2] = EGL_RENDERABLE_TYPE;
 	pi32ConfigAttribs[3] = EGL_OPENGL_ES2_BIT;
 	pi32ConfigAttribs[4] = EGL_NONE;
+#		endif
 
-#elif defined(ES3)
-#error "TBD"
-#endif
+#	elif defined(ES3)
+#		error "TBD"
+#	endif
     EGLint iConfigs;
-    ret = eglChooseConfig(eglDisplay, pi32ConfigAttribs, &eglConfig, 1, &iConfigs) || (iConfigs != 1);
+    ret = eglChooseConfig(mEglDisplay, pi32ConfigAttribs, &mEglConfig, 1, &iConfigs) || (iConfigs != 1);
     GCLAssertMsg(ret, "eglChooseConfig() failed.");
+    /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
+     * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
+     * As soon as we picked a EGLConfig, we can safely reconfigure the
+     * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
+    EGLint format;
+    ret = eglGetConfigAttrib(mEglDisplay, mEglConfig, EGL_NATIVE_VISUAL_ID, &format);
+    GCLAssert(ret);
+    ANativeWindow_setBuffersGeometry((ANativeWindow*)windowsHandle, 0, 0, format);
 
-    eglSurface = eglCreateWindowSurface(eglDisplay, eglConfig, eglWindow, NULL);
-    if (eglSurface == EGL_NO_SURFACE)
+    mEglSurface = eglCreateWindowSurface(mEglDisplay, mEglConfig, (ANativeWindow*)windowsHandle, NULL);
+    if (mEglSurface == EGL_NO_SURFACE)
     {    
         eglGetError(); // Clear error
-        eglSurface = eglCreateWindowSurface(eglDisplay, eglConfig, (EGLNativeWindowType)NULL, NULL);
+        mEglSurface = eglCreateWindowSurface(mEglDisplay, mEglConfig, (EGLNativeWindowType)NULL, NULL);
 	}
 
 
-
-#if defined(ES2)
+#	if defined(ES2)
 	EGLint ai32ContextAttribs[] = { EGL_CONTEXT_CLIENT_VERSION, 2, EGL_NONE };
-#else
-#error "TBD"
-#endif
-    eglContext = eglCreateContext(eglDisplay, eglConfig, NULL, ai32ContextAttribs);
+#	else
+#		error "TBD"
+#	endif
+	mEglContext = eglCreateContext(mEglDisplay, mEglConfig, NULL, ai32ContextAttribs);
 	eglErrorCheck();
-
-	eglMakeCurrent(eglDisplay, eglSurface, eglSurface, eglContext);
+	auto mkRet = eglMakeCurrent(mEglDisplay, mEglSurface, mEglSurface, mEglContext);
+	GCLAssert(mkRet != EGL_FALSE);
 	eglErrorCheck();
 
 	int i32Values;
-	eglGetConfigAttrib(eglDisplay, eglConfig, EGL_DEPTH_SIZE , &i32Values);
-
+	ret = eglGetConfigAttrib(mEglDisplay, mEglConfig, EGL_DEPTH_SIZE , &i32Values);
+	GCLAssert(ret);
+#endif
 	Init3DState();
 	mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
+	KLog("Version: %s", mVersion.c_str());
 	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
+	KLog("Vendor: %s", mVendor.c_str());
 	mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
+	KLog("Render: %s", mRenderer.c_str());
 	const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);glErrorCheck();
 	mShadingLanguageVersion = std::string(ver);
+	KLog("Shading Language: %s", mShadingLanguageVersion.c_str());
 	char delim = ' ';
 	std::string extString((const char *) glGetString(GL_EXTENSIONS));
 	StringUtil::Explode(extString,mExtensions, delim); glErrorCheck();
@@ -251,8 +278,8 @@ GLESRenderer::~GLESRenderer()
 {
 	RenderPipe::SendCommandSync([&](){
 	mExtensions.clear();
-	eglMakeCurrent(eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) ;
-	eglTerminate(eglDisplay);
+	eglMakeCurrent(mEglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT) ;
+	eglTerminate(mEglDisplay);
 
 #ifdef OS_WIN32
 	ReleaseDC( mhWnd, mhDC );
@@ -283,7 +310,9 @@ void GLESRenderer::PreRender()
 }
 void GLESRenderer::PostRender()
 {
-
+	RenderPipe::SendCommand([&](){
+		eglSwapBuffers(mEglDisplay, mEglSurface);
+	});
 }
 
 
@@ -320,7 +349,7 @@ void GLESRenderer::SwapBuffer()
 {
 
 	RenderPipe::SendCommand([&](){
-	eglSwapBuffers(eglDisplay, eglSurface);
+	eglSwapBuffers(mEglDisplay, mEglSurface);
 	});
 }
 

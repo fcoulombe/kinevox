@@ -216,10 +216,10 @@ private:
 		return res;
 	}
 
-    EGLDisplay			eglDisplay;
-    EGLConfig			eglConfig;
-    EGLSurface			eglSurface;
-    EGLContext			eglContext;
-    EGLNativeWindowType	eglWindow;
+    EGLDisplay			mEglDisplay;
+    EGLConfig			mEglConfig;
+    EGLSurface			mEglSurface;
+    EGLContext			mEglContext;
+    EGLNativeWindowType	mEglWindow;
 };
 }

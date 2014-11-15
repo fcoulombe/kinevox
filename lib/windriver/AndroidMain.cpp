@@ -20,14 +20,24 @@
  * THE SOFTWARE.
  */
 #if	defined( OS_ANDROID)
+#include <gcl/Log.h>
+#include <gcl/File.h>
+using namespace GCL;
 extern int main(int argc, char **argv);
 #include <native_app_glue/android_native_app_glue.h>
 
 #pragma GCC diagnostic ignored "-pedantic"
-JNIEXPORT void android_main(struct android_app* /*state*/)
+namespace GCL
+{
+	android_app* gAndroidApp = nullptr;
+}
+JNIEXPORT void android_main(struct android_app* state)
 {
    	app_dummy();
-   	char **argv=nullptr;
+   	gAndroidApp = state;
+   	GCLFile::RegisterAssetManager(gAndroidApp->activity->assetManager);
+
+    char **argv=nullptr;
    	main(0, argv);
 
 }

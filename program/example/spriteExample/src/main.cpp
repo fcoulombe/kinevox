@@ -23,6 +23,7 @@
 #include <applayer/GCLApplication.h>
 #include <applayer/Sprite.h>
 #include <gcl/Exception.h>
+#include <gcl/Log.h>
 #include <gcl/Time.h>
 #include <input/Input.h>
 
@@ -98,9 +99,8 @@ int main(int /*argc*/, char ** /*argv*/)
 	}
 	catch(GCLException &e)
 	{
-		std::cerr << e.what() << std::endl;
+		KLog("%s", e.what());
 	}
-
 
 	GCLApplication::Terminate();
 

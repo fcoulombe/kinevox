@@ -59,7 +59,6 @@ RenderTarget::~RenderTarget()
 	delete mBackground;
 	delete mMaterial;
 	delete mFrameBuffer;
-	delete mTexture;
 	delete mRenderBuffer;
 }
 

@@ -68,6 +68,6 @@ void GPUResourceManager::ReleaseResource( const GPUResource *resource )
 			return;
 		}
 	}
-	GCLAssertMsg(false, "we released a texture that didnt exist.");
+	GCLAssertMsg(false, "we released a gpu texture that didnt exist.");
 }
 

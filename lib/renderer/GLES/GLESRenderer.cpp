@@ -27,6 +27,7 @@
 
 #include <3rdparty/OpenGL.h>
 #include <gcl/Assert.h>
+#include <gcl/Config.h>
 #include <gcl/Log.h>
 #include <gcl/StringUtil.h>
 
@@ -44,30 +45,16 @@ using namespace GCL;
 void GLESRenderer::Init3DState()
 {
 
-	EGLint w, h;//, dummy, format;
-    GLboolean ret;
-    int i32Values;
-	ret = eglGetConfigAttrib(mEglDisplay, mEglConfig, EGL_DEPTH_SIZE , &i32Values);
-	GCLAssert(ret);
-    ret = eglQuerySurface(mEglDisplay, mEglSurface, EGL_WIDTH, &w);
-    GCLAssert(ret);
-    ret = eglQuerySurface(mEglDisplay, mEglSurface, EGL_HEIGHT, &h);
-    GCLAssert(ret);
-    KLog("resolution %dx%d", w, h);
-	glErrorCheck();
-    glViewport(0,0,(GLsizei)w,(GLsizei)h);
 	glErrorCheck();
 	glClearColor(0.0f, 0.0f, 1.0f, 0.0f); glErrorCheck();
 	glClearDepth(1.0); glErrorCheck();
-	
 	glDepthMask(GL_TRUE); glErrorCheck();
-	
 	glDepthFunc(GL_LESS); glErrorCheck();
 	glEnable(GL_DEPTH_TEST); glErrorCheck();
-	glDisable(GL_BLEND); glErrorCheck();
-
+	glEnable(GL_BLEND); glErrorCheck();
+	glEnable(GL_CULL_FACE);glErrorCheck();
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); glErrorCheck();
-	glActiveTexture(GL_TEXTURE0);glErrorCheck();
+	//glActiveTexture(GL_TEXTURE0);glErrorCheck();
 	
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
 }
@@ -174,7 +161,7 @@ void GLESRenderer::InitLinux(size_t windowsHandle)
 GLESRenderer::GLESRenderer(size_t windowsHandle)
 	:   mModelView(true),
 		mFov(45.0),
-	mAspect(640.0/480.0),
+	mAspect(Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH") / Real(Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"))),
 	mNear(0.1),
 	mFar(100.0)
 {
@@ -373,4 +360,26 @@ void GCL::GLESRenderer::SetIsDepthTesting( bool isDepthTesting /*= true*/ )
             glDisable(GL_DEPTH_TEST); glErrorCheck();
         }
     });
+}
+
+void GCL::GLESRenderer::GetScreenSize(Point2<size_t> &screenSize) const
+{
+	RenderPipe::SendCommandSync([&](){
+#if defined(OS_ANDROID)
+		EGLint w, h;//, dummy, format;
+	    GLboolean ret;
+	    ret = eglQuerySurface(mEglDisplay, mEglSurface, EGL_WIDTH, &w);
+	    GCLAssert(ret);
+	    ret = eglQuerySurface(mEglDisplay, mEglSurface, EGL_HEIGHT, &h);
+	    screenSize = Point2<size_t>((size_t)(w), (size_t)(h));
+#elif defined(OS_WIN32)
+	RECT rect;
+	::GetWindowRect(mHwnd,&rect);
+	screenSize = Point2<size_t>((size_t)(rect.right-rect.left), (size_t)(rect.top-rect.bottom));
+#elif defined(OS_LINUX)
+	XWindowAttributes xwa;
+	XGetWindowAttributes(mDisplay, mWin, &xwa);
+	screenSize = Point2<size_t>(size_t(xwa.width), size_t(xwa.height));
+#endif
+	});
 }

@@ -69,6 +69,7 @@ namespace GCL
 		mPimpl->SetViewPort(mViewPort);
 	}
     const ViewPort &GetViewPort() const { return mViewPort; }
+    void GetScreenSize(Point2<size_t> &screenSize) const { mPimpl->GetScreenSize(screenSize); }
 
 	void GetVendor(std::string &vendor) const 
 	{ 

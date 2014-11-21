@@ -28,16 +28,17 @@
 #include <windriver/WinDriver.h>
 namespace GCL
 {
-class Camera;
-class Renderer;
 class Actor;
-class Text2D;
+class Camera;
 class GCLText2D;
-class Input;
-class WinDriver;
 class GCLWorld;
-class Sprite;
+class Input;
+class Renderer;
+class RenderTarget;
 class ScriptApi;
+class Sprite;
+class Text2D;
+class WinDriver;
 typedef std::vector<Actor *> ActorList;
 typedef std::shared_ptr<Actor> ActorPtr;
 typedef std::vector<ActorPtr> StrongActorList;
@@ -97,6 +98,7 @@ private:
 	static SpriteList mSpriteList;
 
 	static ScriptApi *mScriptApi;
+	static RenderTarget *mRenderTarget;
 
 	static Real mCurrentDt;
 

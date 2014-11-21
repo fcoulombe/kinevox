@@ -68,9 +68,7 @@ void Test()
 	}
 	{
 		const char *fullFileName = TEXTURE_PATH"mushroomtga.tga";
-		std::fstream fp(fullFileName, std::fstream::binary|std::fstream::in);
-		AssertMsg_Test( fp.good(), fullFileName);
-
+		GCLFile fp(fullFileName);
 		PixelBufferHAL pb;
 		PixelBuffer::LoadTga(fp, pb);
 		pb.Bind();

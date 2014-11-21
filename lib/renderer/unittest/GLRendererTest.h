@@ -36,7 +36,12 @@ void Test()
     WinDriver winDriver("GLRendererTest");
 	{
 	Renderer renderer(winDriver.GetWindowsHandle());
-
+	const ViewPort &testViewPort = renderer.GetViewPort();
+	Assert_Test(testViewPort.GetX() == 0 && testViewPort.GetY() == 0 &&
+				testViewPort.GetWidth() == 800 && testViewPort.GetHeight() == 600);
+	Point2<size_t> testScreenSize;
+	renderer.GetScreenSize(testScreenSize);
+	Assert_Test(testScreenSize == Point2<size_t>(640, 480));
 	std::cout << "OpenGL Stats"<<std::endl;
 	std::string version;
 	renderer.GetVersion(version);

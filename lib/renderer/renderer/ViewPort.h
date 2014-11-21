@@ -34,6 +34,8 @@ public:
 
     ViewPort()
 	{Set(0,0,640,480);}
+    ViewPort(size_t ix, size_t iy, size_t iwidth, size_t iheight)
+   	{Set(ix,iy,iwidth,iheight);}
 
     void Set(size_t ix, size_t iy, size_t iwidth, size_t iheight)
     {
@@ -42,6 +44,8 @@ public:
         width = iwidth;
         height = iheight;
     }
+    size_t GetX() const { return x; }
+    size_t GetY() const { return y; }
 	size_t GetWidth() const { return width; }
 	size_t GetHeight() const { return height; }
 

@@ -41,9 +41,9 @@ namespace GCL
         Real GetDt() const;
         bool IsKeyUp(uint32_t key);
         size_t GetWindowsHandle() const;
-        bool IsReady() const;
-    private:
 
+    private:
+        bool IsReady() const;
         pWinDriver *mpWinDriver;
 
     };

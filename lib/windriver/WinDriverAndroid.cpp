@@ -46,13 +46,10 @@ extern android_app* gAndroidApp;
 			mDt(0.0),
 			mIsReady(false)
 		{
-
-
 			mWindowsTitle = windowsTitle;
 			gAndroidApp->userData = this;
 			gAndroidApp->onAppCmd = HandleEvent;
 			gAndroidApp->onInputEvent = HandleInputs;
-
 		}
 
 		~pWinDriver()
@@ -65,14 +62,13 @@ extern android_app* gAndroidApp;
 		    switch (cmd) {
 		        case APP_CMD_SAVE_STATE:
 		            // The system has asked us to save our current state.  Do so.
-		        	//gAndroidApp->savedState = malloc(sizeof(struct saved_state));
-		            //*((struct saved_state*)gAndroidApp->savedState) = engine->state;
-		            //gAndroidApp->savedStateSize = sizeof(struct saved_state);
+
 		            break;
 		        case APP_CMD_INIT_WINDOW:
 		            // The window is being shown, get it ready.
 		            if (gAndroidApp->window != NULL)
 		            {
+		            	KLog("We have a window!");
 		            	window->mIsReady = true;
 		            }
 		            break;
@@ -156,17 +152,6 @@ extern android_app* gAndroidApp;
 		            }*/
 		        }
 
-		        /*if (engine.animating) {
-		            // Done with events; draw next animation frame.
-		            engine.state.angle += .01f;
-		            if (engine.state.angle > 1) {
-		                engine.state.angle = 0;
-		            }
-
-		            // Drawing is throttled to the screen update rate, so there
-		            // is no need to do timing here.
-		            engine_draw_frame(&engine);
-		        }*/
 
 			//calculate fps
 			double currentTime = Time::GetTickMs()/1000.0;
@@ -204,6 +189,8 @@ extern android_app* gAndroidApp;
 	{
 		EventManager::Initialize();
 		mpWinDriver = new pWinDriver(windowsTitle);
+		while (!IsReady())
+			SwapBuffer();
 	}
 	WinDriver::~WinDriver()
 	{

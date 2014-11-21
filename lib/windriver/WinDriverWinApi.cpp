@@ -91,8 +91,8 @@ namespace GCL
 
 
 
-			int width = Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
-			int height = Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT");
+			int width = Config::Instance().GetInt("DEFAULT_SCREEN_WIDTH");
+			int height = Config::Instance().GetInt("DEFAULT_SCREEN_HEIGHT");
 
 			RECT rect; //window rectangle
 			rect.top = (long)0;

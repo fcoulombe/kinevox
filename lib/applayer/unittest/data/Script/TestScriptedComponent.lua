@@ -13,8 +13,8 @@ function TestKinevoxModule(self)
     --Test GetScreen size
   SCREEN_SIZE = kinevox.GetScreenSize()
   kinevox.Log("TestInit"..SCREEN_SIZE[0].." "..SCREEN_SIZE[1].." ") --..KINEVOX_ACTOR_ID)
-  assert(SCREEN_SIZE[0]==640)
-  assert(SCREEN_SIZE[1]==480)
+  assert(SCREEN_SIZE[0]==800)
+  assert(SCREEN_SIZE[1]==600)
   
   --test GetActor and Get/SetPositoin
   scriptedActor2 = kinevox.GetActor("TestScriptedActor2")

@@ -24,6 +24,7 @@
 
 #include "renderer/GLES/GLESGPUProgram.h"
 #include <gcl/Exception.h>
+#include <gcl/Log.h>
 #include <gcl/Matrix44.h>
 
 #include "renderer/GLES/GLESShader.h"

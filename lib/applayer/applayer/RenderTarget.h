@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 by Francois Coulombe
+ * Copyright (C) 2014 by Francois Coulombe
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,39 +21,28 @@
  */
 
 #pragma once
+#include <cstdlib>
 
-#include <gcl/Point4.h>
 namespace GCL
 {
+class RenderBuffer;
+class Material;
+class Matrix44;
 class Texture;
-class GPUProgram;
-class Shader;
-class Material
+class FrameBuffer;
+class RenderObject;
+class RenderTarget
 {
 public:
-	Material(const char *filename="Default");
-
-	~Material();
-	void Bind() const;
-	void LoadMaterial(const char *filename);
-
-	void SetTexture(const char *texture);
-	void SetTexture(Texture *texture);
-
-    GPUProgram *GetShader() const { return mProgram; }
-    Texture *GetTexture() const { return mTexture; }
+	RenderTarget(size_t width, size_t height);
+	~RenderTarget();
+	void Bind();
+	void Render(const Matrix44 &ortho);
 private:
-	Material(Material &);
-	void operator=(Material &);
+	RenderBuffer *mRenderBuffer;
+	Material *mMaterial;
 	Texture *mTexture;
-	mutable GPUProgram *mProgram; //mutable because we need to set uniforms before rendering
-	Shader *mVertexShader;
-	Shader *mFragmentShader;
-	WorldPoint4 mAmbient;
-	WorldPoint4 mDiffuse;
-	WorldPoint4 mSpecular;
-	WorldPoint4 mEmissive;
-	Real mShininess;
+	FrameBuffer *mFrameBuffer;
+	RenderObject *mBackground;
 };
-
 }

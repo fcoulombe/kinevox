@@ -27,14 +27,19 @@
 #include "applayer/Actor.h"
 #include "applayer/GCLText2D.h"
 #include "applayer/GameStateManager.h"
+#include "applayer/RenderTarget.h"
 #include "applayer/Sprite.h"
 #include "applayer/ScriptApi.h"
 #include <gcl/Assert.h>
+#include <gcl/Log.h>
 #include <gcl/Time.h>
 #include <gcl/ThreadManager.h>
 #include <input/Input.h>
 #include <physics/PhysicsWorld.h>
+#include <renderer/GeomUtilHelper.h>
+#include <renderer/FrameBuffer.h>
 #include <renderer/Renderer.h>
+#include <renderer/RenderBuffer.h>
 #include <renderer/FontResourceManager.h>
 #include <renderer/MeshResourceManager.h>
 #include <renderer/ShaderResourceManager.h>
@@ -59,6 +64,7 @@ GCLWorld *GCLApplication::mCurrentWorld= nullptr;
 Renderer *GCLApplication::mRenderer = nullptr;
 WinDriver *GCLApplication::mWinDriver = nullptr;
 ScriptApi *GCLApplication::mScriptApi = nullptr;
+RenderTarget *GCLApplication::mRenderTarget = nullptr;
 ActorList GCLApplication::mActorList;
 StrongActorList GCLApplication::mStrongActorList;
 SpriteList GCLApplication::mSpriteList;
@@ -77,6 +83,8 @@ void GCLApplication::InitializaAppLayerComponents()
 	REGISTER_COMPONENT_FACTOR(SpriteComponent);
 	REGISTER_COMPONENT_FACTOR(ScriptComponent);
 }
+
+
 /*static */void GCLApplication::Initialize(const char * windowsTitle)
 {
     SoundResourceManager::Initialize();
@@ -89,15 +97,23 @@ void GCLApplication::InitializaAppLayerComponents()
 	PhysicsWorld::Initialize();
 	GCLAssert(mRenderer == NULL);
     mWinDriver = new WinDriver(windowsTitle);
-    while (!mWinDriver->IsReady())
-    	mWinDriver->SwapBuffer();
 	mRenderer = new Renderer(mWinDriver->GetWindowsHandle());
 	mScriptApi = new ScriptApi();
 	InitializaAppLayerComponents();
 	GameStateManager::Initialize();
+	const ViewPort &viewPort = mRenderer->GetViewPort();
+	size_t width = viewPort.GetWidth();
+	size_t height = viewPort.GetHeight();
+	KLog("resolution: %dx%d", (int)width, (int)height);
+	Point2<size_t> screenSize;
+	mRenderer->GetScreenSize(screenSize);
+	KLog("ScreenSize: %dx%d", (int)screenSize.x, (int)screenSize.y);
+	mRenderTarget = new RenderTarget(width, height);
 }
 /*static */void GCLApplication::Terminate()
 {
+	delete mRenderTarget;
+	mRenderTarget = nullptr;
 	Input::Terminate();
 	GameStateManager::Terminate();
 
@@ -105,10 +121,10 @@ void GCLApplication::InitializaAppLayerComponents()
     GCLAssertMsg(mActorList.size() == 0, "You still have some actors hanging around");
  	GCLAssert(mRenderer);
 	delete mRenderer;
-	mRenderer = NULL;
+	mRenderer = nullptr;
     GCLAssert(mWinDriver);
     delete mWinDriver;
-    mWinDriver = NULL;
+    mWinDriver = nullptr;
     PhysicsWorld::Terminate();
 	MeshResourceManager::Terminate();
 	ScriptResourceManager::Terminate();
@@ -144,11 +160,20 @@ void GCLApplication::Render()
 	//perform actor culling against view frustum
 
 	//pass it to renderer
+	mRenderTarget->Bind();
 	mRenderer->PreRender();
+
+
+	mRenderer->SetViewPort(
+			ViewPort((size_t)0,
+					 (size_t)0,
+					 (size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"),
+					 (size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT")));
 	Matrix44 proj;
 	mRenderer->GetProjection(proj);
     mRenderer->SetIsDepthTesting(true);
-    std::sort(mActorList.begin(), mActorList.end(),  [](Actor * a, Actor * b){return b->GetPosition().z < a->GetPosition().z;});
+    std::sort(mActorList.begin(), mActorList.end(),
+    		  [](Actor * a, Actor * b){return b->GetPosition().z < a->GetPosition().z;});
 	for (size_t i=0; i<mActorList.size(); ++i)
 	{
 		mActorList[i]->Render(proj);
@@ -157,14 +182,25 @@ void GCLApplication::Render()
 	mRenderer->SetIsDepthTesting(false);
     mRenderer->SetOrtho();
 	mRenderer->GetProjection(proj);
-    std::sort(mSpriteList.begin(), mSpriteList.end(),  [](Sprite * a, Sprite * b){return b->GetPosition().z > a->GetPosition().z;});
+    std::sort(mSpriteList.begin(), mSpriteList.end(),
+    		  [](Sprite * a, Sprite * b){return b->GetPosition().z > a->GetPosition().z;});
 	for (size_t i=0; i<mSpriteList.size(); ++i)
 	{
 		Sprite *tempSprite =mSpriteList[i];
 		tempSprite->Render(proj);
 	}
+	FrameBuffer::ResetDefault();
+
+	Point2<size_t> screenSize;
+	mRenderer->GetScreenSize(screenSize);
+	mRenderer->SetViewPort(
+			ViewPort((size_t)0,(size_t)0,screenSize.x,screenSize.y));
+	Matrix44 ortho;
+	ortho.SetOrtho(-0.5, 0.5, 0.5,-0.5, -0.5, 0.5);
+	mRenderTarget->Render(ortho);
 	mRenderer->PostRender();
 	mWinDriver->SwapBuffer();
+
 }
 
 void GCLApplication::SetViewportCamera(Camera &camera)

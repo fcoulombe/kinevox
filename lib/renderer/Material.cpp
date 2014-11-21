@@ -147,3 +147,9 @@ void Material::SetTexture(const char *texture)
 		delete mTexture;
 	mTexture = new Texture(texture);
 }
+void Material::SetTexture(Texture *texture)
+{
+	if (mTexture)
+		delete mTexture;
+	mTexture = texture;
+}

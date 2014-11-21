@@ -150,6 +150,8 @@ public:
 		});
 	}
 	void SetIsDepthTesting(bool isDepthTesting = true);
+
+    void GetScreenSize(Point2<size_t> &screenSize) const;
 private:
 	void Init3DState();
    
@@ -192,6 +194,8 @@ private:
 	void SetViewPortUnsafe(const ViewPort &viewport)
 	{
 		mViewPort = viewport;
+		glViewport(viewport.GetX(),viewport.GetY(),viewport.GetWidth(), viewport.GetHeight());glErrorCheck();
+
 	}
 	void SetProjectionUnsafe(const Matrix44 &projection)
 	{

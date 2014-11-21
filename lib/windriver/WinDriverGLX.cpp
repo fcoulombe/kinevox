@@ -143,8 +143,8 @@ public:
                 PointerMotionMask | KeyPressMask | KeyReleaseMask | StructureNotifyMask |
                 EnterWindowMask | LeaveWindowMask;;
 
-		int width = Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
-		int height = Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT");
+		int width = Config::Instance().GetInt("DEFAULT_SCREEN_WIDTH");
+		int height = Config::Instance().GetInt("DEFAULT_SCREEN_HEIGHT");
 		data.mWin = XCreateWindow( data.mDisplay, RootWindow( data.mDisplay, vi->screen ),
 				0, 0, width, height, 0, vi->depth, InputOutput,
 				vi->visual,
@@ -287,6 +287,7 @@ public:
 						*"WM_PROTOCOLS")
 				{
 					printf("Exiting sanely...\n");
+					EventManager::Instance().KeyUp((uint32_t)XK_Escape);
 
 				}
 				break;
@@ -295,8 +296,6 @@ public:
 				break;
 			}
 		}
-
-
 	}
 	void SwapBuffer()
 	{

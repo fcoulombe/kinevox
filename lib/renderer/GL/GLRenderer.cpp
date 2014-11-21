@@ -27,6 +27,8 @@
 
 #include <3rdparty/OpenGL.h>
 #include <gcl/Assert.h>
+#include <gcl/Config.h>
+#include <gcl/Log.h>
 #include <gcl/StringUtil.h>
 
 #include "renderer/Camera.h"
@@ -50,8 +52,6 @@ using namespace GCL;
 
 void GLRenderer::Init3DState()
 {
-	glErrorCheck();
-    glViewport(0,0,(GLsizei)mViewPort.GetWidth(),(GLsizei)mViewPort.GetHeight()); 
 	glErrorCheck();
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f); glErrorCheck();
 	glClearDepth(1.0); glErrorCheck();
@@ -324,7 +324,7 @@ void GLRenderer::InitWGL(size_t windowsHandle)
 GLRenderer::GLRenderer(size_t windowsHandle)
 	:   mModelView(true),
 			mFov(45.0),
-	mAspect(640.0/480.0),
+	mAspect(Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH") / Real(Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"))),
 	mNear(0.1),
 	mFar(100.0)
 {
@@ -506,4 +506,19 @@ void GCL::GLRenderer::SetIsDepthTesting( bool isDepthTesting /*= true*/ )
             glDisable(GL_DEPTH_TEST); glErrorCheck();
         }
     });
+}
+
+void GCL::GLRenderer::GetScreenSize(Point2<size_t> &screenSize) const
+{
+	RenderPipe::SendCommandSync([&](){
+#if defined(OS_WIN32)
+	RECT rect;
+	::GetWindowRect(mHwnd,&rect);
+	screenSize = Point2<size_t>((size_t)(rect.right-rect.left), (size_t)(rect.top-rect.bottom));
+#elif defined(OS_LINUX)
+	XWindowAttributes xwa;
+	XGetWindowAttributes(mDisplay, mWin, &xwa);
+	screenSize = Point2<size_t>(size_t(xwa.width), size_t(xwa.height));
+#endif
+	});
 }

@@ -10,7 +10,8 @@
       android:label="@ProjectName@"
       android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
       android:launchMode="singleTask" 
-      android:configChanges="orientation|keyboardHidden">
+      android:configChanges="orientation|keyboardHidden"
+      android:screenOrientation="landscape">
       <meta-data android:name="android.app.lib_name" android:value="@ProjectName@"/>
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>

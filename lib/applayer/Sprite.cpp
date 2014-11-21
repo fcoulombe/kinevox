@@ -90,13 +90,13 @@ void Sprite::LoadSprite(const char * filename)
 	MeshReal halfWidth = MeshReal(mHeader.width/2.0);
 	MeshReal halfHeight = MeshReal(mHeader.height/2.0);
 
-	square[0] = VertexPT(Point3<MeshReal>(-halfWidth, -halfHeight, 0.0),Point2<MeshReal>(0.0, 0.0));
-	square[1] = VertexPT(Point3<MeshReal>(halfWidth, -halfHeight, 0.0), Point2<MeshReal>(1.0, 0.0));
-	square[2] = VertexPT(Point3<MeshReal>(-halfWidth, halfHeight, 0.0), Point2<MeshReal>(0.0, 1.0));
-	square[3] = VertexPT(Point3<MeshReal>(-halfWidth, halfHeight, 0.0), Point2<MeshReal>(0.0, 1.0));
-	square[4] = VertexPT(Point3<MeshReal>(halfWidth, -halfHeight, 0.0), Point2<MeshReal>(1.0, 0.0));
-	square[5] = VertexPT(Point3<MeshReal>(halfWidth, halfHeight, 0.0), Point2<MeshReal>(1.0, 1.0));
-	
+	square[0] = VertexPT(Point3<MeshReal>(-halfWidth, halfHeight, 0.0), Point2<MeshReal>(0.0, 1.0)); // top left
+	square[1] = VertexPT(Point3<MeshReal>(halfWidth, -halfHeight, 0.0), Point2<MeshReal>(1.0, 0.0)); // bot right
+	square[2] = VertexPT(Point3<MeshReal>(-halfWidth, -halfHeight, 0.0),Point2<MeshReal>(0.0, 0.0)); // bot left
+	square[3] = VertexPT(Point3<MeshReal>(halfWidth, halfHeight, 0.0), Point2<MeshReal>(1.0, 1.0)); // top right
+	square[4] = VertexPT(Point3<MeshReal>(halfWidth, -halfHeight, 0.0), Point2<MeshReal>(1.0, 0.0)); // bot right
+	square[5] = VertexPT(Point3<MeshReal>(-halfWidth, halfHeight, 0.0), Point2<MeshReal>(0.0, 1.0)); // top left
+
 
 	mMaterial = new Material("DefaultSprite");
 	mObj = new RenderObject( *mMaterial, square, 6);

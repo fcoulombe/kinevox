@@ -43,26 +43,38 @@ public:
 	  mVertexCount(count),
 	  mVao(vertexArray)
 	{
+		RenderPipe::SendCommand([this, vertexArray, count, loc](){
 		glGenBuffers(1, &mVertexBufferId);glErrorCheck();
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);glErrorCheck();
 		mVao.PostInit(vertexArray, loc);
 		glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(sizeof(VertexType)*count), (GLvoid*)vertexArray, mBufferType);glErrorCheck();
+		});
 	}
 
 
 	~GLESVertexBuffer()
 	{
+		RenderPipe::SendCommandSync([&](){
 		glDeleteBuffers(1, &mVertexBufferId);glErrorCheck();
+		});
 	}
 
 	void Render(int mode = GL_TRIANGLES)
 	{
-		mVao.Bind();
+		RenderPipe::SendCommand([this, mode](){
+		mVao.BindUnsafe();
 		glDrawArrays((GLenum)mode, 0, (GLsizei)mVertexCount);glErrorCheck();
-		mVao.UnBind();
+		mVao.UnBindUnsafe();
+		});
 	}
 
-	bool IsValid() const { return mVertexBufferId!=(GLuint)-1; }
+	bool IsValid() const
+	{
+		bool ret;
+		RenderPipe::SendCommandSync([&](){ret = IsValidUnsafe();});
+		return ret;
+	}
+	bool IsValidUnsafe() const { return mVertexBufferId!=(GLuint)-1; }
 
 	static GLint GetRenderMode(size_t mode)
 	{

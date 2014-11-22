@@ -43,6 +43,7 @@ GLESFrameBuffer::GLESFrameBuffer(const GLESTexture & texture, const GLESRenderBu
 : mFrameBufferId((GLuint)-1)
 {
 	GCLAssert(texture.IsValid());
+	RenderPipe::SendCommand([&](){
 
 	glGenFramebuffers(1, &mFrameBufferId); glErrorCheck();
 	glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId); glErrorCheck();
@@ -53,4 +54,5 @@ GLESFrameBuffer::GLESFrameBuffer(const GLESTexture & texture, const GLESRenderBu
 	checkFrameBufferStatus(status);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);glErrorCheck();
+	});
 }

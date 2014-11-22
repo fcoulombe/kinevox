@@ -40,7 +40,9 @@ public:
 	}
 	void Bind()
 	{
-		RenderPipe::SendCommand([this](){GCLAssert(IsValidUnsafe()); glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);  glErrorCheck();});
+		RenderPipe::SendCommand([this](){
+			GCLAssert(IsValidUnsafe()); glBindFramebuffer(GL_FRAMEBUFFER, mFrameBufferId);  glErrorCheck();
+		});
 	}
 
 	bool IsValid() const 

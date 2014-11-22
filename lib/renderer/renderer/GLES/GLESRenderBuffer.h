@@ -22,8 +22,9 @@
 
 #pragma once
 #include <3rdparty/OpenGL.h>
+#include "renderer/RenderPipe.h"
 
-
+#include <gcl/Log.h>
 namespace GCL
 {
 class GLESRenderBuffer
@@ -32,21 +33,43 @@ public:
 	GLESRenderBuffer(size_t width, size_t height)
 	: mRenderBufferId((GLuint)-1)
 	{
+		RenderPipe::SendCommand([this, width, height](){
 		glGenRenderbuffers(1, &mRenderBufferId); glErrorCheck();
 		glBindRenderbuffer(GL_RENDERBUFFER, mRenderBufferId);glErrorCheck();
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, (GLsizei)width, (GLsizei)height);glErrorCheck();
 		glBindRenderbuffer(GL_RENDERBUFFER, 0); glErrorCheck();
+		});
 	}
 	~GLESRenderBuffer()
 	{
+		RenderPipe::SendCommandSync([&](){
 		glDeleteRenderbuffers(1, &mRenderBufferId); glErrorCheck();
+		});
 	}
-	void Bind() { GCLAssert(IsValid()); glBindRenderbuffer(GL_RENDERBUFFER, mRenderBufferId); glErrorCheck(); }
+	void Bind()
+	{
+		RenderPipe::SendCommand([&](){
+		GCLAssert(IsValid()); glBindRenderbuffer(GL_RENDERBUFFER, mRenderBufferId); glErrorCheck();
+		});
+	}
 
-	bool IsValid() const { return (int)mRenderBufferId!=-1; }
+	bool IsValid() const
+	{
+		bool ret;
+		RenderPipe::SendCommandSync([&](){
+		ret = IsValidUnsafe();
+		});
+		return ret;
+	}
 
 private:
 	friend class GLESFrameBuffer;
+	bool IsValidUnsafe() const
+	{
+		bool ret;
+		ret = (int)mRenderBufferId!=-1;
+		return ret;
+	}
 	GLuint GetRenderBufferId() const  { return  mRenderBufferId; }
 	GLuint mRenderBufferId;
 };

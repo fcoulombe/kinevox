@@ -22,6 +22,7 @@
 
 #include "applayer/RenderTarget.h"
 #include <gcl/Assert.h>
+#include <gcl/Log.h>
 #include <gcl/Matrix44.h>
 #include <gcl/Point3.h>
 #include <renderer/FrameBuffer.h>
@@ -35,15 +36,19 @@ using namespace GCL;
 
 RenderTarget::RenderTarget(size_t width, size_t height)
 {
+	KLogD("Create Render Target");
 	mRenderBuffer = new RenderBuffer(width, height);
 	mRenderBuffer->Bind();
+	KLogD("Create Render Target texture");
 	mTexture = new Texture(width, height, 3);
 	mTexture->Bind();
+	KLogD("Create Render Target Frame buffer");
 	mFrameBuffer = new FrameBuffer(*mTexture, *mRenderBuffer);
 	mFrameBuffer->Bind();
+	KLogD("Create Render Target Material");
 	mMaterial = new Material();
 	mMaterial->SetTexture(mTexture);
-	const VertexPT geom[6] = {
+	static const VertexPT geom[6] = {
 	        VertexPT(Point3<MeshReal>(-0.5, 0.5, 0.0), Point2<MeshReal>(0.0, 0.0)), //left top
 	        VertexPT(Point3<MeshReal>(0.5, -0.5, 0.0), Point2<MeshReal>(1.0, 1.0)), //right bot
 	        VertexPT(Point3<MeshReal>(-0.5, -0.5, 0.0), Point2<MeshReal>(0.0, 1.0)), // left bot
@@ -51,6 +56,7 @@ RenderTarget::RenderTarget(size_t width, size_t height)
 	        VertexPT(Point3<MeshReal>(0.5, -0.5, 0.0), Point2<MeshReal>(1.0, 1.0)), //right bot
 	        VertexPT(Point3<MeshReal>(-0.5, 0.5, 0.0), Point2<MeshReal>(0.0, 0.0)), // left top
 	};
+	KLogD("Create Render Target Render object");
 	mBackground = new RenderObject(*mMaterial, geom, 6);
 }
 

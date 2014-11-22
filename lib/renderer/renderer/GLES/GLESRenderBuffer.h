@@ -49,7 +49,8 @@ public:
 	void Bind()
 	{
 		RenderPipe::SendCommand([&](){
-		GCLAssert(IsValid()); glBindRenderbuffer(GL_RENDERBUFFER, mRenderBufferId); glErrorCheck();
+		GCLAssert(IsValidUnsafe());
+		glBindRenderbuffer(GL_RENDERBUFFER, mRenderBufferId); glErrorCheck();
 		});
 	}
 

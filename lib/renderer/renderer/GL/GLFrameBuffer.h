@@ -56,7 +56,7 @@ public:
 
 	static void ResetDefault()
 	{
-		RenderPipe::SendCommand([&](){
+		RenderPipe::SendCommand([](){
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);  glErrorCheck();
 		});
 	}

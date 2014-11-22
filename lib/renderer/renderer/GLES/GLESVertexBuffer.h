@@ -43,10 +43,10 @@ public:
 	  mVertexCount(count),
 	  mVao(vertexArray)
 	{
-		RenderPipe::SendCommand([this, vertexArray, count, loc](){
+		RenderPipe::SendCommand([=](){
 		glGenBuffers(1, &mVertexBufferId);glErrorCheck();
 		glBindBuffer(GL_ARRAY_BUFFER, mVertexBufferId);glErrorCheck();
-		mVao.PostInit(vertexArray, loc);
+		mVao.PostInitUnsafe(vertexArray, loc);
 		glBufferData(GL_ARRAY_BUFFER, GLsizeiptr(sizeof(VertexType)*count), (GLvoid*)vertexArray, mBufferType);glErrorCheck();
 		});
 	}

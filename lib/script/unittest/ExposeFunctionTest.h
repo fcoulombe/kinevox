@@ -93,7 +93,7 @@ namespace ExposeFunctionTest
         ScriptResourceManager::Instance().ExposeFunction("FunctionToExpose", FunctionToExposeProx);
         {
             
-            const Resource *resource = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"ExposeToLuaTest.luac");
+            const Resource *resource = ScriptResourceManager::Instance().LoadResource(SCRIPT_PATH"ExposeToLuaTest.lua");
             const ScriptResource *luaResource = static_cast<const ScriptResource*>(resource);
 
             luaResource->ExecuteMethod("Logic", &object);

@@ -54,9 +54,41 @@ macro(ProcessDependencies projName)
 	endif()
 endmacro()
 
+macro(ndk_gdb_debuggable TARGET_NAME)
+    get_property(TARGET_LOCATION TARGET ${TARGET_NAME} PROPERTY LOCATION)
+    
+    # create custom target that depends on the real target so it gets executed afterwards
+    add_custom_target(NDK_GDB_${TARGET_NAME} ALL) 
+    add_dependencies(NDK_GDB_${TARGET_NAME} ${TARGET_NAME})
+    
+    set(GDB_SOLIB_PATH ${CMAKE_CURRENT_BINARY_DIR}/android/obj/local/${ANDROID_ABI}/)
+    
+    # 1. generate essential Android Makefiles
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/android/jni/Android.mk "APP_ABI := ${ANDROID_NDK_ABI_NAME}\n")
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/android/jni/Application.mk "APP_ABI := ${ANDROID_NDK_ABI_NAME}\n")
+
+    # 2. generate gdb.setup
+    get_directory_property(PROJECT_INCLUDES DIRECTORY ${PROJECT_SOURCE_DIR}  INCLUDE_DIRECTORIES)
+    string(REGEX REPLACE ";" " " PROJECT_INCLUDES "${PROJECT_INCLUDES}")
+    file(WRITE 
+    ${CMAKE_CURRENT_BINARY_DIR}/android/libs/${ANDROID_ABI}/gdb.setup "set solib-search-path ${GDB_SOLIB_PATH}\n")
+    file(APPEND
+    ${CMAKE_CURRENT_BINARY_DIR}/android/libs/${ANDROID_ABI}/gdb.setup "directory ${PROJECT_INCLUDES}\n")
+
+    # 3. copy gdbserver executable
+    file(COPY ${ANDROID_NDK}/prebuilt/android-arm/gdbserver/gdbserver DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/android/libs/${ANDROID_ABI}/)
+
+    # 4. copy lib to obj
+    add_custom_command(TARGET NDK_GDB_${TARGET_NAME} POST_BUILD COMMAND mkdir -p ${GDB_SOLIB_PATH})
+    add_custom_command(TARGET NDK_GDB_${TARGET_NAME} POST_BUILD COMMAND cp ${TARGET_LOCATION} ${GDB_SOLIB_PATH})
+
+    # 5. strip symbols
+    add_custom_command(TARGET NDK_GDB_${TARGET_NAME} POST_BUILD COMMAND ${CMAKE_STRIP} ${TARGET_LOCATION})
+endmacro()
 SET(USE_NATIVE_ACTIVITY ON)
 macro(AndroidExecutable ProjectName)
     add_library(${ProjectName} SHARED ${${ProjectName}_src} ${ANDROID_NDK}/sources/android/native_app_glue/android_native_app_glue.c ${DATA_DEP})
+
     set(ANDROID_SO_OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/android/libs/${ANDROID_ABI})
     set_target_properties(${ProjectName} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${ANDROID_SO_OUTDIR})
     set_target_properties(${ProjectName} PROPERTIES LIBRARY_OUTPUT_DIRECTORY_RELEASE ${ANDROID_SO_OUTDIR})
@@ -75,6 +107,7 @@ macro(AndroidExecutable ProjectName)
              --package com.kinevox.${ProjectName}
              --activity KinevoxActivity
              WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+    ndk_gdb_debuggable(${ProjectName})
     if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
       set(ANT_BUILD_TYPE "debug")
       set(IS_DEBUGGABLE "true")

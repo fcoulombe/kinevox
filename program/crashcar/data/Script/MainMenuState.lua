@@ -8,7 +8,7 @@ end
 
 function Logic(self, dt)
   
-  if input.IsKeyDown(GCL_ENTER) then
+  if input.IsKeyDown(GCL_ENTER) or input.IsMouseDown() then
     kinevox.Log("Logic!!")
     kinevox.ChangeToState("MainGameState", "MainGameState")
   end

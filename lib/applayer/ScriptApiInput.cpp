@@ -27,6 +27,34 @@
 
 using namespace GCL;
 
+static int KIsMouseUp(lua_State * L)
+{
+	if (Input::IsMouseUp())
+	{
+		lua_pushboolean(L, 1);
+	}
+	else
+	{
+		lua_pushboolean(L, 0);
+	}
+
+	return 1;
+}
+
+static int KIsMouseDown(lua_State * L)
+{
+	if (Input::IsMouseDown())
+	{
+		lua_pushboolean(L, 1);
+	}
+	else
+	{
+		lua_pushboolean(L, 0);
+	}
+
+	return 1;
+}
+
 static int KIsKeyUp(lua_State * L)
 {
 	lua_Integer key = lua_tointeger(L, 1);
@@ -61,6 +89,8 @@ static int KIsKeyDown(lua_State * L)
 static const luaL_Reg inputExposedFunc[] = {
 	{ "IsKeyDown", KIsKeyDown},
 	{ "IsKeyUp", KIsKeyUp},
+	{ "IsMouseDown", KIsMouseDown},
+	{ "IsMouseUp", KIsMouseUp},
 	{ NULL, NULL } };
 
 #define REGISTER_GLOBAL_KEY(key) 	lua_pushinteger(L, key);lua_setglobal(L,#key);

@@ -44,7 +44,8 @@ extern android_app* gAndroidApp;
 			mFPS(0),
 			mAccumulatedTime(0.0),
 			mDt(0.0),
-			mIsReady(false)
+			mIsReady(false),
+			mIsInFocus(true)
 		{
 			mWindowsTitle = windowsTitle;
 			gAndroidApp->userData = this;
@@ -77,6 +78,7 @@ extern android_app* gAndroidApp;
 		            KLog("engine_term_display(engine);");
 		            break;
 		        case APP_CMD_GAINED_FOCUS:
+		        	KLog("command gained focus;");
 		            // When our app gains focus, we start monitoring the accelerometer.
 		            /*if (engine->accelerometerSensor != NULL) {
 		                ASensorEventQueue_enableSensor(engine->sensorEventQueue,
@@ -85,8 +87,12 @@ extern android_app* gAndroidApp;
 		                ASensorEventQueue_setEventRate(engine->sensorEventQueue,
 		                        engine->accelerometerSensor, (1000L/60)*1000);
 		            }*/
+		        	window->SetInFocus();
 		            break;
 		        case APP_CMD_LOST_FOCUS:
+
+		        	KLog("lost focus;");
+		        	window->SetInFocus(false);
 		            // When our app loses focus, we stop monitoring the accelerometer.
 		            // This is to avoid consuming battery while not being used.
 		            /*if (engine->accelerometerSensor != NULL) {
@@ -95,19 +101,67 @@ extern android_app* gAndroidApp;
 		            }
 		            // Also stop animating.
 		            engine->animating = 0;*/
-		            KLog("engine_draw_frame(engine);");
 		            break;
 		    }
 		}
-		static int32_t HandleInputs(struct android_app* /*app*/, AInputEvent* /*event*/)
+		static int32_t HandleInputs(struct android_app* /*app*/, AInputEvent* event)
 		{
-		    //pWinDriver* engine = (pWinDriver*)app->userData;
-		    /*if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION) {
-		        engine->animating = 1;
-		        engine->state.x = AMotionEvent_getX(event, 0);
-		        engine->state.y = AMotionEvent_getY(event, 0);
-		        return 1;
-		    }*/
+
+			if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION)
+			{
+				int x = AMotionEvent_getX(event, 0);
+		        int y = AMotionEvent_getY(event, 0);
+				int32_t action = AMotionEvent_getAction(event);
+				switch (action & AMOTION_EVENT_ACTION_MASK)
+				{
+	               case AMOTION_EVENT_ACTION_SCROLL:
+	                {
+	                	KLog("Scroll");
+	                    //processScrollEvent(_event, states);
+	                    //handled = 1;
+	                    break;
+	                }
+	                case AMOTION_EVENT_ACTION_HOVER_MOVE:
+	                case AMOTION_EVENT_ACTION_MOVE:
+	                {
+	                	KLog("Move!");
+	                    //processMotionEvent(_event, states);
+	                    //handled = 1;
+	                    break;
+	                }
+	                case AMOTION_EVENT_ACTION_POINTER_DOWN:
+	                 case AMOTION_EVENT_ACTION_DOWN:
+	                 {
+	                	 EventManager::Instance().MouseDown(x, y);
+	                     //processPointerEvent(true, _event, states);
+	                     //handled = 1;
+	                     break;
+	                 }
+	                 case AMOTION_EVENT_ACTION_POINTER_UP:
+	                 case AMOTION_EVENT_ACTION_UP:
+	                 case AMOTION_EVENT_ACTION_CANCEL:
+	                 {
+	                	 EventManager::Instance().MouseUp(x, y);
+	                     //processPointerEvent(false, _event, states);
+	                     //handled = 1;
+	                     break;
+	                 }
+				}
+
+		        KLog("motion input %dx%d", x, y);
+			}
+			else if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_KEY)
+			{
+				KLog("Key event: action=%d keyCode=%d metaState=0x%x",
+		                AKeyEvent_getAction(event),
+		                AKeyEvent_getKeyCode(event),
+		                AKeyEvent_getMetaState(event));
+		    }
+			else
+			{
+				KLog("some kind of event");
+			}
+
 		    return 0;
 		}
 		size_t GetWindowsHandle() const
@@ -177,6 +231,8 @@ extern android_app* gAndroidApp;
 		Real GetDt() const { return mDt; }
 
 		bool IsReady() const { return mIsReady; }
+		bool IsInFocus() const { return mIsInFocus; }
+		void SetInFocus(bool isInFocus = true) { mIsInFocus = isInFocus; }
 	private:
 		std::string mWindowsTitle;
 		double mPreviousFrameTime;
@@ -184,6 +240,7 @@ extern android_app* gAndroidApp;
 		double mAccumulatedTime;
 		Real mDt;
 		bool mIsReady;
+		bool mIsInFocus;
 	};
 	WinDriver::WinDriver(const char *windowsTitle)
 	{
@@ -214,6 +271,11 @@ extern android_app* gAndroidApp;
 	bool WinDriver::IsReady() const
 	{
 		return mpWinDriver->IsReady();
+	}
+
+	bool WinDriver::IsInFocus() const
+	{
+		return mpWinDriver->IsInFocus();
 	}
 }
 #endif

@@ -41,6 +41,7 @@ namespace GCL
         Real GetDt() const;
         bool IsKeyUp(uint32_t key);
         size_t GetWindowsHandle() const;
+        bool IsInFocus() const;
 
     private:
         bool IsReady() const;

@@ -67,7 +67,8 @@ public:
 : mPreviousFrameTime(0.0),
   mFPS(0),
   mAccumulatedTime(0.0),
-  mDt(0.0)
+  mDt(0.0),
+  mIsInFocus(true)
 {
 		Status stats = XInitThreads();
 		GCLAssert(stats != 0);
@@ -218,6 +219,7 @@ public:
 			}
 			case FocusIn :
 			{
+				SetInFocus();
 				// Update the input context
 				if (mInputContext)
 					XSetICFocus(mInputContext);
@@ -229,6 +231,8 @@ public:
 			}
 			case FocusOut :
 			{
+				SetInFocus(false);
+				KLog("lose focus");
 				// Update the input context
 				if (mInputContext)
 					XUnsetICFocus(mInputContext);
@@ -326,7 +330,8 @@ public:
 	}
 
 	Real GetDt() const { return mDt; }
-
+	bool IsInFocus() const { return mIsInFocus; }
+	void SetInFocus(bool isInFocus = true) { mIsInFocus = isInFocus; }
 private:
 	struct WindowsData
 	{
@@ -346,6 +351,7 @@ private:
 	size_t mFPS;
 	double mAccumulatedTime;
 	Real mDt;
+	bool mIsInFocus;
 };
 WinDriver::WinDriver(const char *windowsTitle)
 {
@@ -373,6 +379,10 @@ size_t WinDriver::GetWindowsHandle() const
 bool WinDriver::IsReady() const
 {
 	return true;
+}
+bool WinDriver::IsInFocus() const
+{
+	return mpWinDriver->IsInFocus();
 }
 }
 #endif

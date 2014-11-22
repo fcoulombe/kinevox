@@ -2,10 +2,29 @@ Port sound android
 Input android
 Android platform
 Android threaded render
+Generate symlinks for data
+Generate helper scripts for in debug or write builder
+Unit test android
+Generate build for other architectures
+Packaging mechanism?
+Android platform integration
+Ad integration
+Facebook integration
+Openal dynamic link
 
+Logging levels
 Animation
 Streaming
 Material
 Script reload
 Script edit
 Pfx?
+Sprite builder
+Pak file
+Animation script
+Look into not creating new lua thread per call
+Setup Travis ci
+Gui
+Movie playback
+Anti aliasing
+Anti aliased text

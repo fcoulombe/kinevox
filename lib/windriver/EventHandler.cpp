@@ -41,18 +41,35 @@ void EventManager::Terminate()
 
 void GCL::EventManager::KeyDown( uint32_t key )
 {
-    for (KeyListenerList::iterator it = mKeyListenerList.begin(); it != mKeyListenerList.end(); ++it)
+    for (auto it = mInputListenerList.begin(); it != mInputListenerList.end(); ++it)
     {
-        KeyListener *listener = *it;
+        InputListener *listener = *it;
         listener->KeyDown(key);
     }
 }
 
 void GCL::EventManager::KeyUp( uint32_t key )
 {
-    for (KeyListenerList::iterator it = mKeyListenerList.begin(); it != mKeyListenerList.end(); ++it)
+    for (auto it = mInputListenerList.begin(); it != mInputListenerList.end(); ++it)
     {
-        KeyListener *listener = *it;
+        InputListener *listener = *it;
         listener->KeyUp(key);
+    }
+}
+void GCL::EventManager::MouseDown( size_t x, size_t y )
+{
+    for (auto it = mInputListenerList.begin(); it != mInputListenerList.end(); ++it)
+    {
+        InputListener *listener = *it;
+        listener->ClickDown(x,y);
+    }
+}
+
+void GCL::EventManager::MouseUp( size_t x, size_t y)
+{
+    for (auto it = mInputListenerList.begin(); it != mInputListenerList.end(); ++it)
+    {
+        InputListener *listener = *it;
+        listener->ClickUp(x,y);
     }
 }

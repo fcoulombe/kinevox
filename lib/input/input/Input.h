@@ -40,7 +40,8 @@ public:
 	static void ProcessInput();
 	static bool IsKeyUp(uint32_t key);
 	static bool IsKeyDown(uint32_t key);
-	static bool IsLMouseDown();
+	static bool IsMouseDown();
+	static bool IsMouseUp();
 	static size_t GetMouseX();
 	static size_t GetMouseY();
 	static void Terminate();

@@ -35,11 +35,11 @@
 using namespace GCL;
 
 
-class InputKeyListener : public KeyListener
+class GeneralInputListener : public InputListener
 {
 public:
-    InputKeyListener()
-        :     smIsLMousedown(false),
+	GeneralInputListener()
+        :     smIsMousedown(false),
         smMouseX(0),
         smMouseY(0)
     {
@@ -55,14 +55,29 @@ public:
          smKeys[key] = false;
     }
 
+    virtual void ClickDown(size_t x, size_t y)
+    {
+    	smIsMousedown = true;
+    	smMouseX = x;
+    	smMouseY = y;
+    }
+
+    virtual void ClickUp(size_t x, size_t y)
+    {
+    	smIsMousedown = false;
+    	smMouseX = x;
+    	smMouseY = y;
+    }
     static const size_t KEYS_STATE_ARRAY_SIZE = 350;
     std::map<uint32_t, bool> smKeys;
-    bool smIsLMousedown;
+    bool smIsMousedown;
     size_t smMouseX;
     size_t smMouseY;
 };
 
-InputKeyListener *keyListener = nullptr;
+
+
+GeneralInputListener *inputListener = nullptr;
 
 void Input::ProcessInput()
 {
@@ -70,38 +85,44 @@ void Input::ProcessInput()
 
 size_t Input::GetMouseX()
 {
-    if (!keyListener)
-        keyListener = new InputKeyListener();
-    return keyListener->smMouseX;
+    if (!inputListener)
+        inputListener = new GeneralInputListener();
+    return inputListener->smMouseX;
 }
 size_t Input::GetMouseY()
 {
-    if (!keyListener)
-        keyListener = new InputKeyListener();
-    return keyListener->smMouseY;
+    if (!inputListener)
+        inputListener = new GeneralInputListener();
+    return inputListener->smMouseY;
 }
-bool Input::IsLMouseDown()
+bool Input::IsMouseDown()
 {
-    if (!keyListener)
-        keyListener = new InputKeyListener();
-    return keyListener->smIsLMousedown;
+    if (!inputListener)
+        inputListener = new GeneralInputListener();
+    return inputListener->smIsMousedown;
 }
 bool Input::IsKeyUp(uint32_t key)
 {
-    if (!keyListener)
-        keyListener = new InputKeyListener();
-    return keyListener->smKeys[key];
+    if (!inputListener)
+        inputListener = new GeneralInputListener();
+    return inputListener->smKeys[key];
+}
+bool Input::IsMouseUp()
+{
+    if (!inputListener)
+        inputListener = new GeneralInputListener();
+    return inputListener->smIsMousedown;
 }
 bool Input::IsKeyDown(uint32_t key)
 {
-	if (!keyListener)
-		keyListener = new InputKeyListener();
-	return keyListener->smKeys[key];
+	if (!inputListener)
+		inputListener = new GeneralInputListener();
+	return inputListener->smKeys[key];
 }
 
 void Input::Terminate()
 {
-	delete keyListener;
-	keyListener = nullptr;
+	delete inputListener;
+	inputListener = nullptr;
 }
 

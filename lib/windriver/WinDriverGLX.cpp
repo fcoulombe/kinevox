@@ -30,6 +30,7 @@
 
 #include <gcl/Assert.h>
 #include <gcl/Config.h>
+#include <gcl/Log.h>
 #include <gcl/StringUtil.h>
 #include <gcl/Time.h>
 #include "windriver/EventHandler.h"
@@ -239,19 +240,22 @@ public:
 			}
 			/* exit in case of a mouse button press */
 			case ButtonPress:
-				//std::cout << "button press!" << std::endl;
+				EventManager::Instance().MouseDown(event.xbutton.x, event.xbutton.y);
+				break;
+			case ButtonRelease:
+				EventManager::Instance().MouseUp(event.xbutton.x, event.xbutton.y);
 				break;
 			case KeyRelease:
-				//std::cout << "key release!" << std::endl;
 				EventManager::Instance().KeyUp((uint32_t)XLookupKeysym(&event.xkey, 0));
 				break;
 			case KeyPress:
-				//std::cout << "key press!" << std::endl;
 				EventManager::Instance().KeyDown((uint32_t)XLookupKeysym(&event.xkey, 0));
 				break;
 				// Mouse moved
 			case MotionNotify :
 			{
+				//KLog("we're in motion!");
+				//EventManager::Instance().ClickDown()
 				//Event event;
 				//event.type        = Event::MouseMoved;
 				//event.mouseMove.x = windowEvent.xmotion.x;

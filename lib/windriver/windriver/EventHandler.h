@@ -75,8 +75,8 @@ namespace GCL
 namespace GCL
 {
 #endif
-    class KeyListener;
-    typedef std::list<KeyListener*> KeyListenerList;
+    class InputListener;
+    typedef std::list<InputListener*> InputListenerList;
     class EventManager
     {
     public:
@@ -88,7 +88,7 @@ namespace GCL
         }
         ~EventManager()
         {
-            mKeyListenerList.clear();
+            mInputListenerList.clear();
         }
 
         static EventManager &Instance()
@@ -99,33 +99,40 @@ namespace GCL
 
         void KeyDown(uint32_t key);
         void KeyUp(uint32_t key);
-        void RegisterKeyListener(KeyListener *listener)
+        void MouseDown(size_t x, size_t y);
+        void MouseUp(size_t x, size_t y);
+        void RegisterInputListener(InputListener *listener)
         {
-            mKeyListenerList.push_back(listener);
+            mInputListenerList.push_back(listener);
         }
-        void UnRegisterKeyListener(KeyListener *listener)
+        void UnRegisterInputListener(InputListener *listener)
         {
-            mKeyListenerList.remove(listener);
+            mInputListenerList.remove(listener);
         }
     private:
         static EventManager *smpInstance;
-        KeyListenerList mKeyListenerList;
+        InputListenerList mInputListenerList;
     };
 
-    class KeyListener 
+    class InputListener
     {
     public:
-        KeyListener() 
+    	InputListener()
         {
-            EventManager::Instance().RegisterKeyListener(this);
+            EventManager::Instance().RegisterInputListener(this);
         }
-        virtual ~KeyListener() 
+        virtual ~InputListener()
         {
-            EventManager::Instance().UnRegisterKeyListener(this);
+            EventManager::Instance().UnRegisterInputListener(this);
         }
 
         virtual void KeyDown(uint32_t key) = 0;
 
         virtual void KeyUp(uint32_t key) = 0;
+
+
+        virtual void ClickDown(size_t x, size_t y) = 0;
+
+        virtual void ClickUp(size_t x, size_t y) = 0;
     };
 }

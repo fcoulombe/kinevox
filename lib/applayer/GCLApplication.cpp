@@ -58,6 +58,8 @@
 #include "applayer/RigidBodyComponent.h"
 #include "applayer/SpriteComponent.h"
 #include "applayer/ScriptComponent.h"
+
+#define ENABLE_RENDER_TARGET 1
 using namespace GCL;
 
 GCLWorld *GCLApplication::mCurrentWorld= nullptr;
@@ -105,15 +107,19 @@ void GCLApplication::InitializaAppLayerComponents()
 	size_t width = viewPort.GetWidth();
 	size_t height = viewPort.GetHeight();
 	KLog("resolution: %dx%d", (int)width, (int)height);
+#if ENABLE_RENDER_TARGET
 	Point2<size_t> screenSize;
 	mRenderer->GetScreenSize(screenSize);
 	KLog("ScreenSize: %dx%d", (int)screenSize.x, (int)screenSize.y);
 	mRenderTarget = new RenderTarget(width, height);
+#endif
 }
 /*static */void GCLApplication::Terminate()
 {
+#if ENABLE_RENDER_TARGET
 	delete mRenderTarget;
 	mRenderTarget = nullptr;
+#endif
 	Input::Terminate();
 	GameStateManager::Terminate();
 
@@ -160,7 +166,9 @@ void GCLApplication::Render()
 	//perform actor culling against view frustum
 
 	//pass it to renderer
+#if ENABLE_RENDER_TARGET
 	mRenderTarget->Bind();
+#endif
 	mRenderer->PreRender();
 
 
@@ -190,7 +198,7 @@ void GCLApplication::Render()
 		tempSprite->Render(proj);
 	}
 	FrameBuffer::ResetDefault();
-
+#if ENABLE_RENDER_TARGET
 	Point2<size_t> screenSize;
 	mRenderer->GetScreenSize(screenSize);
 	mRenderer->SetViewPort(
@@ -198,6 +206,7 @@ void GCLApplication::Render()
 	Matrix44 ortho;
 	ortho.SetOrtho(-0.5, 0.5, 0.5,-0.5, -0.5, 0.5);
 	mRenderTarget->Render(ortho);
+#endif
 	mRenderer->PostRender();
 	mWinDriver->SwapBuffer();
 

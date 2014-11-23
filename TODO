@@ -23,6 +23,7 @@ Sprite builder
 Pak file
 Animation script
 Look into not creating new lua thread per call
+use luajit
 Setup Travis ci
 Gui
 Movie playback

@@ -25,6 +25,7 @@
 #include <sstream>
 #include <map>
 #include <windows.h>
+#include <Windowsx.h>
 #pragma comment(lib, "User32.lib") 
 
 #include <gcl/Assert.h>
@@ -49,6 +50,28 @@ namespace GCL
 				EventManager::Instance().KeyUp((uint32_t)wParam);
 				break;
 			}
+        case WM_MOUSEMOVE:
+            {
+                break;
+            }
+        case WM_LBUTTONDOWN:
+        case WM_RBUTTONDOWN:
+        case WM_MBUTTONDOWN:
+            {
+                int xPos = GET_X_LPARAM(lParam); 
+                int yPos = GET_Y_LPARAM(lParam); 
+                EventManager::Instance().MouseDown(xPos, yPos);
+                break;
+            }
+        case WM_LBUTTONUP:
+        case WM_RBUTTONUP:
+        case WM_MBUTTONUP:
+            {
+                int xPos = GET_X_LPARAM(lParam); 
+                int yPos = GET_Y_LPARAM(lParam); 
+                EventManager::Instance().MouseUp(xPos, yPos);
+                break;
+            }
 		case WM_SYSCOMMAND:
 			{
 				switch (wParam)

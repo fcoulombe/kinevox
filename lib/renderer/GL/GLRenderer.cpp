@@ -513,8 +513,8 @@ void GCL::GLRenderer::GetScreenSize(Point2<size_t> &screenSize) const
 	RenderPipe::SendCommandSync([&](){
 #if defined(OS_WIN32)
 	RECT rect;
-	::GetWindowRect(mHwnd,&rect);
-	screenSize = Point2<size_t>((size_t)(rect.right-rect.left), (size_t)(rect.top-rect.bottom));
+	::GetClientRect(mhWnd,&rect);
+	screenSize = Point2<size_t>((size_t)(rect.right-rect.left), (size_t)(rect.bottom-rect.top));
 #elif defined(OS_LINUX)
 	XWindowAttributes xwa;
 	XGetWindowAttributes(mDisplay, mWin, &xwa);

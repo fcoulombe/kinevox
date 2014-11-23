@@ -30,15 +30,19 @@ using namespace GCL;
 
 #define SIMULATE_KEYPRESS(key) EventManager::Instance().KeyDown(key);
 #define SIMULATE_KEYRELEASE(key) EventManager::Instance().KeyUp(key);
+#define SIMULATE_CLICKPRESS(x,y) EventManager::Instance().MouseDown(x,y);
+#define SIMULATE_CLICKRELEASE(x,y) EventManager::Instance().MouseUp(x,y);
 
 namespace EventHandlerTest
 {
-    class MyEventHandler : public KeyListener
+    class MyEventHandler : public InputListener
     {
     public:
         MyEventHandler()
             : hasReceivedKeyDown(false),
-            hasReceivedKeyUp(false)
+            hasReceivedKeyUp(false),
+            hasReceivedClickDown(false),
+            hasReceivedClickUp(false)
         {}
         virtual void KeyDown(uint32_t /*key*/)
         {
@@ -49,9 +53,20 @@ namespace EventHandlerTest
         {
             hasReceivedKeyUp = true;
         }
+        virtual void ClickDown(size_t , size_t )
+        {
+            hasReceivedClickDown = true;
+        }
+
+        virtual void ClickUp(size_t , size_t )
+        {
+            hasReceivedClickUp = true;
+        }
 
         bool hasReceivedKeyDown;
         bool hasReceivedKeyUp;
+        bool hasReceivedClickDown;
+        bool hasReceivedClickUp;
     };
 
 void Test()
@@ -68,10 +83,14 @@ void Test()
     SIMULATE_KEYPRESS('a');
     SIMULATE_KEYRELEASE('a');
     SIMULATE_KEYPRESS(GCL_UP);
+    SIMULATE_CLICKPRESS(300,400);
+    SIMULATE_CLICKRELEASE(300,400);
     //SIMULATE_LEFT_MOUSE_CLICK(128, 128);
     KINEVOX_TEST_LOOP_END
     Assert_Test(handler.hasReceivedKeyDown == true);
     Assert_Test(handler.hasReceivedKeyUp == true);
+    Assert_Test(handler.hasReceivedClickDown == true);
+    Assert_Test(handler.hasReceivedClickUp == true);
 
 }
 }

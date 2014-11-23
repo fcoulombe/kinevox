@@ -197,7 +197,8 @@ private:
 	void SetViewPortUnsafe(const ViewPort &viewport)
 	{
 		mViewPort = viewport;
-		glViewport(viewport.GetX(),viewport.GetY(),viewport.GetWidth(), viewport.GetHeight());glErrorCheck();
+		glViewport((GLint)viewport.GetX(),(GLint)viewport.GetY(),
+                    (GLsizei)viewport.GetWidth(), (GLsizei)viewport.GetHeight());glErrorCheck();
 	}
 	void SetProjectionUnsafe(const Matrix44 &projection)
 	{

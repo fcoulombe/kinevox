@@ -47,10 +47,11 @@ public:
 	bool mIsInteractive;
 };
 
-class KineTestKeyListener : public KeyListener
+class KineTestInputListener : public InputListener
 {
 public:
-    KineTestKeyListener() : mIsLooping(false) {}
+    KineTestInputListener()
+        : mIsLooping(false) {}
     virtual void KeyDown(uint32_t /*key*/)
     {
     }
@@ -58,6 +59,13 @@ public:
     {
         if (key == GCL_ESCAPE) 
             mIsLooping = false;
+    }
+    virtual void ClickDown(size_t , size_t )
+    {
+    }
+
+    virtual void ClickUp(size_t , size_t )
+    {
     }
     bool mIsLooping;
 };
@@ -70,15 +78,15 @@ public:
 //this loop will run at 60fps
 #define KINEVOX_TEST_LOOP_START \
     {\
-    KineTestKeyListener kineTestKeyListener;\
+    KineTestInputListener kineTestInputListener;\
     size_t iteration=0;\
-	kineTestKeyListener.mIsLooping = testCounter.mIsInteractive;\
+	kineTestInputListener.mIsLooping = testCounter.mIsInteractive;\
 	const size_t TICKS_PER_SECOND = 60;\
 const size_t SKIP_TICKS = 1000 / TICKS_PER_SECOND;\
 const int MAX_FRAMESKIP = 5;\
 size_t next_game_tick = GCL::Time::GetTickMs()-1; \
 int loops;\
-while(iteration<2 || kineTestKeyListener.mIsLooping)\
+while(iteration<2 || kineTestInputListener.mIsLooping)\
 {\
 			loops = 0;\
 			while(GCL::Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP) \

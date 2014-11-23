@@ -88,7 +88,7 @@ void Material::LoadMaterial(const char *filename)
 	}
 	GCLFile fp(fullFileName.c_str());
 	auto fileBuffer = fp.ReadAll();
-	std::string fileContent((const char *)fileBuffer.get());
+	std::string fileContent((const char *)std::get<0>(fileBuffer).get(), std::get<1>(fileBuffer));
 	std::vector<std::string> lines;
 	StringUtil::Explode(fileContent, lines, '\n');
 

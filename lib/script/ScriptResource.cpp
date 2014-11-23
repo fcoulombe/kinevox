@@ -37,12 +37,10 @@ mFilename(scriptFileName)
     LuaState &L = ScriptResourceManager::Instance().GetLuaState();
     LuaState tempL(lua_newthread(L)); //1 thread
     GCLFile scriptFile(scriptFileName);
-    size_t fileSize = scriptFile.GetFileSize();
-    uint8_t *buffer = new uint8_t[fileSize];
-    scriptFile.Read(buffer, fileSize);
+    auto fileContent = scriptFile.ReadAll();
 
     std::string name = std::string("@")+scriptFileName;
-    int s = luaL_loadbuffer(tempL,(const char*)buffer,fileSize,name.c_str());
+    int s = luaL_loadbuffer(tempL,(const char *)std::get<0>(fileContent).get(), std::get<1>(fileContent),name.c_str());
     tempL.ReportLuaErrors(s);
 
     GCLAssertMsg(s==0, scriptFileName);

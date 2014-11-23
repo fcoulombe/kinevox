@@ -46,11 +46,9 @@ static int KLoadLib(lua_State * L)
     s<<SCRIPT_PATH<<lib<<".lua";
     //int res = luaL_loadfile(L, s.str().c_str());
     GCLFile scriptFile(s.str().c_str());
-    size_t fileSize = scriptFile.GetFileSize();
-    uint8_t *buffer = new uint8_t[fileSize];
-    scriptFile.Read(buffer, fileSize);
+    auto buffer = scriptFile.ReadAll();
     std::string name = std::string("@")+s.str();
-    int res = luaL_loadbuffer(L,(const char*)buffer,fileSize,name.c_str());
+    int res = luaL_loadbuffer(L,(const char *)std::get<0>(buffer).get(), std::get<1>(buffer),name.c_str());
     (void)res;
     int ret = lua_pcall(L,0,LUA_MULTRET,0);   
     if ( ret!=0 )

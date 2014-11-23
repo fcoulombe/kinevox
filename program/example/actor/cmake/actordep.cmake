@@ -1,1 +1,1 @@
-SET(DEPENDENCIES applayer)
+SET(DEPENDENCIES applayer gclvld)

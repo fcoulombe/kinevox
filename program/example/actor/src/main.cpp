@@ -19,7 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
+#ifdef USE_VLD
+#include <vld.h>
+#endif
 #include <applayer/GCLApplication.h>
 #include <applayer/Actor.h>
 #include <gcl/Exception.h>

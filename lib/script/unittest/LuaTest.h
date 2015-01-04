@@ -39,13 +39,10 @@ namespace LuaTest
         Script(const char *filename)
             : mFilename(filename)
         {
-
         	GCLFile scriptFile(filename);
-        	size_t fileSize = scriptFile.GetFileSize();
-        	uint8_t *buffer = new uint8_t[fileSize];
-        	scriptFile.Read(buffer, fileSize);
+            auto buffer = scriptFile.ReadAll();
         	std::string name = std::string("@")+filename;
-        	int s = luaL_loadbuffer(L,(const char*)buffer,fileSize,name.c_str());
+        	int s = luaL_loadbuffer(L,(const char *)std::get<0>(buffer).get(), std::get<1>(buffer),name.c_str());
             //int s = luaL_loadfile(L, filename); //1
             L.ReportLuaErrors(s);
             GCLAssertMsg(s==0, filename);

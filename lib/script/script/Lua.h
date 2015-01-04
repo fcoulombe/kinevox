@@ -137,10 +137,7 @@ namespace GCL
         {
             lua_pushboolean(L, value);
         }
-        void Push(Real value)
-        {
-            lua_pushnumber(L, value);
-        }
+
         void Push(const char *value)
         {
             lua_pushstring(L, value);
@@ -153,6 +150,15 @@ namespace GCL
         inline void Push(T& t)
         {
             lua_pushlightuserdata(L, &t);
+        }
+        void Push(double value)
+        {
+            lua_pushnumber(L, (lua_Number)value);
+        }
+
+        void Push(float value)
+        {
+            lua_pushnumber(L, (lua_Number)value);
         }
 
        /* template <typename T, typename... Rest>

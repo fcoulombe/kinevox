@@ -24,7 +24,7 @@
 
 #include <vector>
 #include <gcl/Point4.h>
-#include "common/BufferWriter.h"
+#include <gcl/BufferWriter.h>
 #include "common/ToolMaterialData.h"
 
 #define MeshReal float

@@ -23,9 +23,10 @@
 #pragma once
 
 #include <string>
+
+#include <gcl/BufferWriter.h>
 #include <gcl/Path.h>
 #include <gcl/Point4.h>
-#include "common/BufferWriter.h"
 #include "common/ToolStringTableData.h"
 
 

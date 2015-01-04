@@ -24,7 +24,7 @@
 
 #include <string>
 #include <vector>
-#include "common/BufferWriter.h"
+#include <gcl/BufferWriter.h>
 
 
 namespace GCL

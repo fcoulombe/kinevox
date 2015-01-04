@@ -332,6 +332,7 @@ public:
 	Real GetDt() const { return mDt; }
 	bool IsInFocus() const { return mIsInFocus; }
 	void SetInFocus(bool isInFocus = true) { mIsInFocus = isInFocus; }
+	const std::string &GetWindowsTitle() const { return mWindowsTitle; }
 private:
 	struct WindowsData
 	{
@@ -383,6 +384,10 @@ bool WinDriver::IsReady() const
 bool WinDriver::IsInFocus() const
 {
 	return mpWinDriver->IsInFocus();
+}
+const std::string &WinDriver::GetWindowsTitle() const
+{
+    return mpWinDriver->GetWindowsTitle();
 }
 }
 #endif

@@ -126,8 +126,8 @@ void GCL::Actor::SaveStates( BufferWriter &buffer )
 
 void GCL::Actor::PatchReference( const std::vector<ActorPtr> &actorList )
 {
-    uint32_t parentId = (uint32_t)mParentNode;
-    if (parentId != -1)
+    uint32_t parentId = (uint32_t)size_t(mParentNode);
+    if (parentId != (uint32_t)-1)
     {
         auto it = std::find_if(actorList.begin(), actorList.end(),
         [parentId](const ActorPtr actor) { return actor->GetId() ==  parentId; }); 
@@ -140,7 +140,7 @@ void GCL::Actor::PatchReference( const std::vector<ActorPtr> &actorList )
 
     for (auto child = mChilds.begin(); child != mChilds.end(); ++child)
     {
-        uint32_t childId = (uint32_t)*child;
+        uint32_t childId = (uint32_t)size_t(*child);
         auto it = std::find_if(actorList.begin(), actorList.end(),
                 [childId](const ActorPtr actor) { return actor->GetId() ==  childId; }); 
         *child = it->get();

@@ -129,13 +129,13 @@ GCL::Node::Node( BufferReader &buffer )
     buffer.Read(mName);
     uint32_t parentNodeId;
     buffer.Read(parentNodeId);
-    mParentNode = (Node *)parentNodeId;
+    mParentNode = (Node *)size_t(parentNodeId);
     size_t childCount;
     buffer.Read(childCount);
     for (size_t i=0; i<childCount; ++i)
     {
         uint32_t id;
         buffer.Read(id);
-        mChilds.push_back((Node*)id);
+        mChilds.push_back((Node*)size_t(id));
     }
 }

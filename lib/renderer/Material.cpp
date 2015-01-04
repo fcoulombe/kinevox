@@ -80,13 +80,13 @@ void Material::LoadMaterial(const char *filename)
 	for (size_t i=0; i<resourcePathList.size(); ++i)
 	{
 		std::string fullPath = resourcePathList[i] + "/" + fullFileName;
-		if (GCLFile::Exists(fullPath.c_str()))
+		if (ResourceFile::Exists(fullPath.c_str()))
 		{
 			fullFileName = fullPath;
 			break;
 		}
 	}
-	GCLFile fp(fullFileName.c_str());
+	ResourceFile fp(fullFileName.c_str());
 	auto fileBuffer = fp.ReadAll();
 	std::string fileContent((const char *)std::get<0>(fileBuffer).get(), std::get<1>(fileBuffer));
 	std::vector<std::string> lines;

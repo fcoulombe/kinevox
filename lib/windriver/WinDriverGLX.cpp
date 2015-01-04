@@ -227,6 +227,7 @@ public:
 				//Event event;
 				//event.type = Event::GainedFocus;
 				//pushEvent(event);
+				EventManager::Instance().GainFocus();
 				break;
 			}
 			case FocusOut :
@@ -240,6 +241,7 @@ public:
 				//Event event;
 				//event.type = Event::LostFocus;
 				//pushEvent(event);
+				EventManager::Instance().LoseFocus();
 				break;
 			}
 			/* exit in case of a mouse button press */

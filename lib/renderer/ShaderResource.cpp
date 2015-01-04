@@ -34,9 +34,9 @@ const ShaderResource ShaderResource::EmptyShader;
 
 char *LoadShader(const char *filename)
 {
-	GCLAssertMsg(GCLFile::Exists(filename), filename);
+	GCLAssertMsg(ResourceFile::Exists(filename), filename);
 
-	GCLFile fp(filename);
+	ResourceFile fp(filename);
 	size_t fileSize = fp.GetFileSize();
 	char *fileContent = new char[fileSize+1];
 	fp.Read(fileContent, fileSize);

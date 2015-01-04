@@ -29,7 +29,7 @@
 
 namespace GCL
 {
-class GCLFile;
+class ResourceFile;
 //this is a resource class that can be shared between difference Mesh instance
 class MeshResource : public Resource
 {
@@ -98,7 +98,7 @@ public:
 
 	static const MeshResource EmptyMesh;
 
-	static const MeshData *LoadMesh(GCLFile &is);
+	static const MeshData *LoadMesh(ResourceFile &is);
 	static void Unload(const MeshData *data);
 private:
 	MeshResource() {}

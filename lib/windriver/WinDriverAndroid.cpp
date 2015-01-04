@@ -78,7 +78,6 @@ extern android_app* gAndroidApp;
 		            KLog("engine_term_display(engine);");
 		            break;
 		        case APP_CMD_GAINED_FOCUS:
-		        	KLog("command gained focus;");
 		            // When our app gains focus, we start monitoring the accelerometer.
 		            /*if (engine->accelerometerSensor != NULL) {
 		                ASensorEventQueue_enableSensor(engine->sensorEventQueue,
@@ -88,11 +87,11 @@ extern android_app* gAndroidApp;
 		                        engine->accelerometerSensor, (1000L/60)*1000);
 		            }*/
 		        	window->SetInFocus();
+		        	EventManager::Instance().GainFocus();
 		            break;
 		        case APP_CMD_LOST_FOCUS:
-
-		        	KLog("lost focus;");
 		        	window->SetInFocus(false);
+		        	EventManager::Instance().LoseFocus();
 		            // When our app loses focus, we stop monitoring the accelerometer.
 		            // This is to avoid consuming battery while not being used.
 		            /*if (engine->accelerometerSensor != NULL) {
@@ -233,6 +232,7 @@ extern android_app* gAndroidApp;
 		bool IsReady() const { return mIsReady; }
 		bool IsInFocus() const { return mIsInFocus; }
 		void SetInFocus(bool isInFocus = true) { mIsInFocus = isInFocus; }
+        const std::string &GetWindowsTitle() const { return mWindowsTitle; }
 	private:
 		std::string mWindowsTitle;
 		double mPreviousFrameTime;
@@ -277,5 +277,9 @@ extern android_app* gAndroidApp;
 	{
 		return mpWinDriver->IsInFocus();
 	}
+	const std::string &WinDriver::GetWindowsTitle() const
+    {
+        return mpWinDriver->GetWindowsTitle();
+    }
 }
 #endif

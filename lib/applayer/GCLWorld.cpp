@@ -33,8 +33,8 @@ GCL::GCLWorld::GCLWorld( const char * name )
 	std::string worldFile(WORLD_PATH);
 	worldFile += name;
 	worldFile += ".world";
-	GCLAssert(GCLFile::Exists(worldFile));
-	GCLFile fp(worldFile);
+	GCLAssert(ResourceFile::Exists(worldFile));
+	ResourceFile fp(worldFile);
 	const size_t fileSize = fp.GetFileSize();
 	mWorldFileData = new uint8_t[fileSize];
 	fp.Read(mWorldFileData, fileSize);

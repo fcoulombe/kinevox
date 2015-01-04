@@ -38,7 +38,7 @@ void MeshResource::Unload(const MeshData *data)
 	delete [] buffer;
 }
 
-const MeshResource::MeshData * MeshResource::LoadMesh(GCLFile & fp)
+const MeshResource::MeshData * MeshResource::LoadMesh(ResourceFile & fp)
 {
 	size_t fileSize = fp.GetFileSize();
 	uint8_t *buffer = new uint8_t[fileSize];
@@ -59,7 +59,7 @@ MeshResource::MeshResource( const char *MeshName )
 	const char *ext = &(path.c_str()[path.length()-4]);
 	if (strncmp(ext, "mesh", 4) == 0)
 	{
-		GCLFile fp(path.c_str());
+		ResourceFile fp(path.c_str());
 
 		mMeshData =LoadMesh(fp);
 		GCLAssert(mMeshData);

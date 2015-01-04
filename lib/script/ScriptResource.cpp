@@ -36,7 +36,7 @@ mFilename(scriptFileName)
 {
     LuaState &L = ScriptResourceManager::Instance().GetLuaState();
     LuaState tempL(lua_newthread(L)); //1 thread
-    GCLFile scriptFile(scriptFileName);
+    ResourceFile scriptFile(scriptFileName);
     auto fileContent = scriptFile.ReadAll();
 
     std::string name = std::string("@")+scriptFileName;

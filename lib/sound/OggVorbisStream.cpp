@@ -51,7 +51,7 @@ void OggStream::Open(const char *filename)
     SoundManager::SendCommand([this, filename_copy]{
 	int result;
 
-	GCLAssert(GCLFile::Exists(filename_copy));
+	GCLAssert(ResourceFile::Exists(filename_copy));
 	result = ov_fopen(filename_copy.c_str(), &mOggStream); ovErrorCheck(result);
 
 	mVorbisInfo = ov_info(&mOggStream, -1);

@@ -68,7 +68,7 @@ void Test()
 	}
 	{
 		const char *fullFileName = TEXTURE_PATH"mushroomtga.tga";
-		GCLFile fp(fullFileName);
+		ResourceFile fp(fullFileName);
 		PixelBufferHAL pb;
 		PixelBuffer::LoadTga(fp, pb);
 		pb.Bind();

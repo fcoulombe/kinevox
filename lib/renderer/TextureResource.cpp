@@ -48,14 +48,14 @@ TextureResource::TextureResource( const char *textureName )
 	TextureData &data = mTextureData;
 	if (strncmp(ext.c_str(), "tga", 3) == 0)
 	{
-		GCLFile fp(path.c_str());
+		ResourceFile fp(path.c_str());
 		PixelBuffer::LoadTga(fp, data.imageData);
 		GCLAssert(data.imageData.mPixels);
 	}
 	else if (strncmp(ext.c_str(), "png", 3) == 0)
 	{
 #ifndef OS_IPHONE
-		GCLFile fp(path.c_str());
+		ResourceFile fp(path.c_str());
 
 		PixelBuffer::LoadPng(fp, data.imageData);
 		GCLAssert(data.imageData.mPixels);

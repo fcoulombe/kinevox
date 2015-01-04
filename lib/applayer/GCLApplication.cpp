@@ -86,23 +86,34 @@ namespace GCL
 class GCLAppEventListener : public AppEventListener
 {
 public:
+	GCLAppEventListener()
+		: mIsInFocus(true)
+	{}
     void OnGainFocus()
     {
+    	if (mIsInFocus)
+    		return;
         KLog("Gain focus");
         
         GCLApplication::InternalInitialize(gameStates.mWindowsTitle.c_str());
         GCLApplication::LoadStates();
         GCLApplication::SetPaused(false);
+        mIsInFocus = true;
     }
     void OnLoseFocus()
     {
-        GCLApplication::SaveStates();
-        KLog("lose focus");
+    	if (!mIsInFocus)
+    		return;
+    	KLog("lose focus");
+    	GCLApplication::SaveStates();
         GCLApplication::SetPaused(true);
         // backup states.
         gameStates.mWindowsTitle = GCLApplication::GetWinDriver()->GetWindowsTitle();
         GCLApplication::InternalTerminate();
+        mIsInFocus = false;
     }
+private:
+    bool mIsInFocus;
 };
 }
 static GCLAppEventListener  *appEventListener = nullptr;
@@ -135,7 +146,7 @@ void GCLApplication::InitializaAppLayerComponents()
 	InitializaAppLayerComponents();
 	GameStateManager::Initialize();
     mWinDriver = new WinDriver(windowsTitle);
-    		  RenderPipe::Initialize();
+    RenderPipe::Initialize();
     InternalInitialize(windowsTitle);
     appEventListener = new GCLAppEventListener(); 
 }
@@ -384,7 +395,8 @@ GCLEXPORT  void GCL::GCLApplication::SaveStates()
 
 GCLEXPORT  void GCL::GCLApplication::LoadStates()
 {
-    BufferReader buffer("GameStates.save");
+	GCLFile saveStateFile("GameStates.save");
+    BufferReader buffer(saveStateFile);
     size_t actorCount;
     buffer.Read(actorCount);
     for (size_t i=0; i<actorCount; ++i)

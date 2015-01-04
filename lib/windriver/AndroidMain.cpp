@@ -37,7 +37,9 @@ JNIEXPORT void android_main(struct android_app* state)
 {
    	app_dummy();
    	gAndroidApp = state;
-   	GCLFile::RegisterAssetManager(gAndroidApp->activity->assetManager);
+   	KLog("internal storage path: %s", gAndroidApp->activity->internalDataPath);
+   	ResourceFile::RegisterAssetManager(gAndroidApp->activity->assetManager);
+   	GCLFile::SetDataPath(gAndroidApp->activity->internalDataPath);
 	try
 	{
     char **argv=nullptr;

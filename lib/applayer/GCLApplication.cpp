@@ -31,6 +31,8 @@
 #include "applayer/Sprite.h"
 #include "applayer/ScriptApi.h"
 #include <gcl/Assert.h>
+#include <gcl/BufferWriter.h>
+#include <gcl/BufferReader.h>
 #include <gcl/Log.h>
 #include <gcl/Time.h>
 #include <gcl/ThreadManager.h>
@@ -72,6 +74,38 @@ StrongActorList GCLApplication::mStrongActorList;
 SpriteList GCLApplication::mSpriteList;
 
 Real GCLApplication::mCurrentDt = 1.0/60.0;
+bool GCLApplication::mIsPaused = false;
+
+class GameStates
+{
+public:
+    std::string mWindowsTitle;
+}gameStates;
+namespace GCL
+{
+class GCLAppEventListener : public AppEventListener
+{
+public:
+    void OnGainFocus()
+    {
+        KLog("Gain focus");
+        
+        GCLApplication::InternalInitialize(gameStates.mWindowsTitle.c_str());
+        GCLApplication::LoadStates();
+        GCLApplication::SetPaused(false);
+    }
+    void OnLoseFocus()
+    {
+        GCLApplication::SaveStates();
+        KLog("lose focus");
+        GCLApplication::SetPaused(true);
+        // backup states.
+        gameStates.mWindowsTitle = GCLApplication::GetWinDriver()->GetWindowsTitle();
+        GCLApplication::InternalTerminate();
+    }
+};
+}
+static GCLAppEventListener  *appEventListener = nullptr;
 
 #define REGISTER_COMPONENT_FACTOR(name) \
 	Component::Register(#name, \
@@ -97,40 +131,67 @@ void GCLApplication::InitializaAppLayerComponents()
 	ScriptResourceManager::Initialize();
 	MeshResourceManager::Initialize();
 	PhysicsWorld::Initialize();
-	GCLAssert(mRenderer == NULL);
-    mWinDriver = new WinDriver(windowsTitle);
-	mRenderer = new Renderer(mWinDriver->GetWindowsHandle());
 	mScriptApi = new ScriptApi();
 	InitializaAppLayerComponents();
 	GameStateManager::Initialize();
-	const ViewPort &viewPort = mRenderer->GetViewPort();
-	size_t width = viewPort.GetWidth();
-	size_t height = viewPort.GetHeight();
-	KLog("resolution: %dx%d", (int)width, (int)height);
+    mWinDriver = new WinDriver(windowsTitle);
+    		  RenderPipe::Initialize();
+    InternalInitialize(windowsTitle);
+    appEventListener = new GCLAppEventListener(); 
+}
+void GCLApplication::InternalInitialize(const char * /*windowsTitle*/)
+{
+    GCLAssert(mRenderer == NULL);
+
+    mRenderer = new Renderer(mWinDriver->GetWindowsHandle());
+    mRenderer->SetViewPort(
+        ViewPort((size_t)0,
+        (size_t)0,
+        (size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"),
+        (size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT")));
+    const ViewPort &viewPort = mRenderer->GetViewPort();
+    size_t width = viewPort.GetWidth();
+    size_t height = viewPort.GetHeight();
+    KLog("resolution: %dx%d", (int)width, (int)height);
 #if ENABLE_RENDER_TARGET
-	Point2<size_t> screenSize;
-	mRenderer->GetScreenSize(screenSize);
-	KLog("ScreenSize: %dx%d", (int)screenSize.x, (int)screenSize.y);
-	mRenderTarget = new RenderTarget(width, height);
+    Point2<size_t> screenSize;
+    mRenderer->GetScreenSize(screenSize);
+    KLog("ScreenSize: %dx%d", (int)screenSize.x, (int)screenSize.y);
+    mRenderTarget = new RenderTarget(width, height);
 #endif
+}
+
+void GCLApplication::InternalTerminate()
+{
+    mStrongActorList.clear();
+    mActorList.clear();
+#if ENABLE_RENDER_TARGET
+    delete mRenderTarget;
+    mRenderTarget = nullptr;
+#endif
+    GCLAssert(mRenderer);
+    delete mRenderer;
+    mRenderer = nullptr;
 }
 /*static */void GCLApplication::Terminate()
 {
-#if ENABLE_RENDER_TARGET
-	delete mRenderTarget;
-	mRenderTarget = nullptr;
-#endif
-	Input::Terminate();
-	GameStateManager::Terminate();
-
-	delete mScriptApi;
+    GameStateManager::Terminate();
+    delete appEventListener;
+    appEventListener = nullptr;
+    GCLAssertMsg(mStrongActorList.size() == 0, "You still have some strong actors hanging around");
     GCLAssertMsg(mActorList.size() == 0, "You still have some actors hanging around");
- 	GCLAssert(mRenderer);
-	delete mRenderer;
-	mRenderer = nullptr;
+
+    InternalTerminate();
+
+    RenderPipe::Terminate();
+    Input::Terminate();
     GCLAssert(mWinDriver);
     delete mWinDriver;
     mWinDriver = nullptr;
+
+	delete mScriptApi;
+
+
     PhysicsWorld::Terminate();
 	MeshResourceManager::Terminate();
 	ScriptResourceManager::Terminate();
@@ -144,6 +205,8 @@ void GCLApplication::InitializaAppLayerComponents()
 
 void GCLApplication::Update()
 {
+    if (mIsPaused)
+        return;
 	size_t currentTime = GCL::Time::GetTickMs();
     static size_t lastTime = currentTime;
 	Real mCurrentDt = (currentTime - lastTime) / 1000.0;
@@ -161,6 +224,11 @@ void GCLApplication::Update()
 }
 void GCLApplication::Render()
 {
+    if (mIsPaused)
+    {
+        mWinDriver->SwapBuffer();
+        return;
+    }
     GCLAssert(mWinDriver);
 	GCLAssert(mRenderer);
 	//perform actor culling against view frustum
@@ -172,11 +240,11 @@ void GCLApplication::Render()
 	mRenderer->PreRender();
 
 
-	mRenderer->SetViewPort(
+	/*mRenderer->SetViewPort(
 			ViewPort((size_t)0,
 					 (size_t)0,
 					 (size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"),
-					 (size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT")));
+					 (size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT")));*/
 	Matrix44 proj;
 	mRenderer->GetProjection(proj);
     mRenderer->SetIsDepthTesting(true);
@@ -199,6 +267,9 @@ void GCLApplication::Render()
 	}
 	FrameBuffer::ResetDefault();
 #if ENABLE_RENDER_TARGET
+    const ViewPort &viewPort = mRenderer->GetViewPort();
+    size_t width = viewPort.GetWidth();
+    size_t height = viewPort.GetHeight();
 	Point2<size_t> screenSize;
 	mRenderer->GetScreenSize(screenSize);
 	mRenderer->SetViewPort(
@@ -206,10 +277,14 @@ void GCLApplication::Render()
 	Matrix44 ortho;
 	ortho.SetOrtho(-0.5, 0.5, 0.5,-0.5, -0.5, 0.5);
 	mRenderTarget->Render(ortho);
+    mRenderer->SetViewPort(
+        ViewPort((size_t)0,
+        (size_t)0,
+        (size_t)width,
+        (size_t)height));
 #endif
 	mRenderer->PostRender();
 	mWinDriver->SwapBuffer();
-
 }
 
 void GCLApplication::SetViewportCamera(Camera &camera)
@@ -257,13 +332,9 @@ void GCLApplication::ReleaseText2D(GCLText2D* textToDelete)
 
 bool GCLApplication::IsRegistered(const Actor &obj)
 {
-	for (auto it = mActorList.begin(); it !=mActorList.end(); ++it)
-	{
-		const Actor* ro = *it;
-		if (ro == &obj)
-			return true;
-	}
-	return false;
+    auto it = std::find_if(mActorList.begin(), mActorList.end(),
+        [&](const Actor *actor) { return actor == &obj; }); 
+    return it != mActorList.end();
 }
 
 void GCL::GCLApplication::RegisterWorld( GCLWorld* currentWorld )
@@ -298,3 +369,32 @@ GCLEXPORT  void GCL::GCLApplication::DestroyActor( const char *actorName )
     GCLAssertMsg(it != mStrongActorList.end(), std::string("Couldn't find the actor: ") + actorName);
     mStrongActorList.erase(it);
 }
+
+GCLEXPORT  void GCL::GCLApplication::SaveStates()
+{
+    BufferWriter buffer(4096);
+    buffer << mStrongActorList.size();
+    for ( ActorPtr actor : mStrongActorList)
+    {
+        actor->SaveStates(buffer);
+    }
+    buffer.WriteToFile("GameStates.save");
+}
+
+
+GCLEXPORT  void GCL::GCLApplication::LoadStates()
+{
+    BufferReader buffer("GameStates.save");
+    size_t actorCount;
+    buffer.Read(actorCount);
+    for (size_t i=0; i<actorCount; ++i)
+    {
+        ActorPtr actor = std::make_shared<Actor>(buffer);
+        mStrongActorList.push_back(actor);
+    }
+    for (ActorPtr actor : mStrongActorList)
+    {
+        actor->PatchReference(mStrongActorList);
+    }
+}
+

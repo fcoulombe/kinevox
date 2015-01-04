@@ -68,10 +68,15 @@ public:
     GCLEXPORT static void DestroyActor(const char *actorName);
 
     GCLEXPORT static Real GetCurrentDt() { return mCurrentDt; }
+
+    GCLEXPORT static void SetPaused(bool isPaused=true) { mIsPaused = isPaused; }
+    GCLEXPORT static void SaveStates();
+    GCLEXPORT static void LoadStates();
 private:
 	GCLApplication();
 	~GCLApplication();
 
+    friend class GCLAppEventListener;
 	friend class Actor;
 	friend class GCLRenderObject2D;
 	friend class GCLText2D;
@@ -89,6 +94,9 @@ private:
     static void RegisterWorld(GCLWorld* currentWorld);
     static void ReleaseWorld(GCLWorld* shouldBeTheSameWorldAsTheCurrent);
 
+    static void InternalInitialize(const char *windowsTitle);
+    static void InternalTerminate();
+
 	static Renderer *mRenderer;
     static WinDriver *mWinDriver;
 
@@ -101,6 +109,7 @@ private:
 	static RenderTarget *mRenderTarget;
 
 	static Real mCurrentDt;
+    static bool mIsPaused;
 
 };
 

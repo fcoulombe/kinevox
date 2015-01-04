@@ -24,6 +24,7 @@
 
 #include <stdint.h>
 #include <cstdlib>
+#include <string>
 #include <gcl/WorldUnit.h>
 
 namespace GCL
@@ -42,6 +43,8 @@ namespace GCL
         bool IsKeyUp(uint32_t key);
         size_t GetWindowsHandle() const;
         bool IsInFocus() const;
+        const std::string &GetWindowsTitle() const;
+
 
     private:
         bool IsReady() const;

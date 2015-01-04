@@ -23,6 +23,9 @@
 #include "applayer/Node.h"
 #include <algorithm>
 
+#include <gcl/BufferReader.h>
+#include <gcl/BufferWriter.h>
+
 
 using namespace GCL;
 
@@ -72,6 +75,7 @@ GCL::Node::Node( const std::string &name, Node *parent )
 	mParentNode = parent;
 }
 
+
 GCL::Node::~Node()
 {
 	if (mParentNode)
@@ -99,4 +103,39 @@ void GCL::Node::SetOrientation( Real x,Real y,Real z )
 	mTransform = xRot * yRot * zRot;
 
 	mTransform.SetPosition(backupPosition);
+}
+
+void GCL::Node::SaveStates( BufferWriter &buffer )
+{
+    buffer << mId;
+    buffer << mTransform;
+    buffer << mName;
+
+    if (mParentNode)
+        buffer << mParentNode->GetId();
+    else
+        buffer << (uint32_t)-1;
+
+    buffer << mChilds.size();
+    for (Node* child : mChilds)
+    {
+        buffer << child->GetId();
+    }
+}
+GCL::Node::Node( BufferReader &buffer )
+{
+    buffer.Read(mId);
+    buffer.Read(mTransform);
+    buffer.Read(mName);
+    uint32_t parentNodeId;
+    buffer.Read(parentNodeId);
+    mParentNode = (Node *)parentNodeId;
+    size_t childCount;
+    buffer.Read(childCount);
+    for (size_t i=0; i<childCount; ++i)
+    {
+        uint32_t id;
+        buffer.Read(id);
+        mChilds.push_back((Node*)id);
+    }
 }

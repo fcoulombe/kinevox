@@ -77,6 +77,8 @@ namespace GCL
 #endif
     class InputListener;
     typedef std::list<InputListener*> InputListenerList;
+    class AppEventListener;
+    typedef std::list<AppEventListener*> AppEventListenerList;
     class EventManager
     {
     public:
@@ -101,6 +103,9 @@ namespace GCL
         void KeyUp(uint32_t key);
         void MouseDown(size_t x, size_t y);
         void MouseUp(size_t x, size_t y);
+        void LoseFocus();
+
+        void GainFocus();
         void RegisterInputListener(InputListener *listener)
         {
             mInputListenerList.push_back(listener);
@@ -109,9 +114,18 @@ namespace GCL
         {
             mInputListenerList.remove(listener);
         }
+        void RegisterAppEventListener(AppEventListener *listener)
+        {
+            mAppEventListenerList.push_back(listener);
+        }
+        void UnRegisterAppEventListener(AppEventListener *listener)
+        {
+            mAppEventListenerList.remove(listener);
+        }
     private:
         static EventManager *smpInstance;
         InputListenerList mInputListenerList;
+        AppEventListenerList mAppEventListenerList;
     };
 
     class InputListener
@@ -134,5 +148,22 @@ namespace GCL
         virtual void ClickDown(size_t x, size_t y) = 0;
 
         virtual void ClickUp(size_t x, size_t y) = 0;
+    };
+    class AppEventListener
+    {
+    public:
+        AppEventListener()
+        {
+            EventManager::Instance().RegisterAppEventListener(this);
+        }
+        virtual ~AppEventListener()
+        {
+            EventManager::Instance().UnRegisterAppEventListener(this);
+        }
+
+        virtual void OnGainFocus() = 0;
+
+        virtual void OnLoseFocus() = 0;
+
     };
 }

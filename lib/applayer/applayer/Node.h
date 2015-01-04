@@ -28,6 +28,8 @@
 
 namespace GCL
 {
+    class BufferWriter;
+    class BufferReader;
 struct NodeData
 {
 	uint32_t mId;
@@ -50,6 +52,7 @@ public:
 	Node();
 	Node(const std::string &name, Node *parent = nullptr);
 	Node(const NodeData *data, Node *parent = nullptr);
+    Node( BufferReader &buffer );
 	virtual ~Node();
 	uint32_t GetId() const { return mId; }
 	virtual void Update(Real dt)
@@ -103,6 +106,7 @@ public:
 		mTransform.SetPosition(position);
 	}
 
+    void SaveStates(BufferWriter &buffer);
 protected:
 	uint32_t mId;
 	Matrix44 mTransform;

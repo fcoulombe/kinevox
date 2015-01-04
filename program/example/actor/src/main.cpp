@@ -52,12 +52,13 @@ int main(int /*argc*/, char ** /*argv*/)
 		size_t next_game_tick = GCL::Time::GetTickMs()-1;
 		int loops;
 		Real x=0., y=0.,z=0.;
+
+        GCLApplication::SetViewportCamera(cam);
 		while(isRunning)
 		{
 			loops = 0;
 			while(GCL::Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP)
 			{
-				GCLApplication::SetViewportCamera(cam);
 				GCLApplication::Update();
 				if (Input::IsKeyUp(GCL_ESCAPE))
 					isRunning=false;

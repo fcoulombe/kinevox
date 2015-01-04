@@ -30,6 +30,7 @@
 
 #include <gcl/Assert.h>
 #include <gcl/Config.h>
+#include <gcl/Log.h>
 #include <gcl/Time.h>
 #include "windriver/EventHandler.h"
 
@@ -82,6 +83,16 @@ namespace GCL
 				}
 				break;
 			}
+        case WM_KILLFOCUS:
+            {
+                EventManager::Instance().LoseFocus();
+                break;
+            }
+        case WM_SETFOCUS:
+            {
+                EventManager::Instance().GainFocus();
+                break;
+            }
 		case WM_CLOSE: //case it's a Window Close MSG
 			PostQuitMessage(0); //Apply a Quit Message
 			break;
@@ -156,12 +167,7 @@ namespace GCL
 		}
 		void SwapBuffer()
 		{   
-			MSG msg; //declare a MSG local variable for the GetMessage of the while loop
-			if (PeekMessage(&msg,NULL,0,0,PM_REMOVE)) //GetMessage reffer to the wndProc() function
-			{
-				TranslateMessage(&msg); //translate the msg of the GetMessage of your while loop
-				DispatchMessage(&msg); //dispath the msg of the GetMessage of your while loop
-			}
+
 			//calculate fps
 			double currentTime = Time::GetTickMs()/1000.0;
 			double dt = currentTime - mPreviousFrameTime;
@@ -180,11 +186,16 @@ namespace GCL
 				mFPS=0;
 			}
 			mPreviousFrameTime = currentTime;
-
+            MSG msg; //declare a MSG local variable for the GetMessage of the while loop
+            if (PeekMessage(&msg,NULL,0,0,PM_REMOVE)) //GetMessage reffer to the wndProc() function
+            {
+                TranslateMessage(&msg); //translate the msg of the GetMessage of your while loop
+                DispatchMessage(&msg); //dispath the msg of the GetMessage of your while loop
+            }
 		}
 
 		Real GetDt() const { return mDt; }
-
+        const std::string &GetWindowsTitle() const { return mWindowsTitle; }
 	private:
 		HINSTANCE mInstance;
 		HWND mWindowsHandle;
@@ -218,5 +229,10 @@ namespace GCL
 	{
 		return (size_t)mpWinDriver->GetWindowsHandle();
 	}
+
+    const std::string &WinDriver::GetWindowsTitle() const
+    {
+        return mpWinDriver->GetWindowsTitle();
+    }
 }
 #endif

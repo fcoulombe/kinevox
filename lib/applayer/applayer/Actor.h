@@ -31,6 +31,10 @@
 
 namespace GCL
 {
+    class Actor;
+    typedef std::shared_ptr<Actor> ActorPtr;
+    class BufferWriter;
+    class BufferReader;
 	enum ActorEvent
 	{
 		AE_REGISTER_RENDER_OBJECT
@@ -40,6 +44,7 @@ class Actor : public Node
 public:
 	Actor(const char *name, const char *archetype);
 	Actor(const char *name);
+    Actor(BufferReader &buffer);
 
 	~Actor();
 
@@ -84,9 +89,14 @@ public:
 	void SetPosition(Real x, Real y,Real z)
 	{ SetPosition(WorldPoint3(x,y,z));	}
 	void SetPosition(const WorldPoint3 &position);
+    void SaveStates(BufferWriter &buffer);
+    void PatchReference(const std::vector<ActorPtr> &actorList);
 private:
 	typedef std::map<std::string, Component*> ComponentMap;
 	ComponentMap mComponentList;
+    std::string mAcrchetype;
+
+    void InternalInitialize();
 };
 
 }

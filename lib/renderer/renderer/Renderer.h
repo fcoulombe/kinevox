@@ -37,7 +37,7 @@ namespace GCL
       Renderer(size_t windowsHandle)
       {
 		  mCamera = &Camera::DefaultCamera();
-		  RenderPipe::Initialize();
+
 		  mPimpl = new IRenderer(windowsHandle);
 		  mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
 		  mPimpl->SetViewPort(mViewPort);
@@ -45,7 +45,6 @@ namespace GCL
     ~Renderer() 
 	{
 		delete mPimpl;
-		RenderPipe::Terminate();
 	}
 
 	void PreRender()

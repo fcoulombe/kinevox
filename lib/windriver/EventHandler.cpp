@@ -41,35 +41,53 @@ void EventManager::Terminate()
 
 void GCL::EventManager::KeyDown( uint32_t key )
 {
-    for (auto it = mInputListenerList.begin(); it != mInputListenerList.end(); ++it)
+    for (auto it : mInputListenerList)
     {
-        InputListener *listener = *it;
+        InputListener *listener = it;
         listener->KeyDown(key);
     }
 }
 
 void GCL::EventManager::KeyUp( uint32_t key )
 {
-    for (auto it = mInputListenerList.begin(); it != mInputListenerList.end(); ++it)
+    for (auto it : mInputListenerList)
     {
-        InputListener *listener = *it;
+        InputListener *listener = it;
         listener->KeyUp(key);
     }
 }
 void GCL::EventManager::MouseDown( size_t x, size_t y )
 {
-    for (auto it = mInputListenerList.begin(); it != mInputListenerList.end(); ++it)
+    for (auto it : mInputListenerList)
     {
-        InputListener *listener = *it;
+        InputListener *listener = it;
         listener->ClickDown(x,y);
     }
 }
 
 void GCL::EventManager::MouseUp( size_t x, size_t y)
 {
-    for (auto it = mInputListenerList.begin(); it != mInputListenerList.end(); ++it)
+    for (auto it : mInputListenerList)
     {
-        InputListener *listener = *it;
+        InputListener *listener = it;
         listener->ClickUp(x,y);
+    }
+}
+
+void GCL::EventManager::LoseFocus()
+{
+    for (auto it : mAppEventListenerList)
+    {
+        AppEventListener *listener = it;
+        listener->OnLoseFocus();
+    }
+}
+
+void GCL::EventManager::GainFocus()
+{
+    for (auto it : mAppEventListenerList)
+    {
+        AppEventListener *listener = it;
+        listener->OnGainFocus();
     }
 }

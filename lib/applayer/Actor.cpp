@@ -26,6 +26,9 @@
 #include "applayer/GCLApplication.h"
 #include "applayer/RigidBodyComponent.h"
 
+#include <gcl/BufferReader.h>
+#include <gcl/BufferWriter.h>
+
 #include <script/ConfigLua.h>
 
 using namespace GCL;
@@ -38,33 +41,50 @@ void Actor::CreateComponent(const std::string &componentName)
 	Component *tempComponent2 = tempComponent.second;
 	tempComponent2->PostInit();
 }
-Actor::Actor(const char *name, const char *archetype)
-	: Node(name)
-{
-	std::string archFile(ARCHETYPE_PATH);
-	archFile += archetype;
-	archFile += ".arch";
-	ConfigLua conf(archFile.c_str());
-	PtrLuaTableIterator it = conf.GetTableIterator("Archetype.Components");
-	while (!it->End())
-	{
-		const std::string componentName = it->GetKey();
-		PtrLuaTableIterator compIt = it->GetTableIterator();
-		std::pair<std::string, Component *> tempComponent = Component::CreateComponent(this, componentName, compIt );
-		mComponentList.insert(tempComponent);
-		(void)tempComponent;
-		++(*it);
-	}
-	//we need post init phase since some component depend on other but cannot 
-	//guarantee that they will be created at first init time
-	for (auto it = mComponentList.begin(); it != mComponentList.end(); ++it)
-	{
-		Component *tempComponent = it->second;
-		tempComponent->PostInit();
-	}
 
+Actor::Actor(BufferReader &buffer)
+    : Node(buffer)
+{
+    buffer.Read(mAcrchetype);
+
+    InternalInitialize();
+    GCLApplication::RegisterRenderObject(this);
+}
+
+Actor::Actor(const char *name, const char *archetype)
+	: Node(name),
+    mAcrchetype(archetype)
+{
+    InternalInitialize();
 	GCLApplication::RegisterRenderObject(this);
 }
+
+void Actor::InternalInitialize()
+{
+    std::string archFile(ARCHETYPE_PATH);
+    archFile += mAcrchetype;
+    archFile += ".arch";
+    ConfigLua conf(archFile.c_str());
+    PtrLuaTableIterator it = conf.GetTableIterator("Archetype.Components");
+    while (!it->End())
+    {
+        const std::string componentName = it->GetKey();
+        PtrLuaTableIterator compIt = it->GetTableIterator();
+        std::pair<std::string, Component *> tempComponent = Component::CreateComponent(this, componentName, compIt );
+        mComponentList.insert(tempComponent);
+        (void)tempComponent;
+        ++(*it);
+    }
+    //we need post init phase since some component depend on other but cannot 
+    //guarantee that they will be created at first init time
+    for (auto it = mComponentList.begin(); it != mComponentList.end(); ++it)
+    {
+        Component *tempComponent = it->second;
+        tempComponent->PostInit();
+    }
+
+}
+
 Actor::Actor(const char *name)
 	: Node(name)
 {
@@ -94,4 +114,35 @@ void Actor::SetPosition(const WorldPoint3 &position)
 		tempRigidBodyComp->SetPosition(position);
 	}
 	Node::SetPosition(position);
+}
+#include <gcl/BufferWriter.h>
+void GCL::Actor::SaveStates( BufferWriter &buffer )
+{
+    Node::SaveStates(buffer);
+
+    buffer << mAcrchetype;
+}
+
+
+void GCL::Actor::PatchReference( const std::vector<ActorPtr> &actorList )
+{
+    uint32_t parentId = (uint32_t)mParentNode;
+    if (parentId != -1)
+    {
+        auto it = std::find_if(actorList.begin(), actorList.end(),
+        [parentId](const ActorPtr actor) { return actor->GetId() ==  parentId; }); 
+        mParentNode = it->get();
+    }
+    else
+    {
+        mParentNode = nullptr;
+    }
+
+    for (auto child = mChilds.begin(); child != mChilds.end(); ++child)
+    {
+        uint32_t childId = (uint32_t)*child;
+        auto it = std::find_if(actorList.begin(), actorList.end(),
+                [childId](const ActorPtr actor) { return actor->GetId() ==  childId; }); 
+        *child = it->get();
+    }
 }

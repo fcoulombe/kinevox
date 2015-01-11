@@ -187,7 +187,7 @@ private:
 #endif
 	void SetOrthoUnsafe()
 	{
-		mProjection.SetOrtho(0.0,  (Real)mViewPort.GetWidth(), (Real)mViewPort.GetHeight(),0.0, -1.0, 1.0);
+		mProjection.SetOrtho(0.0,  (Real)mViewPort.GetWidth(), (Real)mViewPort.GetHeight(),0.0, 1.0, -1.0);
 		mModelView.SetIdentity();
 	}
 	void SetModelViewUnsafe(const Matrix44 &modelView)

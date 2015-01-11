@@ -1,4 +1,4 @@
-MINE_COUNT = 9
+MINE_COUNT = 1
 VELOCITY = { -0.0,50.0} 
 function Initialize(self)
   kinevox.Log("Main Game State!")
@@ -9,10 +9,11 @@ function Initialize(self)
   kinevox.CreateActor("Road1", "Road")
   local road = kinevox.GetActor("Road1")
   road:SetPosition(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT, 0.0)
-  
+  road:SetVisible(false)
   kinevox.CreateActor("Road2", "Road")
   local road = kinevox.GetActor("Road2")
-  road:SetPosition(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT - SCREEN_SIZE[1]+1, 0.0)
+  road:SetPosition(HALF_SCREEN_WIDTH, HALF_SCREEN_HEIGHT - SCREEN_SIZE[1], 0.0)
+  road:SetVisible(false)
   
   kinevox.CreateActor("Car", "Car")
   local car = kinevox.GetActor("Car")
@@ -37,11 +38,11 @@ function Logic(self, dt)
   local road1 = kinevox.GetActor("Road1")
   local roadPos = road1:GetPosition()
   roadPos[1] = roadPos[1] + VELOCITY[2] * dt
-  if roadPos[1] > HALF_SCREEN_HEIGHT + SCREEN_SIZE[1]-1 then
+  if roadPos[1] > HALF_SCREEN_HEIGHT + SCREEN_SIZE[1] then
     roadPos[0] = HALF_SCREEN_WIDTH
     roadPos[1] = HALF_SCREEN_HEIGHT - SCREEN_SIZE[1]
     roadPos[2] = roadPos[2]
-    kinevox.Log("road1 pos: "..roadPos[0].." "..roadPos[1])
+    --kinevox.Log("road1 pos: "..roadPos[0].." "..roadPos[1])
   end
   road1:SetPosition(roadPos[0], roadPos[1], roadPos[2])
   
@@ -49,12 +50,12 @@ function Logic(self, dt)
   local road2 = kinevox.GetActor("Road2")
   local roadPos = road2:GetPosition()
   roadPos[1] = roadPos[1] + VELOCITY[2] * dt
-  if roadPos[1] > HALF_SCREEN_HEIGHT + SCREEN_SIZE[1]-1 then
+  if roadPos[1] > HALF_SCREEN_HEIGHT + SCREEN_SIZE[1] then
     roadPos[0] = HALF_SCREEN_WIDTH
     roadPos[1] = HALF_SCREEN_HEIGHT - SCREEN_SIZE[1]
     roadPos[2] = roadPos[2]
     
-    kinevox.Log("road2 pos: "..roadPos[0].." "..roadPos[1])
+    --kinevox.Log("road2 pos: "..roadPos[0].." "..roadPos[1])
   end
   road2:SetPosition(roadPos[0], roadPos[1], roadPos[2])
   

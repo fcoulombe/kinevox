@@ -73,7 +73,6 @@ ActorList GCLApplication::mActorList;
 StrongActorList GCLApplication::mStrongActorList;
 SpriteList GCLApplication::mSpriteList;
 
-Real GCLApplication::mCurrentDt = 1.0/60.0;
 bool GCLApplication::mIsPaused = false;
 
 class GameStates
@@ -94,7 +93,6 @@ public:
     	if (mIsInFocus)
     		return;
         KLog("Gain focus");
-        
         GCLApplication::InternalInitialize(gameStates.mWindowsTitle.c_str());
         GCLApplication::LoadStates();
         GCLApplication::SetPaused(false);
@@ -250,17 +248,11 @@ void GCLApplication::Render()
 #endif
 	mRenderer->PreRender();
 
-
-	/*mRenderer->SetViewPort(
-			ViewPort((size_t)0,
-					 (size_t)0,
-					 (size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"),
-					 (size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT")));*/
 	Matrix44 proj;
 	mRenderer->GetProjection(proj);
     mRenderer->SetIsDepthTesting(true);
     std::sort(mActorList.begin(), mActorList.end(),
-    		  [](Actor * a, Actor * b){return b->GetPosition().z < a->GetPosition().z;});
+    		  [](const Actor * a, const Actor * b){return b->GetPosition().z < a->GetPosition().z;});
 	for (size_t i=0; i<mActorList.size(); ++i)
 	{
 		mActorList[i]->Render(proj);
@@ -270,12 +262,13 @@ void GCLApplication::Render()
     mRenderer->SetOrtho();
 	mRenderer->GetProjection(proj);
     std::sort(mSpriteList.begin(), mSpriteList.end(),
-    		  [](Sprite * a, Sprite * b){return b->GetPosition().z > a->GetPosition().z;});
+    		  [](const Sprite * a, const Sprite * b){return b->GetPosition().z > a->GetPosition().z;});
 	for (size_t i=0; i<mSpriteList.size(); ++i)
 	{
 		Sprite *tempSprite =mSpriteList[i];
 		tempSprite->Render(proj);
 	}
+	mRenderer->SetIsDepthTesting(false);
 	FrameBuffer::ResetDefault();
 #if ENABLE_RENDER_TARGET
     const ViewPort &viewPort = mRenderer->GetViewPort();

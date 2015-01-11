@@ -72,9 +72,9 @@ void GCL::ScriptComponent::ProcessEvent( size_t , void * )
 
 }
 
-void ScriptComponent::Update(Real )
+void ScriptComponent::Update(Real dt)
 {
-	mScriptResource->ExecuteMethod("Logic", mParentActor, GCLApplication::GetCurrentDt());
+	mScriptResource->ExecuteMethod("Logic", mParentActor, dt);
 }
 
 void GCL::ScriptComponent::Render(const Matrix44 &)

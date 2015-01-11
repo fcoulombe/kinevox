@@ -67,8 +67,6 @@ public:
     GCLEXPORT static ActorPtr CreateActor(const char *actorName, const char *archetype);
     GCLEXPORT static void DestroyActor(const char *actorName);
 
-    GCLEXPORT static Real GetCurrentDt() { return mCurrentDt; }
-
     GCLEXPORT static void SetPaused(bool isPaused=true) { mIsPaused = isPaused; }
     GCLEXPORT static void SaveStates();
     GCLEXPORT static void LoadStates();
@@ -107,8 +105,6 @@ private:
 
 	static ScriptApi *mScriptApi;
 	static RenderTarget *mRenderTarget;
-
-	static Real mCurrentDt;
     static bool mIsPaused;
 
 };

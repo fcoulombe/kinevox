@@ -508,6 +508,46 @@ void GCL::GLRenderer::SetIsDepthTesting( bool isDepthTesting /*= true*/ )
     });
 }
 
+void GCL::GLRenderer::SetIsBlendEnabled( bool isBlendEnabled /*= true*/ )
+{
+    RenderPipe::SendCommand([=](){
+        if (isBlendEnabled)
+        {
+            glEnable(GL_BLEND); glErrorCheck();
+        }
+        else
+        {
+            glDisable(GL_BLEND); glErrorCheck();
+        }
+    });
+}
+void GCL::GLRenderer::SetIsAlphaTestEnabled( bool isAlphaTestEnabled /*= true*/ )
+{
+    RenderPipe::SendCommand([=](){
+        if (isAlphaTestEnabled)
+        {
+            glEnable(GL_ALPHA_TEST); glErrorCheck();
+        }
+        else
+        {
+            glDisable(GL_ALPHA_TEST); glErrorCheck();
+        }
+    });
+}
+void GCL::GLRenderer::SetIsDepthMaskEnabled( bool isDepthMaskEnabled /*= true*/ )
+{
+    RenderPipe::SendCommand([=](){
+        if (isDepthMaskEnabled)
+        {
+        	glDepthMask(GL_TRUE);  glErrorCheck();
+        }
+        else
+        {
+        	glDepthMask(GL_FALSE);  glErrorCheck();
+        }
+    });
+}
+
 void GCL::GLRenderer::GetScreenSize(Point2<size_t> &screenSize) const
 {
 	RenderPipe::SendCommandSync([&](){

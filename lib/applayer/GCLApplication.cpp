@@ -214,12 +214,13 @@ void GCLApplication::InternalTerminate()
 
 void GCLApplication::Update()
 {
-    if (mIsPaused)
-        return;
 	size_t currentTime = GCL::Time::GetTickMs();
     static size_t lastTime = currentTime;
 	Real mCurrentDt = (currentTime - lastTime) / 1000.0;
 	lastTime = currentTime;
+    if (mIsPaused)
+        return;
+
     SoundManager::Update();
 	Input::ProcessInput();
 	PhysicsWorld::Update(mCurrentDt);
@@ -247,6 +248,10 @@ void GCLApplication::Render()
 	mRenderTarget->Bind();
 #endif
 	mRenderer->PreRender();
+	mRenderer->SetIsDepthMaskEnabled(true);
+	mRenderer->SetIsDepthTesting(true);
+	mRenderer->SetIsBlendEnabled(true);
+	mRenderer->SetIsAlphaTestEnabled(true);
 
 	Matrix44 proj;
 	mRenderer->GetProjection(proj);
@@ -258,7 +263,10 @@ void GCLApplication::Render()
 		mActorList[i]->Render(proj);
 	}
 	//mRenderer->Render(renderList);
+	mRenderer->SetIsDepthMaskEnabled(false);
 	mRenderer->SetIsDepthTesting(false);
+	mRenderer->SetIsBlendEnabled(false);
+	mRenderer->SetIsAlphaTestEnabled(false);
     mRenderer->SetOrtho();
 	mRenderer->GetProjection(proj);
     std::sort(mSpriteList.begin(), mSpriteList.end(),

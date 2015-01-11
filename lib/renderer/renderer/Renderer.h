@@ -90,6 +90,18 @@ namespace GCL
     {
         mPimpl->SetIsDepthTesting(isDepthTesting);
     }
+    void SetIsBlendEnabled(bool isBlendEnabled = true)
+    {
+        mPimpl->SetIsBlendEnabled(isBlendEnabled);
+    }
+    void SetIsDepthMaskEnabled(bool isDepthMaskEnabled = true)
+    {
+        mPimpl->SetIsDepthMaskEnabled(isDepthMaskEnabled);
+    }
+    void SetIsAlphaTestEnabled(bool isAlphaTestEnabled = true)
+    {
+        mPimpl->SetIsAlphaTestEnabled(isAlphaTestEnabled);
+    }
 	void GetProjection(Matrix44  &projection) {mPimpl->GetProjection(projection); }
 	void GetModelView(Matrix44  &modelView) {mPimpl->GetModelView(modelView); }
 

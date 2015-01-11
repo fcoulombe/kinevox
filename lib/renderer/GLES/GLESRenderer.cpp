@@ -57,6 +57,7 @@ void GLESRenderer::Init3DState()
 	//glActiveTexture(GL_TEXTURE0);glErrorCheck();
 	
 	//glPolygonMode( GL_FRONT_AND_BACK, GL_FILL); glErrorCheck();
+
 }
 
 void eglErrorCheck()
@@ -235,6 +236,8 @@ GLESRenderer::GLESRenderer(size_t windowsHandle)
 	GCLAssert(ret);
 #endif
 	Init3DState();
+	//disable vsync
+	//eglSwapInterval(mEglDisplay, 1);eglErrorCheck();
 	mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
 	KLog("Version: %s", mVersion.c_str());
 	mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();

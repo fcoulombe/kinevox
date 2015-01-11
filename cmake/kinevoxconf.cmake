@@ -137,7 +137,6 @@ ELSE()
 ENDIF()
 
    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -pedantic")
-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -O0")	
 ENDIF()
 
 configure_file (

@@ -44,7 +44,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		GCLApplication::Initialize("Crash Car");
 		GameStateManager::ChangeToState(std::make_shared<ScriptedGameState>("SplashState", "SplashState"));
 		bool isRunning = true;
-		const size_t TICKS_PER_SECOND = 60;
+		const size_t TICKS_PER_SECOND = Config::Instance().GetInt("FPS");
 		const size_t SKIP_TICKS = 1000 / TICKS_PER_SECOND;
 		const int MAX_FRAMESKIP = 5;
 		size_t next_game_tick = GCL::Time::GetTickMs()-1; 
@@ -52,7 +52,7 @@ int main(int /*argc*/, char ** /*argv*/)
 		while(isRunning)
 		{
 			loops = 0;
-			while(GCL::Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP) 
+			while(GCL::Time::GetTickMs() > next_game_tick && loops < MAX_FRAMESKIP)
 			{
 
 				GCLApplication::Update();

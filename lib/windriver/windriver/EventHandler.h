@@ -55,6 +55,7 @@ namespace GCL
         GCL_ENTER = XK_Return,
         GCL_PG_UP = XK_Page_Up,
         GCL_PG_DOWN = XK_Page_Down,
+        GCL_A = XK_A,
     };
 #elif defined(OS_ANDROID)
 namespace GCL
@@ -69,6 +70,7 @@ namespace GCL
         GCL_ENTER,
         GCL_PG_UP,
         GCL_PG_DOWN,
+        GCL_A,
     };
 #else
 #error "TBD"

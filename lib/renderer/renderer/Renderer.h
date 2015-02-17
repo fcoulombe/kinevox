@@ -31,61 +31,67 @@
 #include "renderer/ViewPort.h"
 namespace GCL
 {
-  class Renderer
-  {
-  public:
-      Renderer(size_t windowsHandle)
-      {
-		  mCamera = &Camera::DefaultCamera();
+class Renderer
+{
+public:
+    Renderer(size_t windowsHandle)
+{
+        mCamera = &Camera::DefaultCamera();
 
-		  mPimpl = new IRenderer(windowsHandle);
-		  mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
-		  mPimpl->SetViewPort(mViewPort);
-      }
+        mPimpl = new IRenderer(windowsHandle);
+        mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
+        mPimpl->SetViewPort(mViewPort);
+        mPimpl->SetIsDepthTesting();
+        mPimpl->SetIsBlendEnabled();
+        mPimpl->SetIsDepthMaskEnabled();
+        mPimpl->SetIsAlphaTestEnabled();
+        mPimpl->SetVSyncEnabled(Config::Instance().GetBool("IS_VSYNC_ENABLED"));
+        mPimpl->SetIsAntiAliasingEnabled(Config::Instance().GetBool("IS_ANTIALIASING_ENABLED"));
+}
     ~Renderer() 
-	{
-		delete mPimpl;
-	}
+    {
+        delete mPimpl;
+    }
 
-	void PreRender()
-	{
-		mPimpl->PreRender();
-	}
-	void PostRender()
-	{
-		mPimpl->PostRender();
-		mPimpl->SwapBuffer();	
-	}
+    void PreRender()
+    {
+        mPimpl->PreRender();
+    }
+    void PostRender()
+    {
+        mPimpl->PostRender();
+        mPimpl->SwapBuffer();
+    }
 
-	void SetCamera(Camera &camera)
-	{
-		mCamera = &camera;
-		mPimpl->SetProjection(camera);
-	}
-	void SetViewPort(const ViewPort &viewport)
-	{
-		mViewPort = viewport;
-		mPimpl->SetViewPort(mViewPort);
-	}
+    void SetCamera(Camera &camera)
+    {
+        mCamera = &camera;
+        mPimpl->SetProjection(camera);
+    }
+    void SetViewPort(const ViewPort &viewport)
+    {
+        mViewPort = viewport;
+        mPimpl->SetViewPort(mViewPort);
+    }
     const ViewPort &GetViewPort() const { return mViewPort; }
     void GetScreenSize(Point2<size_t> &screenSize) const { mPimpl->GetScreenSize(screenSize); }
 
-	void GetVendor(std::string &vendor) const 
-	{ 
-		mPimpl->GetVendor(vendor);
-	}
-	void GetVersion(std::string &version) const { mPimpl->GetVersion(version); }
-	void GetRenderer(std::string &renderer) const { mPimpl->GetRenderer(renderer); }
-	void GetShadingLanguageVersion(std::string  &shadingLanguageVersion) const { mPimpl->GetShadingLanguageVersion(shadingLanguageVersion); }
-	void GetGlewVersion(std::string  &glewVersion) const { mPimpl->GetGlewVersion(glewVersion); }
-	void GetExtensions(std::vector<std::string>  &extensions) const { mPimpl->GetExtensions(extensions); }
-	bool IsExtensionSupported(const std::string &ext) const { return mPimpl->IsExtensionSupported(ext); }
-	bool IsGlewExtensionSupported(const std::string &ext) const { return mPimpl->IsGlewExtensionSupported(ext); }
+    void GetVendor(std::string &vendor) const
+    {
+        mPimpl->GetVendor(vendor);
+    }
+    void GetVersion(std::string &version) const { mPimpl->GetVersion(version); }
+    void GetRenderer(std::string &renderer) const { mPimpl->GetRenderer(renderer); }
+    void GetShadingLanguageVersion(std::string  &shadingLanguageVersion) const { mPimpl->GetShadingLanguageVersion(shadingLanguageVersion); }
+    void GetGlewVersion(std::string  &glewVersion) const { mPimpl->GetGlewVersion(glewVersion); }
+    void GetExtensions(std::vector<std::string>  &extensions) const { mPimpl->GetExtensions(extensions); }
+    bool IsExtensionSupported(const std::string &ext) const { return mPimpl->IsExtensionSupported(ext); }
+    bool IsGlewExtensionSupported(const std::string &ext) const { return mPimpl->IsGlewExtensionSupported(ext); }
 
-	void SetOrtho()
-	{
-		mPimpl->SetOrtho();
-	}
+    void SetOrtho()
+    {
+        mPimpl->SetOrtho();
+    }
     void SetIsDepthTesting(bool isDepthTesting = true)
     {
         mPimpl->SetIsDepthTesting(isDepthTesting);
@@ -104,16 +110,20 @@ namespace GCL
     }
     void SetVSyncEnabled(bool isEnabled = true)
     {
-    	mPimpl->SetVSyncEnabled(isEnabled);
+        mPimpl->SetVSyncEnabled(isEnabled);
     }
-	void GetProjection(Matrix44  &projection) {mPimpl->GetProjection(projection); }
-	void GetModelView(Matrix44  &modelView) {mPimpl->GetModelView(modelView); }
+    void SetIsAntiAliasingEnabled(bool isEnabled = true)
+    {
+        mPimpl->SetIsAntiAliasingEnabled(isEnabled);
+    }
+    void GetProjection(Matrix44  &projection) {mPimpl->GetProjection(projection); }
+    void GetModelView(Matrix44  &modelView) {mPimpl->GetModelView(modelView); }
 
-	static Matrix44 GetGLProjection() {return IRenderer::GetGLProjection(); }
-	static Matrix44 GetGLModelView() {return IRenderer::GetGLModelView(); }
-  private:
-	  ViewPort mViewPort;
-	  Camera *mCamera;
-	  IRenderer *mPimpl;
-  };
+    static Matrix44 GetGLProjection() {return IRenderer::GetGLProjection(); }
+    static Matrix44 GetGLModelView() {return IRenderer::GetGLModelView(); }
+private:
+    ViewPort mViewPort;
+    Camera *mCamera;
+    IRenderer *mPimpl;
+};
 }

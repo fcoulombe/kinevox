@@ -1,1 +1,1 @@
-SET(DEPENDENCIES renderer  kinetestlib)
+SET(DEPENDENCIES renderer  kinetestlib input)

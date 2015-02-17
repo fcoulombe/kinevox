@@ -159,6 +159,7 @@ public:
     void SetIsDepthMaskEnabled(bool isDepthMaskEnabled = true);
     void SetIsAlphaTestEnabled(bool isAlphaTestEnabled = true);
 	void SetVSyncEnabled(bool isEnabled = true);
+	void SetIsAntiAliasingEnabled(bool isEnabled = true);
 
 
     void GetScreenSize(Point2<size_t> &screenSize) const;

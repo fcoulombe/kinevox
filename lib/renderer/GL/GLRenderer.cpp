@@ -52,7 +52,7 @@ using namespace GCL;
 
 void GLRenderer::Init3DState() {
     glErrorCheck();
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);glErrorCheck()    ;
+/*    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);glErrorCheck()    ;
     glClearDepth(1.0);glErrorCheck()    ;
     glDepthMask(GL_TRUE);glErrorCheck()    ;
     glDepthFunc(GL_LESS);glErrorCheck()    ;
@@ -60,8 +60,7 @@ void GLRenderer::Init3DState() {
     glEnable(GL_BLEND);glErrorCheck();
 
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);glErrorCheck();
-
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);glErrorCheck();
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);glErrorCheck();*/
 
 }
 #ifdef OS_LINUX
@@ -466,7 +465,7 @@ void GCL::GLRenderer::SetProjection(const Camera &camera) {
     });
 }
 
-void GCL::GLRenderer::SetIsDepthTesting(bool isDepthTesting /*= true*/) {
+void GCL::GLRenderer::SetIsDepthTestEnabled(bool isDepthTesting /*= true*/) {
     RenderPipe::SendCommand([=]() {
         if (isDepthTesting)
         {
@@ -542,6 +541,46 @@ void GCL::GLRenderer::SetIsAntiAliasingEnabled(bool isEnabled)
         }
     });
 }
+
+
+
+void GCL::GLRenderer::SetClearColor(Real r, Real g, Real b, Real a)
+{
+    RenderPipe::SendCommand(
+            [=]() {
+        glClearColor(r,g,b,a);glErrorCheck();
+    });
+}
+void GCL::GLRenderer::SetClearDepth(Real depthValue)
+{
+    RenderPipe::SendCommand(
+            [=]() {
+        glClearDepth(depthValue);glErrorCheck();
+    });
+}
+void GCL::GLRenderer::SetDepthFunc(GCLDepthFunc depthFunc)
+{
+    RenderPipe::SendCommand(
+                [=]() {
+            glDepthFunc((GLenum)depthFunc);glErrorCheck();
+        });
+}
+void GCL::GLRenderer::SetBlendFunc(GCLBlendFunc srcBlendFunc, GCLBlendFunc dstBlendFunc)
+{
+    RenderPipe::SendCommand(
+                 [=]() {
+        glBlendFunc((GLenum)srcBlendFunc, (GLenum)dstBlendFunc);glErrorCheck();
+         });
+}
+void GCL::GLRenderer::SetPolygonMode(GCLPolygonFace face, GCLPolygonMode mode)
+{
+    RenderPipe::SendCommand(
+                 [=]() {
+        glPolygonMode((GLenum)face, (GLenum)mode);glErrorCheck();
+         });
+}
+
+
 
 void GCL::GLRenderer::GetScreenSize(Point2<size_t> &screenSize) const {
     RenderPipe::SendCommandSync(

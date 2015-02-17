@@ -223,7 +223,10 @@ void GCLApplication::Update()
     Real mCurrentDt = (currentTime - lastTime) / 1000.0;
     lastTime = currentTime;
     if (mIsPaused)
+    {
+        Time::SleepMs(10);
         return;
+    }
 
     SoundManager::Update();
     Input::ProcessInput();
@@ -256,13 +259,13 @@ void GCLApplication::Render()
 #endif
     mRenderer->PreRender();
     mRenderer->SetIsDepthMaskEnabled(true);
-    mRenderer->SetIsDepthTesting(true);
+    mRenderer->SetIsDepthTestEnabled(true);
     mRenderer->SetIsBlendEnabled(true);
     //mRenderer->SetIsAlphaTestEnabled(true);
 
     Matrix44 proj;
     mRenderer->GetProjection(proj);
-    mRenderer->SetIsDepthTesting(true);
+    mRenderer->SetIsDepthTestEnabled(true);
     std::sort(mActorList.begin(), mActorList.end(),
             [](const Actor * a, const Actor * b){return b->GetPosition().z < a->GetPosition().z;});
     for (size_t i=0; i<mActorList.size(); ++i)
@@ -271,7 +274,7 @@ void GCLApplication::Render()
     }
     //mRenderer->Render(renderList);
     mRenderer->SetIsDepthMaskEnabled(false);
-    mRenderer->SetIsDepthTesting(false);
+    mRenderer->SetIsDepthTestEnabled(false);
     mRenderer->SetIsBlendEnabled(true);
     //mRenderer->SetIsAlphaTestEnabled(false);
     mRenderer->SetOrtho();
@@ -283,7 +286,7 @@ void GCLApplication::Render()
         Sprite *tempSprite =mSpriteList[i];
         tempSprite->Render(proj);
     }
-    mRenderer->SetIsDepthTesting(false);
+    mRenderer->SetIsDepthTestEnabled(false);
     FrameBuffer::ResetDefault();
 #if ENABLE_RENDER_TARGET
     const ViewPort &viewPort = mRenderer->GetViewPort();

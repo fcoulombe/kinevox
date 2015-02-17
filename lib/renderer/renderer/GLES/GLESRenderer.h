@@ -35,6 +35,42 @@
 
 namespace GCL
 {
+enum class GCLDepthFunc
+{
+    LESS = GL_LESS,
+            EQUAL = GL_EQUAL,
+            LEQUAL = GL_LEQUAL,
+            GREATER = GL_GREATER,
+            NOTEQUAL = GL_NOTEQUAL,
+            GEQUAL = GL_GEQUAL,
+};
+
+enum class GCLBlendFunc
+{
+    SRC_COLOR = GL_SRC_COLOR,
+    ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
+    SRC_ALPHA = GL_SRC_ALPHA,
+    ONE_MINUS_SRC_ALPHA = GL_ONE_MINUS_SRC_ALPHA,
+    DST_ALPHA = GL_DST_ALPHA,
+    ONE_MINUS_DST_ALPHA = GL_ONE_MINUS_DST_ALPHA,
+    DST_COLOR = GL_DST_COLOR,
+    ONE_MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR,
+    SRC_ALPHA_SATURATE = GL_SRC_ALPHA_SATURATE,
+};
+
+enum class GCLPolygonFace
+{
+    FRONT_AND_BACK = GL_FRONT_AND_BACK,
+    FRONT = GL_FRONT,
+    BACK = GL_BACK,
+};
+
+enum class GCLPolygonMode
+{
+    FILL,
+    LINE,
+    POINT,
+};
 class Text2D;
 class Camera;
 
@@ -43,186 +79,193 @@ class GLESGPUProgram;
 class GLESRenderer
 {
 public:
-	GLESRenderer(size_t windowsHandle);
-	~GLESRenderer();
-	bool Update();
-	void PreRender();
-	void PostRender();
+    GLESRenderer(size_t windowsHandle);
+    ~GLESRenderer();
+    bool Update();
+    void PreRender();
+    void PostRender();
 
-	struct RenderState
-	{
-		void SetTextureEnabled(bool isEnabled);
-	};
-	RenderState mCurrentRenderState;
-
-
-	void GetVendor(std::string &vendor) const
-	{
-		RenderPipe::SendCommandSync([&](){
-			GetVendorUnsafe(vendor);
-		});
-	}
-	void GetVersion(std::string &version) const
-	{
-		RenderPipe::SendCommandSync([&](){
-			GetVersionUnsafe(version);
-		});
-	}
-	void GetRenderer(std::string &version) const
-	{
-		RenderPipe::SendCommandSync([&](){
-			GetRendererUnsafe(version);
-		});
-	}
-	void GetShadingLanguageVersion(std::string &shadingLanguageVersion) const
-	{
-		RenderPipe::SendCommandSync([&](){
-			GetShadingLanguageVersionUnsafe(shadingLanguageVersion);
-		});
-	}
-	void GetGlewVersion(std::string &glewVersion) const
-	{
-		RenderPipe::SendCommandSync([&](){
-			GetGlewVersionUnsafe(glewVersion);
-		});
-	}
-	void GetExtensions(std::vector<std::string> &extensions) const
-	{
-		RenderPipe::SendCommandSync([&](){
-			GetExtensionsUnsafe(extensions);
-		});
-	}
-
-	bool IsExtensionSupported(const std::string &ext) const
-	{
-		bool ret;
-		RenderPipe::SendCommandSync([&](){
-			ret = IsExtensionSupportedUnsafe(ext);
-		});
-		return ret;
-	}
-
-	bool IsGlewExtensionSupported(const std::string &) const
-	{
-		GCLAssert(false && "unsupported");
-		return false;
-	}
+    struct RenderState
+    {
+        void SetTextureEnabled(bool isEnabled);
+    };
+    RenderState mCurrentRenderState;
 
 
-	static Matrix44 GetGLProjection();
-	static Matrix44 GetGLModelView();
-	void GetProjection(Matrix44 &projection) const
-	{
-		RenderPipe::SendCommandSync([&](){
-			GetProjectionUnsafe(projection);
-		});
-	}
-	void GetModelView(Matrix44 &modelView) const
-	{
-		RenderPipe::SendCommandSync([&](){
-			GetModelViewUnsafe(modelView);
-		});
-	}
-	void SwapBuffer();
-	void SetViewPort(const ViewPort &viewport)
-	{
-		RenderPipe::SendCommand([=](){
-			SetViewPortUnsafe(viewport);
-		});
-	}
-	void SetProjection(const Matrix44 &projection)
-	{
-		RenderPipe::SendCommand([=](){
-			SetProjectionUnsafe(projection);
-		});
-	}
-	void SetProjection(const Camera &camera);
-	void SetOrtho()
-	{
-		RenderPipe::SendCommand([&](){
-			SetOrthoUnsafe();
-		});
-	}
-	void SetModelView(const Matrix44 &modelView)
-	{
-		RenderPipe::SendCommand([=](){
-			SetModelViewUnsafe(modelView);
-		});
-	}
-	void SetIsDepthTesting(bool isDepthTesting = true);
-	void SetIsBlendEnabled(bool isBlendEnabled = true);
+    void GetVendor(std::string &vendor) const
+    {
+        RenderPipe::SendCommandSync([&](){
+            GetVendorUnsafe(vendor);
+        });
+    }
+    void GetVersion(std::string &version) const
+    {
+        RenderPipe::SendCommandSync([&](){
+            GetVersionUnsafe(version);
+        });
+    }
+    void GetRenderer(std::string &version) const
+    {
+        RenderPipe::SendCommandSync([&](){
+            GetRendererUnsafe(version);
+        });
+    }
+    void GetShadingLanguageVersion(std::string &shadingLanguageVersion) const
+    {
+        RenderPipe::SendCommandSync([&](){
+            GetShadingLanguageVersionUnsafe(shadingLanguageVersion);
+        });
+    }
+    void GetGlewVersion(std::string &glewVersion) const
+    {
+        RenderPipe::SendCommandSync([&](){
+            GetGlewVersionUnsafe(glewVersion);
+        });
+    }
+    void GetExtensions(std::vector<std::string> &extensions) const
+    {
+        RenderPipe::SendCommandSync([&](){
+            GetExtensionsUnsafe(extensions);
+        });
+    }
+
+    bool IsExtensionSupported(const std::string &ext) const
+    {
+        bool ret;
+        RenderPipe::SendCommandSync([&](){
+            ret = IsExtensionSupportedUnsafe(ext);
+        });
+        return ret;
+    }
+
+    bool IsGlewExtensionSupported(const std::string &) const
+    {
+        GCLAssert(false && "unsupported");
+        return false;
+    }
+
+
+    static Matrix44 GetGLProjection();
+    static Matrix44 GetGLModelView();
+    void GetProjection(Matrix44 &projection) const
+    {
+        RenderPipe::SendCommandSync([&](){
+            GetProjectionUnsafe(projection);
+        });
+    }
+    void GetModelView(Matrix44 &modelView) const
+    {
+        RenderPipe::SendCommandSync([&](){
+            GetModelViewUnsafe(modelView);
+        });
+    }
+    void SwapBuffer();
+    void SetViewPort(const ViewPort &viewport)
+    {
+        RenderPipe::SendCommand([=](){
+            SetViewPortUnsafe(viewport);
+        });
+    }
+    void SetProjection(const Matrix44 &projection)
+    {
+        RenderPipe::SendCommand([=](){
+            SetProjectionUnsafe(projection);
+        });
+    }
+    void SetProjection(const Camera &camera);
+    void SetOrtho()
+    {
+        RenderPipe::SendCommand([&](){
+            SetOrthoUnsafe();
+        });
+    }
+    void SetModelView(const Matrix44 &modelView)
+    {
+        RenderPipe::SendCommand([=](){
+            SetModelViewUnsafe(modelView);
+        });
+    }
+    void SetIsBlendEnabled(bool isBlendEnabled = true);
     void SetIsDepthMaskEnabled(bool isDepthMaskEnabled = true);
     void SetIsAlphaTestEnabled(bool isAlphaTestEnabled = true);
-	void SetVSyncEnabled(bool isEnabled = true);
+    void SetVSyncEnabled(bool isEnabled = true);
+    void SetIsAntiAliasingEnabled(bool isEnabled = true);
+
+    void SetClearColor(Real r, Real g, Real b, Real a);
+    void SetClearDepth(Real depthValue);
+    void SetDepthFunc(GCLDepthFunc depthFunc);
+    void SetBlendFunc(GCLBlendFunc srcBlendFunc, GCLBlendFunc dstBlendFunc);
+    void SetPolygonMode(GCLPolygonFace face, GCLPolygonMode mode);
+    void SetIsDepthTestEnabled(bool isEnabled = true);
 
     void GetScreenSize(Point2<size_t> &screenSize) const;
 private:
-	void Init3DState();
-   
-	std::string mVendor,
-				mVersion,
-				mRenderer,
-				mShadingLanguageVersion,
-				mGlewVersion;
+    void Init3DState();
 
-	std::vector<std::string> mExtensions;
-	ViewPort mViewPort;
-	Matrix44 mProjection;
-	Matrix44 mModelView;
-	Real mFov, mAspect, mNear, mFar;
+    std::string mVendor,
+    mVersion,
+    mRenderer,
+    mShadingLanguageVersion,
+    mGlewVersion;
 
-	void InitWin(size_t windowsHandle);
-	void InitLinux(size_t windowsHandle);
+    std::vector<std::string> mExtensions;
+    ViewPort mViewPort;
+    Matrix44 mProjection;
+    Matrix44 mModelView;
+    Real mFov, mAspect, mNear, mFar;
+
+    void InitWin(size_t windowsHandle);
+    void InitLinux(size_t windowsHandle);
 #ifdef OS_WIN32
-	HWND mhWnd;
-	HDC mhDC;
-	HGLRC mhRC;
+    HWND mhWnd;
+    HDC mhDC;
+    HGLRC mhRC;
 #elif defined(OS_LINUX)
-	Display *mDisplay;
-	Window mWin;
-	Colormap mCmap;
-	XVisualInfo *x11Visual;
+    Display *mDisplay;
+    Window mWin;
+    Colormap mCmap;
+    XVisualInfo *x11Visual;
 #elif defined(OS_ANDROID)
 #else
 #error "TBD"
 #endif
-	void SetOrthoUnsafe()
-	{
-		mProjection.SetOrtho(0.0,  (Real)mViewPort.GetWidth(), (Real)mViewPort.GetHeight(),0.0, -1.0, 1.0);
-		mModelView.SetIdentity();
-	}
-	void SetModelViewUnsafe(const Matrix44 &modelView)
-	{
-		mModelView = modelView;
-	}
-	void SetViewPortUnsafe(const ViewPort &viewport)
-	{
-		mViewPort = viewport;
-		glViewport(viewport.GetX(),viewport.GetY(),viewport.GetWidth(), viewport.GetHeight());glErrorCheck();
+    void SetOrthoUnsafe()
+    {
+        mProjection.SetOrtho(0.0,  (Real)mViewPort.GetWidth(), (Real)mViewPort.GetHeight(),0.0, -1.0, 1.0);
+        mModelView.SetIdentity();
+    }
+    void SetModelViewUnsafe(const Matrix44 &modelView)
+    {
+        mModelView = modelView;
+    }
+    void SetViewPortUnsafe(const ViewPort &viewport)
+    {
+        mViewPort = viewport;
+        glViewport(viewport.GetX(),viewport.GetY(),viewport.GetWidth(), viewport.GetHeight());glErrorCheck();
 
-	}
-	void SetProjectionUnsafe(const Matrix44 &projection)
-	{
-		mProjection = projection;
-	}
-	void GetProjectionUnsafe(Matrix44 &projection) const { projection = mProjection; }
-	void GetModelViewUnsafe(Matrix44 &modelView) const { modelView = mModelView; }
-	void GetVendorUnsafe(std::string &vendor) const { vendor = mVendor; }
-	void GetVersionUnsafe(std::string &version) const { version = mVersion; }
-	void GetRendererUnsafe(std::string &renderer) const { renderer = mRenderer; }
-	void GetShadingLanguageVersionUnsafe(std::string &shadingLanguageVersion) const { shadingLanguageVersion = mShadingLanguageVersion; }
-	void GetGlewVersionUnsafe(std::string &glewVersion) const { glewVersion = mGlewVersion; }
-	void GetExtensionsUnsafe(std::vector<std::string> &extensions) const { extensions = mExtensions; }
+    }
+    void SetProjectionUnsafe(const Matrix44 &projection)
+    {
+        mProjection = projection;
+    }
+    void GetProjectionUnsafe(Matrix44 &projection) const { projection = mProjection; }
+    void GetModelViewUnsafe(Matrix44 &modelView) const { modelView = mModelView; }
+    void GetVendorUnsafe(std::string &vendor) const { vendor = mVendor; }
+    void GetVersionUnsafe(std::string &version) const { version = mVersion; }
+    void GetRendererUnsafe(std::string &renderer) const { renderer = mRenderer; }
+    void GetShadingLanguageVersionUnsafe(std::string &shadingLanguageVersion) const { shadingLanguageVersion = mShadingLanguageVersion; }
+    void GetGlewVersionUnsafe(std::string &glewVersion) const { glewVersion = mGlewVersion; }
+    void GetExtensionsUnsafe(std::vector<std::string> &extensions) const { extensions = mExtensions; }
 
-	bool IsExtensionSupportedUnsafe(const std::string &ext) const
-	{
-		std::vector<std::string>::const_iterator b = mExtensions.begin();
-		std::vector<std::string>::const_iterator e = mExtensions.end();
-		std::vector<std::string>::const_iterator r =  std::find(b, e, ext);
+    bool IsExtensionSupportedUnsafe(const std::string &ext) const
+    {
+        std::vector<std::string>::const_iterator b = mExtensions.begin();
+        std::vector<std::string>::const_iterator e = mExtensions.end();
+        std::vector<std::string>::const_iterator r =  std::find(b, e, ext);
 
-		bool res = r != mExtensions.end();
-		return res;
-	}
+        bool res = r != mExtensions.end();
+        return res;
+    }
 
     EGLDisplay			mEglDisplay;
     EGLConfig			mEglConfig;

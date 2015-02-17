@@ -28,108 +28,136 @@
 using namespace GCL;
 namespace GLRendererTest
 {
-    
-    void Test();
+
+void Test();
 void Test()
 {
-	KINEVOX_TEST_START
+    KINEVOX_TEST_START
     WinDriver winDriver("GLRendererTest");
-	{
-	Renderer renderer(winDriver.GetWindowsHandle());
-	const ViewPort &testViewPort = renderer.GetViewPort();
-	Assert_Test(testViewPort.GetX() == 0 && testViewPort.GetY() == 0 &&
-				testViewPort.GetWidth() == 800 && testViewPort.GetHeight() == 600);
-	Point2<size_t> testScreenSize;
-	renderer.GetScreenSize(testScreenSize);
-	Assert_Test(testScreenSize == Point2<size_t>(640, 480));
-	std::cout << "OpenGL Stats"<<std::endl;
-	std::string version;
-	renderer.GetVersion(version);
-	std::cout << "Version: " << version <<std::endl;
-	std::string vendor;
-	renderer.GetVendor(vendor);
-	std::cout << "Vendor: " << vendor<<std::endl;
-	std::string rendererstr;
-	renderer.GetRenderer(rendererstr);
-	std::cout << "Renderer: " << rendererstr<<std::endl;
-	std::string shadingLanguageVersion;
-	renderer.GetShadingLanguageVersion(shadingLanguageVersion);
-	std::cout << "ShadingLanguageVersion: " << shadingLanguageVersion<<std::endl;
-	std::string glewVersion;
-	renderer.GetGlewVersion(glewVersion);
-	std::cout << "GlewVersion: " << glewVersion<<std::endl;
+    {
+        Renderer renderer(winDriver.GetWindowsHandle());
+        const ViewPort &testViewPort = renderer.GetViewPort();
+        Assert_Test(testViewPort.GetX() == 0 && testViewPort.GetY() == 0 &&
+                testViewPort.GetWidth() == 800 && testViewPort.GetHeight() == 600);
+        Point2<size_t> testScreenSize;
+        renderer.GetScreenSize(testScreenSize);
+        Assert_Test(testScreenSize == Point2<size_t>(640, 480));
+        std::cout << "OpenGL Stats"<<std::endl;
+        std::string version;
+        renderer.GetVersion(version);
+        std::cout << "Version: " << version <<std::endl;
+        std::string vendor;
+        renderer.GetVendor(vendor);
+        std::cout << "Vendor: " << vendor<<std::endl;
+        std::string rendererstr;
+        renderer.GetRenderer(rendererstr);
+        std::cout << "Renderer: " << rendererstr<<std::endl;
+        std::string shadingLanguageVersion;
+        renderer.GetShadingLanguageVersion(shadingLanguageVersion);
+        std::cout << "ShadingLanguageVersion: " << shadingLanguageVersion<<std::endl;
+        std::string glewVersion;
+        renderer.GetGlewVersion(glewVersion);
+        std::cout << "GlewVersion: " << glewVersion<<std::endl;
 
-	std::cout << "Extensions: " << std::endl;
-	std::vector<std::string> ext;
-	renderer.GetExtensions(ext);
-	for (size_t i=0; i<ext.size();++i)
-	{
-		std::cout << ext[i] << std::endl;;
-	}
+        std::cout << "Extensions: " << std::endl;
+        std::vector<std::string> ext;
+        renderer.GetExtensions(ext);
+        for (size_t i=0; i<ext.size();++i)
+        {
+            std::cout << ext[i] << std::endl;;
+        }
 
 #if  defined(ES2)
 #ifdef OS_IPHONE
-    Assert_Test(renderer.IsExtensionSupported("GL_OES_framebuffer_object"));
+        Assert_Test(renderer.IsExtensionSupported("GL_OES_framebuffer_object"));
 #endif
-    Assert_Test(renderer.IsExtensionSupported("GL_OES_vertex_array_object"));
-    //Assert_Test(renderer.IsExtensionSupported("GL_IMG_texture_compression_pvrtc"));
+        Assert_Test(renderer.IsExtensionSupported("GL_OES_vertex_array_object"));
+        //Assert_Test(renderer.IsExtensionSupported("GL_IMG_texture_compression_pvrtc"));
 #else
-	//Assert_Test(renderer.IsExtensionSupported("GL_ARB_multitexture"));
-	Assert_Test(renderer.IsExtensionSupported("GL_ARB_pixel_buffer_object"));
-	//Assert_Test(renderer.IsExtensionSupported("GL_ARB_vertex_buffer_object"));
-	//Assert_Test(renderer.IsExtensionSupported("GL_ARB_vertex_program"));
-	Assert_Test(renderer.IsExtensionSupported("GL_ARB_vertex_shader"));
-    //Assert_Test(renderer.IsExtensionSupported("GL_ARB_fragment_program"));
-    Assert_Test(renderer.IsExtensionSupported("GL_ARB_fragment_shader"));
-    //Assert_Test(renderer.IsExtensionSupported("GL_ARB_shading_language_100"));
-	//Assert_Test(renderer.IsExtensionSupported("GL_ARB_texture_compression"));
-    Assert_Test(renderer.IsExtensionSupported("GL_EXT_framebuffer_object"));
-    // GL_EXT_texture_compression_s3tc      
+        //Assert_Test(renderer.IsExtensionSupported("GL_ARB_multitexture"));
+        Assert_Test(renderer.IsExtensionSupported("GL_ARB_pixel_buffer_object"));
+        //Assert_Test(renderer.IsExtensionSupported("GL_ARB_vertex_buffer_object"));
+        //Assert_Test(renderer.IsExtensionSupported("GL_ARB_vertex_program"));
+        Assert_Test(renderer.IsExtensionSupported("GL_ARB_vertex_shader"));
+        //Assert_Test(renderer.IsExtensionSupported("GL_ARB_fragment_program"));
+        Assert_Test(renderer.IsExtensionSupported("GL_ARB_fragment_shader"));
+        //Assert_Test(renderer.IsExtensionSupported("GL_ARB_shading_language_100"));
+        //Assert_Test(renderer.IsExtensionSupported("GL_ARB_texture_compression"));
+        Assert_Test(renderer.IsExtensionSupported("GL_EXT_framebuffer_object"));
+        // GL_EXT_texture_compression_s3tc
 #endif
 
-	//test default viewport values
-	{
-		std::stringstream s;
-		s<<renderer.GetViewPort().GetHeight()<<"=="<<Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT");
-		AssertMsg_Test(renderer.GetViewPort().GetHeight()==(size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"), s.str().c_str());
-	}
-	{
-		std::stringstream s;
-		s<<renderer.GetViewPort().GetWidth()<<"=="<<Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
-		AssertMsg_Test(renderer.GetViewPort().GetWidth()==(size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), s.str().c_str());
-	}
+        //test default viewport values
+        {
+            std::stringstream s;
+            s<<renderer.GetViewPort().GetHeight()<<"=="<<Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT");
+            AssertMsg_Test(renderer.GetViewPort().GetHeight()==(size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"), s.str().c_str());
+        }
+        {
+            std::stringstream s;
+            s<<renderer.GetViewPort().GetWidth()<<"=="<<Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH");
+            AssertMsg_Test(renderer.GetViewPort().GetWidth()==(size_t)Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), s.str().c_str());
+        }
 
 #if 0 //ENABLE_GLEW
-	//Assert_Test(GLEW_ARB_vertex_program);
-	Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_multitexture"));
-	Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_pixel_buffer_object"));
-	Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_vertex_buffer_object"));
-	Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_vertex_program"));
-	Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_vertex_shader"));
-    Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_fragment_program"));
-    Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_fragment_shader"));
-    Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_shading_language_100"));
-    Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_texture_compression"));
-    Assert_Test(renderer.IsGlewExtensionSupported("GL_EXT_framebuffer_object"));
+        //Assert_Test(GLEW_ARB_vertex_program);
+        Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_multitexture"));
+        Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_pixel_buffer_object"));
+        Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_vertex_buffer_object"));
+        Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_vertex_program"));
+        Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_vertex_shader"));
+        Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_fragment_program"));
+        Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_fragment_shader"));
+        Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_shading_language_100"));
+        Assert_Test(renderer.IsGlewExtensionSupported("GL_ARB_texture_compression"));
+        Assert_Test(renderer.IsGlewExtensionSupported("GL_EXT_framebuffer_object"));
 #endif
-	KINEVOX_TEST_LOOP_START
+        KINEVOX_TEST_LOOP_START
 
-		renderer.PreRender();
-	renderer.SetIsDepthTesting();
-	renderer.SetIsBlendEnabled();
-	renderer.SetIsDepthMaskEnabled();
-	renderer.SetIsAlphaTestEnabled();
-	renderer.SetVSyncEnabled();
+        renderer.PreRender();
+        renderer.SetIsBlendEnabled();
+        renderer.SetIsDepthMaskEnabled();
+        renderer.SetIsAlphaTestEnabled();
+        renderer.SetVSyncEnabled();
+        renderer.SetClearColor(0.0, 0.0, 0.0, 0.0);
+        renderer.SetClearDepth(1.0);
+        renderer.SetIsDepthMaskEnabled();
+        renderer.SetIsDepthTestEnabled();
+        renderer.SetDepthFunc(GCLDepthFunc::LESS);
+        renderer.SetBlendFunc(GCLBlendFunc::SRC_ALPHA, GCLBlendFunc::ONE_MINUS_SRC_ALPHA);
+        renderer.SetPolygonMode(GCLPolygonFace::FRONT_AND_BACK, GCLPolygonMode::FILL);
+        renderer.SetIsBlendEnabled();
+        renderer.SetIsAntiAliasingEnabled();
 
-	renderer.SetIsDepthTesting(false);
-	renderer.SetIsBlendEnabled(false);
-	renderer.SetIsDepthMaskEnabled(false);
-	renderer.SetIsAlphaTestEnabled(false);
-	renderer.SetVSyncEnabled(false);
-		renderer.PostRender();
-		winDriver.SwapBuffer();
-	KINEVOX_TEST_LOOP_END
-	}
+
+        renderer.SetIsBlendEnabled(false);
+        renderer.SetIsDepthMaskEnabled(false);
+        renderer.SetIsAlphaTestEnabled(false);
+        renderer.SetVSyncEnabled(false);
+        renderer.SetClearColor(0.0, 0.0, 0.0, 0.0);
+        renderer.SetClearDepth(1.0);
+        renderer.SetIsDepthTestEnabled(false);
+        renderer.SetDepthFunc(GCLDepthFunc::LESS);
+        renderer.SetDepthFunc(GCLDepthFunc::EQUAL);
+        renderer.SetDepthFunc(GCLDepthFunc::LEQUAL);
+        renderer.SetDepthFunc(GCLDepthFunc::GREATER);
+        renderer.SetDepthFunc(GCLDepthFunc::NOTEQUAL);
+        renderer.SetDepthFunc(GCLDepthFunc::GEQUAL);
+
+        renderer.SetBlendFunc(GCLBlendFunc::SRC_ALPHA, GCLBlendFunc::ONE_MINUS_SRC_ALPHA);
+        renderer.SetBlendFunc(GCLBlendFunc::SRC_ALPHA, GCLBlendFunc::DST_ALPHA);
+        renderer.SetBlendFunc(GCLBlendFunc::SRC_COLOR, GCLBlendFunc::ONE_MINUS_DST_ALPHA);
+        renderer.SetBlendFunc(GCLBlendFunc::ONE_MINUS_SRC_COLOR, GCLBlendFunc::DST_COLOR);
+        renderer.SetBlendFunc(GCLBlendFunc::SRC_ALPHA_SATURATE, GCLBlendFunc::ONE_MINUS_DST_COLOR);
+        renderer.SetPolygonMode(GCLPolygonFace::FRONT_AND_BACK, GCLPolygonMode::FILL);
+        renderer.SetIsBlendEnabled(false);
+        renderer.SetIsAlphaTestEnabled(false);
+        renderer.SetVSyncEnabled(false);
+        renderer.SetIsAntiAliasingEnabled(false);
+        renderer.PostRender();
+        winDriver.SwapBuffer();
+        KINEVOX_TEST_LOOP_END
+    }
 
 }
 }

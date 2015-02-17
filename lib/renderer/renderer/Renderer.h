@@ -41,9 +41,14 @@ public:
         mPimpl = new IRenderer(windowsHandle);
         mViewPort.Set(0,0,Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH"), Config::Instance().GetInt("DEFAULT_VIEWPORT_HEIGHT"));
         mPimpl->SetViewPort(mViewPort);
-        mPimpl->SetIsDepthTesting();
-        mPimpl->SetIsBlendEnabled();
+        mPimpl->SetClearColor(0.0, 0.0, 0.0, 0.0);
+        mPimpl->SetClearDepth(1.0);
         mPimpl->SetIsDepthMaskEnabled();
+        mPimpl->SetIsDepthTestEnabled();
+        mPimpl->SetDepthFunc(GCLDepthFunc::LESS);
+        mPimpl->SetBlendFunc(GCLBlendFunc::SRC_ALPHA, GCLBlendFunc::ONE_MINUS_SRC_ALPHA);
+        mPimpl->SetPolygonMode(GCLPolygonFace::FRONT_AND_BACK, GCLPolygonMode::FILL);
+        mPimpl->SetIsBlendEnabled();
         mPimpl->SetIsAlphaTestEnabled();
         mPimpl->SetVSyncEnabled(Config::Instance().GetBool("IS_VSYNC_ENABLED"));
         mPimpl->SetIsAntiAliasingEnabled(Config::Instance().GetBool("IS_ANTIALIASING_ENABLED"));
@@ -92,10 +97,6 @@ public:
     {
         mPimpl->SetOrtho();
     }
-    void SetIsDepthTesting(bool isDepthTesting = true)
-    {
-        mPimpl->SetIsDepthTesting(isDepthTesting);
-    }
     void SetIsBlendEnabled(bool isBlendEnabled = true)
     {
         mPimpl->SetIsBlendEnabled(isBlendEnabled);
@@ -115,6 +116,30 @@ public:
     void SetIsAntiAliasingEnabled(bool isEnabled = true)
     {
         mPimpl->SetIsAntiAliasingEnabled(isEnabled);
+    }
+    void SetClearColor(Real r, Real g, Real b, Real a)
+    {
+        mPimpl->SetClearColor(r,g,b,a);
+    }
+    void SetClearDepth(Real depthValue)
+    {
+        mPimpl->SetClearDepth(depthValue);
+    }
+    void SetDepthFunc(GCLDepthFunc depthFunc)
+    {
+        mPimpl->SetDepthFunc(depthFunc);
+    }
+    void SetBlendFunc(GCLBlendFunc srcBlendFunc, GCLBlendFunc dstBlendFunc)
+    {
+        mPimpl->SetBlendFunc(srcBlendFunc, dstBlendFunc);
+    }
+    void SetPolygonMode(GCLPolygonFace face, GCLPolygonMode mode)
+    {
+        mPimpl->SetPolygonMode(face, mode);
+    }
+    void SetIsDepthTestEnabled(bool isEnabled = true)
+    {
+        mPimpl->SetIsDepthTestEnabled(isEnabled);
     }
     void GetProjection(Matrix44  &projection) {mPimpl->GetProjection(projection); }
     void GetModelView(Matrix44  &modelView) {mPimpl->GetModelView(modelView); }

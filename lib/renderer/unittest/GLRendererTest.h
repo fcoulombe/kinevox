@@ -115,7 +115,17 @@ void Test()
 	KINEVOX_TEST_LOOP_START
 
 		renderer.PreRender();
+	renderer.SetIsDepthTesting();
+	renderer.SetIsBlendEnabled();
+	renderer.SetIsDepthMaskEnabled();
+	renderer.SetIsAlphaTestEnabled();
+	renderer.SetVSyncEnabled();
 
+	renderer.SetIsDepthTesting(false);
+	renderer.SetIsBlendEnabled(false);
+	renderer.SetIsDepthMaskEnabled(false);
+	renderer.SetIsAlphaTestEnabled(false);
+	renderer.SetVSyncEnabled(false);
 		renderer.PostRender();
 		winDriver.SwapBuffer();
 	KINEVOX_TEST_LOOP_END

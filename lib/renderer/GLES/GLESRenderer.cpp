@@ -378,7 +378,18 @@ void GCL::GLESRenderer::SetIsBlendEnabled( bool isblendEnabled /*= true*/ )
         }
     });
 }
+void GCL::GLESRenderer::SetIsAlphaTestEnabled( bool /*isAlphaTestEnabled*/ /*= true*/ )
+{
+	GCLAssert(false && "Not supported");
+}
 
+void GCL::GLESRenderer::SetVSyncEnabled(bool isEnabled) {
+	RenderPipe::SendCommand(
+			[=]() {
+				eglSwapInterval(mEglDisplay, isEnabled ? 1 : 0);eglErrorCheck();
+			});
+
+}
 void GCL::GLESRenderer::SetIsDepthMaskEnabled( bool isDepthMaskEnabled /*= true*/ )
 {
     RenderPipe::SendCommand([=](){

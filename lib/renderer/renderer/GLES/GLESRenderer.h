@@ -152,6 +152,8 @@ public:
 	void SetIsDepthTesting(bool isDepthTesting = true);
 	void SetIsBlendEnabled(bool isBlendEnabled = true);
     void SetIsDepthMaskEnabled(bool isDepthMaskEnabled = true);
+    void SetIsAlphaTestEnabled(bool isAlphaTestEnabled = true);
+	void SetVSyncEnabled(bool isEnabled = true);
 
     void GetScreenSize(Point2<size_t> &screenSize) const;
 private:

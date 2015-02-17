@@ -102,6 +102,10 @@ namespace GCL
     {
         mPimpl->SetIsAlphaTestEnabled(isAlphaTestEnabled);
     }
+    void SetVSyncEnabled(bool isEnabled = true)
+    {
+    	mPimpl->SetVSyncEnabled(isEnabled);
+    }
 	void GetProjection(Matrix44  &projection) {mPimpl->GetProjection(projection); }
 	void GetModelView(Matrix44  &modelView) {mPimpl->GetModelView(modelView); }
 

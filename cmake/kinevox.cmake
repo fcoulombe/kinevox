@@ -134,11 +134,15 @@ macro(AndroidExecutable ProjectName)
           "${PROJECT_SOURCE_DIR}/android/KinevoxView.java"
           "${CMAKE_CURRENT_BINARY_DIR}/android/src/com/kinevox/${ProjectName}/KinevoxView.java"
           )
-  
     else()
         configure_file (
           "${PROJECT_SOURCE_DIR}/android/AndroidManifest_native.xml"
           "${CMAKE_CURRENT_BINARY_DIR}/android/AndroidManifest.xml"
+          )
+          
+        configure_file (
+          "${PROJECT_SOURCE_DIR}/android/run.sh"
+          "${CMAKE_CURRENT_BINARY_DIR}/run.sh"
           )
     endif()  
     add_custom_command(TARGET ${ProjectName} POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory assets WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/android)

@@ -1,6 +1,7 @@
 function Initialize(self)
     SCREEN_SIZE = kinevox.GetScreenSize()
-    VELOCITY = { -0.0,50.0} 
+    VELOCITY = { -0.0,50.0}
+    START_WIDTH = 120
 end
 
 function Logic(self, dt)
@@ -15,16 +16,17 @@ function Logic(self, dt)
     newX = newX + velocityX 
     newY = newY + velocityY 
     
-    if newY > SCREEN_SIZE[1]+32+1 then
-      newY = -32
+    if newY > SCREEN_SIZE[1]+16 then
+      newY = -16
+      newX = newX + math.random(-1*16, 1*16)
     end
     
     
     --Test collision against paddle
     local car = kinevox.GetActor("Car")
     local carPos = car:GetPosition()
-    
-    self:SetPosition(newX, newY, pos[2])
+    kinevox.Log("pos: "..newX.."  "..math.floor(newY+0.5).." "..pos[2]) 
+    self:SetPosition(newX, math.floor(newY+0.5), pos[2])
 end
 
 

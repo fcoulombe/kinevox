@@ -380,7 +380,7 @@ void GCL::GLESRenderer::SetIsBlendEnabled( bool isblendEnabled /*= true*/ )
 }
 void GCL::GLESRenderer::SetIsAlphaTestEnabled( bool /*isAlphaTestEnabled*/ /*= true*/ )
 {
-    GCLAssert(false && "Not supported");
+    //GCLAssert(false && "Not supported");
 }
 
 void GCL::GLESRenderer::SetVSyncEnabled(bool isEnabled) {

@@ -394,7 +394,7 @@ GCLEXPORT  void GCL::GCLApplication::DestroyActor( const char *actorName )
 
 GCLEXPORT  void GCL::GCLApplication::SaveStates()
 {
-    BufferWriter buffer(4096);
+    BufferWriter buffer(1024*100);
     buffer << mStrongActorList.size();
     for ( ActorPtr actor : mStrongActorList)
     {

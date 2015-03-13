@@ -49,7 +49,7 @@ public:
         mPimpl->SetBlendFunc(GCLBlendFunc::SRC_ALPHA, GCLBlendFunc::ONE_MINUS_SRC_ALPHA);
         mPimpl->SetPolygonMode(GCLPolygonFace::FRONT_AND_BACK, GCLPolygonMode::FILL);
         mPimpl->SetIsBlendEnabled();
-        mPimpl->SetIsAlphaTestEnabled();
+        //mPimpl->SetIsAlphaTestEnabled();
         mPimpl->SetVSyncEnabled(Config::Instance().GetBool("IS_VSYNC_ENABLED"));
         mPimpl->SetIsAntiAliasingEnabled(Config::Instance().GetBool("IS_ANTIALIASING_ENABLED"));
 }

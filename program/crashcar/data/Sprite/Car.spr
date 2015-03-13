@@ -1,6 +1,6 @@
 gclsprite = {
-    width=87,
-    height=128,
+    width=44,
+    height=64,
     frame_count="1",
     texture_count = 1,
     textures = {

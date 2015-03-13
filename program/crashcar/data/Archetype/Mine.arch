@@ -3,9 +3,6 @@ Archetype = {
 	Components = {
         SpriteComponent = {
         sprite = "Mine"
-        },
-        ScriptComponent = {
-          filename = "Mine"
         }
 	}
 }

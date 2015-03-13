@@ -44,555 +44,575 @@
 #elif defined(OS_LINUX)
 #include <GL/glx.h>
 typedef GLXContext (*glXCreateContextAttribsARBProc)(Display*, GLXFBConfig,
-        GLXContext, Bool, const int*);
+  GLXContext, Bool, const int*);
 #define GLX_CONTEXT_MAJOR_VERSION_ARB       0x2091
 #define GLX_CONTEXT_MINOR_VERSION_ARB       0x2092
 #endif
 using namespace GCL;
 
-void GLRenderer::Init3DState() {
-    glErrorCheck();
-/*    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);glErrorCheck()    ;
-    glClearDepth(1.0);glErrorCheck()    ;
-    glDepthMask(GL_TRUE);glErrorCheck()    ;
-    glDepthFunc(GL_LESS);glErrorCheck()    ;
-    glEnable(GL_DEPTH_TEST);glErrorCheck()    ;
-    glEnable(GL_BLEND);glErrorCheck();
-
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);glErrorCheck();
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL);glErrorCheck();*/
-
-}
 #ifdef OS_LINUX
 // Helper to check for extension string presence.  Adapted from:
 //   http://www.opengl.org/resources/features/OGLextensions/
 static bool isExtensionSupported(const char *extList, const char *extension)
 
 {
-    std::vector<std::string> extVector;
-    StringUtil::Explode(extList, extVector, ' ');
-    for (size_t i = 0; i < extVector.size(); ++i) {
-        if (extVector[i] == extension)
-            return true;
-    }
-    return false;
+  std::vector<std::string> extVector;
+  StringUtil::Explode(extList, extVector, ' ');
+  for (size_t i = 0; i < extVector.size(); ++i) {
+    if (extVector[i] == extension)
+      return true;
+  }
+  return false;
 }
 
 static int ctxErrorHandler(Display *, XErrorEvent *) {
-    GCLAssert(false);
-    return 0;
+  GCLAssert(false);
+  return 0;
 }
 #endif
 void GLRenderer::InitGLX(size_t windowsHandle) {
 #ifdef OS_LINUX
-    mDisplay = (Display *) *(size_t*) windowsHandle;
-    mWin = *(Window*) (((uint8_t*) windowsHandle) + sizeof(Display *));
+  mDisplay = (Display *) *(size_t*) windowsHandle;
+  mWin = *(Window*) (((uint8_t*) windowsHandle) + sizeof(Display *));
 
-    // Get a matching FB config
-    static const int visual_attribs[] = {
-            GLX_X_RENDERABLE, True,
-            GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
-            GLX_RENDER_TYPE, GLX_RGBA_BIT,
-            GLX_X_VISUAL_TYPE, GLX_TRUE_COLOR,
-            GLX_RED_SIZE, 8,
-            GLX_GREEN_SIZE, 8,
-            GLX_BLUE_SIZE, 8,
-            GLX_ALPHA_SIZE, 8,
-            GLX_DEPTH_SIZE, 24,
-            GLX_STENCIL_SIZE, 8,
-            GLX_DOUBLEBUFFER, True,
-            GLX_SAMPLE_BUFFERS_ARB, 1, GLX_SAMPLES_ARB, 1,
-            //GLX_SAMPLE_BUFFERS  , 1,
-            //GLX_SAMPLES         , 4,
-            None };
+  // Get a matching FB config
+  static const int visual_attribs[] = {
+    GLX_X_RENDERABLE, True,
+    GLX_DRAWABLE_TYPE, GLX_WINDOW_BIT,
+    GLX_RENDER_TYPE, GLX_RGBA_BIT,
+    GLX_X_VISUAL_TYPE, GLX_TRUE_COLOR,
+    GLX_RED_SIZE, 8,
+    GLX_GREEN_SIZE, 8,
+    GLX_BLUE_SIZE, 8,
+    GLX_ALPHA_SIZE, 8,
+    GLX_DEPTH_SIZE, 24,
+    GLX_STENCIL_SIZE, 8,
+    GLX_DOUBLEBUFFER, True,
+    GLX_SAMPLE_BUFFERS_ARB, 1, GLX_SAMPLES_ARB, 1,
+    //GLX_SAMPLE_BUFFERS  , 1,
+    //GLX_SAMPLES         , 4,
+    None };
 
-    int glx_major, glx_minor;
+  int glx_major, glx_minor;
 
-    // FBConfigs were added in GLX version 1.3.
-    int ret = glXQueryVersion(mDisplay, &glx_major, &glx_minor);
-    GCLAssertMsg(ret && (glx_major >= 1) && (glx_minor >= 3),
-            "Invalid GLX version");
+  // FBConfigs were added in GLX version 1.3.
+  int ret = glXQueryVersion(mDisplay, &glx_major, &glx_minor);
+  GCLAssertMsg(ret && (glx_major >= 1) && (glx_minor >= 3),
+    "Invalid GLX version");
 
-    int fbcount;
-    GLXFBConfig *fbc = glXChooseFBConfig(mDisplay, DefaultScreen(mDisplay),
-            visual_attribs, &fbcount);
-    GCLAssertMsg(fbc, "Failed to retrieve a framebuffer config\n");
+  int fbcount;
+  GLXFBConfig *fbc = glXChooseFBConfig(mDisplay, DefaultScreen(mDisplay),
+    visual_attribs, &fbcount);
+  GCLAssertMsg(fbc, "Failed to retrieve a framebuffer config\n");
 
-    //std::cout <<  "Found "<<fbcount <<" matching FB configs."<<std::endl;
+  //std::cout <<  "Found "<<fbcount <<" matching FB configs."<<std::endl;
 
-    // Pick the FB config/visual with the most samples per pixel
-    int best_fbc = -1, worst_fbc = -1, best_num_samp = -1, worst_num_samp = 999;
+  // Pick the FB config/visual with the most samples per pixel
+  int best_fbc = -1, worst_fbc = -1, best_num_samp = -1, worst_num_samp = 999;
 
-    for (int i = 0; i < fbcount; i++) {
-        XVisualInfo *vi = glXGetVisualFromFBConfig(mDisplay, fbc[i]);
-        if (vi) {
-            int samp_buf, samples;
-            glXGetFBConfigAttrib(mDisplay, fbc[i], GLX_SAMPLE_BUFFERS,
-                    &samp_buf);
-            glXGetFBConfigAttrib(mDisplay, fbc[i], GLX_SAMPLES, &samples);
+  for (int i = 0; i < fbcount; i++) {
+    XVisualInfo *vi = glXGetVisualFromFBConfig(mDisplay, fbc[i]);
+    if (vi) {
+      int samp_buf, samples;
+      glXGetFBConfigAttrib(mDisplay, fbc[i], GLX_SAMPLE_BUFFERS,
+        &samp_buf);
+      glXGetFBConfigAttrib(mDisplay, fbc[i], GLX_SAMPLES, &samples);
 #if 0
-            std::cout << "  Matching fbconfig " << i
-                    << ", visual ID "<<vi->visualid
-                    <<": SAMPLE_BUFFERS = "<< samp_buf
-                    <<", SAMPLES = " << samples << std::endl;
+      std::cout << "  Matching fbconfig " << i
+        << ", visual ID "<<vi->visualid
+        <<": SAMPLE_BUFFERS = "<< samp_buf
+        <<", SAMPLES = " << samples << std::endl;
 #endif
-            if ((best_fbc < 0) || ((samp_buf) && (samples > best_num_samp))) {
-                best_fbc = i;
-                best_num_samp = samples;
-            }
-            if ((worst_fbc < 0) || (!samp_buf) || (samples < worst_num_samp)) {
-                worst_fbc = i;
-                worst_num_samp = samples;
-            }
-        }
-        XFree(vi);
+      if ((best_fbc < 0) || ((samp_buf) && (samples > best_num_samp))) {
+        best_fbc = i;
+        best_num_samp = samples;
+      }
+      if ((worst_fbc < 0) || (!samp_buf) || (samples < worst_num_samp)) {
+        worst_fbc = i;
+        worst_num_samp = samples;
+      }
     }
+    XFree(vi);
+  }
 
-    GLXFBConfig bestFbc = fbc[best_fbc];
+  GLXFBConfig bestFbc = fbc[best_fbc];
 
-    // Be sure to free the FBConfig list allocated by glXChooseFBConfig()
-    XFree(fbc);
+  // Be sure to free the FBConfig list allocated by glXChooseFBConfig()
+  XFree(fbc);
 
-    // Get the default screen's GLX extension list
-    const char *glxExts = glXQueryExtensionsString(mDisplay,
-            DefaultScreen(mDisplay));
+  // Get the default screen's GLX extension list
+  const char *glxExts = glXQueryExtensionsString(mDisplay,
+    DefaultScreen(mDisplay));
 
-    // NOTE: It is not necessary to create or make current to a context before
-    // calling glXGetProcAddressARB
-    glXCreateContextAttribsARBProc glXCreateContextAttribsARB = 0;
-    glXCreateContextAttribsARB =
-            (glXCreateContextAttribsARBProc) glXGetProcAddressARB(
-                    (const GLubyte *) "glXCreateContextAttribsARB");
+  // NOTE: It is not necessary to create or make current to a context before
+  // calling glXGetProcAddressARB
+  glXCreateContextAttribsARBProc glXCreateContextAttribsARB = 0;
+  glXCreateContextAttribsARB =
+    (glXCreateContextAttribsARBProc) glXGetProcAddressARB(
+    (const GLubyte *) "glXCreateContextAttribsARB");
 
-    mCtx = 0;
+  mCtx = 0;
 
-    // Install an X error handler so the application won't exit if GL 3.0
-    // context allocation fails.
-    //
-    // Note this error handler is global.  All display connections in all threads
-    // of a process use the same error handler, so be sure to guard against other
-    // threads issuing X commands while this code is running.
-    bool ctxErrorOccurred = false;
-    int (*oldHandler)(Display*,
-            XErrorEvent*) = XSetErrorHandler(&ctxErrorHandler);
+  // Install an X error handler so the application won't exit if GL 3.0
+  // context allocation fails.
+  //
+  // Note this error handler is global.  All display connections in all threads
+  // of a process use the same error handler, so be sure to guard against other
+  // threads issuing X commands while this code is running.
+  bool ctxErrorOccurred = false;
+  int (*oldHandler)(Display*,
+    XErrorEvent*) = XSetErrorHandler(&ctxErrorHandler);
 
-    // Check for the GLX_ARB_create_context extension string and the function.
-    // If either is not present, use GLX 1.3 context creation method.
-    if (!isExtensionSupported(glxExts, "GLX_ARB_create_context")
-            || !glXCreateContextAttribsARB) {
-        printf("glXCreateContextAttribsARB() not found"
-                " ... using old-style GLX context\n");
-        mCtx = glXCreateNewContext(mDisplay, bestFbc, GLX_RGBA_TYPE, 0, True);
-    }
+  // Check for the GLX_ARB_create_context extension string and the function.
+  // If either is not present, use GLX 1.3 context creation method.
+  if (!isExtensionSupported(glxExts, "GLX_ARB_create_context")
+    || !glXCreateContextAttribsARB) {
+    printf("glXCreateContextAttribsARB() not found"
+      " ... using old-style GLX context\n");
+    mCtx = glXCreateNewContext(mDisplay, bestFbc, GLX_RGBA_TYPE, 0, True);
+  }
 
-    // If it does, try to get a GL 3.0 context!
-    else {
+  // If it does, try to get a GL 3.0 context!
+  else {
 #if USE_OPENGL3
-        int context_attribs[] =
-        {
-                GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
-                GLX_CONTEXT_MINOR_VERSION_ARB, 1,
-                GLX_CONTEXT_FLAGS_ARB , GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
-                GLX_CONTEXT_PROFILE_MASK_ARB, GLX_CONTEXT_CORE_PROFILE_BIT_ARB,
-                None
-        };
+    int context_attribs[] =
+    {
+      GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+      GLX_CONTEXT_MINOR_VERSION_ARB, 1,
+      GLX_CONTEXT_FLAGS_ARB , GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+      GLX_CONTEXT_PROFILE_MASK_ARB, GLX_CONTEXT_CORE_PROFILE_BIT_ARB,
+      None
+    };
 
-        mCtx = glXCreateContextAttribsARB( mDisplay, bestFbc, 0,True, context_attribs );
-
-        // Sync to ensure any errors generated are processed.
-        XSync( mDisplay, False );
-        if ( !ctxErrorOccurred && mCtx )
-        {
-            //std::cout << "Created GL 3.0 context" << std::endl;
-        }
-        else
-        {
-            // Couldn't create GL 3.0 context.  Fall back to old-style 2.x context.
-            // When a context version below 3.0 is requested, implementations will
-            // return the newest context version compatible with OpenGL versions less
-            // than version 3.0.
-            // GLX_CONTEXT_MAJOR_VERSION_ARB = 1
-            context_attribs[1] = 1;
-            // GLX_CONTEXT_MINOR_VERSION_ARB = 0
-            context_attribs[3] = 0;
-
-            ctxErrorOccurred = false;
-
-            KLog("Failed to create GL 3.0 context  ... using old-style GLX context");
-            mCtx = glXCreateContextAttribsARB( mDisplay, bestFbc, 0,True, context_attribs );
-        }
-#else
-        mCtx = glXCreateNewContext(mDisplay, bestFbc, GLX_RGBA_TYPE, 0, True);
-#endif
-    }
+    mCtx = glXCreateContextAttribsARB( mDisplay, bestFbc, 0,True, context_attribs );
 
     // Sync to ensure any errors generated are processed.
-    XSync(mDisplay, False);
-
-    // Restore the original error handler
-    XSetErrorHandler(oldHandler);
-
-    GCLAssertMsg(!ctxErrorOccurred && mCtx,
-            "Failed to create an OpenGL context\n");
-
-    // Verifying that context is a direct context
-    if (!glXIsDirect(mDisplay, mCtx)) {
-        KLog("Indirect GLX rendering context obtained");
-    } else {
-        //std::cout << "Direct GLX rendering context obtained" << std::endl;
+    XSync( mDisplay, False );
+    if ( !ctxErrorOccurred && mCtx )
+    {
+      //std::cout << "Created GL 3.0 context" << std::endl;
     }
+    else
+    {
+      // Couldn't create GL 3.0 context.  Fall back to old-style 2.x context.
+      // When a context version below 3.0 is requested, implementations will
+      // return the newest context version compatible with OpenGL versions less
+      // than version 3.0.
+      // GLX_CONTEXT_MAJOR_VERSION_ARB = 1
+      context_attribs[1] = 1;
+      // GLX_CONTEXT_MINOR_VERSION_ARB = 0
+      context_attribs[3] = 0;
 
-    glXMakeCurrent(mDisplay, mWin, mCtx);
+      ctxErrorOccurred = false;
+
+      KLog("Failed to create GL 3.0 context  ... using old-style GLX context");
+      mCtx = glXCreateContextAttribsARB( mDisplay, bestFbc, 0,True, context_attribs );
+    }
 #else
-    (void)windowsHandle;
+    mCtx = glXCreateNewContext(mDisplay, bestFbc, GLX_RGBA_TYPE, 0, True);
+#endif
+  }
+
+  // Sync to ensure any errors generated are processed.
+  XSync(mDisplay, False);
+
+  // Restore the original error handler
+  XSetErrorHandler(oldHandler);
+
+  GCLAssertMsg(!ctxErrorOccurred && mCtx,
+    "Failed to create an OpenGL context\n");
+
+  // Verifying that context is a direct context
+  if (!glXIsDirect(mDisplay, mCtx)) {
+    KLog("Indirect GLX rendering context obtained");
+  } else {
+    //std::cout << "Direct GLX rendering context obtained" << std::endl;
+  }
+
+  glXMakeCurrent(mDisplay, mWin, mCtx);
+#else
+  (void)windowsHandle;
 #endif
 }
 void GLRenderer::InitWGL(size_t windowsHandle) {
 #ifdef OS_WIN32
-    // remember the window handle (HWND)
-    mhWnd = (HWND)windowsHandle;
+  // remember the window handle (HWND)
+  mhWnd = (HWND)windowsHandle;
 
-    // get the device context (DC)
-    mhDC = GetDC( mhWnd );
-    GCLAssertMsg(mhDC, "Failed to get the device context");
+  // get the device context (DC)
+  mhDC = GetDC(mhWnd);
+  GCLAssertMsg(mhDC, "Failed to get the device context");
 
-    // set the pixel format for the DC
-    PIXELFORMATDESCRIPTOR pfd;
-    ZeroMemory( &pfd, sizeof( pfd ) );
-    pfd.nSize = sizeof( pfd );
-    pfd.nVersion = 1;
-    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL |
-            PFD_DOUBLEBUFFER;
-    pfd.iPixelType = PFD_TYPE_RGBA;
-    pfd.cColorBits = 24;
-    pfd.cDepthBits = 16;
-    pfd.iLayerType = PFD_MAIN_PLANE;
-    int format = ChoosePixelFormat( mhDC, &pfd );
-    BOOL wglRet = SetPixelFormat( mhDC, format, &pfd );
-    HGLRC tempContext = wglCreateContext(mhDC);
-    wglRet = wglMakeCurrent(mhDC,tempContext);
+  // set the pixel format for the DC
+  PIXELFORMATDESCRIPTOR pfd;
+  ZeroMemory(&pfd, sizeof(pfd));
+  pfd.nSize = sizeof(pfd);
+  pfd.nVersion = 1;
+  pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+  pfd.iPixelType = PFD_TYPE_RGBA;
+  pfd.cColorBits = 24;
+  pfd.cDepthBits = 16;
+  pfd.iLayerType = PFD_MAIN_PLANE;
+  int format = ChoosePixelFormat(mhDC, &pfd);
+  BOOL wglRet = SetPixelFormat(mhDC, format, &pfd);
+  GCLAssert(wglRet == TRUE);
+  HGLRC tempContext = wglCreateContext(mhDC);
+  GCLAssert(tempContext);
+  wglRet = wglMakeCurrent(mhDC, tempContext);
+  GCLAssert(wglRet == TRUE);
 
 #if USE_OPENGL3
-    int attribs[] =
-    {
-            WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
-            WGL_CONTEXT_MINOR_VERSION_ARB, 2,
-            WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
-            WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
-            0
-    };
+  int attribs[] =
+  {
+    WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
+    WGL_CONTEXT_MINOR_VERSION_ARB, 2,
+    WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB ,
+    WGL_CONTEXT_PROFILE_MASK_ARB, WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
+    0
+  };
 
-    PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = NULL;
-    wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC) wglGetProcAddress("wglCreateContextAttribsARB");
-    if(wglCreateContextAttribsARB != NULL)
-    {
-        mhRC = wglCreateContextAttribsARB(mhDC,0, attribs);
-        wglMakeCurrent(NULL,NULL);
-        wglDeleteContext(tempContext);
-        wglRet = wglMakeCurrent( mhDC, mhRC );
-    }
-    else
+  PFNWGLCREATECONTEXTATTRIBSARBPROC wglCreateContextAttribsARB = NULL;
+  wglCreateContextAttribsARB = (PFNWGLCREATECONTEXTATTRIBSARBPROC)wglGetProcAddress("wglCreateContextAttribsARB");
+  if (wglCreateContextAttribsARB != NULL)
+  {
+    mhRC = wglCreateContextAttribsARB(mhDC, 0, attribs);
+    GCLAssert(mhRC);
+    wglRet = wglMakeCurrent(NULL, NULL); GCLAssert(wglRet == TRUE);
+    wglRet = wglDeleteContext(tempContext);
+    wglRet = wglMakeCurrent(mhDC, mhRC); GCLAssert(wglRet == TRUE);
+  }
+  else
 #endif
-    {
-        // fall back on normal context
-        mhRC = tempContext;
-    }
-    // make it the current render context
+  {
+    // fall back on normal context
+    mhRC = tempContext;
+  }
+  // make it the current render context
+
+  PFNWGLCHOOSEPIXELFORMATARBPROC wglChoosePixelFormatARB = (PFNWGLCHOOSEPIXELFORMATARBPROC)wglGetProcAddress("wglChoosePixelFormatARB");
+  int iAttributes[] = { 
+    WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
+    WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
+    WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
+    WGL_COLOR_BITS_ARB, 24,
+    WGL_ALPHA_BITS_ARB, 8,
+    WGL_DEPTH_BITS_ARB, 16,
+    WGL_STENCIL_BITS_ARB, 0,
+    WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
+    WGL_SAMPLE_BUFFERS_ARB, GL_TRUE,
+    WGL_SAMPLES_ARB, 4,                        // Check For 4x Multisampling
+    0, 0
+};
+
+  float fAttributes[] = { 0, 0 };
+  int pixelFormat;
+  UINT numFormats;
+  // First We Check To See If We Can Get A Pixel Format For 4 Samples
+  BOOL valid = wglChoosePixelFormatARB(mhDC, iAttributes, fAttributes, 1, &pixelFormat, &numFormats);
+  GCLAssert(valid && numFormats >= 1);
+  //SetPixelFormat(mhDC, PixelFormat, &pfd) == FALSE
 #else
-    (void) windowsHandle;
+  (void) windowsHandle;
 #endif
 }
 
 GLRenderer::GLRenderer(size_t windowsHandle) :
-		        mModelView(true), mFov(45.0), mAspect(
-		                Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH")
-		                / Real(
-		                        Config::Instance().GetInt(
-		                                "DEFAULT_VIEWPORT_HEIGHT"))), mNear(
-		                                        0.1), mFar(100.0) {
+mModelView(true), mFov(45.0), mAspect(
+Config::Instance().GetInt("DEFAULT_VIEWPORT_WIDTH")
+/ Real(
+Config::Instance().GetInt(
+"DEFAULT_VIEWPORT_HEIGHT"))), mNear(
+0.1), mFar(100.0) {
 
-    RenderPipe::SendCommand(
-            [this, windowsHandle]() {
-        mProjection.SetPerspective(mFov,mAspect,mNear,mFar);
+  RenderPipe::SendCommand(
+    [this, windowsHandle]() {
+    mProjection.SetPerspective(mFov, mAspect, mNear, mFar);
 
-        InitWGL(windowsHandle);
-        InitGLX(windowsHandle);
+    InitWGL(windowsHandle);
+    InitGLX(windowsHandle);
 
 #if ENABLE_GLEW
-        glewExperimental=1;
-        GLenum err = glewInit();
-        GCLAssertMsg(GLEW_OK == err, (const char *)glewGetErrorString(err));
-        mGlewVersion = std::string((const char*)glewGetString(GLEW_VERSION));
-        glGetError(); //glew generates an error that can be ignored. on 3.x+
-        glErrorCheck();
+    glewExperimental = 1;
+    GLenum err = glewInit();
+    GCLAssertMsg(GLEW_OK == err, (const char *)glewGetErrorString(err));
+    mGlewVersion = std::string((const char*)glewGetString(GLEW_VERSION));
+    glGetError(); //glew generates an error that can be ignored. on 3.x+
+    glErrorCheck();
 #else
-        mGlewVersion = std::string("Unused");
+    mGlewVersion = std::string("Unused");
 #endif
 
-        Init3DState();
-        mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
-        mVendor = std::string((const char*)glGetString(GL_VENDOR));glErrorCheck();
-        mRenderer = std::string((const char*)glGetString(GL_RENDERER));glErrorCheck();
-        const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);glErrorCheck();
-        mShadingLanguageVersion = std::string(ver);
-        char delim = ' ';
+    mVersion = std::string((const char*)glGetString(GL_VERSION)); glErrorCheck();
+    mVendor = std::string((const char*)glGetString(GL_VENDOR)); glErrorCheck();
+    mRenderer = std::string((const char*)glGetString(GL_RENDERER)); glErrorCheck();
+    const char *ver = (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION); glErrorCheck();
+    mShadingLanguageVersion = std::string(ver);
+    char delim = ' ';
 
-        GLint n, i;
-        glGetIntegerv(GL_NUM_EXTENSIONS, &n);glErrorCheck();
-        std::string extString;
-        for (i = 0; i < n; i++)
-        {
-            const char *ex = (const char*)glGetStringi(GL_EXTENSIONS, i); glErrorCheck();
-            extString = extString +ex;
-            extString = extString + " ";
-        }
+    GLint n, i;
+    glGetIntegerv(GL_NUM_EXTENSIONS, &n); glErrorCheck();
+    std::string extString;
+    for (i = 0; i < n; i++)
+    {
+      const char *ex = (const char*)glGetStringi(GL_EXTENSIONS, i); glErrorCheck();
+      extString = extString + ex;
+      extString = extString + " ";
+    }
 
-        StringUtil::Explode(extString, mExtensions ,delim);
-    });
+    StringUtil::Explode(extString, mExtensions, delim);
+  });
 
 }
 GLRenderer::~GLRenderer() {
 
-    RenderPipe::SendCommandSync([&]() {
-        mExtensions.clear();
+  RenderPipe::SendCommandSync([&]() {
+    mExtensions.clear();
 #ifdef OS_WIN32
-        wglMakeCurrent( NULL, NULL );
-        wglDeleteContext( mhRC );
-        ReleaseDC( mhWnd, mhDC );
+    wglMakeCurrent(NULL, NULL);
+    wglDeleteContext(mhRC);
+    ReleaseDC(mhWnd, mhDC);
 #elif defined(OS_LINUX)
-        glXMakeCurrent( mDisplay, 0, 0 );
-        glXDestroyContext( mDisplay, mCtx );
+    glXMakeCurrent( mDisplay, 0, 0 );
+    glXDestroyContext( mDisplay, mCtx );
 #endif
-    });
+  });
 }
 
 bool GLRenderer::Update() {
-    return true;
+  return true;
 }
 
 void GLRenderer::PreRender() {
-    RenderPipe::SendCommand([&]() {
-        glClearColor(0.0, 0.0, 1.0, 0.0); glErrorCheck();
-        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); glErrorCheck();
-    });
+  RenderPipe::SendCommand([&]() {
+    glClearColor(0.0, 0.0, 1.0, 0.0); glErrorCheck();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); glErrorCheck();
+  });
 }
 void GLRenderer::PostRender() {
 }
 
 void GLRenderer::RenderState::SetTextureEnabled(bool isEnabled) {
-    RenderPipe::SendCommand([&]() {
-        if (isEnabled)
-        {
-            glEnable(GL_TEXTURE_2D); glErrorCheck();
-        }
-        else
-        {
-            glBindTexture(GL_TEXTURE_2D, 0); glErrorCheck();
-            glDisable(GL_TEXTURE_2D); glErrorCheck();
-        }
-    });
+  RenderPipe::SendCommand([&]() {
+    if (isEnabled)
+    {
+      glEnable(GL_TEXTURE_2D); glErrorCheck();
+    }
+    else
+    {
+      glBindTexture(GL_TEXTURE_2D, 0); glErrorCheck();
+      glDisable(GL_TEXTURE_2D); glErrorCheck();
+    }
+  });
 }
 
 Matrix44 GLRenderer::GetGLProjection() {
-    Matrix44 projectionMatrixd;
-    RenderPipe::SendCommandSync([&]() {
-        Matrix44f projectionMatrix;
-        glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
+  Matrix44 projectionMatrixd;
+  RenderPipe::SendCommandSync([&]() {
+    Matrix44f projectionMatrix;
+    glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&projectionMatrix);
 
-        projectionMatrixd[0].x = projectionMatrix.m0.x;
-        projectionMatrixd[0].y = projectionMatrix.m0.y;
-        projectionMatrixd[0].z = projectionMatrix.m0.z;
-        projectionMatrixd[0].w = projectionMatrix.m0.w;
-        projectionMatrixd[1].x = projectionMatrix.m1.x;
-        projectionMatrixd[1].y = projectionMatrix.m1.y;
-        projectionMatrixd[1].z = projectionMatrix.m1.z;
-        projectionMatrixd[1].w = projectionMatrix.m1.w;
-        projectionMatrixd[2].x = projectionMatrix.m2.x;
-        projectionMatrixd[2].y = projectionMatrix.m2.y;
-        projectionMatrixd[2].z = projectionMatrix.m2.z;
-        projectionMatrixd[2].w = projectionMatrix.m2.w;
-        projectionMatrixd[3].x = projectionMatrix.m3.x;
-        projectionMatrixd[3].y = projectionMatrix.m3.y;
-        projectionMatrixd[3].z = projectionMatrix.m3.z;
-        projectionMatrixd[3].w = projectionMatrix.m3.w;
-    });
+    projectionMatrixd[0].x = projectionMatrix.m0.x;
+    projectionMatrixd[0].y = projectionMatrix.m0.y;
+    projectionMatrixd[0].z = projectionMatrix.m0.z;
+    projectionMatrixd[0].w = projectionMatrix.m0.w;
+    projectionMatrixd[1].x = projectionMatrix.m1.x;
+    projectionMatrixd[1].y = projectionMatrix.m1.y;
+    projectionMatrixd[1].z = projectionMatrix.m1.z;
+    projectionMatrixd[1].w = projectionMatrix.m1.w;
+    projectionMatrixd[2].x = projectionMatrix.m2.x;
+    projectionMatrixd[2].y = projectionMatrix.m2.y;
+    projectionMatrixd[2].z = projectionMatrix.m2.z;
+    projectionMatrixd[2].w = projectionMatrix.m2.w;
+    projectionMatrixd[3].x = projectionMatrix.m3.x;
+    projectionMatrixd[3].y = projectionMatrix.m3.y;
+    projectionMatrixd[3].z = projectionMatrix.m3.z;
+    projectionMatrixd[3].w = projectionMatrix.m3.w;
+  });
 
-    return projectionMatrixd;
+  return projectionMatrixd;
 }
 Matrix44 GLRenderer::GetGLModelView() {
-    Matrix44 modelViewMatrixd;
+  Matrix44 modelViewMatrixd;
 
-    RenderPipe::SendCommandSync([&]() {
-        Matrix44f modelViewMatrix;
-        glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&modelViewMatrix);
+  RenderPipe::SendCommandSync([&]() {
+    Matrix44f modelViewMatrix;
+    glGetFloatv(GL_PROJECTION_MATRIX, (GLfloat*)&modelViewMatrix);
 
-        modelViewMatrixd[0].x = modelViewMatrix.m0.x;
-        modelViewMatrixd[0].y = modelViewMatrix.m0.y;
-        modelViewMatrixd[0].z = modelViewMatrix.m0.z;
-        modelViewMatrixd[0].w = modelViewMatrix.m0.w;
-        modelViewMatrixd[1].x = modelViewMatrix.m1.x;
-        modelViewMatrixd[1].y = modelViewMatrix.m1.y;
-        modelViewMatrixd[1].z = modelViewMatrix.m1.z;
-        modelViewMatrixd[1].w = modelViewMatrix.m1.w;
-        modelViewMatrixd[2].x = modelViewMatrix.m2.x;
-        modelViewMatrixd[2].y = modelViewMatrix.m2.y;
-        modelViewMatrixd[2].z = modelViewMatrix.m2.z;
-        modelViewMatrixd[2].w = modelViewMatrix.m2.w;
-        modelViewMatrixd[3].x = modelViewMatrix.m3.x;
-        modelViewMatrixd[3].y = modelViewMatrix.m3.y;
-        modelViewMatrixd[3].z = modelViewMatrix.m3.z;
-        modelViewMatrixd[3].w = modelViewMatrix.m3.w;
-    });
-    return modelViewMatrixd;
+    modelViewMatrixd[0].x = modelViewMatrix.m0.x;
+    modelViewMatrixd[0].y = modelViewMatrix.m0.y;
+    modelViewMatrixd[0].z = modelViewMatrix.m0.z;
+    modelViewMatrixd[0].w = modelViewMatrix.m0.w;
+    modelViewMatrixd[1].x = modelViewMatrix.m1.x;
+    modelViewMatrixd[1].y = modelViewMatrix.m1.y;
+    modelViewMatrixd[1].z = modelViewMatrix.m1.z;
+    modelViewMatrixd[1].w = modelViewMatrix.m1.w;
+    modelViewMatrixd[2].x = modelViewMatrix.m2.x;
+    modelViewMatrixd[2].y = modelViewMatrix.m2.y;
+    modelViewMatrixd[2].z = modelViewMatrix.m2.z;
+    modelViewMatrixd[2].w = modelViewMatrix.m2.w;
+    modelViewMatrixd[3].x = modelViewMatrix.m3.x;
+    modelViewMatrixd[3].y = modelViewMatrix.m3.y;
+    modelViewMatrixd[3].z = modelViewMatrix.m3.z;
+    modelViewMatrixd[3].w = modelViewMatrix.m3.w;
+  });
+  return modelViewMatrixd;
 }
 
 void GLRenderer::SwapBuffer() {
 
-    RenderPipe::SendCommand([&]() {
+  RenderPipe::SendCommand([&]() {
 #ifdef OS_WIN32
-        SwapBuffers( mhDC );
+    SwapBuffers(mhDC);
 #elif defined(OS_LINUX)
-        glXSwapBuffers ( mDisplay, mWin );
+    glXSwapBuffers ( mDisplay, mWin );
 #endif
-    });
+  });
 }
 
 void GCL::GLRenderer::SetProjection(const Camera &camera) {
-    RenderPipe::SendCommand(
-            [&]() {
-        mProjection.SetPerspective(camera.GetFov(),camera.GetAspectRatio(),camera.GetNear(),camera.GetFar());
-        mModelView= Inverse(camera.GetTransform());
-    });
+  RenderPipe::SendCommand(
+    [&]() {
+    mProjection.SetPerspective(camera.GetFov(), camera.GetAspectRatio(), camera.GetNear(), camera.GetFar());
+    mModelView = Inverse(camera.GetTransform());
+  });
 }
 
 void GCL::GLRenderer::SetIsDepthTestEnabled(bool isDepthTesting /*= true*/) {
-    RenderPipe::SendCommand([=]() {
-        if (isDepthTesting)
-        {
-            glEnable(GL_DEPTH_TEST); glErrorCheck();
-        }
-        else
-        {
-            glDisable(GL_DEPTH_TEST); glErrorCheck();
-        }
-    });
+  RenderPipe::SendCommand([=]() {
+    if (isDepthTesting)
+    {
+      glEnable(GL_DEPTH_TEST); glErrorCheck();
+    }
+    else
+    {
+      glDisable(GL_DEPTH_TEST); glErrorCheck();
+    }
+  });
 }
 
 void GCL::GLRenderer::SetIsBlendEnabled(bool isBlendEnabled /*= true*/) {
-    RenderPipe::SendCommand([=]() {
-        if (isBlendEnabled)
-        {
-            glEnable(GL_BLEND); glErrorCheck();
-        }
-        else
-        {
-            glDisable(GL_BLEND); glErrorCheck();
-        }
-    });
+  RenderPipe::SendCommand([=]() {
+    if (isBlendEnabled)
+    {
+      glEnable(GL_BLEND); glErrorCheck();
+    }
+    else
+    {
+      glDisable(GL_BLEND); glErrorCheck();
+    }
+  });
 }
 void GCL::GLRenderer::SetIsAlphaTestEnabled(
-        bool isAlphaTestEnabled /*= true*/) {
-    RenderPipe::SendCommand([=]() {
-        if (isAlphaTestEnabled)
-        {
-            glEnable(GL_ALPHA_TEST); glErrorCheck();
-        }
-        else
-        {
-            glDisable(GL_ALPHA_TEST); glErrorCheck();
-        }
-    });
+  bool isAlphaTestEnabled /*= true*/) {
+  RenderPipe::SendCommand([=]() {
+    if (isAlphaTestEnabled)
+    {
+      glEnable(GL_ALPHA_TEST); glErrorCheck();
+    }
+    else
+    {
+      glDisable(GL_ALPHA_TEST); glErrorCheck();
+    }
+  });
 }
 void GCL::GLRenderer::SetIsDepthMaskEnabled(
-        bool isDepthMaskEnabled /*= true*/) {
-    RenderPipe::SendCommand([=]() {
-        if (isDepthMaskEnabled)
-        {
-            glDepthMask(GL_TRUE); glErrorCheck();
-        }
-        else
-        {
-            glDepthMask(GL_FALSE); glErrorCheck();
-        }
-    });
+  bool isDepthMaskEnabled /*= true*/) {
+  RenderPipe::SendCommand([=]() {
+    if (isDepthMaskEnabled)
+    {
+      glDepthMask(GL_TRUE); glErrorCheck();
+    }
+    else
+    {
+      glDepthMask(GL_FALSE); glErrorCheck();
+    }
+  });
 }
 void GCL::GLRenderer::SetVSyncEnabled(bool isEnabled) {
-    RenderPipe::SendCommand(
-            [=]() {
-        const GLubyte* name = reinterpret_cast<const GLubyte*>("glXSwapIntervalMESA");
-        PFNGLXSWAPINTERVALMESAPROC glXSwapIntervalMesa = reinterpret_cast<PFNGLXSWAPINTERVALMESAPROC>(glXGetProcAddress(name));
-        if (glXSwapIntervalMesa)
-            glXSwapIntervalMesa(isEnabled ? 1 : 0);
-    });
+  RenderPipe::SendCommand(
+    [=]() {
+#ifdef OS_WIN32
+    PFNWGLSWAPINTERVALEXTPROC       wglSwapIntervalEXT = NULL;
+    PFNWGLGETSWAPINTERVALEXTPROC    wglGetSwapIntervalEXT = NULL;
+    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+    wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC)wglGetProcAddress("wglGetSwapIntervalEXT");
+    wglSwapIntervalEXT(isEnabled ? 1 : 0);
+#else
+    const GLubyte* name = reinterpret_cast<const GLubyte*>("glXSwapIntervalMESA");
+    PFNGLXSWAPINTERVALMESAPROC glXSwapIntervalMesa = reinterpret_cast<PFNGLXSWAPINTERVALMESAPROC>(glXGetProcAddress(name));
+    if (glXSwapIntervalMesa)
+      glXSwapIntervalMesa(isEnabled ? 1 : 0);
+#endif
+  });
 
 }
 
 void GCL::GLRenderer::SetIsAntiAliasingEnabled(bool isEnabled)
 {
-    RenderPipe::SendCommand(
-            [=]() {
-        if (isEnabled)
-        {
-            glEnable(GL_MULTISAMPLE_ARB);glErrorCheck();
-        }
-        else
-        {
-            glDisable(GL_MULTISAMPLE_ARB);glErrorCheck();
-        }
-    });
+  RenderPipe::SendCommand(
+    [=]() {
+    if (isEnabled)
+    {
+      glEnable(GL_MULTISAMPLE_ARB); glErrorCheck();
+    }
+    else
+    {
+      glDisable(GL_MULTISAMPLE_ARB); glErrorCheck();
+    }
+  });
 }
 
 
 
 void GCL::GLRenderer::SetClearColor(Real r, Real g, Real b, Real a)
 {
-    RenderPipe::SendCommand(
-            [=]() {
-        glClearColor(r,g,b,a);glErrorCheck();
-    });
+  RenderPipe::SendCommand(
+    [=]() {
+    glClearColor((GLclampf)r, (GLclampf)g, (GLclampf)b, (GLclampf)a); glErrorCheck();
+  });
 }
 void GCL::GLRenderer::SetClearDepth(Real depthValue)
 {
-    RenderPipe::SendCommand(
-            [=]() {
-        glClearDepth(depthValue);glErrorCheck();
-    });
+  RenderPipe::SendCommand(
+    [=]() {
+    glClearDepth(depthValue); glErrorCheck();
+  });
 }
 void GCL::GLRenderer::SetDepthFunc(GCLDepthFunc depthFunc)
 {
-    RenderPipe::SendCommand(
-                [=]() {
-            glDepthFunc((GLenum)depthFunc);glErrorCheck();
-        });
+  RenderPipe::SendCommand(
+    [=]() {
+    glDepthFunc((GLenum)depthFunc); glErrorCheck();
+  });
 }
 void GCL::GLRenderer::SetBlendFunc(GCLBlendFunc srcBlendFunc, GCLBlendFunc dstBlendFunc)
 {
-    RenderPipe::SendCommand(
-                 [=]() {
-        glBlendFunc((GLenum)srcBlendFunc, (GLenum)dstBlendFunc);glErrorCheck();
-         });
+  RenderPipe::SendCommand(
+    [=]() {
+    glBlendFunc((GLenum)srcBlendFunc, (GLenum)dstBlendFunc); glErrorCheck();
+  });
 }
 void GCL::GLRenderer::SetPolygonMode(GCLPolygonFace face, GCLPolygonMode mode)
 {
-    RenderPipe::SendCommand(
-                 [=]() {
-        glPolygonMode((GLenum)face, (GLenum)mode);glErrorCheck();
-         });
+  RenderPipe::SendCommand(
+    [=]() {
+    glPolygonMode((GLenum)face, (GLenum)mode); glErrorCheck();
+  });
 }
 
 
 
 void GCL::GLRenderer::GetScreenSize(Point2<size_t> &screenSize) const {
-    RenderPipe::SendCommandSync(
-            [&]() {
+  RenderPipe::SendCommandSync(
+    [&]() {
 #if defined(OS_WIN32)
-        RECT rect;
-        ::GetClientRect(mhWnd,&rect);
-        screenSize = Point2<size_t>((size_t)(rect.right-rect.left), (size_t)(rect.bottom-rect.top));
+    RECT rect;
+    ::GetClientRect(mhWnd, &rect);
+    screenSize = Point2<size_t>((size_t)(rect.right - rect.left), (size_t)(rect.bottom - rect.top));
 #elif defined(OS_LINUX)
-        XWindowAttributes xwa;
-        XGetWindowAttributes(mDisplay, mWin, &xwa);
-        screenSize = Point2<size_t>(size_t(xwa.width), size_t(xwa.height));
+    XWindowAttributes xwa;
+    XGetWindowAttributes(mDisplay, mWin, &xwa);
+    screenSize = Point2<size_t>(size_t(xwa.width), size_t(xwa.height));
 #endif
-    });
+  });
 }

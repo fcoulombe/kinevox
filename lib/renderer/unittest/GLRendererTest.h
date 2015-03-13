@@ -41,7 +41,7 @@ void Test()
                 testViewPort.GetWidth() == 800 && testViewPort.GetHeight() == 600);
         Point2<size_t> testScreenSize;
         renderer.GetScreenSize(testScreenSize);
-        Assert_Test(testScreenSize == Point2<size_t>(640, 480));
+        Assert_Test(testScreenSize == Point2<size_t>(800, 600));
         std::cout << "OpenGL Stats"<<std::endl;
         std::string version;
         renderer.GetVersion(version);
@@ -117,7 +117,7 @@ void Test()
         renderer.PreRender();
         renderer.SetIsBlendEnabled();
         renderer.SetIsDepthMaskEnabled();
-        renderer.SetIsAlphaTestEnabled();
+        //renderer.SetIsAlphaTestEnabled();
         renderer.SetVSyncEnabled();
         renderer.SetClearColor(0.0, 0.0, 0.0, 0.0);
         renderer.SetClearDepth(1.0);
@@ -132,7 +132,7 @@ void Test()
 
         renderer.SetIsBlendEnabled(false);
         renderer.SetIsDepthMaskEnabled(false);
-        renderer.SetIsAlphaTestEnabled(false);
+        //renderer.SetIsAlphaTestEnabled(false);
         renderer.SetVSyncEnabled(false);
         renderer.SetClearColor(0.0, 0.0, 0.0, 0.0);
         renderer.SetClearDepth(1.0);
@@ -150,9 +150,7 @@ void Test()
         renderer.SetBlendFunc(GCLBlendFunc::ONE_MINUS_SRC_COLOR, GCLBlendFunc::DST_COLOR);
         renderer.SetBlendFunc(GCLBlendFunc::SRC_ALPHA_SATURATE, GCLBlendFunc::ONE_MINUS_DST_COLOR);
         renderer.SetPolygonMode(GCLPolygonFace::FRONT_AND_BACK, GCLPolygonMode::FILL);
-        renderer.SetIsBlendEnabled(false);
-        renderer.SetIsAlphaTestEnabled(false);
-        renderer.SetVSyncEnabled(false);
+
         renderer.SetIsAntiAliasingEnabled(false);
         renderer.PostRender();
         winDriver.SwapBuffer();

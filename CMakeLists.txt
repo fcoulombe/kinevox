@@ -1,7 +1,8 @@
 cmake_minimum_required (VERSION 2.8)
+cmake_policy(SET CMP0054 NEW)
 project (kinevox)
 SET(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "limited configs"  FORCE)
-if(${CMAKE_CXX_COMPILER_ID} STREQUAL "MSVC")
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     option(ENABLE_VLD "enable visual leak detector if installed" ON)
 endif()
 
@@ -32,9 +33,6 @@ add_custom_target(build_and_test ${CMAKE_CTEST_COMMAND} -C $(ConfigurationName) 
 foreach(makefile ${cmakelist})
 	add_subdirectory(${makefile}) 
 endforeach()
-#add_subdirectory(lib/applayer/unittest) 
-#add_subdirectory(program/tools/common/unittest) 
-
 
 # add a target to generate API documentation with Doxygen
 find_package(Doxygen)

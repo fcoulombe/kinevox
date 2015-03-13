@@ -32,14 +32,14 @@
 
 int main(int argc, char ** argv)
 {
-	SUITE_INIT(argc, argv)
-		LuaTest::Test();
-	LuaStateTest::Test();
-	ScriptTest::Test();
-	ScriptResourceTest::Test();
-	ExposeFunctionTest::Test();
-	ConfigLuaTest::Test();
+  SUITE_INIT(argc, argv)
+    LuaTest::Test();
+  LuaStateTest::Test();
+  ScriptTest::Test();
+  ScriptResourceTest::Test();
+  ExposeFunctionTest::Test();
+  ConfigLuaTest::Test();
 
-	SUITE_TERMINATE
-		return 0;
+  SUITE_TERMINATE
+    return 0;
 }
